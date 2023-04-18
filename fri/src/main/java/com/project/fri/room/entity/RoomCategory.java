@@ -31,5 +31,5 @@ public class RoomCategory {
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  private Enum category;
+  private Category category;
 }

@@ -30,6 +30,7 @@ public class Area {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="room_id")
   private Long id;
+
   @Enumerated(EnumType.STRING)
-  private Enum category;
+  private Category category;
 }
