@@ -5,5 +5,5 @@ package com.project.fri.common.entity;
  * 2023-04-18 description    :
  */
 public enum Category {
-  SEAUL, DAEJEON, GWANGJU, BUSAN, GUMI;
+  SEOUL, DAEJEON, GWANGJU, BUSAN, GUMI;
 }

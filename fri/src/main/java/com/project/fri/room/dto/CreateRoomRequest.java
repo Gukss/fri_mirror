@@ -17,8 +17,6 @@ import lombok.Data;
  * 2023-04-19        hagnoykmik       최초 생성
  */
 
-@Builder
-@AllArgsConstructor
 @Data
 public class CreateRoomRequest {
 

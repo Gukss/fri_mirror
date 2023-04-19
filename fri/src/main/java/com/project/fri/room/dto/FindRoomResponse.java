@@ -6,7 +6,7 @@ public class FindRoomResponse {
     private String title;
     private String location;
     private String roomCategory;
-    private int headcount;
+    private int headCount;
     private Boolean isConfirmed;
     private Boolean isParticipate;
 
@@ -16,7 +16,7 @@ public class FindRoomResponse {
 	"roomId": 1,
 	"title": "작교 가실 분 :)",
 	"location": "학하동",
-	"headcount": 4,
+	"headCount": 4,
 	"isConfirmed": false,
 	"isParticipate": false, //참여 안하고 있을 때 false
 	"major": [

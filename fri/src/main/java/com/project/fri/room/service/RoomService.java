@@ -11,7 +11,13 @@ import com.project.fri.room.dto.CreateRoomResponse;
  * 2023-04-18 description    :
  */
 public interface RoomService {
-  CreateRoomResponse CreateRoom(CreateRoomRequest request);
+
+  /**
+   * 방 생성
+   * @param request
+   * @return 만든 방 제목
+   */
+  CreateRoomResponse createRoom(CreateRoomRequest request);
 
   /**
    * desc: 전체 방 리스트를 조회, area에 따라 해당 지역의 방 리스트를 조회한다.
