@@ -1,12 +1,19 @@
 package com.project.fri.room.entity;
 
 import com.project.fri.common.entity.Area;
-
-import javax.persistence.*;
-
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
 import com.sun.istack.NotNull;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
