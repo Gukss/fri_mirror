@@ -28,7 +28,9 @@ public class RoomController {
 
     List<Room> roomList = roomService.findAllByArea(area);
     log.debug("roomList = " + Arrays.toString(roomList.toArray()));
-
-    return null;
   }
+
+//    @GetMapping("/room/{roomId}")
+//    public
+
 }
