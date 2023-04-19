@@ -12,14 +12,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.project.fri.room.entity.Room;
+import com.project.fri.room.repository.RoomRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * packageName    : com.project.fri.room.service fileName       : RoomServiceImpl date           :
  * 2023-04-18 description    :
  */
-@Transactional(readOnly = true)
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RoomServiceImpl implements RoomService{
+@Slf4j
+public class RoomServiceImpl implements RoomService {
 
   private final RoomCategoryRepository roomCategoryRepository;
   private final AreaRepository areaRepository;
@@ -38,6 +48,7 @@ public class RoomServiceImpl implements RoomService{
     // 방, 지역 카테고리 객체화
     RoomCategory roomCategory = roomCategoryRepository.findByCategory(request.getRoomCategory());
     Area area = areaRepository.findByCategory(request.getArea());
+//  private final JPAQueryFactory queryFactory;
 
     // request dto를 저장
     Room room = Room.builder()
@@ -57,5 +68,11 @@ public class RoomServiceImpl implements RoomService{
     return createRoomResponse;
   }
 
-
+  @Override
+  public List<Room> findAllByArea(String areaString) {
+//    return roomRepository.findAllByArea(area)
+//        .orElseThrow(
+//            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_LIST));
+    return null;
+  }
 }
