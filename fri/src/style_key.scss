@@ -1,0 +1,448 @@
+// 컴포넌트 LogoEgg
+.main_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+
+  #main_logo {
+    margin-left: 24px;
+    width: 53px;
+    height: 32px;
+  }
+
+  .egg_cnt {
+    margin-right: 24px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    font-weight: bolder;
+  }
+
+  #main_egg {
+    margin-right: 5px;
+    width: 15px;
+    height: 22px;
+  }
+}
+
+// page 메인 페이지
+.mainpage {
+  height: 100vh;
+  overflow: hidden;
+}
+
+// 지역 부분
+.main_region {
+  display: flex;
+  padding: 0px;
+  width: 234px;
+  justify-content: space-between;
+  height: 22px;
+  margin: 0 0 30px 24px;
+  font-weight: bolder;
+  color: rgba(124, 124, 124, 1);
+
+  li {
+    list-style: none;
+  }
+
+  #select {
+    color: rgba(255, 192, 0, 1);
+    font-weight: bolder;
+    border-bottom: 1px solid rgba(255, 192, 0, 1);
+    transition: 0.7s ease-in-out;
+  }
+}
+
+// 메인 카테고리 부분
+.main_category {
+  height: calc(100vh - 150px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  text-align: start;
+
+  #category_title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0em;
+    margin: 16px 0 0px 24px;
+    margin-left: 24px;
+
+    span {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 15px;
+      letter-spacing: 0em;
+      float: right;
+      margin-right: 20px;
+      color: rgba(124, 124, 124, 1);
+    }
+
+  }
+}
+
+// 카테고리 각 줄
+.meeting_block {
+  margin: 0 24px 12px 12px;
+  display: flex;
+  width: 100vw;
+  min-height: 190px;
+  max-height: 190px;
+  height: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  flex-flow: column wrap;
+  border-bottom: 1px solid rgba(225, 225, 225, 1);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+// 메인 nav부분
+#egg_yellow {
+  margin-top: 20px;
+  z-index: 3px;
+  position: fixed;
+  left: calc(50vw - 40px);
+  width: 80px;
+  height: 80px;
+  transition: linear 0.5s;
+}
+
+#egg_nav {
+  width: 300px;
+  height: 300px;
+  z-index: 1;
+  position: fixed;
+  left: calc(50vw - 150px);
+  transition: linear 0.3s;
+}
+
+.nav_back {
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+
+  img {
+    position: fixed;
+    z-index: 5;
+    transition: linear 0.3s;
+    width: 60px;
+    left: calc(50vw - 30px);
+  }
+
+  div {
+    position: fixed;
+    z-index: 5;
+    transition: linear 0.3s;
+    font-weight: 700;
+    font-size: 25px;
+  }
+
+  #meeting {
+    left: calc(50vw - 28px);
+  }
+
+  #chat {
+    transform: rotate(-65deg);
+    left: calc(50vw - 130px);
+  }
+
+  #my {
+    transform: rotate(65deg);
+    left: calc(50vw + 85px);
+  }
+}
+
+// 미팅 룸 컴포넌트
+.room_component {
+  width: 161px;
+  height: auto;
+  padding: 12px;
+}
+
+.meeting_room {
+  padding: 8px 0 0 16px;
+  width: 139px;
+  height: 134px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 240, 195, 1);
+  margin: 0 0 24px 0;
+
+  p {
+    margin: 0;
+  }
+
+  .place {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    letter-spacing: 0em;
+    margin-bottom: 8px;
+    color: rgba(255, 192, 0, 1);
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    width: 120px;
+    letter-spacing: 0em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 27px;
+  }
+
+  .soft {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0em;
+    width: 120px;
+
+    .total {
+      float: right;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19px;
+      letter-spacing: 0em;
+      color: rgba(124, 124, 124, 1);
+    }
+  }
+
+  .other {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0em;
+    width: 120px;
+
+    .total {
+      float: right;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19px;
+      letter-spacing: 0em;
+      color: rgba(124, 124, 124, 1);
+    }
+  }
+
+
+}
+
+.meeting_room_full {
+  width: 155px;
+  height: 142px;
+  color: white;
+  background-color: rgba(255, 192, 0, 1);
+  font-size: 25px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.game_room {
+  padding: 8px 0 0 16px;
+  width: 139px;
+  height: 134px;
+  border-radius: 16px;
+  background-color: rgba(255, 240, 195, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  margin: 0 0 24px 0;
+
+  p {
+    margin: 0;
+  }
+
+  .place {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    letter-spacing: 0em;
+    margin-bottom: 8px;
+    color: rgba(255, 192, 0, 1);
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    width: 120px;
+    letter-spacing: 0em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 37px;
+  }
+
+  .cnt {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0em;
+    width: 120px;
+
+    span {
+      float: right;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19px;
+      letter-spacing: 0em;
+      color: rgba(124, 124, 124, 1);
+    }
+  }
+}
+
+.empty_category {
+  display: flex;
+  height: 190px;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 192, 0, 1);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+// 방 상세보기 모달같은거
+@-webkit-keyframes moveup {
+  0% {
+    bottom: -450px
+  }
+
+  100% {
+    bottom: 0
+  }
+}
+
+@keyframes moveup {
+  0% {
+    bottom: -450px
+  }
+
+  100% {
+    bottom: 0
+  }
+}
+
+
+.room_detail {
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+
+  .room_modal {
+    position: fixed;
+    width: 100vw;
+    height: 450px;
+    bottom: 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    background-color: white;
+    transition: linear 0.5s;
+
+    animation: moveup 1s;
+    -webkit-animation: moveup 1s;
+
+    p {
+      margin: 24px;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 36px;
+      letter-spacing: 0em;
+    }
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 48px;
+    letter-spacing: 0em;
+    width: 100vw;
+    border-bottom: 1px solid rgba(214, 214, 214, 1);
+
+    span {
+      margin: 24px;
+    }
+  }
+
+  .join_game {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    background-color: rgba(255, 192, 0, 1);
+    font-weight: 700;
+    width: 100vw;
+    height: 62px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// 게임 대기 방
+.wait_game {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-weight: 700;
+
+  .top {
+    width: 100vw;
+    display: flex;
+    font-size: 20px;
+
+    height: 24px;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  p {
+    position: fixed;
+    top: -10px;
+    left: 16px;
+    font-size: 24px;
+  }
+
+  img {
+    width: 50px;
+    height: 74px;
+    margin-top: 200px;
+    margin-right: 20px;
+  }
+}
+
+
+
+// 게임방
+.game_3s_back {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 100vw;
+  height: 100vh;
+  font-size: 200px;
+  font-weight: 700;
+  color: rgba(255, 192, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
