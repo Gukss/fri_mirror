@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class RoomCategory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="room_id")
+  @Column(name="room_category_id")
   private Long id;
 
   @Enumerated(EnumType.STRING)

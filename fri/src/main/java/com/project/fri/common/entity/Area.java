@@ -28,7 +28,7 @@ public class Area {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="room_id")
+  @Column(name="area_id")
   private Long id;
 
   @Enumerated(EnumType.STRING)
