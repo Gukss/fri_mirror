@@ -1,16 +1,15 @@
 package com.project.fri.room.controller;
 
 import java.util.Arrays;
+
+import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.service.RoomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * packageName    : com.project.fri.room.controller fileName       : RoomController date           :
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/room")
 @Slf4j
 public class RoomController {
   private final RoomService roomService;
@@ -29,7 +29,11 @@ public class RoomController {
     return null;
   }
 
-//    @GetMapping("/room/{roomId}")
-//    public
+  @GetMapping("/{roomId}")
+  public ResponseEntity<FindRoomResponse> findRoom(@PathVariable("roomId") Long roomId) {
+    FindRoomResponse result = roomService.findRoom(roomId);
+    return ResponseEntity.status(200).body(result);
+  }
+
 
 }
