@@ -41,11 +41,11 @@ public class RoomServiceImpl implements RoomService{
 
     // request dto를 저장
     Room room = Room.builder()
-        .title(request.getTitle())
-        .headCount(request.getHeadCount())
-        .roomCategory(roomCategory)
-        .area(area)
-        .build();
+            .title(request.getTitle())
+            .headCount(request.getHeadCount())
+            .roomCategory(roomCategory)
+            .area(area)
+            .build();
 
     roomRepository.save(room);
 
