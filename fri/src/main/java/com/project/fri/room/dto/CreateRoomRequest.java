@@ -27,4 +27,5 @@ public class CreateRoomRequest {
   private com.project.fri.room.entity.Category roomCategory;
   private Category area;
   private String location;
+
 }

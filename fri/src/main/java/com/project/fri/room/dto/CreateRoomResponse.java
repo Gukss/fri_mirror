@@ -1,5 +1,6 @@
 package com.project.fri.room.dto;
 
+import com.project.fri.room.entity.Room;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,16 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class CreateRoomResponse {
-
+  private Long id;
   private String title;
   private boolean ready;
+
+  public static CreateRoomResponse create(Room room) {
+    CreateRoomResponse createRoomResponse = CreateRoomResponse.builder()
+        .id(room.getId())
+        .title(room.getTitle())
+//        .ready()
+        .build();
+    return createRoomResponse;
+  }
 }

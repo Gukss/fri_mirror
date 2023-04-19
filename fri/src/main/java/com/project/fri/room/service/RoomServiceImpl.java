@@ -47,10 +47,14 @@ public class RoomServiceImpl implements RoomService{
         .area(area)
         .build();
 
-    roomRepository.save(room);
+    Room saveRoom = roomRepository.save(room);
 
+    // user 찾기
 
-    return null;
+    // response dto로 변환
+    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(saveRoom);
+
+    return createRoomResponse;
   }
 
 
