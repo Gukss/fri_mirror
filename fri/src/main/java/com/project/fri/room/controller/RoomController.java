@@ -7,10 +7,16 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.project.fri.room.dto.CreateRoomRequest;
+import com.project.fri.room.dto.CreateRoomResponse;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * packageName    : com.project.fri.room.controller fileName       : RoomController date           :
@@ -28,9 +34,17 @@ public class RoomController {
 
     List<Room> roomList = roomService.findAllByArea(area);
     log.debug("roomList = " + Arrays.toString(roomList.toArray()));
+    return null;
   }
 
 //    @GetMapping("/room/{roomId}")
 //    public
 
+
+
+  @PostMapping
+  public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request) {
+    CreateRoomResponse createRoomResponse = roomService.createRoom(request);
+    return ResponseEntity.status(201).body(createRoomResponse);
+  }
 }
