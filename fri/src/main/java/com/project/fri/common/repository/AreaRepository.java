@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 2023-04-19        hagnoykmik       최초 생성
  */
 public interface AreaRepository extends JpaRepository<Area, Long> {
+  //todo: optional로 감싸기
   Area findByCategory(Category category);
 
 }
