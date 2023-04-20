@@ -1,5 +1,6 @@
 package com.project.fri.user.service;
 
+import com.project.fri.room.dto.UpdateUserRoomResponse;
 import com.project.fri.user.entity.User;
 import java.util.Optional;
 
@@ -15,4 +16,6 @@ public interface UserService {
    * @return
    */
   User findById(long userId);
+
+  UpdateUserRoomResponse updateUserRoom();
 }
