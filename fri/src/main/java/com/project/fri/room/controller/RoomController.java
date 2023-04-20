@@ -1,9 +1,8 @@
 package com.project.fri.room.controller;
 
-import java.util.Arrays;
-import com.project.fri.room.entity.Room;
+import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.service.RoomService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +28,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class RoomController {
   private final RoomService roomService;
   @GetMapping
-  public ResponseEntity<?> findAllByArea(@RequestParam String area){
-
-
-    List<Room> roomList = roomService.findAllByArea(area);
-    log.debug("roomList = " + Arrays.toString(roomList.toArray()));
-    return null;
+  public ResponseEntity<FindAllRoomResponse> findAllByArea(@RequestParam("area") String stringArea){
+    //String 값 Enum으로 바꿔서 roomList 찾기
+    Category area = Category.valueOf(stringArea);
+    FindAllRoomResponse findAllRoomResponse = roomService.findAllByArea(area);
+    return ResponseEntity.ok().body(findAllRoomResponse);
   }
 
 //    @GetMapping("/room/{roomId}")

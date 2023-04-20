@@ -1,6 +1,8 @@
 package com.project.fri.room.entity;
 
 import com.project.fri.common.entity.Area;
+import com.project.fri.room.dto.FindAllRoomInstance;
+import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
 import com.sun.istack.NotNull;
@@ -57,4 +59,16 @@ public class Room extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  public FindAllRoomInstance createFindRoomResponse(Category roomCategory){
+    return FindAllRoomInstance.builder()
+        .roomId(this.id)
+        .title(this.title)
+        .location(this.location)
+        //todo: 현재 방의 category_id로 category 가지고 와서 넣어주기
+        .roomCategory(roomCategory.toString())
+        .headCount(this.headCount)
+        .isConfirmed(this.isConfirmed)
+        .build();
+  }
 }

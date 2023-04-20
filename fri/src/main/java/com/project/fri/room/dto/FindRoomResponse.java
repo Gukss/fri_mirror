@@ -1,5 +1,8 @@
 package com.project.fri.room.dto;
 
+import lombok.Builder;
+
+@Builder
 public class FindRoomResponse {
 
     private Long roomId;

@@ -1,5 +1,7 @@
 package com.project.fri.room.service;
 
+import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.entity.Room;
 import java.util.List;
 
@@ -24,5 +26,5 @@ public interface RoomService {
    * @param areaString
    * @return 카테고리 별로 묶여있는 전체 방 리스트
    */
-  List<Room> findAllByArea(String areaString);
+  FindAllRoomResponse findAllByArea(Category areaString);
 }
