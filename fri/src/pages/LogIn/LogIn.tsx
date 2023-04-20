@@ -7,9 +7,18 @@ interface SingInForm {
   password: string;
 }
 
+function preloadImage(src: string) {
+  const img = new Image();
+  img.src = src;
+}
+
 export default function LogIn() {
   const navigate = useNavigate();
   const [form, setForm] = useState<SingInForm>({ id: "", password: "" });
+
+  useEffect(() => {
+    preloadImage("/assets/images/Logo.png");
+  }, []);
 
   // const contentRef = useRef<HTMLDivElement>(null);
   // const logoRef = useRef<HTMLImageElement>(null);
