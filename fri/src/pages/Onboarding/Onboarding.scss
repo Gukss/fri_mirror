@@ -1,0 +1,20 @@
+.onboarding {
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  opacity: 1;
+  transition: opacity 1s ease-out;
+
+  &.hidden {
+    opacity: 0; /* fade-out 효과로 숨김 */
+  }
+}
+.onboarding-img {
+  width: 80vw;
+  height: 80vh;
+  object-fit: contain;
+}
+
+.onboarding-text {
+  font-size: 1rem;
+}
