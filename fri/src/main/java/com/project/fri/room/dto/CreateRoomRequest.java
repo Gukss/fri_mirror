@@ -17,8 +17,6 @@ import lombok.Data;
  * 2023-04-19        hagnoykmik       최초 생성
  */
 
-@Builder
-@AllArgsConstructor
 @Data
 public class CreateRoomRequest {
 
@@ -27,4 +25,5 @@ public class CreateRoomRequest {
   private com.project.fri.room.entity.Category roomCategory;
   private Category area;
   private String location;
+
 }

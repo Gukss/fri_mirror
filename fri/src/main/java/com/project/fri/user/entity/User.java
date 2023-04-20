@@ -71,4 +71,13 @@ public class User extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  //==비즈니스 로직==//
+  /**
+   * 방 생성 시 방 update(번호는 자동으로 pk값으로 update됨)
+   */
+  public Room updateRoomNumber(Room saveRoom) {
+    this.room = saveRoom;
+    return room;
+  }
 }
