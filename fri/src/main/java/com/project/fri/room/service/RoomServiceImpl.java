@@ -6,6 +6,8 @@ import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.dto.CreateRoomRequest;
 import com.project.fri.room.dto.CreateRoomResponse;
+import com.project.fri.room.dto.FindAllUserByRoomIdDto;
+import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.room.dto.FindAllRoomInstance;
 import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.entity.Room;
@@ -17,14 +19,17 @@ import com.project.fri.user.repository.UserRepository;
 import com.project.fri.util.BaseEntity;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -86,7 +91,6 @@ public class RoomServiceImpl implements RoomService {
 
     // todo: user테이블에 방번호 추가(update)
     findUser.updateRoomNumber(saveRoom);
-
 
     // response dto로 변환
     CreateRoomResponse createRoomResponse = CreateRoomResponse.create(saveRoom, findUser);
@@ -163,4 +167,36 @@ public class RoomServiceImpl implements RoomService {
         .exercise(exerciseList)
         .build();
   }
+
+  /**
+   * desc: 요청한 방 한개에 대한 상세 정보 조회
+   * @param roomId 찾으려는 방 Id (pathvariable)
+   * @return 요청한 방에 대한 상세 정보
+   */
+  @Override
+  public FindRoomResponse findRoom(Long roomId, Long userId) {
+    Optional<Room> room = roomRepository.findRoomWithCategoryById(roomId);
+    Room findRoom = room.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
+
+    Optional<List<User>> userList = userRepository.findAllByRoom(findRoom);
+    List<User> findUserList = userList.orElseThrow(() -> new IllegalStateException("유저가 없는 방은 존재할 수 없습니다."));
+
+    List<FindAllUserByRoomIdDto> majorList = findUserList.stream()
+            .filter(User::isMajor)
+            .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+            .collect(Collectors.toList());
+
+    List<FindAllUserByRoomIdDto> nonMajorList = findUserList.stream()
+            .filter(user -> !user.isMajor())
+            .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+            .collect(Collectors.toList());
+
+    Optional<User> user = userRepository.findById(userId);
+    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    Boolean isParticipated = findUser.getRoom().equals(findRoom);
+
+    return new FindRoomResponse(findRoom, isParticipated, majorList, nonMajorList);
+  }
+
 }
