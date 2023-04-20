@@ -22,9 +22,9 @@ spring:
 #      ddl-auto: create
     properties:
       hibernate:
-        # sql ?? ?? ? ???? ``?? ????.
+        # sql 변수 생성 시 자동으로 ``으로 감싸준다.
         globally_quoted_identifiers: true
-        # ??? ?? sql ?? ?? ?????.
+        # 콘솔에 뜨는 sql 보기 좋게 만들어준다.
         format_sql: true
 
 logging:

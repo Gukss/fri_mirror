@@ -3,6 +3,10 @@ package com.project.fri.room.service;
 import com.project.fri.common.entity.Area;
 import com.project.fri.common.entity.Category;
 import com.project.fri.room.dto.FindAllRoomByCategoryResponse;
+
+import com.project.fri.room.dto.FindRoomResponse;
+import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.entity.RoomCategory;
 import java.util.List;
@@ -35,4 +39,14 @@ public interface RoomService {
    * @return 카테고리 별 방 목록 더보기
    */
   List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category area, com.project.fri.room.entity.Category roomCategory);
+  
+  FindAllRoomResponse findAllByArea(Category areaString);
+
+  /**
+   * desc: 요청한 방 한개에 대한 상세 정보 조회
+   * @param roomId 찾으려는 방 Id
+   * @return 요청한 방에 대한 상세 정보
+   */
+  FindRoomResponse findRoom(Long roomId, Long userId);
+
 }
