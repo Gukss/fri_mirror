@@ -20,13 +20,16 @@ public class FindRoomResponse {
     private List<FindAllUserByRoomIdDto> major;
     private List<FindAllUserByRoomIdDto> nonMajor;
 
-    public FindRoomResponse(Room room, List<FindAllUserByRoomIdDto> major, List<FindAllUserByRoomIdDto> nonMajor) {
+    public FindRoomResponse(Room room, Boolean isParticipated, List<FindAllUserByRoomIdDto> majorList, List<FindAllUserByRoomIdDto> nonMajorList) {
         roomId = room.getId();
         title = room.getTitle();
         location = room.getLocation();
-        roomCategory = String.valueOf(room.getRoomCategory());
+        roomCategory = String.valueOf(room.getRoomCategory().getCategory());
         headCount = room.getHeadCount();
         isConfirmed = room.isConfirmed();
+        isParticipate = isParticipated;
+        major = majorList;
+        nonMajor = nonMajorList;
     }
 
 }

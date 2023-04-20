@@ -26,5 +26,5 @@ public interface RoomService {
    * @param roomId 찾으려는 방 Id
    * @return 요청한 방에 대한 상세 정보
    */
-  FindRoomResponse findRoom(Long roomId);
+  FindRoomResponse findRoom(Long roomId, Long userId);
 }

@@ -5,6 +5,7 @@ import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.dto.CreateRoomRequest;
 import com.project.fri.room.dto.CreateRoomResponse;
+import com.project.fri.room.dto.FindAllUserByRoomIdDto;
 import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.entity.RoomCategory;
@@ -22,7 +23,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,15 +90,29 @@ public class RoomServiceImpl implements RoomService {
    * @return 요청한 방에 대한 상세 정보
    */
   @Override
-  public FindRoomResponse findRoom(Long roomId) {
-    Optional<Room> room = roomRepository.findById(roomId);
+  public FindRoomResponse findRoom(Long roomId, Long userId) {
+    Optional<Room> room = roomRepository.findRoomWithCategoryById(roomId);
     Room findRoom = room.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
-    Optional<List<User>> userList = userRepository.findByRoom(findRoom);
+    Optional<List<User>> userList = userRepository.findAllByRoom(findRoom);
     List<User> findUserList = userList.orElseThrow(() -> new IllegalStateException("유저가 없는 방은 존재할 수 없습니다."));
 
+    List<FindAllUserByRoomIdDto> majorList = findUserList.stream()
+            .filter(User::isMajor)
+            .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+            .collect(Collectors.toList());
 
+    List<FindAllUserByRoomIdDto> nonMajorList = findUserList.stream()
+            .filter(user -> !user.isMajor())
+            .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+            .collect(Collectors.toList());
 
+    Optional<User> user = userRepository.findById(userId);
+    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    Boolean isParticipated = findUser.getRoom().equals(findRoom);
+
+    return new FindRoomResponse(findRoom, isParticipated, majorList, nonMajorList);
   }
 
 }

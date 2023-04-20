@@ -12,5 +12,5 @@ import java.util.Optional;
  * 2023-04-18 description    :
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<List<User>> findByRoom(Room room);
+    Optional<List<User>> findAllByRoom(Room room);
 }
