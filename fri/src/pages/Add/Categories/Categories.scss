@@ -1,0 +1,40 @@
+.category-select-box {
+  .category-label {
+    text-align: start;
+    margin: 1rem 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #000000;
+  }
+
+  .category-select-boxs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+
+    .select-box {
+      height: 15vh;
+      background: #fff2cb;
+      box-shadow: 2px 2px 1px #7c7c7c;
+      border-radius: 0.5rem;
+      display: grid;
+      align-items: center;
+
+      transition: 0.2s ease-in-out;
+
+      .title {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+      .content {
+        margin: 0 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      &#select {
+        background: #ffc000;
+      }
+    }
+  }
+}

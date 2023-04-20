@@ -64,7 +64,6 @@ export default function SignUp() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const isFormValid = Object.values(error).every((value) => value === true);
-      console.log(error, isFormValid);
 
       if (isFormValid) {
         // 회원가입 axios

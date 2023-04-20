@@ -1,0 +1,46 @@
+.add-room {
+  display: grid;
+  //   place-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.add-container {
+  width: 100vw;
+}
+
+.small-logo {
+  margin: 1.5rem;
+  //   text-align: start;
+}
+
+.add-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1.5rem;
+  text-align: start;
+}
+
+.add-form {
+  margin: 1.5rem;
+}
+
+.add-btn {
+  width: 40vw;
+  height: 5vh;
+  margin-top: 3rem;
+  background: #ffc000;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 1px #000000;
+  font-size: 1.25rem;
+  font-weight: bold;
+
+  visibility: hidden;
+  transition: ease-in-out 0.2s;
+
+  &#show {
+    visibility: visible;
+    transition: ease-in-out 0.2s;
+  }
+}
