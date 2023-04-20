@@ -1,6 +1,8 @@
 package com.project.fri.room.repository;
 
+import com.project.fri.common.entity.Area;
 import com.project.fri.room.entity.Room;
+import com.project.fri.room.entity.RoomCategory;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +16,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-  Optional<List<Room>> findAllByArea(int areaId);
+  Optional<List<Room>> findAllByArea(Area area);
+  Optional<List<Room>> findAllByAreaAndRoomCategory(Area area, RoomCategory roomCategory);
+
 }
+

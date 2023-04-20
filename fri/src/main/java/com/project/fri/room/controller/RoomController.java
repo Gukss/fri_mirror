@@ -1,5 +1,9 @@
 package com.project.fri.room.controller;
 
+import com.project.fri.common.entity.Area;
+import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.FindAllRoomByCategoryResponse;
+import com.project.fri.room.entity.RoomCategory;
 import java.util.Arrays;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.service.RoomService;
@@ -27,7 +31,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/room")
 @Slf4j
 public class RoomController {
+
   private final RoomService roomService;
+
   @GetMapping
   public ResponseEntity<?> findAllByArea(@RequestParam String area){
 
@@ -41,10 +47,30 @@ public class RoomController {
 //    public
 
 
-
+  /**
+   * 방 생성
+   */
   @PostMapping
   public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request) {
     CreateRoomResponse createRoomResponse = roomService.createRoom(request);
     return ResponseEntity.status(201).body(createRoomResponse);
   }
+
+  /**
+   * 방 더보기
+   * @param area
+   * @param category
+   * @return
+   */
+  @GetMapping("/category")
+  public ResponseEntity<List<FindAllRoomByCategoryResponse>> findAllByAreaAndRoomCategory(
+      @RequestParam("area") Category area,
+      @RequestParam("category") com.project.fri.room.entity.Category category) {
+
+    List<FindAllRoomByCategoryResponse> seeMoreRoom = roomService.findAllByAreaAndRoomCategory(
+        area, category);
+    return ResponseEntity.status(200).body(seeMoreRoom);
+  }
+
+
 }
