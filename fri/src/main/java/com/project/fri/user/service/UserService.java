@@ -1,7 +1,7 @@
 package com.project.fri.user.service;
 
+import com.project.fri.user.dto.UpdateUserReadyResponse;
 import com.project.fri.user.entity.User;
-import java.util.Optional;
 
 /**
  * packageName    : com.project.fri.user.service fileName       : UserService date           :
@@ -15,4 +15,12 @@ public interface UserService {
    * @return
    */
   User findById(long userId);
+
+  /**
+   * desc: id로 user 찾아서 들고있는 방 번호가 입력받은 방 번호와 일치하는지 확인하고 일치하면 ready를 not해서 바꿔주기
+   *
+   * @param roomId
+   * @return
+   */
+  UpdateUserReadyResponse updateUserReady(long userId, long roomId);
 }
