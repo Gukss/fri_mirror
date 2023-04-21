@@ -1,8 +1,8 @@
 package com.project.fri.user.service;
 
-import com.project.fri.room.dto.UpdateUserRoomResponse;
+import com.project.fri.user.dto.UpdateUserRoomRequest;
+import com.project.fri.user.dto.UpdateUserRoomResponse;
 import com.project.fri.user.entity.User;
-import java.util.Optional;
 
 /**
  * packageName    : com.project.fri.user.service fileName       : UserService date           :
@@ -17,5 +17,11 @@ public interface UserService {
    */
   User findById(long userId);
 
-  UpdateUserRoomResponse updateUserRoom();
+  /**
+   * 방 입장시 User의 room 업데이트
+   * @param roomId
+   * @param request
+   * @return
+   */
+  UpdateUserRoomResponse updateUserRoom(Long roomId, UpdateUserRoomRequest request, Long userId);
 }

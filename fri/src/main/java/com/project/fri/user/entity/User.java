@@ -80,4 +80,8 @@ public class User extends BaseTimeEntity {
     this.room = saveRoom;
     return room;
   }
+
+  public void outRoom() {
+    room = null;
+  }
 }

@@ -1,4 +1,4 @@
-package com.project.fri.room.dto;
+package com.project.fri.user.dto;
 
 import lombok.Data;
 
