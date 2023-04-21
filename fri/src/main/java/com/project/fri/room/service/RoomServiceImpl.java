@@ -15,6 +15,7 @@ import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import com.project.fri.util.BaseEntity;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
