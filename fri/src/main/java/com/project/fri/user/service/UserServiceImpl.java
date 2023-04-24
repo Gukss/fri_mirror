@@ -57,13 +57,15 @@ public class UserServiceImpl implements UserService {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
       if (Boolean.TRUE.equals(request.getIsParticipate())) {
         findUser.updateRoomNumber(findRoom);
+        findUser.updateReady(false);
       } else {
         participate = false;
       }
     } else if (findUser.getRoom().equals(findRoom) && Boolean.FALSE.equals(request.getIsParticipate())) {
       // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제 및 유저 ready상태 false
       findUser.updateRoomNumber(null);
-      //ready 상태 false만들기 -> merge 하고난 후
+      //ready 상태 false만들기
+      findUser.updateReady(false);
       participate = false;
       // 해당방에 유저가 남아 있는지 확인 없으면 방 삭제
       List<User> findUsers = userRepository.findAllByRoom(findRoom).orElse(new ArrayList<>());
