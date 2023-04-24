@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
   private final RoomRepository roomRepository;
 
   private final UserRepository userRepository;
-  private final RoomRepository roomRepository;
 
   @Override
   public User findById(long userId) {

@@ -22,10 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-<<<<<<< fri/src/main/java/com/project/fri/user/controller/UserController.java
-=======
 @Slf4j
->>>>>>> fri/src/main/java/com/project/fri/user/controller/UserController.java
+
 public class UserController {
     private final UserService userService;
 
@@ -35,8 +33,6 @@ public class UserController {
         UpdateUserRoomResponse updateUserRoomResponse = userService.updateUserRoom(roomId, request, userId);
         return ResponseEntity.status(201).body(updateUserRoomResponse);
     }
-
-  private final UserService userService;
 
   @PatchMapping("{roomId}/ready")
   public ResponseEntity<UpdateUserReadyResponse> updateUserReady(@PathVariable Long roomId) {
