@@ -80,4 +80,14 @@ public class User extends BaseTimeEntity {
     this.room = saveRoom;
     return room;
   }
+
+  /**
+   * desc: 사용자가 ready를 눌렀을 때 입력받은 값으로 ready를 update한다.
+   * @param ready
+   * @return
+   */
+  public User updateReady(boolean ready){
+    this.ready = ready;
+    return this;
+  }
 }
