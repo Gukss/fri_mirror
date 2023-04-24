@@ -73,6 +73,9 @@ public class Room extends BaseTimeEntity {
         .build();
   }
 
+  public void deleteRoom() {
+    isDelete = true;
+
   public Room updateIsConfirmed(boolean isConfirmed){
     this.isConfirmed = isConfirmed;
     return this;
