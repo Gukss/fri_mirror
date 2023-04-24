@@ -2,6 +2,7 @@ package com.project.fri.user.entity;
 
 import com.project.fri.common.entity.Area;
 import com.project.fri.room.entity.Room;
+import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
 import com.sun.istack.NotNull;
@@ -89,5 +90,27 @@ public class User extends BaseTimeEntity {
   public User updateReady(boolean ready){
     this.ready = ready;
     return this;
+  }
+
+  //==생성메서드==//
+  public static User create(CreateUserRequest request, Area area) {
+    User user = User.builder()
+        .name(request.getName())
+        .area(area)
+        .isMajor(request.isMajor())
+        .year(request.getYear())
+        .email(request.getEmail())
+//        .profileUrl()
+        .password(request.getPassword())
+        .heart(5)
+        .nickname(request.getNickname())
+        .isCertified(false)  // 인증 전
+        .ready(false)
+        .baseEntity(BaseEntity.builder()
+            .constructor(request.getName())
+            .updater(request.getName())
+            .build())
+        .build();
+    return user;
   }
 }

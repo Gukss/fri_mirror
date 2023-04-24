@@ -1,5 +1,6 @@
 package com.project.fri.user.service;
 
+import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.user.dto.UpdateUserReadyResponse;
 import com.project.fri.user.entity.User;
 
@@ -23,4 +24,10 @@ public interface UserService {
    * @return
    */
   UpdateUserReadyResponse updateUserReady(long userId, long roomId);
+
+  /**
+   * desc: 회원가입
+   * @return
+   */
+  void createUser(CreateUserRequest request);
 }

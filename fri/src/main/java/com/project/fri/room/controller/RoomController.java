@@ -1,13 +1,9 @@
 package com.project.fri.room.controller;
 
-import com.project.fri.common.entity.Area;
 import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.CreateRoomResponse;
 import com.project.fri.room.dto.FindAllRoomByCategoryResponse;
-import com.project.fri.room.entity.RoomCategory;
-import java.util.Arrays;
 import com.project.fri.room.dto.FindRoomResponse;
-import com.project.fri.room.entity.Room;
-import com.project.fri.common.entity.Category;
 import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.service.RoomService;
 import java.util.List;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.project.fri.room.dto.CreateRoomRequest;
-import com.project.fri.room.dto.CreateRoomResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**

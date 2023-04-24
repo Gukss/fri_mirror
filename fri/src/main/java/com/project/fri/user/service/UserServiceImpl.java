@@ -1,8 +1,11 @@
 package com.project.fri.user.service;
 
+import com.project.fri.common.entity.Area;
+import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
+import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.user.dto.UpdateUserReadyResponse;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
@@ -23,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
   private final RoomRepository roomRepository;
-
+  private final AreaRepository areaRepository;
   private final UserRepository userRepository;
 
   @Override
@@ -84,5 +87,20 @@ public class UserServiceImpl implements UserService {
       //todo: 반환 객체 updateUserReadyResponse 에 error 담아서 보내기?
     }
     return updateUserReadyResponse;
+  }
+
+  /**
+   * desc: 회원가입
+   * @return
+   */
+  @Override
+  public void createUser(CreateUserRequest request) {
+
+    // area 찾기
+    Area area = areaRepository.findByCategory(request.getArea());
+
+    // user db에 저장
+    User user = User.create(request, area);
+    User saveUser = userRepository.save(user);
   }
 }

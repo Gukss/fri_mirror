@@ -1,18 +1,14 @@
 package com.project.fri.room.service;
 
-import com.project.fri.common.entity.Area;
 import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.CreateRoomResponse;
 import com.project.fri.room.dto.FindAllRoomByCategoryResponse;
 
 import com.project.fri.room.dto.FindRoomResponse;
-import com.project.fri.common.entity.Category;
 import com.project.fri.room.dto.FindAllRoomResponse;
-import com.project.fri.room.entity.Room;
-import com.project.fri.room.entity.RoomCategory;
 import java.util.List;
 
 import com.project.fri.room.dto.CreateRoomRequest;
-import com.project.fri.room.dto.CreateRoomResponse;
 
 /**
  * packageName    : com.project.fri.room.service fileName       : RoomService date           :
