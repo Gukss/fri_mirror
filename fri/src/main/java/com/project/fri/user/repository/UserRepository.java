@@ -18,6 +18,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<List<User>> findAllByRoom(Room room);
 
-    @Query("SELECT u FROM User u JOIN u.room WHERE u.id = :userId")
-    Optional<User> findByIdWithRoom(@Param("userId") Long userId);
+    Optional<User> findById(Long userId);
 }

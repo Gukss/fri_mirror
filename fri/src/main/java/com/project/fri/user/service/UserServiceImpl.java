@@ -36,21 +36,32 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public UpdateUserRoomResponse updateUserRoom(Long roomId, UpdateUserRoomRequest request, Long userId) {
-    Optional<User> user = userRepository.findByIdWithRoom(userId);
+    Optional<User> user = userRepository.findById(userId);
     User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
     Optional<Room> room = roomRepository.findById(roomId);
     Room findRoom = room.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
+    // 삭제된 방인지 먼저 확인
+    if (Boolean.TRUE.equals(findRoom.isDelete())) {
+      throw new NotFoundExceptionMessage((NotFoundExceptionMessage.NOT_FOUND_ROOM));
+    }
+
     boolean participate = true;
 
-    if (findUser.getRoom() == null) {
+    if (findUser.getRoom() == null ) {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
-      findUser.updateRoomNumber(findRoom);
-    } else if (findUser.getRoom().equals(findRoom)) {
-      // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제
+      if (Boolean.TRUE.equals(request.getIsParticipate())) {
+        findUser.updateRoomNumber(findRoom);
+      } else {
+        participate = false;
+      }
+    } else if (findUser.getRoom().equals(findRoom) && Boolean.FALSE.equals(request.getIsParticipate())) {
+      // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제 및 유저 ready상태 false
       findUser.updateRoomNumber(null);
+      //ready 상태 false만들기 -> merge 하고난 후
       participate = false;
       // 해당방에 유저가 남아 있는지 확인 없으면 방 삭제
       List<User> findUsers = userRepository.findAllByRoom(findRoom).orElse(new ArrayList<>());
@@ -66,7 +77,7 @@ public class UserServiceImpl implements UserService {
             .roomId(findRoom.getId())
             .title(findRoom.getTitle())
             .isParticipate(participate)
-            .ready(true)
+            .ready(false)
             .build();
   }
 
