@@ -1,5 +1,9 @@
 package com.project.fri.user.controller;
 
+import com.project.fri.user.dto.UpdateUserRoomRequest;
+import com.project.fri.user.dto.UpdateUserRoomResponse;
+import com.project.fri.user.service.UserService;
+import org.springframework.web.bind.annotation.*;
 import com.project.fri.user.dto.UpdateUserReadyResponse;
 import com.project.fri.user.service.UserService;
 import java.net.URI;
@@ -18,8 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+<<<<<<< fri/src/main/java/com/project/fri/user/controller/UserController.java
+=======
 @Slf4j
+>>>>>>> fri/src/main/java/com/project/fri/user/controller/UserController.java
 public class UserController {
+    private final UserService userService;
+
+    @PatchMapping("/room/{roomId}")
+    public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId, @RequestBody UpdateUserRoomRequest request) {
+        Long userId = 4L;
+        UpdateUserRoomResponse updateUserRoomResponse = userService.updateUserRoom(roomId, request, userId);
+        return ResponseEntity.status(201).body(updateUserRoomResponse);
+    }
 
   private final UserService userService;
 

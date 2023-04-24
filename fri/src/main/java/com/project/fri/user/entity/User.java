@@ -90,4 +90,5 @@ public class User extends BaseTimeEntity {
     this.ready = ready;
     return this;
   }
+
 }
