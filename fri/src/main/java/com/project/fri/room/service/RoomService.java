@@ -1,10 +1,14 @@
 package com.project.fri.room.service;
 
+import com.project.fri.common.entity.Area;
+import com.project.fri.common.entity.Category;
+import com.project.fri.room.dto.FindAllRoomByCategoryResponse;
 
 import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.common.entity.Category;
 import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.entity.Room;
+import com.project.fri.room.entity.RoomCategory;
 import java.util.List;
 
 import com.project.fri.room.dto.CreateRoomRequest;
@@ -28,6 +32,14 @@ public interface RoomService {
    * @param areaString
    * @return 카테고리 별로 묶여있는 전체 방 리스트
    */
+//  List<Room> findAllByArea(String areaString);
+
+  /**
+   * 방 더보기
+   * @return 카테고리 별 방 목록 더보기
+   */
+  List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category area, com.project.fri.room.entity.Category roomCategory);
+  
   FindAllRoomResponse findAllByArea(Category areaString);
 
   /**

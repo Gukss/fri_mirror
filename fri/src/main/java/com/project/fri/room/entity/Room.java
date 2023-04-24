@@ -3,6 +3,7 @@ package com.project.fri.room.entity;
 import com.project.fri.common.entity.Area;
 import com.project.fri.room.dto.FindAllRoomInstance;
 import com.project.fri.room.dto.FindRoomResponse;
+import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
 import com.sun.istack.NotNull;
@@ -74,5 +75,9 @@ public class Room extends BaseTimeEntity {
 
   public void deleteRoom() {
     isDelete = true;
+
+  public Room updateIsConfirmed(boolean isConfirmed){
+    this.isConfirmed = isConfirmed;
+    return this;
   }
 }
