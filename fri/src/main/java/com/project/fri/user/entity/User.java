@@ -81,7 +81,4 @@ public class User extends BaseTimeEntity {
     return room;
   }
 
-  public void outRoom() {
-    room = null;
-  }
 }
