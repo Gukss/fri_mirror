@@ -32,7 +32,7 @@ public interface RoomService {
    * @param areaString
    * @return 카테고리 별로 묶여있는 전체 방 리스트
    */
-  List<Room> findAllByArea(String areaString);
+//  List<Room> findAllByArea(String areaString);
 
   /**
    * 방 더보기
