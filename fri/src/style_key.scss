@@ -80,7 +80,6 @@
       margin-right: 20px;
       color: rgba(124, 124, 124, 1);
     }
-
   }
 }
 
@@ -236,8 +235,6 @@
       color: rgba(124, 124, 124, 1);
     }
   }
-
-
 }
 
 .meeting_room_full {
@@ -319,24 +316,23 @@
 // 방 상세보기 모달같은거
 @-webkit-keyframes moveup {
   0% {
-    bottom: -450px
+    bottom: -450px;
   }
 
   100% {
-    bottom: 0
+    bottom: 0;
   }
 }
 
 @keyframes moveup {
   0% {
-    bottom: -450px
+    bottom: -450px;
   }
 
   100% {
-    bottom: 0
+    bottom: 0;
   }
 }
-
 
 .room_detail {
   background-color: rgba(0, 0, 0, 0.25);
@@ -415,6 +411,75 @@
     justify-content: center;
   }
 
+  .info {
+    font-size: 20px;
+    margin-top: 20px;
+  }
+
+  .player-list {
+    margin: 24px auto;
+    width: 90%;
+    // height: 210px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    justify-items: center;
+    align-self: center;
+  }
+
+  .player {
+    width: 80%;
+    height: 100%;
+    // margin: 0 24px;
+
+    .player-profile {
+      width: 100%;
+      height: 70%;
+
+      background: #ffefbd;
+      border-radius: 30px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .profile-img {
+      width: 80%;
+      height: 80%;
+      margin: 0;
+    }
+
+    .player-name {
+      margin-top: 4px;
+      width: 100%;
+      // height: 20%;
+    }
+  }
+
+  .ready {
+    font-size: 1.2rem;
+  }
+
+  .ready-btn {
+    width: 40%;
+    height: 40px;
+
+    background: #ffc000;
+    box-shadow: 2px 2px 1px #000000;
+    border-radius: 8px;
+    border: none;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    &:hover {
+      background: #ffce3c;
+    }
+  }
+
   p {
     position: fixed;
     top: -10px;
@@ -424,20 +489,20 @@
 
   img {
     width: 50px;
-    height: 74px;
-    margin-top: 200px;
+    height: 60px;
+    margin-top: 80px;
     margin-right: 20px;
   }
 }
 
-
-
 // 게임방
+
 .game_3s_back {
-  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
   width: 100vw;
   height: 100vh;
-  font-size: 200px;
+  font-size: 250px;
   font-weight: 700;
   color: rgba(255, 192, 0, 1);
   display: flex;
@@ -445,4 +510,37 @@
   justify-content: center;
   margin: 0;
   padding: 0;
+  z-index: 1;
+}
+
+.game {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+
+  .timer {
+    font-size: 5rem;
+    font-weight: bold;
+  }
+
+  .game-content {
+    font-size: 2rem;
+
+    span {
+      font-weight: bold;
+      font-size: 2.5rem;
+      text-decoration: underline;
+    }
+  }
+
+  .wait_lgm {
+    width: 40px;
+  }
+
+  .flip {
+    transform: scaleX(-1);
+    transition: transform 0.5s ease;
+  }
 }
