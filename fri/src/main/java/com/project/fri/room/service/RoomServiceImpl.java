@@ -122,7 +122,7 @@ public class RoomServiceImpl implements RoomService {
 
     for(Room x: roomList){
 
-      com.project.fri.room.entity.Category category = x.getRoomCategory().getCategory();
+      Category category = x.getRoomCategory().getCategory();
       if(x.getId() == enrollRoomId){ //참여중인 방이면 화면에 출력되지 않는다.
         continue;
       }
