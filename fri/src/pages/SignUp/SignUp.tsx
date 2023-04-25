@@ -52,6 +52,16 @@ export default function SignUp() {
     passwordCheck: false
   });
 
+  const [major, setMajor] = useState<boolean>(true);
+
+  const handleMajorChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setMajor(value === "major");
+    },
+    [major]
+  );
+
   const handleInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -210,6 +220,40 @@ export default function SignUp() {
         </div>
         <div className="signup-form">
           <form onSubmit={handleSubmit}>
+            <div className="signup-box">
+              <div className="signup-label" id="label">
+                # 전공자 / 비전공자 <span>(클릭해 주세요.)</span>
+              </div>
+              <div className="signup-input radio">
+                <div className="switch">
+                  <div className="quality">
+                    <input
+                      id="major"
+                      type="radio"
+                      name="major"
+                      value="major"
+                      checked={major}
+                      onChange={handleMajorChange}
+                    />
+                    <label htmlFor="major">전공자</label>
+                  </div>
+                  <div className="quality">
+                    <input
+                      id="nonMajor"
+                      type="radio"
+                      name="major"
+                      value="nonMajor"
+                      checked={!major}
+                      onChange={handleMajorChange}
+                    />
+                    <label htmlFor="nonMajor">비전공자</label>
+                  </div>
+                </div>
+              </div>
+              <div id="areamessage" className="message">
+                {message.area}
+              </div>
+            </div>
             <div className="signup-box">
               <div className="signup-label" id="label">
                 # 캠퍼스 <span>(지역만 입력해주세요.)</span>
