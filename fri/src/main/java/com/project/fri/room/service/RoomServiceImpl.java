@@ -19,9 +19,7 @@ import com.project.fri.room.repository.RoomCategoryRepository;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
-import com.project.fri.util.BaseEntity;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -30,17 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import com.project.fri.room.entity.Room;
-import com.project.fri.room.repository.RoomRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -78,7 +65,6 @@ public class RoomServiceImpl implements RoomService {
     // 방, 지역 카테고리 객체화
     RoomCategory roomCategory = roomCategoryRepository.findByCategory(request.getRoomCategory());
     Area area = areaRepository.findByCategory(request.getArea());
-//  private final JPAQueryFactory queryFactory;
 
     // headCount 내기 방 제외 DB 저장 전에 x2
     int headCount = request.getHeadCount();
@@ -87,27 +73,14 @@ public class RoomServiceImpl implements RoomService {
     }
 
     // request dto를 저장
-    Room room = Room.builder()
-        .title(request.getTitle())
-        .headCount(headCount)
-        .location(request.getLocation())
-        .roomCategory(roomCategory)
-        .area(area)
-        // todo: user
-        .baseEntity(BaseEntity.builder()
-            .constructor(findUser.getName())
-            .updater(findUser.getName())
-            .build())
-        .build();
-
-    Room saveRoom = roomRepository.save(room);
-
+    Room room = Room.create(request, findUser, headCount, roomCategory, area);
+    roomRepository.save(room);
 
     // todo: user테이블에 방번호 추가(update)
-    findUser.updateRoomNumber(saveRoom);
+    findUser.updateRoomNumber(room);
 
     // response dto로 변환
-    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(saveRoom, findUser);
+    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room, findUser);
 
     return createRoomResponse;
   }
