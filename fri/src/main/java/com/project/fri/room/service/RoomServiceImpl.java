@@ -1,7 +1,5 @@
 package com.project.fri.room.service;
 
-import static com.project.fri.room.entity.Category.BETTING;
-
 import com.project.fri.common.entity.Area;
 import com.project.fri.common.entity.Category;
 import com.project.fri.common.repository.AreaRepository;
@@ -68,9 +66,9 @@ public class RoomServiceImpl implements RoomService {
 
     // headCount 내기 방 제외 DB 저장 전에 x2
     int headCount = request.getHeadCount();
-    if (roomCategory.getCategory() != BETTING) {
-      headCount *= 2;
-    }
+    // if (roomCategory.getCategory() != BETTING) {
+    //   headCount *= 2;
+    // }
 
     // request dto를 저장
     Room room = Room.create(request, findUser, headCount, roomCategory, area);
@@ -130,9 +128,9 @@ public class RoomServiceImpl implements RoomService {
         case STUDY:
           studyList.add(x.createFindRoomResponse(category));
           break;
-        case BETTING:
-          bettingList.add(x.createFindRoomResponse(category));
-          break;
+        // case BETTING:
+        //   bettingList.add(x.createFindRoomResponse(category));
+        //   break;
         case ETC:
           etcList.add(x.createFindRoomResponse(category));
           break;
