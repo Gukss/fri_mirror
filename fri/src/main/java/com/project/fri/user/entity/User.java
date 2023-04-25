@@ -1,6 +1,7 @@
 package com.project.fri.user.entity;
 
 import com.project.fri.common.entity.Area;
+import com.project.fri.gameRoom.entity.GameRoom;
 import com.project.fri.room.entity.Room;
 import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.util.BaseEntity;
@@ -68,6 +69,10 @@ public class User extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "room_id")
   private Room room;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "game_room_id")
+  private GameRoom gameRoom;
 
   @Embedded
   @NotNull
