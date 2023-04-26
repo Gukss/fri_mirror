@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Onboarding from "./pages/Onboarding/Onboarding";
-import Main from "./pages/mainPage";
+import Main from "./pages/Main/mainPage";
+import More from "./pages/Main/morePage";
 import Game from "./pages/Game/gamePage";
 import GameWait from "./pages/Game/gameWaitPage";
 import LogIn from "./pages/LogIn/LogIn";
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Onboarding />} />
           <Route path="/main" element={<Main />} />
+          <Route path="/more" element={<More />} />
           <Route path="/wait/:room" element={<GameWait />} />
           <Route path="/game/:room" element={<Game />} />
           <Route path="/login" element={<LogIn />} />

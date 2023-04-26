@@ -167,7 +167,7 @@
 
 // 미팅 룸 컴포넌트
 .room_component {
-  width: 161px;
+  width: 155px;
   height: auto;
   padding: 12px;
 }
@@ -179,7 +179,8 @@
   border-radius: 16px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 240, 195, 1);
-  margin: 0 0 24px 0;
+  margin: 0;
+  text-align: left;
 
   p {
     margin: 0;
@@ -262,7 +263,8 @@
   border-radius: 16px;
   background-color: rgba(255, 240, 195, 1);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  margin: 0 0 24px 0;
+  margin: 0;
+  text-align: left;
 
   p {
     margin: 0;
@@ -272,7 +274,6 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 17px;
-    letter-spacing: 0em;
     margin-bottom: 8px;
     color: rgba(255, 192, 0, 1);
   }
@@ -585,6 +586,7 @@
       font-size: 1.5rem;
       font-weight: bold;
     }
+
     .time {
       font-size: 1.25rem;
       font-weight: bold;
