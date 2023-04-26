@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./Categories.scss";
 
 interface Error {
@@ -29,7 +29,7 @@ export default function Categories({
   error,
   setError
 }: CateProps) {
-  const navigate = useNavigate();
+  const [searchparams, setSearchParmas] = useSearchParams();
   const [select, setSelect] = useState<string>("");
 
   const handleClick = useCallback(
@@ -100,9 +100,7 @@ export default function Categories({
           onClick={() => handleClick("공부")}
         >
           <div className="title">공부</div>
-          <div className="content">
-            공부, 스터디, 취준 <br /> 할 사람
-          </div>
+          <div className="content">공부, 스터디, 취준할 사람</div>
         </div>
         <div
           className="select-box"
@@ -116,7 +114,15 @@ export default function Categories({
         className="add-btn"
         id={select === "" ? "" : "show"}
         onClick={() => {
-          navigate("/add?tab=others");
+          if (form.cate === "내기") {
+            searchparams.set("tab", "infos");
+            searchparams.set("cate", "bet");
+            setSearchParmas(searchparams);
+          } else {
+            searchparams.set("tab", "infos");
+            searchparams.set("cate", "meeting");
+            setSearchParmas(searchparams);
+          }
         }}
       >
         다음
