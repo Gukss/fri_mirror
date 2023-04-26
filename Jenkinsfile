@@ -11,7 +11,7 @@ pipeline{
                     try{
                         sh "docker stop ${BACK_SPRING_CONTAINER_NAME}"
                         sleep 1
-	                    sh "docker rm ${BACK_SPRING_CONTAINER_NAME}"
+                        sh "docker rm ${BACK_SPRING_CONTAINER_NAME}"
                     }catch(e){
                         sh 'exit 0'
                     }
