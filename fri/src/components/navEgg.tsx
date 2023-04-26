@@ -16,7 +16,7 @@ function Nav({isnav, setIsnav} : navType) {
 				<img src="/assets/plus_btn.png" id="create" style={isnav ? {bottom : "190px"} : {bottom : "-190px"}} onClick={() => navigate("/add" + "?tab=cate")} />
 				<div id="meeting" style={isnav ? {bottom : "130px"} : {bottom : "-130px"}} onClick={() => navigate('/main')}>미팅</div>
 				<div id="chat" style={isnav ? {bottom : "55px"} : {bottom : "-55px"}} >채팅</div>
-				<div id="my" style={isnav ? {bottom : "55px"} : {bottom : "-55px"}} >마잉</div>        
+				<div id="my" style={isnav ? {bottom : "55px"} : {bottom : "-55px"}} onClick={() => navigate("/my")}>마잉</div>        
 				<img src="/assets/egg_nav.png" alt="nav_egg" id="egg_nav" style={isnav ? {bottom : "-110px"} : {bottom : "-300px"}} onClick={() => setIsnav(false)}/>
 			</div>  
 		</>

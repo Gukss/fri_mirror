@@ -73,14 +73,14 @@ export default function LogIn() {
 
   return (
     <div className="login">
-      <div
+      {/* <div
         onClick={() => {
           navigate(-1);
         }}
         style={{ position: "absolute", top: 0, left: 0 }}
       >
         뒤로
-      </div>
+      </div> */}
       <div className="login-container">
         <div>
           <img
@@ -116,7 +116,7 @@ export default function LogIn() {
               />
             </div>
             <div className="login-box">
-              <button className="login-btn">로그인</button>
+              <button className="login-btn" onClick={()=> navigate("/main")}>로그인</button>
             </div>
           </form>
           <div

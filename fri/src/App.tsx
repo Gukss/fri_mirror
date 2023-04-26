@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Onboarding from "./pages/Onboarding/Onboarding";
@@ -9,6 +8,7 @@ import GameWait from "./pages/Game/gameWaitPage";
 import LogIn from "./pages/LogIn/LogIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Add from "./pages/Add/Add";
+import My from "./pages/My/MyPage"
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/add" element={<Add />} />
+          <Route path="/my" element={<My />} />
         </Routes>
       </Router>
     </div>
