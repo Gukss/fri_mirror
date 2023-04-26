@@ -8,7 +8,8 @@ import GameWait from "./pages/Game/gameWaitPage";
 import LogIn from "./pages/LogIn/LogIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Add from "./pages/Add/Add";
-import My from "./pages/My/MyPage"
+import My from "./pages/My/MyPage";
+import Chat from "./pages/Chat/Chat";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/add" element={<Add />} />
           <Route path="/my" element={<My />} />
+          <Route path="/chatting/:id" element={<Chat />} />
         </Routes>
       </Router>
     </div>

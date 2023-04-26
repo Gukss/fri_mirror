@@ -1,0 +1,24 @@
+.chatting-room {
+  width: 100vw;
+  height: 100vh;
+
+  .navbar {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 8vh;
+    border-bottom: 2px solid #ffbf00;
+  }
+
+  .content {
+  }
+
+  .footer {
+    position: fixed;
+    top: 90vh;
+    width: 100vw;
+    height: 10vh;
+
+    background: #f2f2f2;
+  }
+}
