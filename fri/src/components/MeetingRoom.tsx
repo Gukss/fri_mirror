@@ -1,4 +1,4 @@
-import {MeetType} from '../pages/mainPage'
+import {MeetType} from '../pages/Main/mainPage'
 import Room from './MeetingDetail'
 import { useState } from 'react';
 

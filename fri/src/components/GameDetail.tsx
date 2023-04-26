@@ -1,4 +1,4 @@
-import { GameType } from "../pages/mainPage";
+import { GameType } from "../pages/Main/mainPage";
 
 interface roomType {
   room: GameType;

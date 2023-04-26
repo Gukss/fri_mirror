@@ -1,4 +1,4 @@
-import {MeetType} from '../pages/mainPage'
+import {MeetType} from '../pages/Main/mainPage'
 
 interface roomType {
 	room : MeetType;
