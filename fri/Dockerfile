@@ -8,7 +8,7 @@ RUN chmod =x ./gradlew
 RUN ./gradlew bootJar
 
 FROM openjdk:11
-COPY --from=builder build/libs/candy-0.0.1-SNAPSHOT.jar fri.jar
+COPY --from=builder build/libs/fri-0.0.1-SNAPSHOT.jar fri.jar
 
 EXPOSE 8080
 
