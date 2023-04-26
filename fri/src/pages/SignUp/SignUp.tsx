@@ -250,9 +250,6 @@ export default function SignUp() {
                   </div>
                 </div>
               </div>
-              <div id="areamessage" className="message">
-                {message.area}
-              </div>
             </div>
             <div className="signup-box">
               <div className="signup-label" id="label">

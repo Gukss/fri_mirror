@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Categories from "./Categories/Categories";
 import Inputs from "./Inputs/Inputs";
@@ -51,6 +51,12 @@ export default function Add() {
     people: false
   });
 
+  useEffect(() => {
+    if (tab === null || !["cate", "infos"].includes(tab)) {
+      setSearchParmas("?tab=cate");
+    }
+  }, []);
+
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -86,14 +92,15 @@ export default function Add() {
         <div className="add-title">미팅방 생성</div>
         <div className="add-form">
           <form onSubmit={handleSubmit}>
-            {tab === "cate" ? (
+            {tab === "cate" && (
               <Categories
                 form={form}
                 setForm={setForm}
                 error={error}
                 setError={setError}
               />
-            ) : (
+            )}
+            {tab === "infos" && (
               <div>
                 <Inputs
                   form={form}
