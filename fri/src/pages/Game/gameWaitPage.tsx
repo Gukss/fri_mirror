@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import lgm from "../../assets/lgm.png"
+import mgl from "../../assets/mgl.png"
+import egg from "../../assets/egg_fri.png"
 
 function GameWaiting() {
   const navigate = useNavigate();
@@ -18,26 +21,18 @@ function GameWaiting() {
       <p onClick={() => navigate("/main")}>&#60;</p>
       <div className="top">커피 내기</div>
       <div>
-        <img
-          src={`/assets/${isLgm ? "lgm" : "mgl"}.png`}
-          alt={isLgm ? "lgm" : "mgl"}
-          className="wait_lgm"
-        />
-        <img
-          src={`/assets/${!isLgm ? "lgm" : "mgl"}.png`}
-          alt={!isLgm ? "lgm" : "mgl"}
-          className="wait_lgm"
-        />
-        <img
-          src={`/assets/${isLgm ? "lgm" : "mgl"}.png`}
-          alt={isLgm ? "lgm" : "mgl"}
-          className="wait_lgm"
-        />
-        <img
-          src={`/assets/${!isLgm ? "lgm" : "mgl"}.png`}
-          alt={!isLgm ? "lgm" : "mgl"}
-          className="wait_lgm"
-        />
+        {
+            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
+          }
+        {
+            isLgm ? <img src={mgl} alt="mgl" className="wait_lgm" /> : <img src={lgm} alt="lgm" className="wait_lgm" />
+          }
+        {
+            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
+          }
+        {
+            isLgm ? <img src={mgl} alt="mgl" className="wait_lgm" /> : <img src={lgm} alt="lgm" className="wait_lgm" />
+          }
       </div>
       <div className="info">
         {/* 현재 접속인원 / api 방 최대 인원 */}
@@ -49,7 +44,7 @@ function GameWaiting() {
         <div className="player">
           <div className="player-profile">
             <img
-              src="/assets/egg_fri.png"
+              src={egg}
               alt="player-profile"
               className="profile-img"
             />
@@ -59,7 +54,7 @@ function GameWaiting() {
         <div className="player">
           <div className="player-profile">
             <img
-              src="/assets/egg_fri.png"
+              src={egg}
               alt="player-profile"
               className="profile-img"
             />
@@ -68,7 +63,7 @@ function GameWaiting() {
         </div>
       </div>
       {/* 참가하기 안눌렀을 때는 */}
-      <button className="ready-btn">준비하기</button>
+      <button className="ready-btn" onClick={()=>navigate("/game/1")}>준비하기</button>
       {/* 참가하기 눌렀을 때는 */}
       <div className="ready">다른 플레이어 기다리는 중...</div>
     </div>

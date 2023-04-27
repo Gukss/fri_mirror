@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import lgm from "../../assets/lgm.png"
+import mgl from "../../assets/mgl.png"
+import egg from "../../assets/egg_fri.png"
 
 function game() {
   const navigate = useNavigate();
@@ -179,26 +182,22 @@ function game() {
       <div className="game">
         <div className="timer">
           {" "}
-          <img
-            src={`/assets/${!isLgm ? "lgm" : "mgl"}.png`}
-            alt={!isLgm ? "lgm" : "mgl"}
-            className="wait_lgm"
-          />
+          {
+            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
+          }
           {"  "}
           {timer.toFixed(2)}
           {"  "}
-          <img
-            src={`/assets/${isLgm ? "lgm" : "mgl"}.png`}
-            alt={isLgm ? "lgm" : "mgl"}
-            className="wait_lgm"
-          />
+          {
+            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
+          }
         </div>
         <div className="game-content">
           <span>4.3</span>초에 <br /> 프라이를 눌러주세요.
         </div>
         <div className="game-btn">
           <img
-            src="/assets/egg_fri.png"
+            src={egg}
             alt="fri-btn"
             className={flip ? "flip" : ""}
             onClick={handleClick}

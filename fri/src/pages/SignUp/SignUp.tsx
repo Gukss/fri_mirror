@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/Logo.png"
 import "./SignUp.scss";
 
 interface SignUp {
@@ -213,7 +214,7 @@ export default function SignUp() {
       <div className="signup-container">
         <div>
           <img
-            src="/assets/images/Logo.png"
+            src={logo}
             alt="Logo"
             className="signup-logo"
           />
