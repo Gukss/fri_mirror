@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import ting from "../../assets/gif/tingtingting.gif"
+
 import "./Onboarding.scss";
 
 export default function Onboarding() {
@@ -18,7 +20,7 @@ export default function Onboarding() {
     <div className="onboarding" onClick={handleClick}>
       <img
         id="gif"
-        src="/assets/gif/tingtingting.gif"
+        src={ting}
         alt="ting"
         className="onboarding-img"
       />
