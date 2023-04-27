@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Docker run') {
             steps {
-                sh "docker run -d --name=${FRONT_CONTAINER_NAME} -p 3000:80 ${FRONT_NAME}"
+                sh "docker run -d --name=${FRONT_CONTAINER_NAME} -p 80:3000 ${FRONT_NAME}"
                 sh "docker image prune --force" 
             }
         }
