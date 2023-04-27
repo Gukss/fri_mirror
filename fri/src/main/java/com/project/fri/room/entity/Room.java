@@ -1,8 +1,8 @@
 package com.project.fri.room.entity;
 
 import com.project.fri.common.entity.Area;
+import com.project.fri.room.dto.CreateRoomRequest;
 import com.project.fri.room.dto.FindAllRoomInstance;
-import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
@@ -73,8 +73,30 @@ public class Room extends BaseTimeEntity {
         .build();
   }
 
-  public Room updateIsConfirmed(boolean isConfirmed){
+  public void deleteRoom() {
+    isDelete = true;
+  }
+
+  public Room updateIsConfirmed(boolean isConfirmed) {
     this.isConfirmed = isConfirmed;
     return this;
+  }
+
+  //==생성 메서드==//
+  public static Room create(CreateRoomRequest request, User user, int headCount, RoomCategory roomCategory, Area area) {
+    Room room = Room.builder()
+        .title(request.getTitle())
+        .headCount(headCount)
+        .location(request.getLocation())
+        .roomCategory(roomCategory)
+        .area(area)
+        // todo: user부분
+        .baseEntity(BaseEntity.builder()
+            .constructor(user.getName())
+            .updater(user.getName())
+            .build())
+        .build();
+
+    return room;
   }
 }
