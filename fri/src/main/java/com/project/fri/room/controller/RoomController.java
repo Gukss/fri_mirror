@@ -10,6 +10,7 @@ import com.project.fri.room.entity.Room;
 import com.project.fri.common.entity.Category;
 import com.project.fri.room.dto.FindAllRoomResponse;
 import com.project.fri.room.service.RoomService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

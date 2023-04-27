@@ -113,6 +113,11 @@ public class RoomServiceImpl implements RoomService {
   }
 
   @Override
+  public List<Room> findAllByArea(String areaString) {
+    return null;
+  }
+
+  @Override
   public FindAllRoomResponse findAllByArea(Category areaString) {
     Area foundArea = areaRepository.findByCategory(areaString);
 
@@ -136,7 +141,7 @@ public class RoomServiceImpl implements RoomService {
 
     for(Room x: roomList){
 
-      Category category = x.getRoomCategory().getCategory();
+      com.project.fri.room.entity.Category category = x.getRoomCategory().getCategory();
       if(x.getId() == enrollRoomId){ //참여중인 방이면 화면에 출력되지 않는다.
         continue;
       }
