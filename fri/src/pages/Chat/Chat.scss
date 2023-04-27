@@ -6,18 +6,20 @@
     position: sticky;
     top: 0;
     width: 100vw;
-    height: 8vh;
-    border-bottom: 2px solid #ffbf00;
+    height: 6vh;
   }
 
   .content {
+    width: 100vw;
+    height: 86vh;
+    background: #ffbf00;
   }
 
   .footer {
     position: fixed;
-    top: 90vh;
+    top: 92vh;
     width: 100vw;
-    height: 10vh;
+    height: 8vh;
 
     background: #f2f2f2;
   }

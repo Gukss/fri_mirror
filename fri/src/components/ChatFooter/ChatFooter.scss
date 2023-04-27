@@ -36,18 +36,18 @@
       //   align-self: center;
 
       font-size: 1.1rem;
-      padding: 0.25rem 2.25rem 0.25rem 1rem;
+      padding: 0.25rem 2.5rem 0.25rem 1rem;
 
       resize: none;
       overflow-y: auto;
 
       &.autoHeight {
-        height: auto;
+        height: 80px;
 
         + button.send-message {
           position: absolute;
           left: calc(100% - 2.25rem);
-          top: 1rem;
+          top: 1.5rem;
           width: 32px;
           height: 32px;
           padding: 2px;

@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/Logo.png"
 import "./LogIn.scss";
 
 interface SingInForm {
@@ -84,7 +85,7 @@ export default function LogIn() {
       <div className="login-container">
         <div>
           <img
-            src="/assets/images/Logo.png"
+            src={logo}
             alt="Logo"
             className="logo"
             // ref={logoRef}

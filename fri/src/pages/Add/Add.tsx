@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Categories from "./Categories/Categories";
 import Inputs from "./Inputs/Inputs";
+import logo from "../../assets/small_logo.png"
 import "./Add.scss";
 
 interface AddForm {
@@ -87,7 +88,7 @@ export default function Add() {
       </div>
       <div className="add-container">
         <div className="small-logo">
-          <img src="/assets/images/Small_Logo.png" alt="Logo" />
+          <img src={logo} alt="Logo" />
         </div>
         <div className="add-title">미팅방 생성</div>
         <div className="add-form">

@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import egg from "../../assets/egg_fri.png";
-import lgm from "../../assets/lgm.png";
-import mgl from "../../assets/mgl.png";
 
 function game() {
   const navigate = useNavigate();
@@ -166,7 +163,7 @@ function game() {
         <div className="timer">
           {" "}
           <img
-            src={!isLgm ? lgm : mgl}
+            src={`/assets/${!isLgm ? "lgm" : "mgl"}.png`}
             alt={!isLgm ? "lgm" : "mgl"}
             className="wait_lgm"
           />
@@ -174,7 +171,7 @@ function game() {
           {timer.toFixed(2)}
           {"  "}
           <img
-            src={!isLgm ? lgm : mgl}
+            src={`/assets/${isLgm ? "lgm" : "mgl"}.png`}
             alt={isLgm ? "lgm" : "mgl"}
             className="wait_lgm"
           />

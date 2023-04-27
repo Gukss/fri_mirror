@@ -1,4 +1,5 @@
 import { GameType } from "../pages/Main/mainPage";
+import { useNavigate } from "react-router-dom";
 
 interface roomType {
   room: GameType;
@@ -8,6 +9,8 @@ interface roomType {
 
 function GameDetail({ room, open, setOpen }: roomType) {
   const { place, title, current_cnt, total_cnt } = room;
+  const navigate = useNavigate();
+
   return (
     <>
       {open ? (
@@ -27,7 +30,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 ( {current_cnt} / {total_cnt} )
               </span>
             </p>
-            <div className="join_game">참여하기</div>
+            <div className="join_game" onClick={()=> navigate("/wait/1")}>참여하기</div>
           </div>
         </div>
       ) : null}
