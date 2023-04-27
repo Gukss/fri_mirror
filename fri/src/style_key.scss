@@ -245,7 +245,7 @@
 .meeting_room_full {
   width: 155px;
   height: 142px;
-  color: white;
+  color: #fff;
   background-color: rgba(255, 192, 0, 1);
   font-size: 25px;
   font-weight: 700;
@@ -355,7 +355,7 @@
     bottom: 0;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-    background-color: white;
+    background-color: #fff;
     transition: linear 0.5s;
 
     animation: moveup 1s;
@@ -567,7 +567,7 @@
     width: 70vw;
     height: 70vh;
     border-radius: 0.5rem;
-    background: white;
+    background: #fff;
     display: grid;
     grid-template-rows: 0.8fr 1.3fr 0.7fr 3fr 1.2fr;
     place-items: center;
