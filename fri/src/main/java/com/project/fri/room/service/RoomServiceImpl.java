@@ -84,6 +84,11 @@ public class RoomServiceImpl implements RoomService {
   }
 
   @Override
+  public List<Room> findAllByArea(String areaString) {
+    return null;
+  }
+
+  @Override
   public FindAllRoomResponse findAllByArea(Category areaString) {
     Area foundArea = areaRepository.findByCategory(areaString);
 
