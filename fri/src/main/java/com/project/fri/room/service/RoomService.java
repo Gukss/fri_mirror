@@ -6,6 +6,7 @@ import com.project.fri.room.dto.FindAllRoomByCategoryResponse;
 
 import com.project.fri.room.dto.FindRoomResponse;
 import com.project.fri.room.dto.FindAllRoomResponse;
+import com.project.fri.room.entity.Room;
 import java.util.List;
 
 import com.project.fri.room.dto.CreateRoomRequest;
@@ -35,7 +36,9 @@ public interface RoomService {
    * @return 카테고리 별 방 목록 더보기
    */
   List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category area, com.project.fri.room.entity.Category roomCategory);
-  
+
+  List<Room> findAllByArea(String areaString);
+
   FindAllRoomResponse findAllByArea(Category areaString);
 
   /**
