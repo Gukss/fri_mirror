@@ -14,23 +14,23 @@ spring:
     username: ENC(1r8bussQYmMrfJCfg4h1mQ==)
     password: ENC(pXp97hELSeLXhz+isZEfFK+2QKlpEQ+0)
 
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
-
   jpa:
     open-in-view: false
     show-sql: true
     hibernate:
-      # ddl-auto: none
-      # ddl-auto: update
-      ddl-auto: create
+#       ddl-auto: none
+       ddl-auto: update
+#      ddl-auto: create
     properties:
       hibernate:
         # sql 변수 생성 시 자동으로 ``으로 감싸준다.
         globally_quoted_identifiers: true
         # 콘솔에 뜨는 sql 보기 좋게 만들어준다.
         format_sql: true
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 
 logging:
   level:
