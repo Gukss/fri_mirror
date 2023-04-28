@@ -4,6 +4,12 @@
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+
+  #back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
 }
 
 .signup-container {
@@ -91,14 +97,14 @@
             outline-offset: 0;
           }
 
-          &:checked ~ label {
+          &:checked~label {
             background-color: #ffc000;
             color: #111;
             font-weight: bold;
             font-size: 1.25rem;
           }
 
-          &:active ~ label {
+          &:active~label {
             transform: scale(1.05);
           }
         }
@@ -121,6 +127,7 @@
       &::placeholder {
         font-size: 1rem;
       }
+
       &:focus {
         outline: 0;
         border: 2px solid #ffc000;
@@ -146,7 +153,8 @@
   }
 
   &.hidden {
-    opacity: 0; /* fade-out 효과로 숨김 */
+    opacity: 0;
+    /* fade-out 효과로 숨김 */
   }
 }
 

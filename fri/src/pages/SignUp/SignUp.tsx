@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/Logo.png"
+import Back from "../../components/Back"
 import "./SignUp.scss";
 
 interface SignUp {
@@ -203,14 +204,7 @@ export default function SignUp() {
 
   return (
     <div className="signup">
-      <div
-        onClick={() => {
-          navigate(-1);
-        }}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      >
-        뒤로
-      </div>
+      <Back />
       <div className="signup-container">
         <div>
           <img
