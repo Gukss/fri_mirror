@@ -13,6 +13,8 @@ import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +44,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public UpdateUserRoomResponse updateUserRoom(Long roomId, UpdateUserRoomRequest request,
+  public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(Long roomId,
+      UpdateUserRoomRequest request,
       Long userId) {
     Optional<User> user = userRepository.findById(userId);
     User findUser = user.orElseThrow(
@@ -59,13 +62,28 @@ public class UserServiceImpl implements UserService {
 
     boolean participate = true;
 
+    ResponseEntity res = null;
+    UpdateUserRoomResponse updateUserRoomResponse = null;
+    log.info("findUser.getRoom(): "+findUser.getRoom());
     if (findUser.getRoom() == null) {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
-      if (Boolean.FALSE.equals(request.getIsParticipate())) { //false로 오면 참여하기를 누른거다.
-        findUser.updateRoomNumber(findRoom);
-      } else {
-        //true로 오면 나가기를 누른거다. => but room이 null인데 true가 올 수 없다.
+      if (findUser.getHeart() >= 1) { //하트 1이상일 때
+        if (Boolean.FALSE.equals(request.getIsParticipate())) { //false로 오면 참여하기를 누른거다.
+          //하트가 1이상인지 검사하고, 1이상이면 입장 후 하트-=1, 1미만이면 입장하면 안된다.
+          findUser.updateRoomNumber(findRoom);
+          findUser.minusHeart();
+        } else {
+          //true로 오면 나가기를 누른거다. => but room이 null인데 true가 올 수 없다.
+          participate = false;
+        }
+      } else { //하트 1미만일 때
         participate = false;
+        updateUserRoomResponse = UpdateUserRoomResponse.builder()
+            .roomId(findRoom.getId())
+            .title(findRoom.getTitle())
+            .isParticipate(participate)
+            .build();
+        return res = ResponseEntity.status(HttpStatus.FORBIDDEN).body(updateUserRoomResponse);
       }
     } else if (findUser.getRoom().equals(findRoom) && Boolean.TRUE.equals(
         request.getIsParticipate())) {
@@ -85,11 +103,14 @@ public class UserServiceImpl implements UserService {
       throw new IllegalStateException("입장중인 방과 일치하지 않습니다.");
     }
 
-    return UpdateUserRoomResponse.builder()
+    updateUserRoomResponse = UpdateUserRoomResponse.builder()
         .roomId(findRoom.getId())
         .title(findRoom.getTitle())
         .isParticipate(participate)
         .build();
+
+    res = ResponseEntity.ok().body(updateUserRoomResponse);
+    return res;
   }
 
   public UpdateUserReadyResponse updateUserReady(long userId, long roomId) {
