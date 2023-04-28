@@ -1,8 +1,9 @@
 package com.project.fri.chatting.controller;
 
-import com.project.fri.chatting.dto.CreateSocketChattingMessageRequest;
 import com.project.fri.chatting.dto.CreateChattingMessageRequest;
 import com.project.fri.chatting.dto.FindChattingMessageResponse;
+import com.project.fri.chatting.dto.SocketChattingRequestAndResponse;
+import com.project.fri.chatting.dto.SocketGameChattingRequestAndResponse;
 import com.project.fri.chatting.service.ChattingServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chatting")
 @Slf4j
 public class ChattingController {
-  private final SimpMessageSendingOperations messagingTemplate;
   private final ChattingServiceImpl chattingService;
+  private final SimpMessageSendingOperations messagingTemplate;
 
-  // pub, sub관리 컨트롤러 RequestMapping 무시..
-  @MessageMapping("/message")
-  public void message(CreateSocketChattingMessageRequest chatMessage){
+  @MessageMapping("/chatting")
+  public void message(SocketChattingRequestAndResponse message){
     System.out.println("클라이언트에서 pub이벤트 발생!!");
-    messagingTemplate.convertAndSend("/sub/room/" + chatMessage.getRoomId(), chatMessage);
+    // sub한 주소에 chatMessage객체 전달
+    messagingTemplate.convertAndSend("/sub/room/" + message.getRoomId(), message);
+  }
+
+  @MessageMapping("/gameChatting")
+  public void message(SocketGameChattingRequestAndResponse message){
+    System.out.println("클라이언트에서 게임 pub이벤트 발생!!");
+    // sub한 주소에 chatMessage객체 전달
+    messagingTemplate.convertAndSend("/sub/gameRoom/" + message.getGameRoomId(), message);
   }
 
   @PostMapping()
