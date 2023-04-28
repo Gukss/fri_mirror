@@ -58,8 +58,6 @@ public class User extends BaseTimeEntity {
 
   private boolean isCertified;
 
-  private boolean ready;
-
   private boolean isDelete;
 
   @ManyToOne(fetch = FetchType.LAZY)
