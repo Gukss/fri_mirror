@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/Logo.png"
+import Back from "../../components/Back"
 import "./LogIn.scss";
 
 interface SingInForm {
@@ -74,14 +75,7 @@ export default function LogIn() {
 
   return (
     <div className="login">
-      {/* <div
-        onClick={() => {
-          navigate(-1);
-        }}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      >
-        뒤로
-      </div> */}
+      <Back />
       <div className="login-container">
         <div>
           <img

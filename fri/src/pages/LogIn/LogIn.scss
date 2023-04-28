@@ -3,6 +3,12 @@
   place-items: center;
   width: 100vw;
   height: 100vh;
+
+  #back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
 }
 
 .login-container {

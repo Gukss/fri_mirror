@@ -1,108 +1,37 @@
 // 컴포넌트 LogoEgg
 .main_top {
-  display: flex;
-  justify-content: space-between;
+  width: 100vw;
   align-items: center;
   margin-top: 20px;
   margin-bottom: 15px;
 
   #main_logo {
-    margin-left: 24px;
     width: 53px;
-    height: 32px;
+    height: 30px;
+    float: center;
+    margin-left: 45px;
   }
 
   .egg_cnt {
     margin-right: 24px;
+    margin-top: 7px;
     height: 22px;
     display: flex;
     align-items: center;
     font-weight: bolder;
+    float: right;
   }
 
   #main_egg {
     margin-right: 5px;
-    width: 15px;
-    height: 22px;
-  }
-}
-
-// page 메인 페이지
-.mainpage {
-  height: 100vh;
-  overflow: hidden;
-
-  .region_bar {
-    border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
-  }
-}
-
-// 지역 부분
-.main_region {
-  display: flex;
-  padding: 0px;
-  width: 234px;
-  justify-content: space-between;
-  height: 22px;
-  margin: 0 0 16px 24px;
-  font-weight: bolder;
-  color: rgba(124, 124, 124, 1);
-
-  li {
-    list-style: none;
+    width: 10px;
+    height: 17px;
   }
 
-  #select {
-    color: rgba(255, 192, 0, 1);
-    font-weight: bolder;
-    border-bottom: 1px solid rgba(255, 192, 0, 1);
-    transition: 0.7s ease-in-out;
-  }
-}
-
-// 메인 카테고리 부분
-.main_category {
-  height: calc(100vh - 150px);
-  overflow-y: scroll;
-  overflow-x: hidden;
-  text-align: start;
-
-  #category_title {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 24px;
-    letter-spacing: 0em;
-    margin: 16px 0 0px 24px;
+  #back {
     margin-left: 24px;
-
-    span {
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 15px;
-      letter-spacing: 0em;
-      float: right;
-      margin-right: 20px;
-      color: rgba(124, 124, 124, 1);
-    }
+    float: left;
   }
-}
-
-// 카테고리 각 줄
-.meeting_block {
-  margin: 0 24px 12px 12px;
-  display: flex;
-  width: 100vw;
-  min-height: 190px;
-  max-height: 190px;
-  height: auto;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  flex-flow: column wrap;
-  border-bottom: 1px solid rgba(225, 225, 225, 1);
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 
 // 메인 nav부분
@@ -616,4 +545,9 @@
       border: none;
     }
   }
+}
+
+#back {
+  width: 15px;
+  height: 30px;
 }

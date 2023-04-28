@@ -1,5 +1,12 @@
 .my {
     height: calc(100vh - 40px);
+
+    #back {
+        position: fixed;
+        left: 24px;
+        top: 24px;
+        margin: 0;
+    }
 }
 
 .my>img {

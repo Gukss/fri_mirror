@@ -8,7 +8,7 @@ import GameWait from "./pages/Game/gameWaitPage";
 import LogIn from "./pages/LogIn/LogIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Add from "./pages/Add/Add";
-import My from "./pages/My/MyPage"
+import My from "./pages/My/MyPage";
 
 function App() {
   return (

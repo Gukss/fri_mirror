@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Back from "../../components/Back"
 import lgm from "../../assets/lgm.png"
 import mgl from "../../assets/mgl.png"
 import egg from "../../assets/egg_fri.png"
+import './game.scss'
 
 function GameWaiting() {
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ function GameWaiting() {
 
   return (
     <div className="wait_game">
-      <p onClick={() => navigate("/main")}>&#60;</p>
+      <Back />
       <div className="top">커피 내기</div>
       <div>
         {
