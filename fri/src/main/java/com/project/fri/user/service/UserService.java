@@ -5,6 +5,7 @@ import com.project.fri.user.dto.UpdateUserRoomRequest;
 import com.project.fri.user.dto.UpdateUserRoomResponse;
 import com.project.fri.user.dto.UpdateUserReadyResponse;
 import com.project.fri.user.entity.User;
+import org.springframework.http.ResponseEntity;
 
 /**
  * packageName    : com.project.fri.user.service fileName       : UserService date           :
@@ -25,7 +26,7 @@ public interface UserService {
    * @param request
    * @return
    */
-  UpdateUserRoomResponse updateUserRoom(Long roomId, UpdateUserRoomRequest request, Long userId);
+  ResponseEntity<UpdateUserRoomResponse> updateUserRoom(Long roomId, UpdateUserRoomRequest request, Long userId);
 
   /**
    * desc: id로 user 찾아서 들고있는 방 번호가 입력받은 방 번호와 일치하는지 확인하고 일치하면 ready를 not해서 바꿔주기
