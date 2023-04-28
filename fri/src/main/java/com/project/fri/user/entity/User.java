@@ -85,6 +85,11 @@ public class User extends BaseTimeEntity {
     return room;
   }
 
+  public User minusHeart(){
+    this.heart -= 1;
+    return this;
+  }
+
   /**
    * desc: 사용자가 ready를 눌렀을 때 입력받은 값으로 ready를 update한다.
    * @param //ready

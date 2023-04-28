@@ -31,8 +31,9 @@ public class UserController {
     @PatchMapping("/room/{roomId}")
     public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId, @RequestBody UpdateUserRoomRequest request) {
         Long userId = 4L;
-        UpdateUserRoomResponse updateUserRoomResponse = userService.updateUserRoom(roomId, request, userId);
-        return ResponseEntity.status(200).body(updateUserRoomResponse);
+      ResponseEntity<UpdateUserRoomResponse> res = userService.updateUserRoom(
+          roomId, request, userId);
+      return res;
     }
 
   @PatchMapping("{roomId}/ready")
