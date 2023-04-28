@@ -44,11 +44,6 @@ public class ChattingServiceImpl implements ChattingService{
     List<FindChattingMessageResponse> chattingMessageAndUser = chattingRepository.findChattingMessageAndUser(
         roomId);
 
-    for (FindChattingMessageResponse response:chattingMessageAndUser) {
-      System.out.println(response.getNickname());
-      System.out.println(response.getMessage());
-    }
-
     return chattingMessageAndUser;
   }
 }

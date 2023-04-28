@@ -41,10 +41,10 @@ public class GameChattingMessage extends BaseTimeEntity {
   @NotNull
   private BaseEntity baseEntity;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user")
+  @JoinColumn(name = "user_id")
   private User user;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="room")
+  @JoinColumn(name="room_id")
   private Room room;
 
   public static GameChattingMessage create(CreateGameChattingMessageRequest request,User user,Room room){
