@@ -25,7 +25,6 @@ public class FindAllRoomByCategoryResponse {
   private long major;
   private long nonMajor;
   private String location;
-  private boolean isConfirmed;
 
   public static FindAllRoomByCategoryResponse create(Room room, long major, long nonMajor) {
     FindAllRoomByCategoryResponse findAllRoom = FindAllRoomByCategoryResponse.builder()
@@ -35,7 +34,6 @@ public class FindAllRoomByCategoryResponse {
         .major(major)
         .nonMajor(nonMajor)
         .location(room.getLocation())
-        .isConfirmed(room.isConfirmed())
         .build();
     return findAllRoom;
   }
