@@ -45,8 +45,6 @@ public class Room extends BaseTimeEntity {
 
   private boolean isDelete;
 
-  private boolean isConfirmed;
-
   private String location;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -61,7 +59,7 @@ public class Room extends BaseTimeEntity {
   @NotNull
   private BaseEntity baseEntity;
 
-  public FindAllRoomInstance createFindRoomResponse(Category roomCategory){
+  public FindAllRoomInstance createFindRoomResponse(Category roomCategory, int majorCount, int nonMajorCount){
     return FindAllRoomInstance.builder()
         .roomId(this.id)
         .title(this.title)
@@ -69,7 +67,8 @@ public class Room extends BaseTimeEntity {
         //todo: 현재 방의 category_id로 category 가지고 와서 넣어주기
         .roomCategory(roomCategory.toString())
         .headCount(this.headCount)
-        .isConfirmed(this.isConfirmed)
+        .major(majorCount)
+        .nonMajor(nonMajorCount)
         .build();
   }
 
@@ -77,10 +76,10 @@ public class Room extends BaseTimeEntity {
     isDelete = true;
   }
 
-  public Room updateIsConfirmed(boolean isConfirmed) {
-    this.isConfirmed = isConfirmed;
-    return this;
-  }
+//  public Room updateIsConfirmed(boolean isConfirmed) {
+//    this.isConfirmed = isConfirmed;
+//    return this;
+//  }
 
   //==생성 메서드==//
   public static Room create(CreateRoomRequest request, User user, int headCount, RoomCategory roomCategory, Area area) {

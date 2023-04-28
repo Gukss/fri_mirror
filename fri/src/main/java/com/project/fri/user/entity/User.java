@@ -58,8 +58,6 @@ public class User extends BaseTimeEntity {
 
   private boolean isCertified;
 
-  private boolean ready;
-
   private boolean isDelete;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -89,13 +87,13 @@ public class User extends BaseTimeEntity {
 
   /**
    * desc: 사용자가 ready를 눌렀을 때 입력받은 값으로 ready를 update한다.
-   * @param ready
+   * @param //ready
    * @return
    */
-  public User updateReady(boolean ready){
-    this.ready = ready;
-    return this;
-  }
+//  public User updateReady(boolean ready){
+//    this.ready = ready;
+//    return this;
+//  }
 
   //==생성메서드==//
   public static User create(CreateUserRequest request, Area area) {
@@ -110,7 +108,6 @@ public class User extends BaseTimeEntity {
         .heart(5)
         .nickname(request.getNickname())
         .isCertified(false)  // 인증 전
-        .ready(false)
         .baseEntity(BaseEntity.builder()
             .constructor(request.getName())
             .updater(request.getName())

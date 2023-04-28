@@ -14,7 +14,6 @@ public class FindRoomResponse {
     private String location;
     private String roomCategory;
     private int headCount;
-    private Boolean isConfirmed;
     private Boolean isParticipate;
     private List<FindAllUserByRoomIdDto> major;
     private List<FindAllUserByRoomIdDto> nonMajor;
@@ -25,7 +24,6 @@ public class FindRoomResponse {
         location = room.getLocation();
         roomCategory = String.valueOf(room.getRoomCategory().getCategory());
         headCount = room.getHeadCount();
-        isConfirmed = room.isConfirmed();
         isParticipate = isParticipated;
         major = majorList;
         nonMajor = nonMajorList;
