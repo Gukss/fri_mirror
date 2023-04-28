@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import lgm from "../../assets/lgm.png"
-import mgl from "../../assets/mgl.png"
-import egg from "../../assets/egg_fri.png"
+import egg from "../../assets/egg_fri.png";
 
 function game() {
   const navigate = useNavigate();
@@ -10,7 +8,6 @@ function game() {
   const [timer, setTimer] = useState<number>(10);
   const [modal, setModal] = useState<boolean>(true);
   const [isLgm, setIsLgm] = useState(true);
-  const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
   const start = "start!";
   const intervalRef = useRef<NodeJS.Timeout>();
   const timerRef = useRef<NodeJS.Timeout>();
@@ -20,30 +17,14 @@ function game() {
   const [flip, setFlip] = useState<boolean>(false);
   const [result, setResult] = useState<boolean>(false);
 
-  // 이미지 로딩
-  useEffect(() => {
-    // 이미지 로딩
-    const lgmImage = new Image();
-    const mglImage = new Image();
-    lgmImage.onload = () => {
-      mglImage.onload = () => {
-        setImagesLoaded(true);
-      };
-      mglImage.src = "/assets/mgl.png";
-    };
-    lgmImage.src = "/assets/lgm.png";
-  }, []);
-
   // 시작 3초
   useEffect(() => {
-    if (imagesLoaded) {
-      intervalRef.current = setInterval(() => {
-        setSeconds((seconds) => seconds - 1);
-      }, 1000);
-    }
+    intervalRef.current = setInterval(() => {
+      setSeconds((seconds) => seconds - 1);
+    }, 1000);
 
     return () => clearInterval(intervalRef.current);
-  }, [imagesLoaded]);
+  }, []);
 
   useEffect(() => {
     if (seconds === -1) {
@@ -182,15 +163,19 @@ function game() {
       <div className="game">
         <div className="timer">
           {" "}
-          {
-            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
-          }
+          <img
+            src={`/assets/${!isLgm ? "lgm" : "mgl"}.png`}
+            alt={!isLgm ? "lgm" : "mgl"}
+            className="wait_lgm"
+          />
           {"  "}
           {timer.toFixed(2)}
           {"  "}
-          {
-            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
-          }
+          <img
+            src={`/assets/${isLgm ? "lgm" : "mgl"}.png`}
+            alt={isLgm ? "lgm" : "mgl"}
+            className="wait_lgm"
+          />
         </div>
         <div className="game-content">
           <span>4.3</span>초에 <br /> 프라이를 눌러주세요.

@@ -34,6 +34,24 @@
   }
 }
 
+// 카테고리 각 줄
+.meeting_block {
+  margin: 0 24px 12px 12px;
+  display: flex;
+  width: 100vw;
+  min-height: 190px;
+  max-height: 190px;
+  height: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  flex-flow: column wrap;
+  border-bottom: 1px solid rgba(225, 225, 225, 1);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 // 메인 nav부분
 #egg_yellow {
   margin-top: 20px;
@@ -545,9 +563,4 @@
       border: none;
     }
   }
-}
-
-#back {
-  width: 15px;
-  height: 30px;
 }
