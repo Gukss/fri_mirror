@@ -196,25 +196,32 @@ public class RoomServiceImpl implements RoomService {
    */
   @Override
   public FindRoomResponse findRoom(Long roomId, Long userId) {
+    //정보 조회할 방 가져오기
     Optional<Room> room = roomRepository.findRoomWithCategoryById(roomId);
     Room findRoom = room.orElseThrow(
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
+    //가져온 방에 속해있는 userList 가져오기
     List<User> findUserList = userRepository.findAllByRoom(findRoom);
+
+    //전공인 사람 list로 묶기
     List<FindAllUserByRoomIdDto> majorList = findUserList.stream()
         .filter(User::isMajor)
         .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
         .collect(Collectors.toList());
 
+    //비전공인 사람 list로 묶깅
     List<FindAllUserByRoomIdDto> nonMajorList = findUserList.stream()
         .filter(user -> !user.isMajor())
         .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
         .collect(Collectors.toList());
 
+    //본인 객체 가지고 오기
     Optional<User> user = userRepository.findById(userId);
     User findUser = user.orElseThrow(
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
+    //참여 여부 판별
     Boolean isParticipated = findUser.getRoom().equals(findRoom);
 
     return new FindRoomResponse(findRoom, isParticipated, majorList, nonMajorList);

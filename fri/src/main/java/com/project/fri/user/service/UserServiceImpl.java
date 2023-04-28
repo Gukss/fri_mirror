@@ -61,12 +61,13 @@ public class UserServiceImpl implements UserService {
 
     if (findUser.getRoom() == null) {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
-      if (Boolean.TRUE.equals(request.getIsParticipate())) {
+      if (Boolean.FALSE.equals(request.getIsParticipate())) { //false로 오면 참여하기를 누른거다.
         findUser.updateRoomNumber(findRoom);
       } else {
+        //true로 오면 나가기를 누른거다. => but room이 null인데 true가 올 수 없다.
         participate = false;
       }
-    } else if (findUser.getRoom().equals(findRoom) && Boolean.FALSE.equals(
+    } else if (findUser.getRoom().equals(findRoom) && Boolean.TRUE.equals(
         request.getIsParticipate())) {
       // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제 및 유저 ready상태 false
       findUser.updateRoomNumber(null);
@@ -77,6 +78,8 @@ public class UserServiceImpl implements UserService {
       if (findUsers.isEmpty()) {
         findRoom.deleteRoom();
       }
+
+      //todo: 방 나갈 때 heart 줄도록 구현 필요
     } else {
       // 방에 입장 상태이지만 기존 입장중이 방과 입장하려는 방이 일치하지 않을 때
       throw new IllegalStateException("입장중인 방과 일치하지 않습니다.");
@@ -86,7 +89,6 @@ public class UserServiceImpl implements UserService {
         .roomId(findRoom.getId())
         .title(findRoom.getTitle())
         .isParticipate(participate)
-        .ready(false)
         .build();
   }
 
