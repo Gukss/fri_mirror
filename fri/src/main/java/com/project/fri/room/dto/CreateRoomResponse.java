@@ -16,15 +16,13 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class CreateRoomResponse {
-  private Long id;
+  private Long roomId;
   private String title;
-  private boolean ready;
 
   public static CreateRoomResponse create(Room room, User user) {
     CreateRoomResponse createRoomResponse = CreateRoomResponse.builder()
-        .id(room.getId())
+        .roomId(room.getId())
         .title(room.getTitle())
-        .ready(user.isReady())
         .build();
     return createRoomResponse;
   }

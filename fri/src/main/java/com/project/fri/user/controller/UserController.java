@@ -32,7 +32,7 @@ public class UserController {
     public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId, @RequestBody UpdateUserRoomRequest request) {
         Long userId = 4L;
         UpdateUserRoomResponse updateUserRoomResponse = userService.updateUserRoom(roomId, request, userId);
-        return ResponseEntity.status(201).body(updateUserRoomResponse);
+        return ResponseEntity.status(200).body(updateUserRoomResponse);
     }
 
   @PatchMapping("{roomId}/ready")

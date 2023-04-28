@@ -1,5 +1,6 @@
 package com.project.fri.chatting.controller;
 
+import com.project.fri.chatting.dto.CreateSocketChattingMessageRequest;
 import com.project.fri.chatting.dto.CreateChattingMessageRequest;
 import com.project.fri.chatting.dto.FindChattingMessageResponse;
 import com.project.fri.chatting.dto.SocketChattingRequestAndResponse;
@@ -29,7 +30,6 @@ public class ChattingController {
 
   @MessageMapping("/chatting")
   public void message(SocketChattingRequestAndResponse message){
-    System.out.println("클라이언트에서 pub이벤트 발생!!");
     // sub한 주소에 chatMessage객체 전달
     messagingTemplate.convertAndSend("/sub/room/" + message.getRoomId(), message);
   }

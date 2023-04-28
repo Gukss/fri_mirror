@@ -19,5 +19,6 @@ public class FindAllRoomInstance {
   private String location;
   private String roomCategory;
   private int headCount;
-  private Boolean isConfirmed;
+  private int major;
+  private int nonMajor;
 }
