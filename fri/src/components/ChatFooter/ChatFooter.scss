@@ -42,12 +42,12 @@
       overflow-y: auto;
 
       &.autoHeight {
-        height: 80px;
+        height: auto;
 
         + button.send-message {
           position: absolute;
           left: calc(100% - 2.25rem);
-          top: 1.5rem;
+          top: 1rem;
           width: 32px;
           height: 32px;
           padding: 2px;

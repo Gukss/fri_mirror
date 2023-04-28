@@ -7,20 +7,20 @@
     top: 0;
     width: 100vw;
     height: 6vh;
+    border-bottom: #ffbf00 1px solid;
   }
 
   .content {
     width: 100vw;
-    height: 86vh;
-    background: #ffbf00;
+    height: 84vh;
   }
 
   .footer {
     position: fixed;
-    top: 92vh;
+    top: 90vh;
     width: 100vw;
-    height: 8vh;
+    height: 10vh;
 
-    background: #f2f2f2;
+    background: #fff3cd;
   }
 }

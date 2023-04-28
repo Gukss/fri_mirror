@@ -2,6 +2,7 @@ import data from '../../components/data/meeting_dummy.json'
 import game_data from '../../components/data/game_dummy.json'
 import Room from '../../components/MeetingRoom'
 import GameRoom from '../../components/GameRoom'
+import Head from "../../components/LogoEgg"
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react';
 import Nav from '../../components/navEgg'
@@ -20,8 +21,8 @@ function More() {
 
 	return (
 		<div className='more_room'>
-			<p className='back' onClick={() => navigate(-1)}>뒤로</p>
-			<p className='text'>{text}</p>
+			<Head />
+			<div className='text'>{text}</div>
 			<div className="room">
 				{
 					category === "game" ?

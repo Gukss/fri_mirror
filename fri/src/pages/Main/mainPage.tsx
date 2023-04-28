@@ -5,6 +5,7 @@ import data from "../../components/data/main_dummy.json";
 import Meeting from "../../components/MeetingRoom";
 import Game from "../../components/GameRoom";
 import Nav from "../../components/navEgg";
+import "./main.scss"
 
 export type MeetType = {
   place: string;

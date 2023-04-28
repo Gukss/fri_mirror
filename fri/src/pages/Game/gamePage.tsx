@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import egg from "../../assets/egg_fri.png";
 
 function game() {
   const navigate = useNavigate();
