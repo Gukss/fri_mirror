@@ -61,8 +61,11 @@ public class RoomServiceImpl implements RoomService {
             NotFoundExceptionMessage.NOT_FOUND_USER));
 
     // 방, 지역 카테고리 객체화
-    RoomCategory roomCategory = roomCategoryRepository.findByCategory(request.getRoomCategory());
-    Area area = areaRepository.findByCategory(request.getArea());
+    RoomCategory roomCategory = roomCategoryRepository.findByCategory(request.getRoomCategory())
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
+    Area area = areaRepository.findByCategory(request.getArea())
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     // headCount 내기 방 제외 DB 저장 전에 x2
     int headCount = request.getHeadCount();
@@ -90,16 +93,15 @@ public class RoomServiceImpl implements RoomService {
 
   @Override
   public FindAllRoomResponse findAllByArea(Category areaString) {
-    Area foundArea = areaRepository.findByCategory(areaString);
+    Area foundArea = areaRepository.findByCategory(areaString)
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     //todo: login 완료되면 id 말고 다른 값으로 찾을꺼같다. => 바꿔주기
     User foundUser = userRepository.findById(1L)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     Long enrollRoomId = foundUser.getRoom().getId();
 
-    List<Room> roomList = roomRepository.findAllByArea(foundArea)
-        .orElseThrow(
-            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_LIST));
+    List<Room> roomList = roomRepository.findAllByArea(foundArea);
 
     //roomList 반복하면서 responseEnitity 채워주기
     List<FindAllRoomInstance> drinkList = new ArrayList<>();
@@ -170,10 +172,7 @@ public class RoomServiceImpl implements RoomService {
     Room findRoom = room.orElseThrow(
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
-    Optional<List<User>> userList = userRepository.findAllByRoom(findRoom);
-    List<User> findUserList = userList.orElseThrow(
-        () -> new IllegalStateException("유저가 없는 방은 존재할 수 없습니다."));
-
+    List<User> findUserList = userRepository.findAllByRoom(findRoom);
     List<FindAllUserByRoomIdDto> majorList = findUserList.stream()
         .filter(User::isMajor)
         .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
@@ -209,7 +208,8 @@ public class RoomServiceImpl implements RoomService {
     Area area = areaRepository.findByCategory(stringArea)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
     RoomCategory roomCategory = roomCategoryRepository.findByCategory(stringCategory)
-        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
 
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
