@@ -2,7 +2,6 @@ package com.project.fri.chatting.repository;
 
 import com.project.fri.chatting.dto.FindChattingMessageResponse;
 import com.project.fri.chatting.dto.QFindChattingMessageResponse;
-import com.project.fri.chatting.entity.ChattingMessage;
 import com.project.fri.chatting.entity.QChattingMessage;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
