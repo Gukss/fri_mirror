@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<List<User>> findAllByRoom(Room room);
+    List<User> findAllByRoom(Room room);
 
 }
