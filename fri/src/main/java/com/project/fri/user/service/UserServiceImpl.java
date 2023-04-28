@@ -93,8 +93,8 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     Room room = foundUser.getRoom();
     Long foundUserRoomId = room.getId();
-    boolean curReady = foundUser.isReady(); //현재 ready 상태
-    boolean curConfirmed = room.isConfirmed();
+//    boolean curReady = foundUser.isReady(); //현재 ready 상태
+//    boolean curConfirmed = room.isConfirmed();
     UpdateUserReadyResponse updateUserReadyResponse = null; //반환할 객체 미리 선언하기
 
     if (foundUserRoomId == roomId) { //같을 때 => 정상 진행
@@ -110,25 +110,25 @@ public class UserServiceImpl implements UserService {
         if(x.equals(foundUser)){ //본인이면
           continue;
         }
-        if(!x.isReady()){ //ready가 안됐으면 return => 다른 사람들이 ready하도록 기다려야 한다.
-          isAllReady = false;
-          break;
-        }
+//        if(!x.isReady()){ //ready가 안됐으면 return => 다른 사람들이 ready하도록 기다려야 한다.
+//          isAllReady = false;
+//          break;
+//        }
       }
       //일단 나의 ready를 not해서 바꿔준다.
-      boolean nextReady = !curReady;
-      boolean nextConfirmed = curConfirmed;
-
-      foundUser.updateReady(nextReady);
-      if(isAllReady){
-        //isAllReady가 true면 나 빼고 모두 완료했다는 의미다. => 현재 방의 isConfirmed를 바꿔준다.
-        nextConfirmed = !curConfirmed;
-        room.updateIsConfirmed(nextConfirmed);
-      }
+//      boolean nextReady = !curReady;
+//      boolean nextConfirmed = curConfirmed;
+//
+//      foundUser.updateReady(nextReady);
+//      if(isAllReady){
+//        //isAllReady가 true면 나 빼고 모두 완료했다는 의미다. => 현재 방의 isConfirmed를 바꿔준다.
+//        nextConfirmed = !curConfirmed;
+//        room.updateIsConfirmed(nextConfirmed);
+//      }
 
       updateUserReadyResponse = UpdateUserReadyResponse.builder()
-          .ready(nextReady)
-          .isConfirmed(nextConfirmed)
+//          .ready(nextReady)
+//          .isConfirmed(nextConfirmed)
           .roomId(roomId)
           .build();
 
