@@ -1,7 +1,7 @@
 package com.project.fri.chatting.service;
 
 
-import com.project.fri.chatting.dto.CreateChattingRequest;
+import com.project.fri.chatting.dto.CreateChattingMessageRequest;
 import com.project.fri.chatting.dto.FindChattingMessageResponse;
 import com.project.fri.chatting.entity.ChattingMessage;
 import com.project.fri.chatting.repository.ChattingRepository;
@@ -26,7 +26,7 @@ public class ChattingServiceImpl implements ChattingService{
   private final RoomRepository roomRepository;
   @Override
   @Transactional
-  public void createChatting(CreateChattingRequest request,Long userId) {
+  public void createChatting(CreateChattingMessageRequest request,Long userId) {
     User user=userRepository.findById(userId)
         .orElseThrow(()->new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
@@ -43,6 +43,11 @@ public class ChattingServiceImpl implements ChattingService{
 
     List<FindChattingMessageResponse> chattingMessageAndUser = chattingRepository.findChattingMessageAndUser(
         roomId);
+
+    for (FindChattingMessageResponse response:chattingMessageAndUser) {
+      System.out.println(response.getNickname());
+      System.out.println(response.getMessage());
+    }
 
     return chattingMessageAndUser;
   }

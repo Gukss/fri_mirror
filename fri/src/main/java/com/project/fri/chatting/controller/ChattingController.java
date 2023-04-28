@@ -1,7 +1,7 @@
 package com.project.fri.chatting.controller;
 
+import com.project.fri.chatting.dto.CreateSocketChattingMessageRequest;
 import com.project.fri.chatting.dto.CreateChattingMessageRequest;
-import com.project.fri.chatting.dto.CreateChattingRequest;
 import com.project.fri.chatting.dto.FindChattingMessageResponse;
 import com.project.fri.chatting.service.ChattingServiceImpl;
 import java.util.List;
@@ -28,13 +28,13 @@ public class ChattingController {
 
   // pub, sub관리 컨트롤러 RequestMapping 무시..
   @MessageMapping("/message")
-  public void message(CreateChattingMessageRequest chatMessage){
+  public void message(CreateSocketChattingMessageRequest chatMessage){
     System.out.println("클라이언트에서 pub이벤트 발생!!");
     messagingTemplate.convertAndSend("/sub/room/" + chatMessage.getRoomId(), chatMessage);
   }
 
   @PostMapping()
-  public ResponseEntity<?> createChatting(@RequestBody CreateChattingRequest request,@RequestHeader Long userId){
+  public ResponseEntity<?> createChatting(@RequestBody CreateChattingMessageRequest request,@RequestHeader Long userId){
     chattingService.createChatting(request,userId);
     return ResponseEntity.ok("ok");
   }

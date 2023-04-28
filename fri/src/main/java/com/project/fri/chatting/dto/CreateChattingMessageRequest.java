@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateChattingMessageRequest {
-  private Long roomId;
+  private long roomId;
   private String message;
-  private Long memberId;
 }
