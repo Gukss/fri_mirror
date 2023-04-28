@@ -1,6 +1,6 @@
-package com.project.fri.chatting.entity;
+package com.project.fri.gameChatting.entity;
 
-import com.project.fri.chatting.dto.CreateChattingMessageRequest;
+import com.project.fri.gameChatting.dto.CreateGameChattingMessageRequest;
 import com.project.fri.room.entity.Room;
 import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
@@ -27,12 +27,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name="chatting")
-public class ChattingMessage extends BaseTimeEntity {
+@Table(name="game_chatting")
+public class GameChattingMessage extends BaseTimeEntity {
   // null 값을 허용하지 않기 위해 원시타입 사용 하지만 String은 참조타입이여서 별도로 @NotNull추가
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="chatting_id")
+  @Column(name="game_chatting_id")
   private Long id;
   @NotNull
   private String message;
@@ -47,8 +47,8 @@ public class ChattingMessage extends BaseTimeEntity {
   @JoinColumn(name="room_id")
   private Room room;
 
-  public static ChattingMessage create(CreateChattingMessageRequest request,User user,Room room){
-    ChattingMessage response=ChattingMessage.builder()
+  public static GameChattingMessage create(CreateGameChattingMessageRequest request,User user,Room room){
+    GameChattingMessage response=GameChattingMessage.builder()
         .message(request.getMessage())
         .user(user)
         .room(room)
