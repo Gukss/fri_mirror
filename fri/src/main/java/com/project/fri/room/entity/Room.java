@@ -59,7 +59,7 @@ public class Room extends BaseTimeEntity {
   @NotNull
   private BaseEntity baseEntity;
 
-  public FindAllRoomInstance createFindRoomResponse(Category roomCategory){
+  public FindAllRoomInstance createFindRoomResponse(Category roomCategory, int majorCount, int nonMajorCount){
     return FindAllRoomInstance.builder()
         .roomId(this.id)
         .title(this.title)
@@ -67,6 +67,8 @@ public class Room extends BaseTimeEntity {
         //todo: 현재 방의 category_id로 category 가지고 와서 넣어주기
         .roomCategory(roomCategory.toString())
         .headCount(this.headCount)
+        .major(majorCount)
+        .nonMajor(nonMajorCount)
         .build();
   }
 

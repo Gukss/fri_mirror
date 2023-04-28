@@ -101,7 +101,9 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     Long enrollRoomId = foundUser.getRoom().getId();
 
-    List<Room> roomList = roomRepository.findAllByArea(foundArea);
+    //이 roomList에서 해당 방으로 userList를 찾아서 size()를 찾아서 가득찬 방 없애야한다.
+    //user마다 전공 여부도 체크해줘야한다.
+    List<Room> roomList = roomRepository.findAllByAreaOrderByCreatedAtDesc(foundArea);
 
     //roomList 반복하면서 responseEnitity 채워주기
     List<FindAllRoomInstance> drinkList = new ArrayList<>();
@@ -113,33 +115,59 @@ public class RoomServiceImpl implements RoomService {
     List<FindAllRoomInstance> etcList = new ArrayList<>();
 
     for (Room x : roomList) {
-
       com.project.fri.room.entity.Category category = x.getRoomCategory().getCategory();
+      List<User> foundUserList = userRepository.findAllByRoom(x);
+      int size = foundUserList.size(); //방에 참여한 인원수
+      int headCount = x.getHeadCount(); //방 최대 인원 => 위에 참여 인원수와 비교해서 가득찬 방인지 판별한다.
+      if (size == headCount) { //가득찬 방이면 continue;
+        continue;
+      }
+      int majorCount = 0;
+      int nonMajorCount = 0;
+
+      for (User u : foundUserList) {
+        boolean major = u.isMajor();
+        if (major) {
+          majorCount += 1;
+        } else {
+          nonMajorCount += 1;
+        }
+      }
+
       if (x.getId() == enrollRoomId) { //참여중인 방이면 화면에 출력되지 않는다.
         continue;
       }
       switch (category) {
         //총 7개 + etc
         case DRINK:
-          drinkList.add(x.createFindRoomResponse(category));
+          if (drinkList.size() < 10) {
+            drinkList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }
           break;
         case MEAL:
-          mealList.add(x.createFindRoomResponse(category));
+          if (mealList.size() < 10) {
+            mealList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }
           break;
         case GAME:
-          gameList.add(x.createFindRoomResponse(category));
+          if (gameList.size() < 10) {
+            gameList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }
           break;
         case EXERCISE:
-          exerciseList.add(x.createFindRoomResponse(category));
+          if (exerciseList.size() < 10) {
+            exerciseList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }
           break;
         case STUDY:
-          studyList.add(x.createFindRoomResponse(category));
+          if (studyList.size() < 10) {
+            studyList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }
           break;
-        // case BETTING:
-        //   bettingList.add(x.createFindRoomResponse(category));
-        //   break;
         case ETC:
-          etcList.add(x.createFindRoomResponse(category));
+          if (etcList.size() < 10) {
+            etcList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }
           break;
         default:
           //todo: 카테고리 없는거 어떻게 할 지 정하기 => 카테고리 없는게 들어올리가 없긴하다. => exceptino으로 던지면 될까?
