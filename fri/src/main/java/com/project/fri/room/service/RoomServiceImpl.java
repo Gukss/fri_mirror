@@ -110,13 +110,13 @@ public class RoomServiceImpl implements RoomService {
     List<FindAllRoomInstance> bettingList = new ArrayList<>();
     List<FindAllRoomInstance> etcList = new ArrayList<>();
 
-    for(Room x: roomList){
+    for (Room x : roomList) {
 
       com.project.fri.room.entity.Category category = x.getRoomCategory().getCategory();
-      if(x.getId() == enrollRoomId){ //참여중인 방이면 화면에 출력되지 않는다.
+      if (x.getId() == enrollRoomId) { //참여중인 방이면 화면에 출력되지 않는다.
         continue;
       }
-      switch(category){
+      switch (category) {
         //총 7개 + etc
         case DRINK:
           drinkList.add(x.createFindRoomResponse(category));
@@ -160,29 +160,33 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * desc: 요청한 방 한개에 대한 상세 정보 조회
+   *
    * @param roomId 찾으려는 방 Id (pathvariable)
    * @return 요청한 방에 대한 상세 정보
    */
   @Override
   public FindRoomResponse findRoom(Long roomId, Long userId) {
     Optional<Room> room = roomRepository.findRoomWithCategoryById(roomId);
-    Room findRoom = room.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
+    Room findRoom = room.orElseThrow(
+        () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
     Optional<List<User>> userList = userRepository.findAllByRoom(findRoom);
-    List<User> findUserList = userList.orElseThrow(() -> new IllegalStateException("유저가 없는 방은 존재할 수 없습니다."));
+    List<User> findUserList = userList.orElseThrow(
+        () -> new IllegalStateException("유저가 없는 방은 존재할 수 없습니다."));
 
     List<FindAllUserByRoomIdDto> majorList = findUserList.stream()
-            .filter(User::isMajor)
-            .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
-            .collect(Collectors.toList());
+        .filter(User::isMajor)
+        .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+        .collect(Collectors.toList());
 
     List<FindAllUserByRoomIdDto> nonMajorList = findUserList.stream()
-            .filter(user -> !user.isMajor())
-            .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
-            .collect(Collectors.toList());
+        .filter(user -> !user.isMajor())
+        .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+        .collect(Collectors.toList());
 
     Optional<User> user = userRepository.findById(userId);
-    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    User findUser = user.orElseThrow(
+        () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
     Boolean isParticipated = findUser.getRoom().equals(findRoom);
 
@@ -192,28 +196,31 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * desc: 방 더보기
+   *
    * @param stringArea
    * @param stringCategory
    * @return
    */
   @Override
-  public List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category stringArea, com.project.fri.room.entity.Category stringCategory) {
+  public List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category stringArea,
+      com.project.fri.room.entity.Category stringCategory) {
 
     // enum 타입으로 객체를 찾음
-    Area area = areaRepository.findByCategory(stringArea);
-    RoomCategory roomCategory = roomCategoryRepository.findByCategory(stringCategory);
+    Area area = areaRepository.findByCategory(stringArea)
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
+    RoomCategory roomCategory = roomCategoryRepository.findByCategory(stringCategory)
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
 
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
-        roomCategory).orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_LIST));
+        roomCategory);
 
     // 찾은 방 목록으로 user찾아서 전공, 비전공자 참여자 수 추가해서 dto로 반환하기
     List<FindAllRoomByCategoryResponse> seeMoreRoom = findAllRoom.stream()
         .map(findRoom -> {
 
           // 방으로 참여 user 찾기
-          List<User> users = userRepository.findAllByRoom(findRoom).orElseThrow(
-              () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+          List<User> users = userRepository.findAllByRoom(findRoom);
           long major = users.stream().filter(user -> user.isMajor() == true).count();    // 전공자
           long nonMajor = users.size() - major;                                          // 비전공자
 

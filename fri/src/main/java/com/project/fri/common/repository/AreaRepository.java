@@ -2,6 +2,7 @@ package com.project.fri.common.repository;
 
 import com.project.fri.common.entity.Area;
 import com.project.fri.common.entity.Category;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AreaRepository extends JpaRepository<Area, Long> {
   //todo: optional로 감싸기
-  Area findByCategory(Category category);  // category 변수로 areaCategory 엔티티에서 조회
+  Optional<Area> findByCategory(Category category);  // category 변수로 areaCategory 엔티티에서 조회
 }

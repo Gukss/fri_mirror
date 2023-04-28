@@ -18,8 +18,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-  Optional<List<Room>> findAllByArea(Area area);
-  Optional<List<Room>> findAllByAreaAndRoomCategory(Area area, RoomCategory roomCategory);
+  List<Room> findAllByArea(Area area);
+  List<Room> findAllByAreaAndRoomCategory(Area area, RoomCategory roomCategory);
   @Query("SELECT r FROM Room r JOIN FETCH r.roomCategory WHERE r.id = :roomId")
   Optional<Room> findRoomWithCategoryById(@Param("roomId") Long roomId);
 }
