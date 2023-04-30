@@ -1,5 +1,6 @@
 package com.project.fri.user.controller;
 
+import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.user.dto.UpdateUserRoomRequest;
 import com.project.fri.user.dto.UpdateUserRoomResponse;
 import com.project.fri.user.service.UserService;
@@ -45,8 +46,9 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity createUser() {
+  public ResponseEntity createUser(@RequestBody CreateUserRequest createUserRequest) {
     // todo: 프로필 파일 + @requestPart
+    userService.createUser(createUserRequest);
     return ResponseEntity.status(201).build();
   }
 }

@@ -13,6 +13,12 @@ import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,6 +41,12 @@ public class UserServiceImpl implements UserService {
   private final RoomRepository roomRepository;
   private final AreaRepository areaRepository;
   private final UserRepository userRepository;
+
+  private WebDriver driver;
+
+  private static final String URL = "https://edu.ssafy.com/comm/login/SecurityLoginForm.do";
+  private static final String LOCAL_PATH = "D:\\Guk\\fri\\chromedriver.exe";
+  private static final String SERVER_PATH = "";
 
   @Override
   public User findById(long userId) {
@@ -175,9 +187,81 @@ public class UserServiceImpl implements UserService {
     // area 찾기
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
+    confirmUser(request.getEmail());
 
     // user db에 저장
     User user = User.create(request, area);
-    User saveUser = userRepository.save(user);
+//    User saveUser = userRepository.save(user);
+  }
+
+  /**
+   * desc: 셀레니움을 이용한 유저 이메일 검증
+   * @param email
+   */
+  private void confirmUser(String email) {
+    //크롬 드라이버 셋팅 (드라이버 설치한 경로 입력)
+    System.setProperty("webdriver.chrome.driver", LOCAL_PATH);
+
+    System.setProperty("webdriver.chrome.whitelistedIps", "");
+    //브라우저 열 때 옵션
+    ChromeOptions options = new ChromeOptions();
+    options.setHeadless(true);
+    options.addArguments("--remote-allow-origins=*");
+    options.addArguments("--lang=ko");
+    options.addArguments("--disable-popup-blocking");       //팝업안띄움
+    options.addArguments("headless");                       //브라우저 안띄움
+    options.addArguments("--disable-gpu");			//gpu 비활성화
+    options.addArguments("--blink-settings=imagesEnabled=false"); //이미지 다운 안받음
+    options.setCapability("ignoreProtectedModeSettings", true);
+
+    //브라우저 선택
+    driver = new ChromeDriver(options);
+
+    //로직
+    try{
+      checkEmail(email);
+    }catch(Exception e){
+
+    }
+
+    driver.close(); //탭 닫기
+    driver.quit(); //브라우저 닫기
+  }
+
+  private boolean checkEmail(String email) throws InterruptedException {
+    driver.get(URL);
+
+    // 스크립트를 사용하기 위한 캐스팅
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+
+    Thread.sleep(1000);
+
+    //css id가 userId로 돼있는 email input 창 가져오기
+    WebElement userId = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[1]/input"));
+    userId.sendKeys(email); //email 입력하기
+
+    // css id가 userPwd로 돼있는 비밀번호 input 창 가져오기
+    WebElement userPwd = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[2]/input"));
+    userPwd.sendKeys("1"); //1 입력하기 => 틀리기 위해
+
+    //css class가 btn-primary로 돼있는 "로그인" 버튼 가지고오기
+    WebElement loginButton = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[3]/a"));
+
+    // 클릭한다. 사실 element.click()로도 클릭이 가능한데 가끔 호환성 에러가 발생하는 경우가 있다.
+    js.executeScript("arguments[0].click();", loginButton);
+
+//    loginButton.click(); //버튼 클릭하기
+
+    Thread.sleep(1000); //1초 정지
+
+    WebElement messageBox = driver.findElement(By.className("c-desc"));
+    String message = messageBox.getText();
+    log.info(message);
+    switch(message){
+      case "비밀번호가 일치하지 않습니다.":
+        log.info("등록돼있는 유저");
+        break;
+    }
+    return false;
   }
 }
