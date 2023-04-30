@@ -1,5 +1,6 @@
 package com.project.fri.user.service;
 
+import com.project.fri.user.dto.CertifiedUserRequest;
 import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.user.dto.UpdateUserRoomRequest;
 import com.project.fri.user.dto.UpdateUserRoomResponse;
@@ -41,4 +42,6 @@ public interface UserService {
    * @return
    */
   void createUser(CreateUserRequest request);
+
+  boolean certifiedUser(CertifiedUserRequest certifiedUserRequest);
 }

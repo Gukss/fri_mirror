@@ -5,6 +5,7 @@ import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
+import com.project.fri.user.dto.CertifiedUserRequest;
 import com.project.fri.user.dto.CreateUserRequest;
 import com.project.fri.user.dto.UpdateUserRoomRequest;
 import com.project.fri.user.dto.UpdateUserRoomResponse;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
   private static final String URL = "https://edu.ssafy.com/comm/login/SecurityLoginForm.do";
   private static final String LOCAL_PATH = "D:\\Guk\\fri\\chromedriver.exe";
-  private static final String SERVER_PATH = "";
+  private static final String SERVER_PATH = "/home/ubuntu/chromedriver.exe";
 
   @Override
   public User findById(long userId) {
@@ -187,20 +188,23 @@ public class UserServiceImpl implements UserService {
     // area 찾기
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
-    confirmUser(request.getEmail());
 
     // user db에 저장
     User user = User.create(request, area);
-//    User saveUser = userRepository.save(user);
+    User saveUser = userRepository.save(user);
   }
 
   /**
    * desc: 셀레니움을 이용한 유저 이메일 검증
-   * @param email
+   * @param certifiedUserRequest
    */
-  private void confirmUser(String email) {
+  @Override
+  public boolean certifiedUser(CertifiedUserRequest certifiedUserRequest) {
+    boolean result = false;
+
     //크롬 드라이버 셋팅 (드라이버 설치한 경로 입력)
-    System.setProperty("webdriver.chrome.driver", LOCAL_PATH);
+//    System.setProperty("webdriver.chrome.driver", LOCAL_PATH);
+    System.setProperty("webdriver.chrome.driver", SERVER_PATH);
 
     System.setProperty("webdriver.chrome.whitelistedIps", "");
     //브라우저 열 때 옵션
@@ -219,13 +223,14 @@ public class UserServiceImpl implements UserService {
 
     //로직
     try{
-      checkEmail(email);
+      result = checkEmail(certifiedUserRequest.getEmail());
     }catch(Exception e){
-
+      //셀레니움 예외처리
     }
 
     driver.close(); //탭 닫기
     driver.quit(); //브라우저 닫기
+    return result;
   }
 
   private boolean checkEmail(String email) throws InterruptedException {
@@ -233,8 +238,6 @@ public class UserServiceImpl implements UserService {
 
     // 스크립트를 사용하기 위한 캐스팅
     JavascriptExecutor js = (JavascriptExecutor) driver;
-
-    Thread.sleep(1000);
 
     //css id가 userId로 돼있는 email input 창 가져오기
     WebElement userId = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[1]/input"));
@@ -251,17 +254,32 @@ public class UserServiceImpl implements UserService {
     js.executeScript("arguments[0].click();", loginButton);
 
 //    loginButton.click(); //버튼 클릭하기
-
-    Thread.sleep(1000); //1초 정지
+//    Thread.sleep(1000); //1초 정지
 
     WebElement messageBox = driver.findElement(By.className("c-desc"));
     String message = messageBox.getText();
     log.info(message);
+    boolean result = false;
     switch(message){
       case "비밀번호가 일치하지 않습니다.":
         log.info("등록돼있는 유저");
+        result = true;
+        break;
+      case "등록된 사용자 정보가 없습니다.":
+        log.info("등록안된 유저");
+        result = false;
+        break;
+        //이 아래는 나오면 안되는 값이다.
+      case "[아이디]은(는) 필수값입니다.":
+        result = false;
+        break;
+      case "[비밀번호]은(는) 필수값입니다.":
+        result = false;
+        break;
+      default:
+        result = false;
         break;
     }
-    return false;
+    return result;
   }
 }

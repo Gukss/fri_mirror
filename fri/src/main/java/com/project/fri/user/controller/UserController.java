@@ -1,12 +1,13 @@
 package com.project.fri.user.controller;
 
+import com.project.fri.user.dto.CertifiedUserRequest;
 import com.project.fri.user.dto.CreateUserRequest;
+import com.project.fri.user.dto.CertifiedUserResponse;
 import com.project.fri.user.dto.UpdateUserRoomRequest;
 import com.project.fri.user.dto.UpdateUserRoomResponse;
 import com.project.fri.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import com.project.fri.user.dto.UpdateUserReadyResponse;
-import com.project.fri.user.service.UserService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,5 +51,19 @@ public class UserController {
     // todo: 프로필 파일 + @requestPart
     userService.createUser(createUserRequest);
     return ResponseEntity.status(201).build();
+  }
+
+  @PostMapping("/certified")
+  public ResponseEntity<CertifiedUserResponse> certifiedUser(@RequestBody CertifiedUserRequest certifiedUserRequest){
+      boolean result = false;
+      result = userService.certifiedUser(certifiedUserRequest);
+      CertifiedUserResponse certifiedUserResponse = new CertifiedUserResponse(result);
+      ResponseEntity<CertifiedUserResponse> res = null;
+      if(result){
+        res = ResponseEntity.ok().body(certifiedUserResponse);
+      }else{
+        res = ResponseEntity.badRequest().body(certifiedUserResponse);
+      }
+      return res;
   }
 }
