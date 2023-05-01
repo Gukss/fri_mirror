@@ -1,5 +1,8 @@
 .chat-contents {
   height: 100%;
+  box-sizing: border-box;
+
+  padding-top: 1rem;
   margin: 0 1rem;
   overflow-y: auto;
 

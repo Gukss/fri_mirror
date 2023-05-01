@@ -30,7 +30,9 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 ( {current_cnt} / {total_cnt} )
               </span>
             </p>
-            <div className="join_game" onClick={()=> navigate("/wait/1")}>참여하기</div>
+            <div className="join_game" onClick={() => navigate("/wait/1")}>
+              참여하기
+            </div>
           </div>
         </div>
       ) : null}

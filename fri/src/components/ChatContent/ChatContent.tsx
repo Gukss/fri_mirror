@@ -10,6 +10,11 @@ export default function ChatContent() {
       <Mine />
       <Mine />
       <Mine />
+      <Others />
+      <Others />
+      <Mine />
+      <Mine />
+      <Mine />
     </div>
   );
 }

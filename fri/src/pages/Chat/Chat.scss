@@ -20,7 +20,137 @@
     top: 90vh;
     width: 100vw;
     height: 10vh;
+    z-index: 0;
 
     background: #fff3cd;
+  }
+
+  .chat-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: opacity 0.5s ease-in-out;
+
+    visibility: hidden;
+    opacity: 0;
+
+    &.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .chat-modal {
+      position: relative;
+      top: 0;
+      left: 25vw;
+      width: 75vw;
+      height: 100vh;
+      box-sizing: border-box;
+      padding: 2rem;
+      background: #ffffff;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+
+      display: grid;
+      grid-template-rows: 1fr 1fr 7fr;
+      row-gap: 1rem;
+
+      &.open {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      }
+
+      .info {
+        display: grid;
+        border-bottom: 1px solid #000000;
+        font-size: 1.25rem;
+        row-gap: 0.25rem;
+        text-align: start;
+        word-break: break-all;
+
+        &.last {
+          border-bottom: none;
+          display: block;
+
+          .top {
+            margin-bottom: 1rem;
+          }
+        }
+
+        .top {
+          font-size: 1.25rem;
+          font-weight: bold;
+        }
+
+        .people {
+          display: flex;
+          flex-wrap: wrap;
+          column-gap: 2rem;
+          row-gap: 2rem;
+
+          .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .img {
+              width: 50px;
+              height: 50px;
+              box-sizing: border-box;
+              border: 1px #dcdcdc solid;
+              border-radius: 1rem;
+
+              overflow: hidden;
+              flex-shrink: 0;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            .name {
+              width: 50px;
+              font-size: 1rem;
+              word-break: break-all;
+            }
+          }
+        }
+      }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0.5rem;
+      left: 85%;
+      width: 8vw;
+      height: 8vw;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .exit {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        width: 50%;
+        border: 1px #dcdcdc solid;
+        border-radius: 0.25rem;
+        padding: 0.25rem;
+      }
+    }
   }
 }
