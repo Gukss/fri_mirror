@@ -36,6 +36,7 @@ export default function Add() {
   const [searchparams, setSearchParmas] = useSearchParams();
   const tab = searchparams.get("tab");
   const cate = searchparams.get("cate");
+  const api_url = process.env.REACT_APP_REST_API;
 
   const [form, setForm] = useState<AddForm>({
     cate: "",
@@ -69,7 +70,7 @@ export default function Add() {
 
   const createRoom = async (data : object) => {
     try {
-      const res = await axios.post("https://k8b204.p.ssafy.io" + '/api/room', data)
+      const res = await axios.post(api_url + "room", data)
       navigate(`/chat?roomId=${res.data.roomId}&title=${res.data.title}`)
     }
     catch(e) {console.log(e)}

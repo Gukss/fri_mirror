@@ -36,6 +36,8 @@ const Main: React.FC = () => {
   const [study, setStudy] = useState(data.study);
   const [etc, setEtc] = useState(data.etc);
 
+  const api_url = process.env.REACT_APP_REST_API;
+
   const navigate = useNavigate();
 
   function go_more(category : string) {
@@ -57,15 +59,15 @@ const Main: React.FC = () => {
     else if(category === "exercise") temp = categories.exercise
     else if(category === "study") temp = categories.study
     else if(category === "etc") temp = categories.etc
-    navigate({pathname : '/more', search : createSearchParams({"category" : category, "text" : temp}).toString()})
+    navigate({pathname : "/more", search : createSearchParams({"region" : region, "category" : category, "text" : temp}).toString()})
     }
 
 
   useEffect(() => {
-    console.log("a")
     const getData = async () => {
+      const userId = 1;
       try{
-        const res = await axios.get(`https://k8b204.p.ssafy.io/room?area={${region}}`)
+        const res = await axios.get(api_url + `room?area={${region}}`, {headers : {'userId' : userId}})
         console.log(res.data)
         setTdata(res.data)
       }
