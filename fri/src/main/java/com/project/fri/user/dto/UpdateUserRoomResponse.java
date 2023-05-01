@@ -11,5 +11,4 @@ public class UpdateUserRoomResponse {
     private Long roomId;
     private String title;
     private Boolean isParticipate;
-    private Boolean ready;
 }

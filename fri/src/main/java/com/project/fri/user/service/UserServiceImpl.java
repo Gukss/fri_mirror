@@ -13,6 +13,8 @@ import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,12 +44,16 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public UpdateUserRoomResponse updateUserRoom(Long roomId, UpdateUserRoomRequest request, Long userId) {
+  public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(Long roomId,
+      UpdateUserRoomRequest request,
+      Long userId) {
     Optional<User> user = userRepository.findById(userId);
-    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    User findUser = user.orElseThrow(
+        () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
     Optional<Room> room = roomRepository.findById(roomId);
-    Room findRoom = room.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
+    Room findRoom = room.orElseThrow(
+        () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
     // 삭제된 방인지 먼저 확인
     if (Boolean.TRUE.equals(findRoom.isDelete())) {
@@ -56,34 +62,55 @@ public class UserServiceImpl implements UserService {
 
     boolean participate = true;
 
-    if (findUser.getRoom() == null ) {
+    ResponseEntity res = null;
+    UpdateUserRoomResponse updateUserRoomResponse = null;
+    log.info("findUser.getRoom(): "+findUser.getRoom());
+    if (findUser.getRoom() == null) {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
-      if (Boolean.TRUE.equals(request.getIsParticipate())) {
-        findUser.updateRoomNumber(findRoom);
-      } else {
+      if (findUser.getHeart() >= 1) { //하트 1이상일 때
+        if (Boolean.FALSE.equals(request.getIsParticipate())) { //false로 오면 참여하기를 누른거다.
+          //하트가 1이상인지 검사하고, 1이상이면 입장 후 하트-=1, 1미만이면 입장하면 안된다.
+          findUser.updateRoomNumber(findRoom);
+          findUser.minusHeart();
+        } else {
+          //true로 오면 나가기를 누른거다. => but room이 null인데 true가 올 수 없다.
+          participate = false;
+        }
+      } else { //하트 1미만일 때
         participate = false;
+        updateUserRoomResponse = UpdateUserRoomResponse.builder()
+            .roomId(findRoom.getId())
+            .title(findRoom.getTitle())
+            .isParticipate(participate)
+            .build();
+        return res = ResponseEntity.status(HttpStatus.FORBIDDEN).body(updateUserRoomResponse);
       }
-    } else if (findUser.getRoom().equals(findRoom) && Boolean.FALSE.equals(request.getIsParticipate())) {
+    } else if (findUser.getRoom().equals(findRoom) && Boolean.TRUE.equals(
+        request.getIsParticipate())) {
       // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제 및 유저 ready상태 false
       findUser.updateRoomNumber(null);
       //ready 상태 false만들기 -> merge 하고난 후
       participate = false;
       // 해당방에 유저가 남아 있는지 확인 없으면 방 삭제
-      List<User> findUsers = userRepository.findAllByRoom(findRoom).orElse(new ArrayList<>());
+      List<User> findUsers = userRepository.findAllByRoom(findRoom);
       if (findUsers.isEmpty()) {
         findRoom.deleteRoom();
       }
+
+      //todo: 방 나갈 때 heart 줄도록 구현 필요
     } else {
       // 방에 입장 상태이지만 기존 입장중이 방과 입장하려는 방이 일치하지 않을 때
       throw new IllegalStateException("입장중인 방과 일치하지 않습니다.");
     }
 
-    return UpdateUserRoomResponse.builder()
-            .roomId(findRoom.getId())
-            .title(findRoom.getTitle())
-            .isParticipate(participate)
-            .ready(false)
-            .build();
+    updateUserRoomResponse = UpdateUserRoomResponse.builder()
+        .roomId(findRoom.getId())
+        .title(findRoom.getTitle())
+        .isParticipate(participate)
+        .build();
+
+    res = ResponseEntity.ok().body(updateUserRoomResponse);
+    return res;
   }
 
   public UpdateUserReadyResponse updateUserReady(long userId, long roomId) {
@@ -93,42 +120,41 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     Room room = foundUser.getRoom();
     Long foundUserRoomId = room.getId();
-    boolean curReady = foundUser.isReady(); //현재 ready 상태
-    boolean curConfirmed = room.isConfirmed();
+//    boolean curReady = foundUser.isReady(); //현재 ready 상태
+//    boolean curConfirmed = room.isConfirmed();
     UpdateUserReadyResponse updateUserReadyResponse = null; //반환할 객체 미리 선언하기
 
     if (foundUserRoomId == roomId) { //같을 때 => 정상 진행
       //해당 방에 속한 user 찾아와서 본인 빼고 모두 ready 눌렀는지 확인하기
-      List<User> userList = userRepository.findAllByRoom(room)
-          .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+      List<User> userList = userRepository.findAllByRoom(room);
       boolean isAllReady = true;
       //todo: 본인은 반복문에서 검사를 안하는데
       // 본인이 true인 경우 다시 false로 바꿔주면 안되기 때문에
       // 적절한 조치가 필요해보인다.
-      for(User x: userList){
-        log.info("userID: "+x.getId());
-        if(x.equals(foundUser)){ //본인이면
+      for (User x : userList) {
+        log.info("userID: " + x.getId());
+        if (x.equals(foundUser)) { //본인이면
           continue;
         }
-        if(!x.isReady()){ //ready가 안됐으면 return => 다른 사람들이 ready하도록 기다려야 한다.
-          isAllReady = false;
-          break;
-        }
+//        if(!x.isReady()){ //ready가 안됐으면 return => 다른 사람들이 ready하도록 기다려야 한다.
+//          isAllReady = false;
+//          break;
+//        }
       }
       //일단 나의 ready를 not해서 바꿔준다.
-      boolean nextReady = !curReady;
-      boolean nextConfirmed = curConfirmed;
-
-      foundUser.updateReady(nextReady);
-      if(isAllReady){
-        //isAllReady가 true면 나 빼고 모두 완료했다는 의미다. => 현재 방의 isConfirmed를 바꿔준다.
-        nextConfirmed = !curConfirmed;
-        room.updateIsConfirmed(nextConfirmed);
-      }
+//      boolean nextReady = !curReady;
+//      boolean nextConfirmed = curConfirmed;
+//
+//      foundUser.updateReady(nextReady);
+//      if(isAllReady){
+//        //isAllReady가 true면 나 빼고 모두 완료했다는 의미다. => 현재 방의 isConfirmed를 바꿔준다.
+//        nextConfirmed = !curConfirmed;
+//        room.updateIsConfirmed(nextConfirmed);
+//      }
 
       updateUserReadyResponse = UpdateUserReadyResponse.builder()
-          .ready(nextReady)
-          .isConfirmed(nextConfirmed)
+//          .ready(nextReady)
+//          .isConfirmed(nextConfirmed)
           .roomId(roomId)
           .build();
 
@@ -140,13 +166,15 @@ public class UserServiceImpl implements UserService {
 
   /**
    * desc: 회원가입
+   *
    * @return
    */
   @Override
   public void createUser(CreateUserRequest request) {
 
     // area 찾기
-    Area area = areaRepository.findByCategory(request.getArea());
+    Area area = areaRepository.findByCategory(request.getArea())
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     // user db에 저장
     User user = User.create(request, area);
