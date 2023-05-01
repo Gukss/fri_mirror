@@ -63,6 +63,14 @@ dependencies {
 	//yml 암호화
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 
+//	// https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+//	//셀레니움
+//	implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+
+	// https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+	implementation 'org.seleniumhq.selenium:selenium-java:4.9.0'
+
+
 }
 
 tasks.named('test') {
