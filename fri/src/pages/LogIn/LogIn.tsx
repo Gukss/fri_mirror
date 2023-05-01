@@ -66,7 +66,7 @@ export default function LogIn() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // 로그인 axios
-      console.log("로그인~");
+      
       // 초기화
       setForm({ id: "", password: "" });
     },

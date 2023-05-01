@@ -91,7 +91,7 @@ export default function Add() {
         let area = "";
         if(form.area === "대전") area = "DAEJEON";
         else if(form.area === "서울") area = "SEOUL";
-        else if(form.area === "광주") area = "GWANJU";
+        else if(form.area === "광주") area = "GWANGJU";
         else if(form.area === "구미") area = "GUMI";
         else if(form.area === "부울경") area = "BUSAN";
         if(tab !== "bet"){

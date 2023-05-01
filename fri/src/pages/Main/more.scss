@@ -18,8 +18,8 @@
     width: 100vw;
     height: calc(100vh - 140px);
     display: flex;
-    justify-content: center;
-    flex-flow: row wrap;
+    // justify-content: start;
+    flex-flow: nowrap;
     overflow-y: scroll;
     border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
     border-top: rgba(0, 0, 0, 0.25) 1px solid;
