@@ -8,11 +8,13 @@ interface AddForm {
   place: string;
   people: string;
   time: string;
+  area: string;
 }
 interface AddFormMsg {
   name: string;
   place: string;
   people: string;
+  area: string;
 }
 
 interface Error {
@@ -20,6 +22,7 @@ interface Error {
   name: boolean;
   place: boolean;
   people: boolean;
+  area: boolean;
 }
 
 interface InputProps {
@@ -32,6 +35,7 @@ interface InputProps {
 }
 
 const ratio = ["2:2", "3:3", "4:4", "5:5", "6:6"];
+const area = ["서울", "대전", "광주", "구미", "부울경"];
 
 export default function Inputs({
   form,
@@ -45,6 +49,7 @@ export default function Inputs({
   const cate = searchparams.get("cate");
 
   const [isDropDown, setIsDropDown] = useState(false);
+  const [isAreaDown, setIsAreaDown] = useState(false);
 
   const onClickSelect = useCallback(() => {
     setIsDropDown(!isDropDown);
@@ -54,6 +59,20 @@ export default function Inputs({
     (e: React.MouseEvent<HTMLButtonElement>) => {
       const { name, value } = e.currentTarget;
       setIsDropDown(false);
+      setForm({ ...form, [name]: value });
+      setError({ ...error, [name]: true });
+    },
+    [form, error]
+  );
+
+  const onClickArea = useCallback(() => {
+    setIsAreaDown(!isAreaDown);
+  }, [isAreaDown]);
+
+  const onClickAreaOption = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { name, value } = e.currentTarget;
+      setIsAreaDown(false);
       setForm({ ...form, [name]: value });
       setError({ ...error, [name]: true });
     },
@@ -147,15 +166,64 @@ export default function Inputs({
     setMessage({
       name: "",
       place: "",
-      people: ""
+      people: "",
+      area: ""
     });
-    setForm({ ...form, people: "" });
-    setError({ ...error, name: false, place: false, people: false });
+    setForm({ ...form, people: "", area: "" });
+    setError({ ...error, name: false, place: false, people: false, area: false });
   }, []);
 
   return (
     <>
       <div className="add-input-box">
+      <div className="input-label" id="label">
+          # 지역 설정
+        </div>
+        <div className="component">
+            <button
+              className={`select-button ${
+                form.area === ""
+                  ? ""
+                  : "checked"
+              }`}
+              type="button"
+              id="people"
+              name="area"
+              onClick={onClickArea}
+            >
+              <div
+                className={`select ${
+                  form.area === ""
+                    ? ""
+                    : "checked"
+                }`}
+              >
+                {form.area === ""
+                  ? "지역을 선택해주세요."
+                  : form.area}
+              </div>
+            </button>
+            <div className="message">
+              {form.area === ""
+                ? ""
+                : "가능합니다!"}
+            </div>
+            {isAreaDown && (
+              <div className="drop-down">
+                {area.map((area) => (
+                  <button
+                    className="option"
+                    value={area}
+                    key={area}
+                    onClick={onClickAreaOption}
+                    name="area"
+                  >
+                    {area}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         <div className="input-label" id="label">
           # 방 이름 설정
         </div>

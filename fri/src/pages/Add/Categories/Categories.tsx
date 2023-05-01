@@ -7,6 +7,7 @@ interface Error {
   name: boolean;
   place: boolean;
   people: boolean;
+  area: boolean;
 }
 interface AddForm {
   cate: string;
@@ -14,6 +15,7 @@ interface AddForm {
   place: string;
   people: string;
   time: string;
+  area: string;
 }
 
 interface CateProps {
@@ -41,7 +43,6 @@ export default function Categories({
       } else {
         setSelect(selectedCate);
       }
-      console.log(form);
     },
     [form, select]
   );
@@ -53,19 +54,19 @@ export default function Categories({
       </div>
       <div className="category-select-boxs">
         <div
-          className="select-box"
+          className="select-box bet"
           id={select === "내기" ? "select" : ""}
           onClick={() => handleClick("내기")}
         >
           <div className="title">내기</div>
           <div className="content">
-            미니게임으로 <br /> 내기할 사람?
+            미니게임으로 내기할 사람?
           </div>
         </div>
         <div
           className="select-box"
-          id={select === "술" ? "select" : ""}
-          onClick={() => handleClick("술")}
+          id={select === "DRINK" ? "select" : ""}
+          onClick={() => handleClick("DRINK")}
         >
           <div className="title">술</div>
           <div className="content">
@@ -75,8 +76,8 @@ export default function Categories({
         </div>
         <div
           className="select-box"
-          id={select === "밥" ? "select" : ""}
-          onClick={() => handleClick("밥")}
+          id={select === "MEAL" ? "select" : ""}
+          onClick={() => handleClick("MEAL")}
         >
           <div className="title">밥</div>
           <div className="content">
@@ -86,26 +87,35 @@ export default function Categories({
         </div>
         <div
           className="select-box"
-          id={select === "게임" ? "select" : ""}
-          onClick={() => handleClick("게임")}
+          id={select === "GAME" ? "select" : ""}
+          onClick={() => handleClick("GAME")}
         >
           <div className="title">게임</div>
           <div className="content">
             PC게임, 보드게임 <br /> 하고 싶은 사람!
           </div>
+        </div><div
+          className="select-box"
+          id={select === "EXERCISE" ? "select" : ""}
+          onClick={() => handleClick("EXERCISE")}
+        >
+          <div className="title">운동</div>
+          <div className="content">
+            어깨, 가슴, 등, 하체 운동 <br /> 하고 싶은 사람!
+          </div>
         </div>
         <div
           className="select-box"
-          id={select === "공부" ? "select" : ""}
-          onClick={() => handleClick("공부")}
+          id={select === "STUDY" ? "select" : ""}
+          onClick={() => handleClick("STUDY")}
         >
           <div className="title">공부</div>
           <div className="content">공부, 스터디, 취준할 사람</div>
         </div>
         <div
           className="select-box"
-          id={select === "기타" ? "select" : ""}
-          onClick={() => handleClick("기타")}
+          id={select === "ETC" ? "select" : ""}
+          onClick={() => handleClick("ETC")}
         >
           <div className="title">기타</div>
         </div>
@@ -120,7 +130,7 @@ export default function Categories({
             setSearchParmas(searchparams);
           } else {
             searchparams.set("tab", "infos");
-            searchparams.set("cate", "meeting");
+            searchparams.set("cate", select);
             setSearchParmas(searchparams);
           }
         }}

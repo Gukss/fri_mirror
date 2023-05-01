@@ -1,11 +1,12 @@
 import Topheader from "../../components/LogoEgg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import data from "../../components/data/main_dummy.json";
 import Meeting from "../../components/MeetingRoom";
 import Game from "../../components/GameRoom";
 import Nav from "../../components/navEgg";
-import "./main.scss"
+import axios from "axios";
+import "./main.scss";
 
 export type MeetType = {
   place: string;
@@ -24,8 +25,9 @@ export type GameType = {
 };
 
 const Main: React.FC = () => {
-  const [region, setRegion] = useState(1);
+  const [region, setRegion] = useState("SEOUL");
   const [isnav, setIsnav] = useState(false);
+  const [tdata, setTdata] = useState({});
   const [game, setGame] = useState(data.game);
   const [dinner, setDinner] = useState(data.dinner);
   const [drink, setDrink] = useState([]);
@@ -58,15 +60,29 @@ const Main: React.FC = () => {
     navigate({pathname : '/more', search : createSearchParams({"category" : category, "text" : temp}).toString()})
     }
 
+
+  useEffect(() => {
+    console.log("a")
+    const getData = async () => {
+      try{
+        const res = await axios.get(`https://k8b204.p.ssafy.io/room?area={${region}}`)
+        console.log(res.data)
+        setTdata(res.data)
+      }
+      catch(e) {console.log(e)}
+    }
+    getData()
+  }, [tdata])
+
   return (
     <div className="mainpage">
       <Topheader />
       <ul className="main_region">
-        <li id={region == 1 ? "select" : "seoul"} onClick={() => setRegion(1)}>서울</li>
-        <li id={region == 2 ? "select" : "daejeon"} onClick={() => setRegion(2)}>대전</li>
-        <li id={region == 3 ? "select" : "gumi"} onClick={() => setRegion(3)}>구미</li>
-        <li id={region == 4 ? "select" : "gwangju"} onClick={() => setRegion(4)}>광주</li>
-        <li id={region == 5 ? "select" : "buulgyeong"} onClick={() => setRegion(5)}>부울경</li>
+        <li id={region == "SEOUL" ? "select" : "seoul"} onClick={() => setRegion("SEOUL")}>서울</li>
+        <li id={region == "DAEJEON" ? "select" : "daejeon"} onClick={() => setRegion("DAEJEON")}>대전</li>
+        <li id={region == "GUMI" ? "select" : "gumi"} onClick={() => setRegion("GUMI")}>구미</li>
+        <li id={region == "GWANJU" ? "select" : "gwangju"} onClick={() => setRegion("GWANJU")}>광주</li>
+        <li id={region == "BUSAN" ? "select" : "buulgyeong"} onClick={() => setRegion("BUSAN")}>부울경</li>
       </ul>
       <div className="region_bar"></div>
 
