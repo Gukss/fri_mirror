@@ -33,8 +33,8 @@ function MeetingDetail({room, open, setOpen} : roomType) {
 				<div className="room_modal">
 				<div className="title"><span>{title}</span><span style={{color: "#FFC000"}} onClick={() => setOpen(false)}>X</span></div>
 				<p className="place"># {location}</p>
-				<p className="soft">전공 <span className="total">{major}/{headCount}</span></p>
-				<p className="other">비전공 <span className="total">{nonMajor}/{headCount}</span></p>
+				<p className="soft">전공 <span className="total">{major}/{headCount/2}</span></p>
+				<p className="other">비전공 <span className="total">{nonMajor}/{headCount/2}</span></p>
 				<div className="join_game">참여하기</div>
 			</div>
 		</div>
