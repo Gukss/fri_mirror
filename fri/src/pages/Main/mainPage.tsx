@@ -67,7 +67,7 @@ const Main: React.FC = () => {
     const getData = async () => {
       const userId = 1;
       try{
-        const res = await axios.get(api_url + `room?area={${region}}`, {headers : {'userId' : userId}})
+        const res = await axios.get(api_url + `room?area=${region}`, {headers : {'userId' : userId}})
         console.log(res.data)
         setTdata(res.data)
       }
