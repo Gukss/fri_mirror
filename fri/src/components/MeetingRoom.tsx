@@ -1,6 +1,6 @@
-import {MeetType} from '../pages/Main/mainPage'
-import Room from './MeetingDetail'
-import { useState } from 'react';
+import {MeetType} from "../pages/Main/mainPage"
+import Room from "./MeetingDetail"
+import { useState } from "react";
 
 interface roomType {
   room : MeetType;

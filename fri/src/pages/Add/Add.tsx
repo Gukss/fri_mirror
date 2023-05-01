@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Categories from "./Categories/Categories";
+import Back from "../../components/Back";
 import Inputs from "./Inputs/Inputs";
-import logo from "../../assets/small_logo.png"
+import logo from "../../assets/small_logo.png";
+import axios from "axios";
 import "./Add.scss";
 
 interface AddForm {
@@ -11,12 +13,14 @@ interface AddForm {
   place: string;
   people: string;
   time: string;
+  area: string;
 }
 
 interface AddFormMsg {
   name: string;
   place: string;
   people: string;
+  area: string;
 }
 
 interface Error {
@@ -24,32 +28,38 @@ interface Error {
   name: boolean;
   place: boolean;
   people: boolean;
+  area: boolean;
 }
 
 export default function Add() {
   const navigate = useNavigate();
   const [searchparams, setSearchParmas] = useSearchParams();
   const tab = searchparams.get("tab");
+  const cate = searchparams.get("cate");
+  const api_url = process.env.REACT_APP_REST_API;
 
   const [form, setForm] = useState<AddForm>({
     cate: "",
     name: "",
     time: "내기 종료 후 5분뒤",
     place: "카페",
-    people: ""
+    people: "",
+    area: ""
   });
 
   const [message, setMessage] = useState<AddFormMsg>({
     name: "",
     place: "",
-    people: ""
+    people: "",
+    area: ""
   });
 
   const [error, setError] = useState<Error>({
     cate: false,
     name: false,
     place: false,
-    people: false
+    people: false,
+    area: false
   });
 
   useEffect(() => {
@@ -58,19 +68,44 @@ export default function Add() {
     }
   }, []);
 
+  const createRoom = async (data : object) => {
+    try {
+      const res = await axios.post(api_url + "room", data)
+      navigate(`/chat?roomId=${res.data.roomId}&title=${res.data.title}`)
+    }
+    catch(e) {console.log(e)}
+  }
+
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(error);
       const isFormValid = Object.values(error).every((value) => value === true);
-
       if (isFormValid) {
-        // 방생성 axios
-        console.log("방생성~");
+        let data = {};
+        let people = 0;
+        if(form.people === "2:2") people = 4;
+        else if(form.people === "3:3") people = 6;
+        else if(form.people === "4:4") people = 8;
+        else if(form.people === "5:5") people = 10;
+        else if(form.people === "6:6") people = 12;
+        let area = "";
+        if(form.area === "대전") area = "DAEJEON";
+        else if(form.area === "서울") area = "SEOUL";
+        else if(form.area === "광주") area = "GWANJU";
+        else if(form.area === "구미") area = "GUMI";
+        else if(form.area === "부울경") area = "BUSAN";
+        if(tab !== "bet"){
+          data = {
+            "title": form.name,
+            "headCount": people, // 내기방 제외 DB 저장 전에 x2
+            "roomCategory": cate,
+            "area": area,
+            "location": form.place,
+          }
+        }
+        createRoom(data);
       } else {
-        console.log("다시");
-        // 모달 띄우거나
-        // 안채운거 빨갛게
+        alert("잘못된 입력입니다.")
       }
     },
     [form, error, message]
@@ -78,14 +113,7 @@ export default function Add() {
 
   return (
     <div className="add-room">
-      <div
-        onClick={() => {
-          navigate(-1);
-        }}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      >
-        뒤로
-      </div>
+      <Back />
       <div className="add-container">
         <div className="small-logo">
           <img src={logo} alt="Logo" />

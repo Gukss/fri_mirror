@@ -4,7 +4,7 @@ import Back from "../../components/Back"
 import lgm from "../../assets/lgm.png"
 import mgl from "../../assets/mgl.png"
 import egg from "../../assets/egg_fri.png"
-import './game.scss'
+import "./game.scss"
 
 function GameWaiting() {
   const navigate = useNavigate();
