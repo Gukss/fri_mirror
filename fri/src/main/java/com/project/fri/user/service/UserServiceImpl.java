@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
   private static final String URL = "https://edu.ssafy.com/comm/login/SecurityLoginForm.do";
   private static final String LOCAL_PATH = "D:\\Guk\\fri\\chromedriver.exe";
-  private static final String SERVER_PATH = "/usr/bin/chromedriver";
+  private static final String SERVER_PATH = "/home/ubuntu/chromedriver";
 
   @Override
   public User findById(long userId) {
