@@ -25,7 +25,7 @@ function More() {
 	useEffect(() => {
 		const getData = async () => {
 			try {
-				const res = await axios.get(api_url + `room/category?area={${region}}&category={${category}}`)
+				const res = await axios.get(api_url + `room/category?area=${region}&category=${category}`)
 				console.log(res.data)
 			}
 			catch(e){console.log(e)}
