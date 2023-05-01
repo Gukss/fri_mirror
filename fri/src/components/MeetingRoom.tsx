@@ -26,8 +26,8 @@ function MeetingRoom({room} : roomType) {
       <div className="meeting_room" onClick={()=> setOpen(true)}>
         <p className="place"># {location}</p>
         <p className="title">{title}</p>
-        <p className="soft">전공 <span className="total">{major}/{headCount}</span></p>
-        <p className="other">비전공 <span className="total">{nonMajor}/{headCount}</span></p>
+        <p className="soft">전공 <span className="total">{major}/{headCount/2}</span></p>
+        <p className="other">비전공 <span className="total">{nonMajor}/{headCount/2}</span></p>
       </div>
     <Room room={room} open={open} setOpen={setOpen} />
     </div>
