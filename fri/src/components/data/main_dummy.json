@@ -1,0 +1,556 @@
+{
+    "game": [
+        {
+            "place": "로비 카페",
+            "title": "아이스크림 내기",
+            "total_cnt": 5,
+            "current_cnt": 3
+        },
+        {
+            "place": "카페",
+            "title": "커피 내기",
+            "total_cnt": 4,
+            "current_cnt": 1
+        },
+        {
+            "place": "카페 테라스",
+            "title": "커피 내기",
+            "total_cnt": 12,
+            "current_cnt": 4
+        },
+        {
+            "place": "카페",
+            "title": "커피 내기",
+            "total_cnt": 4,
+            "current_cnt": 2
+        },
+        {
+            "place": "카페 테라스",
+            "title": "커피 내기",
+            "total_cnt": 3,
+            "current_cnt": 2
+        },
+        {
+            "place": "로비 카페",
+            "title": "아이스크림 내기",
+            "total_cnt": 10,
+            "current_cnt": 2
+        },
+        {
+            "place": "로비 카페",
+            "title": "아이스크림 내기",
+            "total_cnt": 8,
+            "current_cnt": 4
+        },
+        {
+            "place": "로비 카페",
+            "title": "커피 내기",
+            "total_cnt": 5,
+            "current_cnt": 2
+        },
+        {
+            "place": "카페 테라스",
+            "title": "커피 내기",
+            "total_cnt": 7,
+            "current_cnt": 3
+        },
+        {
+            "place": "로비 카페",
+            "title": "아이스크림 내기",
+            "total_cnt": 5,
+            "current_cnt": 5
+        }
+    ],
+    "drink": [
+        {
+            "place": "학하동",
+            "title": "학하학하학하학하",
+            "soft": 5,
+            "other": 2,
+            "total": 6,
+            "is_com": false
+        },
+        {
+            "place": "유성온천역",
+            "title": "일단 와봐 재미는 있을걸?",
+            "soft": 5,
+            "other": 3,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "유온역",
+            "title": "술이 들어간다 쭉쭉쭉쭉",
+            "soft": 4,
+            "other": 1,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "봉명동",
+            "title": "술 못먹는 사람?",
+            "soft": 5,
+            "other": 4,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "한밭대학교",
+            "title": "번개",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "갈마동",
+            "title": "친구 구해요.. 갈마 사는 사람..?",
+            "soft": 3,
+            "other": 2,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "세종시",
+            "title": "세종사는 사람 있나요..",
+            "soft": 3,
+            "other": 2,
+            "total": 3,
+            "is_com": false
+        },
+        {
+            "place": "대전역",
+            "title": "2학기 대비 미팅",
+            "soft": 2,
+            "other": 2,
+            "total": 2,
+            "is_com": true
+        },
+        {
+            "place": "천안역 부근",
+            "title": "뭐하고 노실?",
+            "soft": 3,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "청주대학교",
+            "title": "커피 내기",
+            "soft": 1,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        }
+    ],
+    "dinner": [
+        {
+            "place": "충대앞",
+            "title": "스터디 구해요",
+            "soft": 5,
+            "other": 5,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "궁동",
+            "title": "커피마실 사람?",
+            "soft": 3,
+            "other": 3,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "대전시청 근처",
+            "title": "일단 만나",
+            "soft": 2,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "한밭대",
+            "title": "술 마실 사람?",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "한밭대학교",
+            "title": "번개",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "갈마동",
+            "title": "친구 구해요.. 갈마 사는 사람..?",
+            "soft": 3,
+            "other": 2,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "세종시",
+            "title": "세종사는 사람 있나요..",
+            "soft": 3,
+            "other": 2,
+            "total": 3,
+            "is_com": false
+        },
+        {
+            "place": "대전역",
+            "title": "2학기 대비 미팅",
+            "soft": 2,
+            "other": 2,
+            "total": 2,
+            "is_com": true
+        },
+        {
+            "place": "천안역 부근",
+            "title": "뭐하고 노실?",
+            "soft": 3,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "청주대학교",
+            "title": "커피 내기",
+            "soft": 1,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        }
+    ],
+    "exercise": [
+        {
+            "place": "학하동",
+            "title": "학하학하학하학하",
+            "soft": 5,
+            "other": 2,
+            "total": 6,
+            "is_com": false
+        },
+        {
+            "place": "유성온천역",
+            "title": "일단 와봐 재미는 있을걸?",
+            "soft": 5,
+            "other": 3,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "유온역",
+            "title": "술이 들어간다 쭉쭉쭉쭉",
+            "soft": 4,
+            "other": 1,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "봉명동",
+            "title": "술 못먹는 사람?",
+            "soft": 5,
+            "other": 4,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "한밭대학교",
+            "title": "번개",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "갈마동",
+            "title": "친구 구해요.. 갈마 사는 사람..?",
+            "soft": 3,
+            "other": 2,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "세종시",
+            "title": "세종사는 사람 있나요..",
+            "soft": 3,
+            "other": 2,
+            "total": 3,
+            "is_com": false
+        },
+        {
+            "place": "대전역",
+            "title": "2학기 대비 미팅",
+            "soft": 2,
+            "other": 2,
+            "total": 2,
+            "is_com": true
+        },
+        {
+            "place": "천안역 부근",
+            "title": "뭐하고 노실?",
+            "soft": 3,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "청주대학교",
+            "title": "커피 내기",
+            "soft": 1,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        }
+    ],
+    "play": [
+        {
+            "place": "충대앞",
+            "title": "스터디 구해요",
+            "soft": 5,
+            "other": 5,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "궁동",
+            "title": "커피마실 사람?",
+            "soft": 3,
+            "other": 3,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "대전시청 근처",
+            "title": "일단 만나",
+            "soft": 2,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "한밭대",
+            "title": "술 마실 사람?",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "한밭대학교",
+            "title": "번개",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "갈마동",
+            "title": "친구 구해요.. 갈마 사는 사람..?",
+            "soft": 3,
+            "other": 2,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "세종시",
+            "title": "세종사는 사람 있나요..",
+            "soft": 3,
+            "other": 2,
+            "total": 3,
+            "is_com": false
+        },
+        {
+            "place": "대전역",
+            "title": "2학기 대비 미팅",
+            "soft": 2,
+            "other": 2,
+            "total": 2,
+            "is_com": true
+        },
+        {
+            "place": "천안역 부근",
+            "title": "뭐하고 노실?",
+            "soft": 3,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "청주대학교",
+            "title": "커피 내기",
+            "soft": 1,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        }
+    ],
+    "study": [
+        {
+            "place": "학하동",
+            "title": "학하학하학하학하",
+            "soft": 5,
+            "other": 2,
+            "total": 6,
+            "is_com": false
+        },
+        {
+            "place": "유성온천역",
+            "title": "일단 와봐 재미는 있을걸?",
+            "soft": 5,
+            "other": 3,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "유온역",
+            "title": "술이 들어간다 쭉쭉쭉쭉",
+            "soft": 4,
+            "other": 1,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "봉명동",
+            "title": "술 못먹는 사람?",
+            "soft": 5,
+            "other": 4,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "한밭대학교",
+            "title": "번개",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "갈마동",
+            "title": "친구 구해요.. 갈마 사는 사람..?",
+            "soft": 3,
+            "other": 2,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "세종시",
+            "title": "세종사는 사람 있나요..",
+            "soft": 3,
+            "other": 2,
+            "total": 3,
+            "is_com": false
+        },
+        {
+            "place": "대전역",
+            "title": "2학기 대비 미팅",
+            "soft": 2,
+            "other": 2,
+            "total": 2,
+            "is_com": true
+        },
+        {
+            "place": "천안역 부근",
+            "title": "뭐하고 노실?",
+            "soft": 3,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "청주대학교",
+            "title": "커피 내기",
+            "soft": 1,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        }
+    ],
+    "etc": [
+        {
+            "place": "충대앞",
+            "title": "스터디 구해요",
+            "soft": 5,
+            "other": 5,
+            "total": 5,
+            "is_com": true
+        },
+        {
+            "place": "궁동",
+            "title": "커피마실 사람?",
+            "soft": 3,
+            "other": 3,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "대전시청 근처",
+            "title": "일단 만나",
+            "soft": 2,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "한밭대",
+            "title": "술 마실 사람?",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "한밭대학교",
+            "title": "번개",
+            "soft": 5,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "갈마동",
+            "title": "친구 구해요.. 갈마 사는 사람..?",
+            "soft": 3,
+            "other": 2,
+            "total": 4,
+            "is_com": false
+        },
+        {
+            "place": "세종시",
+            "title": "세종사는 사람 있나요..",
+            "soft": 3,
+            "other": 2,
+            "total": 3,
+            "is_com": false
+        },
+        {
+            "place": "대전역",
+            "title": "2학기 대비 미팅",
+            "soft": 2,
+            "other": 2,
+            "total": 2,
+            "is_com": true
+        },
+        {
+            "place": "천안역 부근",
+            "title": "뭐하고 노실?",
+            "soft": 3,
+            "other": 2,
+            "total": 5,
+            "is_com": false
+        },
+        {
+            "place": "청주대학교",
+            "title": "커피 내기",
+            "soft": 1,
+            "other": 3,
+            "total": 5,
+            "is_com": false
+        }
+    ]
+}
