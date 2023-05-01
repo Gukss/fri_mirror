@@ -42,6 +42,8 @@ public class GameRoom extends BaseTimeEntity {
 
   private int headCount;
 
+  private String location;
+
   private boolean isDelete;
 
   @ManyToOne(fetch = FetchType.LAZY)

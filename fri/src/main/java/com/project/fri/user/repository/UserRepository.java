@@ -1,5 +1,6 @@
 package com.project.fri.user.repository;
 
+import com.project.fri.gameRoom.entity.GameRoom;
 import com.project.fri.room.entity.Room;
 import com.project.fri.user.entity.User;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<List<User>> findAllByGameRoom_Id(Long id);
     List<User> findAllByRoom(Room room);
 
 }
