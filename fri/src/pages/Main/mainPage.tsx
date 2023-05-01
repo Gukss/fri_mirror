@@ -1,19 +1,21 @@
 import Topheader from "../../components/LogoEgg";
 import { useEffect, useState } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import data from "../../components/data/main_dummy.json";
 import Meeting from "../../components/MeetingRoom";
 import Game from "../../components/GameRoom";
 import Nav from "../../components/navEgg";
+import No from "../../assets/no_room.png"
 import axios from "axios";
 import "./main.scss";
 
 export type MeetType = {
-  place: string;
+  headCount: number;
+  location: string;
+  major: number;
+  nonMajor: number;
+  roomId: number;
   title: string;
-  soft: number;
-  other: number;
-  total: number;
+  roomCategory: string;
   is_com: boolean;
 };
 
@@ -27,14 +29,13 @@ export type GameType = {
 const Main: React.FC = () => {
   const [region, setRegion] = useState("SEOUL");
   const [isnav, setIsnav] = useState(false);
-  const [tdata, setTdata] = useState({});
-  const [game, setGame] = useState(data.game);
-  const [dinner, setDinner] = useState(data.dinner);
+  const [game, setGame] = useState([]);
+  const [dinner, setDinner] = useState([]);
   const [drink, setDrink] = useState([]);
-  const [play, setPlay] = useState(data.play);
-  const [exercise, setExercise] = useState(data.exercise);
-  const [study, setStudy] = useState(data.study);
-  const [etc, setEtc] = useState(data.etc);
+  const [play, setPlay] = useState([]);
+  const [exercise, setExercise] = useState([]);
+  const [study, setStudy] = useState([]);
+  const [etc, setEtc] = useState([]);
 
   const api_url = process.env.REACT_APP_REST_API;
 
@@ -52,14 +53,50 @@ const Main: React.FC = () => {
     }
 
     let temp = "";
-    if(category === "game") temp = categories.game
-    else if(category === "drink") temp = categories.drink
-    else if(category === "dinner") temp = categories.dinner
-    else if(category === "play") temp = categories.play
-    else if(category === "exercise") temp = categories.exercise
-    else if(category === "study") temp = categories.study
-    else if(category === "etc") temp = categories.etc
+    if(category === "BETTING"){
+      if(game?.length) temp = categories.game;
+      else return;
+    }
+    else if(category === "DRINK"){
+      if(drink?.length) temp = categories.drink;
+      else return;
+    }
+    else if(category === "MEAL") {
+      if(dinner?.length) temp = categories.dinner;
+      else return;
+    }
+    else if(category === "GAME") {
+      if(play?.length) temp = categories.play;
+      else return;
+    }
+    else if(category === "EXERCISE") {
+      if(exercise?.length) temp = categories.exercise;
+      else return;
+    }
+    else if(category === "STUDY") {
+      if(study?.length) temp = categories.study;
+      else return;
+    }
+    else if(category === "ETC") {
+      if(etc?.length) temp = categories.etc;
+      else return;
+    }
     navigate({pathname : "/more", search : createSearchParams({"region" : region, "category" : category, "text" : temp}).toString()})
+    }
+
+  const changeRegion = async (area : string) => {
+      const userId = 1;
+      try{
+        const res = await axios.get(api_url + `room?area=${area}`, {headers : {'userId' : userId}})
+        setGame(res.data.betting)
+        setDrink(res.data.drink)
+        setEtc(res.data.etc)
+        setPlay(res.data.game)
+        setDinner(res.data.meal)
+        setStudy(res.data.study)
+        setExercise(res.data.exercise)
+        }
+      catch(e) {console.log(e)}
     }
 
 
@@ -68,29 +105,34 @@ const Main: React.FC = () => {
       const userId = 1;
       try{
         const res = await axios.get(api_url + `room?area=${region}`, {headers : {'userId' : userId}})
-        console.log(res.data)
-        setTdata(res.data)
-      }
+        setGame(res.data.betting)
+        setDrink(res.data.drink)
+        setEtc(res.data.etc)
+        setPlay(res.data.game)
+        setDinner(res.data.meal)
+        setStudy(res.data.study)
+        setExercise(res.data.exercise)
+        }
       catch(e) {console.log(e)}
     }
     getData()
-  }, [tdata])
+  }, [])
 
   return (
     <div className="mainpage">
       <Topheader />
       <ul className="main_region">
-        <li id={region == "SEOUL" ? "select" : "seoul"} onClick={() => setRegion("SEOUL")}>서울</li>
-        <li id={region == "DAEJEON" ? "select" : "daejeon"} onClick={() => setRegion("DAEJEON")}>대전</li>
-        <li id={region == "GUMI" ? "select" : "gumi"} onClick={() => setRegion("GUMI")}>구미</li>
-        <li id={region == "GWANJU" ? "select" : "gwangju"} onClick={() => setRegion("GWANJU")}>광주</li>
-        <li id={region == "BUSAN" ? "select" : "buulgyeong"} onClick={() => setRegion("BUSAN")}>부울경</li>
+        <li id={region == "SEOUL" ? "select" : "seoul"} onClick={() => {setRegion("SEOUL"); changeRegion("SEOUL")}}>서울</li>
+        <li id={region == "DAEJEON" ? "select" : "daejeon"} onClick={() => {setRegion("DAEJEON"); changeRegion("DAEJEON")}}>대전</li>
+        <li id={region == "GUMI" ? "select" : "gumi"} onClick={() => {setRegion("GUMI"); changeRegion("GUMI")}}>구미</li>
+        <li id={region == "GWANGJU" ? "select" : "gwangju"} onClick={() =>{ setRegion("GWANGJU");  changeRegion("GWANGJU")}}>광주</li>
+        <li id={region == "BUSAN" ? "select" : "buulgyeong"} onClick={() => {setRegion("BUSAN");  changeRegion("BUSAN")}}>부울경</li>
       </ul>
       <div className="region_bar"></div>
 
       <div className="main_category">
-        <p id="category_title"># 내기 할 사람<span onClick={()=>go_more("game")}>더보기</span></p>
-        {game.length ? (
+        <p id="category_title"># 내기 할 사람<span onClick={()=>go_more("BETTING")}>더보기</span></p>
+        {game?.length ? (
           <div className="meeting_block">
             {game.map((room, idx) => (
               <Game key={idx} room={room} />
@@ -99,14 +141,12 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+              <img src={No} alt="no" />
             </div>
           </div>
         )}
-        <p id="category_title"># 술 마실 사람<span onClick={()=>go_more("drink")}>더보기</span></p>
-        {drink.length ? (
+        <p id="category_title"># 술 마실 사람<span onClick={()=>go_more("DRINK")}>더보기</span></p>
+        {drink?.length ? (
           <div className="meeting_block">
             {drink.map((room, idx) => (
               <Meeting key={idx} room={room} />
@@ -115,14 +155,12 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+            <img src={No} alt="no" />
             </div>
           </div>
         )}
-        <p id="category_title"># 밥 먹을 사람<span  onClick={()=>go_more("dinner")}>더보기</span></p>
-        {dinner.length ? (
+        <p id="category_title"># 밥 먹을 사람<span  onClick={()=>go_more("MEAL")}>더보기</span></p>
+        {dinner?.length ? (
           <div className="meeting_block">
             {dinner.map((room, idx) => (
               <Meeting key={idx} room={room} />
@@ -131,14 +169,12 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+            <img src={No} alt="no" />
             </div>
           </div>
         )}
-        <p id="category_title"># 놀 사람<span onClick={()=>go_more("play")}>더보기</span></p>
-        {play.length ? (
+        <p id="category_title"># 놀 사람<span onClick={()=>go_more("GAME")}>더보기</span></p>
+        {play?.length ? (
           <div className="meeting_block">
             {play.map((room, idx) => (
               <Meeting key={idx} room={room} />
@@ -147,14 +183,12 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+            <img src={No} alt="no" />
             </div>
           </div>
         )}
-        <p id="category_title"># 운동 할 사람<span onClick={()=>go_more("exercise")}>더보기</span></p>
-        {exercise.length ? (
+        <p id="category_title"># 운동 할 사람<span onClick={()=>go_more("EXERCISE")}>더보기</span></p>
+        {exercise?.length ? (
           <div className="meeting_block">
             {exercise.map((room, idx) => (
               <Meeting key={idx} room={room} />
@@ -163,14 +197,12 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+            <img src={No} alt="no" />
             </div>
           </div>
         )}
-        <p id="category_title"># 공부 할 사람<span onClick={()=>go_more("study")}>더보기</span></p>
-        {study.length ? (
+        <p id="category_title"># 공부 할 사람<span onClick={()=>go_more("STUDY")}>더보기</span></p>
+        {study?.length ? (
           <div className="meeting_block">
             {study.map((room, idx) => (
               <Meeting key={idx} room={room} />
@@ -179,15 +211,13 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+            <img src={No} alt="no" />
             </div>
           </div>
         )}
         <p id="category_title">
-          # 뭐라도 할 사람<span onClick={()=>go_more("etc")}>더보기</span></p>
-        {etc.length ? (
+          # 뭐라도 할 사람<span onClick={()=>go_more("ETC")}>더보기</span></p>
+        {etc?.length ? (
           <div className="meeting_block">
             {etc.map((room, idx) => (
               <Meeting key={idx} room={room} />
@@ -196,9 +226,7 @@ const Main: React.FC = () => {
         ) : (
           <div className="meeting_block">
             <div className="empty_category">
-              아직 방이 없음요..
-              <br />
-              방좀 만들어 주라요
+            <img src={No} alt="no" />
             </div>
           </div>
         )}

@@ -68,8 +68,17 @@
     height: auto;
     overflow-x: scroll;
     overflow-y: hidden;
-    flex-flow: column wrap;
+    flex-flow: nowrap;
     border-bottom: 1px solid rgba(225, 225, 225, 1);
+
+    .empty_category {
+        width: 100vw;
+
+        img {
+            width: 150px;
+            height: 100px;
+        }
+    }
 }
 
 ::-webkit-scrollbar {
