@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import back from "../../assets/Arrow back ios.png";
+import back from "../../assets/back.png";
 import menu from "../../assets/Menu.png";
 
 import "./ChatNav.scss";
