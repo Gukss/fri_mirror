@@ -212,8 +212,10 @@ public class UserServiceImpl implements UserService {
     options.setHeadless(true);
     options.addArguments("--remote-allow-origins=*");
     options.addArguments("--lang=ko");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--disable-dev-shm-usage");
     options.addArguments("--disable-popup-blocking");       //팝업안띄움
-    options.addArguments("headless");                       //브라우저 안띄움
+    options.addArguments("--headless");                       //브라우저 안띄움
     options.addArguments("--disable-gpu");			//gpu 비활성화
     options.addArguments("--blink-settings=imagesEnabled=false"); //이미지 다운 안받음
     options.setCapability("ignoreProtectedModeSettings", true);
