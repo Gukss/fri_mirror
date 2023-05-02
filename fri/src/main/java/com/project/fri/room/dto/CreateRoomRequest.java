@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * packageName    : com.project.fri.room.dto
  * fileName       : CreateRoomRequest
@@ -20,10 +22,14 @@ import lombok.Data;
 @Data
 public class CreateRoomRequest {
 
+  @NotNull
   private String title;
   private int headCount;
+  @NotNull
   private com.project.fri.room.entity.Category roomCategory;
+  @NotNull
   private Category area;
+  @NotNull
   private String location;
 
 }

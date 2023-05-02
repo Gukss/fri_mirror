@@ -82,10 +82,10 @@ public class Room extends BaseTimeEntity {
 //  }
 
   //==생성 메서드==//
-  public static Room create(CreateRoomRequest request, User user, int headCount, RoomCategory roomCategory, Area area) {
+  public static Room create(CreateRoomRequest request, User user, RoomCategory roomCategory, Area area) {
     Room room = Room.builder()
         .title(request.getTitle())
-        .headCount(headCount)
+        .headCount(request.getHeadCount())
         .location(request.getLocation())
         .roomCategory(roomCategory)
         .area(area)

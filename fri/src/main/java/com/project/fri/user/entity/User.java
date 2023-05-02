@@ -91,6 +91,14 @@ public class User extends BaseTimeEntity {
   }
 
   /**
+   * 게임 방 참여하기 눌렀을 때, 게임 방 update
+   */
+  public GameRoom updateGameRoomNumber(GameRoom saveGameRoom) {
+    this.gameRoom = saveGameRoom;
+    return gameRoom;
+  }
+
+  /**
    * desc: 사용자가 ready를 눌렀을 때 입력받은 값으로 ready를 update한다.
    * @param //ready
    * @return

@@ -9,6 +9,7 @@ import com.project.fri.gameRoom.entity.GameRoom;
 import com.project.fri.gameRoom.repository.GameRoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
+import com.sun.jdi.request.InvalidRequestStateException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,7 +44,7 @@ public class GameRoomServiceImpl implements GameRoomService{
      * @return
      */
     @Override
-    public FindGameRoomResponse findGameRoom(Long gameRoomId) {
+    public FindGameRoomResponse findGameRoom(Long gameRoomId, Long userId) {
         
         // gameRoomId로 gameRoom 찾기
         GameRoom findGameRoom = gameRoomRepository.findById(gameRoomId)
@@ -53,11 +54,10 @@ public class GameRoomServiceImpl implements GameRoomService{
         // 해당 gameRoom에 참여한 유저 찾고 + 원하는 dto 형식으로 반환
         List<User> users = userRepository.findAllByGameRoom_Id(gameRoomId);
         List<FindAllUserByGameRoomId> findUsers = users.stream()
-                .map(user -> FindAllUserByGameRoomId.create(user))
+                .map(user -> FindAllUserByGameRoomId.create(user))  // todo: 리팩토링 필요
                 .collect(Collectors.toList());
 
         // 해당 gameRoom에 내가 참여했는지 확인
-        Long userId = 4l; // todo: 임의로 줌
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundExceptionMessage(
                         NotFoundExceptionMessage.NOT_FOUND_USER
@@ -100,15 +100,22 @@ public class GameRoomServiceImpl implements GameRoomService{
     /**
      * 게임 방 생성
      * @param request
-     * @param user
+     * @param userId
      * @return
      */
     @Override
-    public CreateGameRoomResponse createGameRoom(CreateGameRoomRequest request, User user) {
+    @Transactional
+    public CreateGameRoomResponse createGameRoom(CreateGameRoomRequest request, Long userId) {
         // area로 지역 객체 만들기
         Area area = areaRepository.findByCategory(request.getArea())
                 .orElseThrow(() -> new NotFoundExceptionMessage(
                         NotFoundExceptionMessage.NOT_FOUND_AREA
+                ));
+
+        // userId로 user 찾기
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(
+                        NotFoundExceptionMessage.NOT_FOUND_USER
                 ));
 
         // db에 저장
@@ -120,5 +127,52 @@ public class GameRoomServiceImpl implements GameRoomService{
         return createGameRoom;
     }
 
+    /**
+     * 게임 방 들어가기, 나가기
+     * @param gameRoomId
+     * @param request
+     * @param userId
+     * @return
+     */
+    @Override
+    @Transactional
+    public UpdateGameRoomParticipationResponse updateGameRoomParticipation(Long gameRoomId, UpdateGameRoomParticipationRequest request, Long userId) {
 
+        // userId로 user 찾기
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(
+                        NotFoundExceptionMessage.NOT_FOUND_USER
+                ));
+        // todo: 예외처리
+        // 참여 중인 다른 방이 있다면
+        if ((user.getGameRoom() != null) && !(user.getGameRoom().getId().equals(gameRoomId))) {
+            throw new InvalidRequestStateException(); // 유효하지 않은 요청 상태
+        }
+        // 방에 참여했는데 false 요청이 왔을 때
+        if ((user.getGameRoom() != null) && (user.getGameRoom().getId().equals(gameRoomId)) && !request.isParticipate()) {
+            throw new InvalidRequestStateException();
+        }
+
+        // isParticipate가 true면 false로, false면 true로 바꿔준다
+        boolean isParticipate = request.isParticipate();
+        GameRoom gameRoom = gameRoomRepository.findById(gameRoomId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(
+                        NotFoundExceptionMessage.NOT_FOUND_ROOM
+                ));
+
+        if (!isParticipate) {       // false이고 참여한 방이 없을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
+            log.info("요청값 확인");
+            isParticipate = true;
+            user.updateGameRoomNumber(gameRoom);
+
+        } else {                    // true일 때 -> 게임방번호 null로
+            isParticipate = false;
+            user.updateGameRoomNumber(null);
+            gameRoom = null;
+        }
+
+        // 응답 dto로 반환
+        UpdateGameRoomParticipationResponse updateGameRoomParticipation = UpdateGameRoomParticipationResponse.create(isParticipate, gameRoom);
+        return updateGameRoomParticipation;
+    }
 }
