@@ -1,14 +1,8 @@
 package com.project.fri.gameRoom.controller;
 
 import com.project.fri.common.entity.Category;
-import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
-import com.project.fri.gameRoom.dto.CreateGameRoomRequest;
-import com.project.fri.gameRoom.dto.CreateGameRoomResponse;
-import com.project.fri.gameRoom.dto.FindAllGameRoomResponse;
-import com.project.fri.gameRoom.dto.FindGameRoomResponse;
+import com.project.fri.gameRoom.dto.*;
 import com.project.fri.gameRoom.service.GameRoomService;
-import com.project.fri.user.entity.User;
-import com.project.fri.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +24,6 @@ import java.util.List;
 public class GameRoomController {
 
     private final GameRoomService gameRoomService;
-    private final UserRepository userRepository;
 
     /**
      * 게임 방 정보조회
@@ -39,7 +32,11 @@ public class GameRoomController {
      */
     @GetMapping("/{gameRoomId}")
     public ResponseEntity<FindGameRoomResponse> findGameRoom(@PathVariable("gameRoomId") Long gameRoomId) {
-        FindGameRoomResponse gameRoom = gameRoomService.findGameRoom(gameRoomId);
+
+        // todo: header에 담긴 userId로 교체
+        Long userId = 4l;
+
+        FindGameRoomResponse gameRoom = gameRoomService.findGameRoom(gameRoomId, userId);
         return ResponseEntity.status(200).body(gameRoom);
     }
 
@@ -66,12 +63,32 @@ public class GameRoomController {
 
         // todo: header에 담긴 userId로 교체
         Long userId = 2l;
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundExceptionMessage(
-                        NotFoundExceptionMessage.NOT_FOUND_USER
-                ));
 
-        CreateGameRoomResponse createGameRoom = gameRoomService.createGameRoom(request, user);
+        CreateGameRoomResponse createGameRoom = gameRoomService.createGameRoom(request, userId);
         return ResponseEntity.status(201).body(createGameRoom);
     }
+
+    /**
+     * 게임 방 참여하기, 나가기
+     * @param gameRoomId
+     * @param request
+     * @return
+     */
+    @PatchMapping("/{gameRoomId}/participation")
+    public ResponseEntity<UpdateGameRoomParticipationResponse> updateGameRoomParticipation(
+            @PathVariable("gameRoomId") Long gameRoomId,
+            @RequestBody UpdateGameRoomParticipationRequest request) {
+
+        // todo: header에 담긴 userId로 교체
+        Long userId = 2l;
+
+        UpdateGameRoomParticipationResponse updateGameRoomParticipation = gameRoomService.updateGameRoomParticipation(gameRoomId, request, userId);
+        if (updateGameRoomParticipation == null) {
+            return ResponseEntity.unprocessableEntity().build(); // todo: 클라이언트 요청이 유효하지 않은 경우
+        } else {
+            return ResponseEntity.status(201).body(updateGameRoomParticipation);
+        }
+
+    }
+
 }

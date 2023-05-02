@@ -22,7 +22,7 @@ public interface RoomService {
    * @param request
    * @return 만든 방 제목
    */
-  CreateRoomResponse createRoom(CreateRoomRequest request);
+  CreateRoomResponse createRoom(CreateRoomRequest request, Long userId);
 
   /**
    * desc: 전체 방 리스트를 조회, area에 따라 해당 지역의 방 리스트를 조회한다.

@@ -52,11 +52,9 @@ public class RoomServiceImpl implements RoomService {
    */
   @Override
   @Transactional
-  public CreateRoomResponse createRoom(CreateRoomRequest request) {
+  public CreateRoomResponse createRoom(CreateRoomRequest request, Long userId) {
 
-    // todo: 가짜 user 찾기
-    Long userId = 1L; // 예시로 userId를 1L로 설정합니다.
-    User findUser = userRepository.findById(userId)
+    User user = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
 
@@ -67,21 +65,15 @@ public class RoomServiceImpl implements RoomService {
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
-    // headCount 내기 방 제외 DB 저장 전에 x2
-    int headCount = request.getHeadCount();
-    // if (roomCategory.getCategory() != BETTING) {
-    //   headCount *= 2;
-    // }
-
     // request dto를 저장
-    Room room = Room.create(request, findUser, headCount, roomCategory, area);
+    Room room = Room.create(request, user, roomCategory, area);
     roomRepository.save(room);
 
-    // todo: user테이블에 방번호 추가(update)
-    findUser.updateRoomNumber(room);
+    // user 테이블에 방번호 추가
+    user.updateRoomNumber(room);
 
     // response dto로 변환
-    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room, findUser);
+    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room, user);
 
     return createRoomResponse;
   }

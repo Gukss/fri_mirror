@@ -55,7 +55,10 @@ public class RoomController {
    */
   @PostMapping
   public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request) {
-    CreateRoomResponse createRoomResponse = roomService.createRoom(request);
+    // todo: 가짜 user 찾기
+    Long userId = 1L; // 예시로 userId를 1L로 설정합니다.
+
+    CreateRoomResponse createRoomResponse = roomService.createRoom(request, userId);
     return ResponseEntity.status(201).body(createRoomResponse);
   }
 
