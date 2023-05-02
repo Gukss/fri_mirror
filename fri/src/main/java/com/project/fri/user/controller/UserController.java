@@ -71,18 +71,22 @@ public class UserController {
   }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response, HttpServletRequest request) {
+    public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response) {
         SignInUserResponse result = userService.signIn(signInUserRequest);
 
         if (result == null) {
             return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("userId", result.getUserId());
-
-        Cookie cookie = new Cookie("Authorization", session.getId());
+        Cookie cookie = new Cookie("Authorization", result.getUserId().toString());
         response.addCookie(cookie);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping
+    public ResponseEntity<FindUserResponse> findUser(@RequestHeader("Authorization") Long userId) {
+        FindUserResponse result = userService.findUser(userId);
+
         return ResponseEntity.ok().body(result);
     }
 }
