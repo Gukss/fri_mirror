@@ -1,10 +1,6 @@
 package com.project.fri.user.service;
 
-import com.project.fri.user.dto.CertifiedUserRequest;
-import com.project.fri.user.dto.CreateUserRequest;
-import com.project.fri.user.dto.UpdateUserRoomRequest;
-import com.project.fri.user.dto.UpdateUserRoomResponse;
-import com.project.fri.user.dto.UpdateUserReadyResponse;
+import com.project.fri.user.dto.*;
 import com.project.fri.user.entity.User;
 import org.springframework.http.ResponseEntity;
 
@@ -44,4 +40,11 @@ public interface UserService {
   void createUser(CreateUserRequest request);
 
   boolean certifiedUser(CertifiedUserRequest certifiedUserRequest);
+
+  /**
+   * desc: 로그인요청시 email, password 확인 맞으면 해당 User 객체, 틀리면 null 반환
+   * @param signInUserRequest
+   * @return
+   */
+  SignInUserResponse signIn(SignInUserRequest signInUserRequest);
 }

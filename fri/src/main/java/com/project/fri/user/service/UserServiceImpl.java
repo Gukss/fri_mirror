@@ -5,11 +5,7 @@ import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
-import com.project.fri.user.dto.CertifiedUserRequest;
-import com.project.fri.user.dto.CreateUserRequest;
-import com.project.fri.user.dto.UpdateUserRoomRequest;
-import com.project.fri.user.dto.UpdateUserRoomResponse;
-import com.project.fri.user.dto.UpdateUserReadyResponse;
+import com.project.fri.user.dto.*;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -286,4 +282,19 @@ public class UserServiceImpl implements UserService {
     }
     return result;
   }
+
+  @Override
+  public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
+    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
+    if (user.isPresent()) {
+      User findUser = user.get();
+      // 패스워드 일치 확인
+      if (findUser.getPassword().equals(signInUserRequest.getPassword())) {
+        return new SignInUserResponse(findUser);
+      }
+      return null;
+    }
+    return null;
+  }
+
 }
