@@ -81,7 +81,7 @@ public class UserController {
         HttpSession session = request.getSession();
         session.setAttribute("userId", result.getUserId());
 
-        Cookie cookie = new Cookie("sessionId", session.getId());
+        Cookie cookie = new Cookie("Authorization", session.getId());
         response.addCookie(cookie);
         return ResponseEntity.ok().body(result);
     }

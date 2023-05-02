@@ -32,11 +32,3 @@ public class SignInUserResponse {
         }
     }
 }
-
-/*
-    "userId": 1,
-	"location": "SEOUL",
-	"heart": 5,
-	"roomId" : 1,
-	"gameRoomId" : "참여한 방이 없습니다" -> 어쩔 수 없이 String 으로 선언
- */
