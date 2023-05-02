@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/images/Logo.png"
-import Back from "../../components/Back"
+import logo from "../../assets/images/Logo.png";
+import Back from "../../components/Back";
 import "./SignUp.scss";
 
 interface SignUp {
@@ -207,11 +207,7 @@ export default function SignUp() {
       <Back />
       <div className="signup-container">
         <div>
-          <img
-            src={logo}
-            alt="Logo"
-            className="signup-logo"
-          />
+          <img src={logo} alt="Logo" className="signup-logo" />
         </div>
         <div className="signup-form">
           <form onSubmit={handleSubmit}>
