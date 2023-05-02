@@ -32,7 +32,37 @@ export default function ChatDetail({ isOpen, onClose }: any) {
               <div className="img">
                 <img src={Egg} alt="profile" />
               </div>
-              <div className="name">이름</div>
+              <div className="name">김은영</div>
+            </div>
+            <div className="profile">
+              <div className="img">
+                <img src={Egg} alt="profile" />
+              </div>
+              <div className="name">김경아</div>
+            </div>
+            <div className="profile">
+              <div className="img">
+                <img src={Egg} alt="profile" />
+              </div>
+              <div className="name">김동국</div>
+            </div>
+            <div className="profile">
+              <div className="img">
+                <img src={Egg} alt="profile" />
+              </div>
+              <div className="name">김영만</div>
+            </div>
+            <div className="profile">
+              <div className="img">
+                <img src={Egg} alt="profile" />
+              </div>
+              <div className="name">배성현</div>
+            </div>
+            <div className="profile">
+              <div className="img">
+                <img src={Egg} alt="profile" />
+              </div>
+              <div className="name">허정범</div>
             </div>
           </div>
         </div>
