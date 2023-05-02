@@ -4,9 +4,7 @@ import com.project.fri.common.entity.Area;
 import com.project.fri.common.entity.Category;
 import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
-import com.project.fri.gameRoom.dto.FindAllGameRoomResponse;
-import com.project.fri.gameRoom.dto.FindAllUserByGameRoomId;
-import com.project.fri.gameRoom.dto.FindGameRoomResponse;
+import com.project.fri.gameRoom.dto.*;
 import com.project.fri.gameRoom.entity.GameRoom;
 import com.project.fri.gameRoom.repository.GameRoomRepository;
 import com.project.fri.user.entity.User;
@@ -97,6 +95,29 @@ public class GameRoomServiceImpl implements GameRoomService{
                 .collect(Collectors.toList());
 
         return findAllGameRoom;
+    }
+
+    /**
+     * 게임 방 생성
+     * @param request
+     * @param user
+     * @return
+     */
+    @Override
+    public CreateGameRoomResponse createGameRoom(CreateGameRoomRequest request, User user) {
+        // area로 지역 객체 만들기
+        Area area = areaRepository.findByCategory(request.getArea())
+                .orElseThrow(() -> new NotFoundExceptionMessage(
+                        NotFoundExceptionMessage.NOT_FOUND_AREA
+                ));
+
+        // db에 저장
+        GameRoom gameRoom = GameRoom.create(request, area, user);
+        gameRoomRepository.save(gameRoom);
+
+        // 응답 dto로 변환
+        CreateGameRoomResponse createGameRoom = CreateGameRoomResponse.create(gameRoom, user);
+        return createGameRoom;
     }
 
 
