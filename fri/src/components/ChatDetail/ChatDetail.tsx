@@ -64,6 +64,12 @@ export default function ChatDetail({ isOpen, onClose }: any) {
               </div>
               <div className="name">허정범</div>
             </div>
+            <div className="profile">
+              <div className="img">
+                <img src={Egg} alt="profile" />
+              </div>
+              <div className="name">누구인가?</div>
+            </div>
           </div>
         </div>
         <div className="exit">
