@@ -1,4 +1,4 @@
-import Close from "../../assets/Close.png";
+import Close from "../../assets/back.png";
 import Egg from "../../assets/egg_fri.png";
 import "../../pages/Chat/Chat.scss";
 
