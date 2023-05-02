@@ -21,6 +21,8 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByGameRoom_Id(Long id);  // list는 null이면 빈배열로 넘어와서 optional로 안감싸줘도 된다.
     List<User> findAllByRoom(Room room);
-    Optional<User> findByEmail(String email);
-
+    @Query("SELECT u FROM User u JOIN FETCH u.area WHERE u.email = :email")
+    Optional<User> findByEmailWithArea(@Param("email") String email);
+    @Query("SELECT u FROM User u JOIN FETCH u.area WHERE u.id = :userId")
+    Optional<User> findByIdWithArea(@Param("userId") Long userId);
 }

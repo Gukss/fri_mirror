@@ -3,21 +3,27 @@ package com.project.fri.user.dto;
 import com.project.fri.common.entity.Category;
 import com.project.fri.user.entity.User;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 @Data
-@Slf4j
-public class SignInUserResponse {
-    private Long userId;
-    private Category location;
-    private int heart;
+public class FindUserResponse {
+    private String name;
+    private String email;
+    private String nickname;
+    private Category area;
+    private String year;
+    private boolean isMajor;
+    private String profileUrl;
     private String roomId;
     private String gameRoomId;
 
-    public SignInUserResponse(User user) {
-        userId = user.getId();
-        location = user.getArea().getCategory();
-        heart = user.getHeart();
+    public FindUserResponse(User user) {
+        name = user.getName();
+        email = user.getEmail();
+        nickname = user.getNickname();
+        area = user.getArea().getCategory();
+        year = user.getYear();
+        isMajor = user.isMajor();
+        profileUrl = user.getProfileUrl();
 
         if (user.getRoom() == null) {
             roomId = "참여한 방이 없습니다.";
