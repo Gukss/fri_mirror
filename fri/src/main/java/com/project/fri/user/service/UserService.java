@@ -47,4 +47,11 @@ public interface UserService {
    * @return
    */
   SignInUserResponse signIn(SignInUserRequest signInUserRequest);
+
+  /**
+   * 유저 정보 조회
+   * @param userId
+   * @return
+   */
+  FindUserResponse findUser(Long userId);
 }
