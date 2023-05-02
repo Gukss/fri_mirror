@@ -1,5 +1,6 @@
 package com.project.fri.room.entity;
 
+import com.sun.istack.NotNull;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -31,5 +32,6 @@ public class RoomCategory {
   private Long id;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private Category category;
 }
