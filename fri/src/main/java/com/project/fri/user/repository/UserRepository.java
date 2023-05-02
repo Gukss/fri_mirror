@@ -19,7 +19,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<List<User>> findAllByGameRoom_Id(Long id);
+    List<User> findAllByGameRoom_Id(Long id);  // list는 null이면 빈배열로 넘어와서 optional로 안감싸줘도 된다.
     List<User> findAllByRoom(Room room);
+    Optional<User> findByEmail(String email);
 
 }

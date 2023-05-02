@@ -1,6 +1,10 @@
 package com.project.fri.gameRoom.service;
 
+import com.project.fri.common.entity.Category;
+import com.project.fri.gameRoom.dto.FindAllGameRoomResponse;
 import com.project.fri.gameRoom.dto.FindGameRoomResponse;
+
+import java.util.List;
 
 /**
  *packageName    : com.project.fri.gameRoom.service
@@ -21,4 +25,12 @@ public interface GameRoomService {
      * @return
      */
     FindGameRoomResponse findGameRoom(Long gameRoomId);
+
+    /**
+     * 게임 방 더보기
+     * @param page
+     * @param size
+     * @return 게임 방 리스트 20개씩 잘라서 주기
+     */
+    List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, int size);
 }
