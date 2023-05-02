@@ -24,9 +24,16 @@ function More() {
 		const userId = 1;
 		const getData = async () => {
 			try {
-				const res = await axios.get(api_url + `room/category?area=${region}&category=${category}`)
-				if(category !== "BETTING") setRoom(res?.data)
-				else setGame(res?.data)
+				let res;
+				if(category !== "BETTING"){
+					res = await axios.get(api_url + `room/category?area=${region}&category=${category}`)
+					setRoom(res?.data)
+				}
+				else
+				{
+					res = await axios.get(api_url + `game-room?area=${region}&page=0`)
+					setGame(res?.data)
+				}
 			}
 			catch(e){console.log(e)}
 		}
@@ -37,18 +44,19 @@ function More() {
 		<div className="more_room">
 			<Head />
 			<div className="text">{text}</div>
-				<div className="room">
-					{
-						category === "BETTING" ?
-						game.map((room, idx) => (
-							<GameRoom key={idx} room={room} />
-			  ))
-						:
-						room.map((room, idx) => (
-							<Room key={idx} room={room} />
-						))
-					}
-				</div>
+			<div className="room">
+				<div className="room_container">
+			{
+				category === "BETTING" ?
+				game.map((room, idx) => (
+					<GameRoom key={idx} room={room} />
+				))
+				:
+				room.map((room, idx) => (
+					<Room key={idx} room={room} />
+				))
+			}</div>
+			</div>
 
 			<Nav isnav={isnav} setIsnav={setIsnav} />
 		</div>

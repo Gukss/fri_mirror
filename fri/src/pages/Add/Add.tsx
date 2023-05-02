@@ -68,9 +68,9 @@ export default function Add() {
     }
   }, []);
 
-  const createRoom = async (data : object) => {
+  const createRoom = async (data : object, url : string) => {
     try {
-      const res = await axios.post(api_url + "room", data)
+      const res = await axios.post(url, data)
       navigate(`/chat?roomId=${res.data.roomId}&title=${res.data.title}`)
     }
     catch(e) {console.log(e)}
@@ -82,19 +82,21 @@ export default function Add() {
       const isFormValid = Object.values(error).every((value) => value === true);
       if (isFormValid) {
         let data = {};
-        let people = 0;
-        if(form.people === "2:2") people = 4;
-        else if(form.people === "3:3") people = 6;
-        else if(form.people === "4:4") people = 8;
-        else if(form.people === "5:5") people = 10;
-        else if(form.people === "6:6") people = 12;
         let area = "";
+        let url = api_url
         if(form.area === "대전") area = "DAEJEON";
         else if(form.area === "서울") area = "SEOUL";
         else if(form.area === "광주") area = "GWANGJU";
         else if(form.area === "구미") area = "GUMI";
         else if(form.area === "부울경") area = "BUSAN";
-        if(tab !== "bet"){
+        if(cate !== "bet"){
+          let people = 0;
+          url = url + "room";
+          if(form.people === "2:2") people = 4;
+          else if(form.people === "3:3") people = 6;
+          else if(form.people === "4:4") people = 8;
+          else if(form.people === "5:5") people = 10;
+          else if(form.people === "6:6") people = 12;
           data = {
             "title": form.name,
             "headCount": people, // 내기방 제외 DB 저장 전에 x2
@@ -103,7 +105,17 @@ export default function Add() {
             "location": form.place,
           }
         }
-        createRoom(data);
+        else {
+          url = api_url + "game-room"
+          data = {
+            "title": form.name,
+            "headCount" : Number(form.people),
+            "area" : area,
+            "location": form.place
+          }
+          console.log(form.people)
+        }
+        createRoom(data, url);
       } else {
         alert("잘못된 입력입니다.")
       }
@@ -118,7 +130,7 @@ export default function Add() {
         <div className="small-logo">
           <img src={logo} alt="Logo" />
         </div>
-        <div className="add-title">미팅방 생성</div>
+        {/* <div className="add-title">미팅방 생성</div> */}
         <div className="add-form">
           <form onSubmit={handleSubmit}>
             {tab === "cate" && (
