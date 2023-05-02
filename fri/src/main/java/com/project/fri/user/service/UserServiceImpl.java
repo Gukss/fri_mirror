@@ -210,9 +210,9 @@ public class UserServiceImpl implements UserService {
     //브라우저 열 때 옵션
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(true);
-    options.setBinary("/usr/bin/chromium-browser");
-    options.addArguments("--remote-debugging-address=" + containerIp);
-    options.addArguments("--remote-allow-origins=*");
+//    options.setBinary("/usr/bin/chromium-browser");
+//    options.addArguments("--remote-debugging-address=" + containerIp);
+//    options.addArguments("--remote-allow-origins=*");
     options.addArguments("--lang=ko");
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
