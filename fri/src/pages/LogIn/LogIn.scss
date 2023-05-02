@@ -3,7 +3,14 @@
   place-items: center;
   width: 100vw;
   height: 100vh;
+
+  #back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
 }
+
 .login-container {
   width: 100vw;
 }
@@ -41,7 +48,8 @@
   margin-right: 24px;
 
   &.hidden {
-    opacity: 0; /* fade-out 효과로 숨김 */
+    opacity: 0;
+    /* fade-out 효과로 숨김 */
   }
 }
 
@@ -69,6 +77,7 @@
     &::placeholder {
       font-size: 1rem;
     }
+
     &:focus {
       outline: 0;
       border: 1px solid #727272;

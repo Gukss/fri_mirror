@@ -13,6 +13,11 @@
     row-gap: 1.5rem;
     column-gap: 1.5rem;
 
+    .bet {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+
     .select-box {
       height: 15vh;
       background: #fff2cb;
@@ -27,6 +32,7 @@
         font-size: 1.25rem;
         font-weight: bold;
       }
+
       .content {
         margin: 0 0.5rem;
         font-size: 1.1rem;

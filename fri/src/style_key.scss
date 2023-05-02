@@ -1,86 +1,36 @@
 // 컴포넌트 LogoEgg
 .main_top {
-  display: flex;
-  justify-content: space-between;
+  width: 100vw;
   align-items: center;
   margin-top: 20px;
   margin-bottom: 15px;
 
   #main_logo {
-    margin-left: 24px;
     width: 53px;
-    height: 32px;
+    height: 30px;
+    float: center;
+    margin-left: 45px;
   }
 
   .egg_cnt {
     margin-right: 24px;
+    margin-top: 7px;
     height: 22px;
     display: flex;
     align-items: center;
     font-weight: bolder;
+    float: right;
   }
 
   #main_egg {
     margin-right: 5px;
-    width: 15px;
-    height: 22px;
-  }
-}
-
-// page 메인 페이지
-.mainpage {
-  height: 100vh;
-  overflow: hidden;
-}
-
-// 지역 부분
-.main_region {
-  display: flex;
-  padding: 0px;
-  width: 234px;
-  justify-content: space-between;
-  height: 22px;
-  margin: 0 0 30px 24px;
-  font-weight: bolder;
-  color: rgba(124, 124, 124, 1);
-
-  li {
-    list-style: none;
+    width: 10px;
+    height: 17px;
   }
 
-  #select {
-    color: rgba(255, 192, 0, 1);
-    font-weight: bolder;
-    border-bottom: 1px solid rgba(255, 192, 0, 1);
-    transition: 0.7s ease-in-out;
-  }
-}
-
-// 메인 카테고리 부분
-.main_category {
-  height: calc(100vh - 150px);
-  overflow-y: scroll;
-  overflow-x: hidden;
-  text-align: start;
-
-  #category_title {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 24px;
-    letter-spacing: 0em;
-    margin: 16px 0 0px 24px;
+  #back {
     margin-left: 24px;
-
-    span {
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 15px;
-      letter-spacing: 0em;
-      float: right;
-      margin-right: 20px;
-      color: rgba(124, 124, 124, 1);
-    }
-
+    float: left;
   }
 }
 
@@ -164,7 +114,7 @@
 
 // 미팅 룸 컴포넌트
 .room_component {
-  width: 161px;
+  width: 155px;
   height: auto;
   padding: 12px;
 }
@@ -176,7 +126,8 @@
   border-radius: 16px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   background-color: rgba(255, 240, 195, 1);
-  margin: 0 0 24px 0;
+  margin: 0;
+  text-align: left;
 
   p {
     margin: 0;
@@ -236,14 +187,12 @@
       color: rgba(124, 124, 124, 1);
     }
   }
-
-
 }
 
 .meeting_room_full {
   width: 155px;
   height: 142px;
-  color: white;
+  color: #fff;
   background-color: rgba(255, 192, 0, 1);
   font-size: 25px;
   font-weight: 700;
@@ -261,7 +210,8 @@
   border-radius: 16px;
   background-color: rgba(255, 240, 195, 1);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  margin: 0 0 24px 0;
+  margin: 0;
+  text-align: left;
 
   p {
     margin: 0;
@@ -271,7 +221,6 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 17px;
-    letter-spacing: 0em;
     margin-bottom: 8px;
     color: rgba(255, 192, 0, 1);
   }
@@ -319,24 +268,23 @@
 // 방 상세보기 모달같은거
 @-webkit-keyframes moveup {
   0% {
-    bottom: -450px
+    bottom: -450px;
   }
 
   100% {
-    bottom: 0
+    bottom: 0;
   }
 }
 
 @keyframes moveup {
   0% {
-    bottom: -450px
+    bottom: -450px;
   }
 
   100% {
-    bottom: 0
+    bottom: 0;
   }
 }
-
 
 .room_detail {
   background-color: rgba(0, 0, 0, 0.25);
@@ -354,8 +302,9 @@
     bottom: 0;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-    background-color: white;
+    background-color: #fff;
     transition: linear 0.5s;
+    text-align: left;
 
     animation: moveup 1s;
     -webkit-animation: moveup 1s;
@@ -397,52 +346,8 @@
   }
 }
 
-// 게임 대기 방
-.wait_game {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  font-weight: 700;
 
-  .top {
-    width: 100vw;
-    display: flex;
-    font-size: 20px;
-
-    height: 24px;
-    align-items: center;
-    margin-top: 20px;
-    justify-content: center;
-  }
-
-  p {
-    position: fixed;
-    top: -10px;
-    left: 16px;
-    font-size: 24px;
-  }
-
-  img {
-    width: 50px;
-    height: 74px;
-    margin-top: 200px;
-    margin-right: 20px;
-  }
-}
-
-
-
-// 게임방
-.game_3s_back {
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 100vw;
-  height: 100vh;
-  font-size: 200px;
-  font-weight: 700;
-  color: rgba(255, 192, 0, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
+#back {
+  width: 15px;
+  height: 30px;
 }

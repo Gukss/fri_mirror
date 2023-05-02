@@ -1,0 +1,86 @@
+// page 메인 페이지
+.mainpage {
+    height: 100vh;
+    overflow: hidden;
+
+    .region_bar {
+        border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
+    }
+}
+
+// 지역 부분
+.main_region {
+    display: flex;
+    padding: 0px;
+    width: 234px;
+    justify-content: space-between;
+    height: 22px;
+    margin: 0 0 16px 24px;
+    font-weight: bolder;
+    color: rgba(124, 124, 124, 1);
+
+    li {
+        list-style: none;
+    }
+
+    #select {
+        color: rgba(255, 192, 0, 1);
+        font-weight: bolder;
+        border-bottom: 1px solid rgba(255, 192, 0, 1);
+        transition: 0.7s ease-in-out;
+    }
+}
+
+// 메인 카테고리 부분
+.main_category {
+    height: calc(100vh - 150px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    text-align: start;
+
+    #category_title {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 0em;
+        margin: 16px 0 0px 24px;
+        margin-left: 24px;
+
+        span {
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 15px;
+            letter-spacing: 0em;
+            float: right;
+            margin-right: 20px;
+            color: rgba(124, 124, 124, 1);
+        }
+    }
+}
+
+// 카테고리 각 줄
+.meeting_block {
+    margin: 0 24px 12px 12px;
+    display: flex;
+    width: 100vw;
+    min-height: 190px;
+    max-height: 190px;
+    height: auto;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    flex-flow: nowrap;
+    border-bottom: 1px solid rgba(225, 225, 225, 1);
+
+    .empty_category {
+        width: 100vw;
+
+        img {
+            width: 150px;
+            height: 100px;
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

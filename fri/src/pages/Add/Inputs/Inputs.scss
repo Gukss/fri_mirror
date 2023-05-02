@@ -32,19 +32,108 @@
     font-size: 1.25rem;
     padding: 0.5rem 1rem;
 
-    border: 2px solid #c0c0c0;
     border-radius: 0.5rem;
+    border: 2px solid #c0c0c0;
     background-color: #ffffff;
-    align-self: center;
     box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
+    align-self: center;
 
     &::placeholder {
       font-size: 1rem;
+      color: #777777;
     }
     &:focus {
       outline: 0;
       border: 2px solid #ffc000;
       box-shadow: 0px 0.075rem 0.075rem #ffbf007b;
+    }
+  }
+
+  .component {
+    width: 100%;
+    position: relative;
+  }
+
+  .select-button {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+
+    border-radius: 0.5rem;
+    border: 2px solid #c0c0c0;
+    background-color: #ffffff;
+    box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
+    align-self: center;
+
+    &.checked {
+      border: 2px solid green;
+    }
+
+    + .message {
+      color: green;
+    }
+
+    &:focus {
+      outline: 0;
+      border: 2px solid #ffc000;
+      box-shadow: 0px 0.075rem 0.075rem #ffbf007b;
+    }
+  }
+
+  .select {
+    width: 100%;
+    outline: none;
+    border: none;
+    color: #777777;
+    font-size: 1rem;
+    text-align: left;
+
+    &.checked {
+      color: #000000;
+      font-size: 1.25rem;
+    }
+  }
+
+  .drop-down {
+    position: absolute;
+    top: 55px;
+    width: 100%;
+    border-radius: 0.5rem;
+    height: 160px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border: 2px solid #c0c0c0;
+    background-color: #ffffff;
+    box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
+
+    @keyframes dropdown {
+      0% {
+        transform: translateY(-5%);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+    animation: dropdown 0.3s ease;
+  }
+
+  .option {
+    box-sizing: border-box;
+    width: 100%;
+    color: #000000;
+    font-size: 1rem;
+    height: 45px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #ededed;
+    background: #ffffff;
+
+    &:hover {
+      border-radius: 0.5rem;
+      background-color: #ffe493;
+      cursor: pointer;
     }
   }
 }

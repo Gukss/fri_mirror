@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/Logo.png"
+import Back from "../../components/Back"
 import "./SignUp.scss";
 
 interface SignUp {
@@ -51,6 +53,16 @@ export default function SignUp() {
     password: false,
     passwordCheck: false
   });
+
+  const [major, setMajor] = useState<boolean>(true);
+
+  const handleMajorChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setMajor(value === "major");
+    },
+    [major]
+  );
 
   const handleInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -192,24 +204,48 @@ export default function SignUp() {
 
   return (
     <div className="signup">
-      <div
-        onClick={() => {
-          navigate(-1);
-        }}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      >
-        뒤로
-      </div>
+      <Back />
       <div className="signup-container">
         <div>
           <img
-            src="/assets/images/Logo.png"
+            src={logo}
             alt="Logo"
             className="signup-logo"
           />
         </div>
         <div className="signup-form">
           <form onSubmit={handleSubmit}>
+            <div className="signup-box">
+              <div className="signup-label" id="label">
+                # 전공자 / 비전공자 <span>(클릭해 주세요.)</span>
+              </div>
+              <div className="signup-input radio">
+                <div className="switch">
+                  <div className="quality">
+                    <input
+                      id="major"
+                      type="radio"
+                      name="major"
+                      value="major"
+                      checked={major}
+                      onChange={handleMajorChange}
+                    />
+                    <label htmlFor="major">전공자</label>
+                  </div>
+                  <div className="quality">
+                    <input
+                      id="nonMajor"
+                      type="radio"
+                      name="major"
+                      value="nonMajor"
+                      checked={!major}
+                      onChange={handleMajorChange}
+                    />
+                    <label htmlFor="nonMajor">비전공자</label>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="signup-box">
               <div className="signup-label" id="label">
                 # 캠퍼스 <span>(지역만 입력해주세요.)</span>

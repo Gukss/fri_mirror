@@ -4,6 +4,12 @@
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+
+  #back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
 }
 
 .signup-container {
@@ -38,6 +44,71 @@
 
     .signup-input {
       width: 100%;
+
+      .switch {
+        position: relative;
+        width: 100%;
+        height: 40px;
+        border: 3px solid #ffc000;
+        color: #ffe598;
+        font-size: 25px;
+        border-radius: 0.5rem;
+      }
+
+      .quality {
+        position: relative;
+        display: inline-block;
+        width: 50%;
+        height: 100%;
+        line-height: 40px;
+
+        &:first-child {
+          label {
+            border-radius: 0.5rem 0 0 0.5rem;
+          }
+        }
+
+        &:last-child {
+          label {
+            border-radius: 0 0.5rem 0.5rem 0;
+          }
+        }
+
+        label {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          transition: transform 0.1s, color 0.1s, background-color 0.1s;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+
+        input {
+          appearance: none;
+          width: 0;
+          height: 0;
+          opacity: 0;
+
+          &:focus {
+            outline: 0;
+            outline-offset: 0;
+          }
+
+          &:checked~label {
+            background-color: #ffc000;
+            color: #111;
+            font-weight: bold;
+            font-size: 1.25rem;
+          }
+
+          &:active~label {
+            transform: scale(1.05);
+          }
+        }
+      }
     }
 
     input {
@@ -56,6 +127,7 @@
       &::placeholder {
         font-size: 1rem;
       }
+
       &:focus {
         outline: 0;
         border: 2px solid #ffc000;
@@ -81,7 +153,8 @@
   }
 
   &.hidden {
-    opacity: 0; /* fade-out 효과로 숨김 */
+    opacity: 0;
+    /* fade-out 효과로 숨김 */
   }
 }
 

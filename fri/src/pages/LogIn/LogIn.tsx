@@ -1,5 +1,7 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/images/Logo.png"
+import Back from "../../components/Back"
 import "./LogIn.scss";
 
 interface SingInForm {
@@ -64,7 +66,7 @@ export default function LogIn() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // 로그인 axios
-      console.log("로그인~");
+      
       // 초기화
       setForm({ id: "", password: "" });
     },
@@ -73,18 +75,11 @@ export default function LogIn() {
 
   return (
     <div className="login">
-      <div
-        onClick={() => {
-          navigate(-1);
-        }}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      >
-        뒤로
-      </div>
+      <Back />
       <div className="login-container">
         <div>
           <img
-            src="/assets/images/Logo.png"
+            src={logo}
             alt="Logo"
             className="logo"
             // ref={logoRef}
@@ -116,7 +111,7 @@ export default function LogIn() {
               />
             </div>
             <div className="login-box">
-              <button className="login-btn">로그인</button>
+              <button className="login-btn" onClick={()=> navigate("/main")}>로그인</button>
             </div>
           </form>
           <div
