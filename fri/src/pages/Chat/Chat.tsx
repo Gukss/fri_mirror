@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import ChatContent from "../../components/ChatContent/ChatContent";
-import ChatFooter from "../../components/ChatFooter/ChatFooter";
+// import ChatFooter from "../../components/ChatFooter/ChatFooter";
+import Image from "../../assets/Add photo alternate.png";
+import Up from "../../assets/Arrow upward.png";
 import ChatNav from "../../components/ChatNav/ChatNav";
 import ChatDetail from "../../components/ChatDetail/ChatDetail";
 
@@ -10,18 +12,22 @@ import SockJS from "sockjs-client";
 import axios from "axios"
 import "./Chat.scss";
 
-interface IMessage {
+export type IMessage = {
   roomId : number;
   message :  string;
-  memberId : number;
+  memberId : string;
+  profile : string;
 }
 
 export default function Chat() {
   const client = useRef<StompJs.Client>();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
   const [message, setMessage] = useState<IMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [text, setText] = useState<string>("");
 
-// 소켓객체와 connect되면 subscribe함수를 동작시켜서 서버에 있는 주소로 sub
+  // 소켓객체와 connect되면 subscribe함수를 동작시켜서 서버에 있는 주소로 sub
   const subscribeChatting = async () => {
     console.log("채팅 구독");
     await client.current?.subscribe(
@@ -76,9 +82,9 @@ export default function Chat() {
     return () => disconnect();
   }, []);
 
-  const publishMessage = async (message: string) => {
+  const publishMessage = async (msg: string) => {
     console.log("채팅을 입력해서 pub이벤트 발생!");
-    console.log(message);
+    console.log(msg);
     if (!client.current?.connected) {
       return;
     }
@@ -94,18 +100,35 @@ export default function Chat() {
         // memberId: userInfo.memberId,
       }),
     });
+    const data = {
+      roomId : 1, // roomId
+      message :  msg,
+      memberId : "true",
+      profile : "string"
+    }
+    setMessage([data, ...message])  
   }
+
+  function sendMessage(){
+    publishMessage(text);    
+  }
+
+  console.log(message)
   // 채팅에 관한 pub이벤트가 발생하는 시점은 채팅을 입력했을때!!
-  // const submitMessage = (e : EventListener) => {
-  //   console.log("submitMessage");
-  //   if (e.keyCode === 13) {
-  //     e.preventDefault();
-
-  //     publishMessage(e.target.value);
-
-  //     e.target.value = "";
-  //   }
-  // };
+  const submitMessage = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setText(e.target.value);
+      
+      const textarea = textareaRef.current;
+      if (textarea) {
+        textarea.classList.remove("autoHeight");
+        if (textarea.scrollHeight > 40) {
+          textarea.classList.add("autoHeight");
+        }
+      }
+    },
+    [text]
+  );
 
   const handleOpenDetail = useCallback(() => {
     setIsOpen(true);
@@ -121,12 +144,23 @@ export default function Chat() {
         <ChatNav onOpen={handleOpenDetail} />
       </div>
       <div className="content">
-        <ChatContent />
+        <ChatContent msg={message} />
       </div>
       <div className="footer">
-        <ChatFooter />
+      <div className="chat-footer">
+      <div className="gallery">
+        <img src={Image} alt="gallery" />
       </div>
-      <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} />
+      <div className="text-input">
+        <textarea ref={textareaRef} onChange={submitMessage} />
+        <button className="send-message" ref={btnRef} onClick={sendMessage}>
+          <img src={Up} alt="up-arrow" />
+        </button>
+      </div>
+    </div>
+        {/* <ChatFooter msg={message} e={e}/> */}
+      </div>
+      <ChatDetail isOpen={isOpen} onClose={sendMessage} />
     </div>
   );
 }
