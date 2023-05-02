@@ -48,6 +48,11 @@ public class RoomController {
     return ResponseEntity.status(200).body(result);
   }
 
+  /**
+   * 방 생성
+   * @param request
+   * @return
+   */
   @PostMapping
   public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request) {
     CreateRoomResponse createRoomResponse = roomService.createRoom(request);
