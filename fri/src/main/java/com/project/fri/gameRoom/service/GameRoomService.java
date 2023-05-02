@@ -1,8 +1,11 @@
 package com.project.fri.gameRoom.service;
 
 import com.project.fri.common.entity.Category;
+import com.project.fri.gameRoom.dto.CreateGameRoomRequest;
+import com.project.fri.gameRoom.dto.CreateGameRoomResponse;
 import com.project.fri.gameRoom.dto.FindAllGameRoomResponse;
 import com.project.fri.gameRoom.dto.FindGameRoomResponse;
+import com.project.fri.user.entity.User;
 
 import java.util.List;
 
@@ -33,4 +36,12 @@ public interface GameRoomService {
      * @return 게임 방 리스트 20개씩 잘라서 주기
      */
     List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, int size);
+
+    /**
+     * 게임 방 생성
+     * @param request
+     * @param user
+     * @return
+     */
+    CreateGameRoomResponse createGameRoom(CreateGameRoomRequest request, User user);
 }

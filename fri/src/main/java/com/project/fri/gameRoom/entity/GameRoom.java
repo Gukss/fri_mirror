@@ -1,6 +1,8 @@
 package com.project.fri.gameRoom.entity;
 
 import com.project.fri.common.entity.Area;
+import com.project.fri.gameRoom.dto.CreateGameRoomRequest;
+import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
 import com.sun.istack.NotNull;
@@ -53,5 +55,20 @@ public class GameRoom extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  //==생성메서드==//
+  public static GameRoom create(CreateGameRoomRequest request, Area area, User user) {
+    GameRoom gameRoom = GameRoom.builder()
+            .title(request.getTitle())
+            .headCount(request.getHeadCount())
+            .area(area)
+            .location(request.getLocation())
+            .baseEntity(BaseEntity.builder()
+                    .constructor(user.getName())
+                    .updater(user.getName())
+                    .build())
+            .build();
+    return gameRoom;
+  }
 
 }
