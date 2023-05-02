@@ -1,13 +1,10 @@
 package com.project.fri.user.controller;
 
-import com.project.fri.user.dto.CertifiedUserRequest;
-import com.project.fri.user.dto.CreateUserRequest;
-import com.project.fri.user.dto.CertifiedUserResponse;
-import com.project.fri.user.dto.UpdateUserRoomRequest;
-import com.project.fri.user.dto.UpdateUserRoomResponse;
+import com.project.fri.user.dto.*;
+import com.project.fri.user.entity.User;
 import com.project.fri.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
-import com.project.fri.user.dto.UpdateUserReadyResponse;
+
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 /**
  * packageName    : com.project.fri.user.controller fileName       : UserController date           :
@@ -66,4 +69,20 @@ public class UserController {
       }
       return res;
   }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response, HttpServletRequest request) {
+        SignInUserResponse result = userService.signIn(signInUserRequest);
+
+        if (result == null) {
+            return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
+        }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", result.getUserId());
+
+        Cookie cookie = new Cookie("sessionId", session.getId());
+        response.addCookie(cookie);
+        return ResponseEntity.ok().body(result);
+    }
 }

@@ -21,5 +21,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<List<User>> findAllByGameRoom_Id(Long id);
     List<User> findAllByRoom(Room room);
+    Optional<User> findByEmail(String email);
 
 }
