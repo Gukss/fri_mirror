@@ -7,6 +7,19 @@ COPY src src
 RUN chmod =x ./gradlew
 RUN ./gradlew bootJar
 
+# Selenium 사용 위해 Chrome 및 Chrome WebDriver 설치
+RUN apt-get update && \
+    apt-get install -y wget unzip xvfb libxi6 libgconf-2-4 default-jdk libgbm-dev && \
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+# NOTE dpkg -i exits nonzero due to missing dependencies
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get install -y -f
+
+RUN wget https://chromedriver.storage.googleapis.com/112.0.5615.49/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/bin/chromedriver && \
+    chmod +x /usr/bin/chromedriver
+
 FROM openjdk:11
 COPY --from=builder build/libs/fri-0.0.1-SNAPSHOT.jar fri.jar
 
