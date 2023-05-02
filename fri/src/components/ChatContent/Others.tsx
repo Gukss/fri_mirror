@@ -1,21 +1,27 @@
 import "./ChatContent.scss";
-
 import Egg from "../../assets/egg_fri.png";
 
-export default function Others() {
+interface msgType{
+  msg : string;
+  profile : string;
+  time : string;
+  nick : string;
+}
+
+export default function Others({msg, profile, time, nick} : msgType) {
+   
   return (
     <div className="chat-content">
       <div className="profile">
         <img src={Egg} alt="profile" />
       </div>
       <div className="chat-box">
-        <div className="name">배성현</div>
+        <div className="name">{nick}</div>
         <div className="message-box">
           <div className="message">
-            메세지 보내기 메세지 보내기 메세지 보내기 메세지 보내기메세지
-            보내기메세지 보내기메세지 보내기메세지 보내기
+            {msg}
           </div>
-          <span className="time">오전 10:48</span>
+          <span className="time">{time}</span>
         </div>
       </div>
     </div>
