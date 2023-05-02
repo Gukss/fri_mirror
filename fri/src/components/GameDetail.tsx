@@ -1,5 +1,7 @@
 import { GameType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 interface roomType {
   room: GameType;
@@ -8,9 +10,22 @@ interface roomType {
 }
 
 function GameDetail({ room, open, setOpen }: roomType) {
-  const { place, title, current_cnt, total_cnt } = room;
+  const { gameRoomId, title, headCount, location } = room;
   const navigate = useNavigate();
 
+  
+  useEffect(() => {
+    const api_url = process.env.REACT_APP_REST_API;
+    const getData = async () => {
+      if(api_url === undefined) return;
+      try {
+        const res = await axios.get(api_url + "game-room/" + gameRoomId);
+        console.log(res.data)
+      }
+      catch(e){console.log(e)}
+    }
+    getData()
+  }, [])
   return (
     <>
       {open ? (
@@ -22,12 +37,12 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 X
               </span>
             </div>
-            <p className="place"># {place}</p>
+            <p className="place"># {location}</p>
             <p className="cnt">
               {" "}
               참가자{" "}
               <span>
-                ( {current_cnt} / {total_cnt} )
+                ( 0 / {headCount} )
               </span>
             </p>
             <div className="join_game" onClick={()=> navigate("/wait/1")}>참여하기</div>

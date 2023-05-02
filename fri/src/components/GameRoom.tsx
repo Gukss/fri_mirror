@@ -7,25 +7,25 @@ interface roomType {
 }
 function GameRoom({ room }: roomType) {
   const [open, setOpen] = useState(false);
-  const { place, title, current_cnt, total_cnt } = room;
+  const { gameRoomId, title, headCount, location } = room;
 
   return (
     <div className="room_component">
-      {current_cnt === total_cnt ? (
+      {/* {current_cnt === total_cnt ? (
         <div className="meeting_room_full">게임중</div>
-      ) : (
+      ) : ( */}
         <div className="game_room" onClick={() => setOpen(true)}>
-          <p className="place"># {place}</p>
+          <p className="place"># {location}</p>
           <p className="title">{title}</p>
           <p className="cnt">
             {" "}
             참가자{" "}
             <span>
-              {current_cnt}/{total_cnt}
+              0/{headCount}
             </span>
           </p>
         </div>
-      )}
+      {/* )} */}
       <Room room={room} open={open} setOpen={setOpen} />
     </div>
   );

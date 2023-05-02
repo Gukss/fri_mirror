@@ -20,10 +20,10 @@ export type MeetType = {
 };
 
 export type GameType = {
-  place: string;
+  location: string;
   title: string;
-  current_cnt: number;
-  total_cnt: number;
+  headCount: number;
+  gameRoomId: number;
 };
 
 const Main: React.FC = () => {
@@ -53,7 +53,7 @@ const Main: React.FC = () => {
     }
 
     let temp = "";
-    if(category === "BETTING"){
+    if(category === "BET"){
       if(game?.length) temp = categories.game;
       else return;
     }
@@ -88,7 +88,7 @@ const Main: React.FC = () => {
       const userId = 1;
       try{
         const res = await axios.get(api_url + `room?area=${area}`, {headers : {'userId' : userId}})
-        setGame(res.data.betting)
+        setGame(res.data.bet)
         setDrink(res.data.drink)
         setEtc(res.data.etc)
         setPlay(res.data.game)

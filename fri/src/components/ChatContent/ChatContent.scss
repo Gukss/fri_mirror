@@ -40,11 +40,12 @@
 
       .message-box {
         display: flex;
-        align-items: end;
+        align-items: flex-end;
 
         &.mine {
           width: 90%;
           align-self: flex-end;
+          float: right;
         }
 
         .message {

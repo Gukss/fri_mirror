@@ -1,17 +1,18 @@
 .category-select-box {
   .category-label {
-    text-align: start;
+    text-align: center;
     margin: 1rem 0;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: bold;
-    color: #000000;
+    color: #ff8400;
   }
 
   .category-select-boxs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    row-gap: 1.5rem;
-    column-gap: 1.5rem;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    color: #ff8400;
 
     .bet {
       grid-column-start: 1;
@@ -19,7 +20,7 @@
     }
 
     .select-box {
-      height: 15vh;
+      height: 13vh;
       background: #fff2cb;
       box-shadow: 2px 2px 1px #7c7c7c;
       border-radius: 0.5rem;
@@ -29,17 +30,23 @@
       transition: 0.2s ease-in-out;
 
       .title {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         font-weight: bold;
       }
 
       .content {
         margin: 0 0.5rem;
-        font-size: 1.1rem;
+        font-size: 0.7rem;
+        color: #000;
       }
 
       &#select {
         background: #ffc000;
+        color: #fff;
+
+        .content {
+          display: none;
+        }
       }
     }
   }

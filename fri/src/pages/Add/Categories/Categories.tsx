@@ -50,7 +50,7 @@ export default function Categories({
   return (
     <div className="category-select-box">
       <div className="category-label" id="label">
-        # 방 카테고리를 선택해주세요!
+        # 카테고리를 선택해주세요
       </div>
       <div className="category-select-boxs">
         <div
@@ -60,7 +60,7 @@ export default function Categories({
         >
           <div className="title">내기</div>
           <div className="content">
-            미니게임으로 내기할 사람?
+            점심시간 커피 내기?
           </div>
         </div>
         <div
@@ -70,8 +70,7 @@ export default function Categories({
         >
           <div className="title">술</div>
           <div className="content">
-            술이 마시고
-            <br /> 싶은 사람
+            이번 주 금요일에 술
           </div>
         </div>
         <div
@@ -81,8 +80,7 @@ export default function Categories({
         >
           <div className="title">밥</div>
           <div className="content">
-            밥이 먹고 <br />
-            싶은 사람
+            이번 주 금요일에 밥
           </div>
         </div>
         <div
@@ -92,7 +90,7 @@ export default function Categories({
         >
           <div className="title">게임</div>
           <div className="content">
-            PC게임, 보드게임 <br /> 하고 싶은 사람!
+            이번 주 금요일에 게임
           </div>
         </div><div
           className="select-box"
@@ -101,7 +99,7 @@ export default function Categories({
         >
           <div className="title">운동</div>
           <div className="content">
-            어깨, 가슴, 등, 하체 운동 <br /> 하고 싶은 사람!
+            이번 주 금요일에 운동
           </div>
         </div>
         <div
@@ -110,7 +108,7 @@ export default function Categories({
           onClick={() => handleClick("STUDY")}
         >
           <div className="title">공부</div>
-          <div className="content">공부, 스터디, 취준할 사람</div>
+          <div className="content">이번 주 금요일에 공부</div>
         </div>
         <div
           className="select-box"
@@ -118,6 +116,7 @@ export default function Categories({
           onClick={() => handleClick("ETC")}
         >
           <div className="title">기타</div>
+          <div className="content">이번 주 금요일에 만나</div>
         </div>
       </div>
       <button
