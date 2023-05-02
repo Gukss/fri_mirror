@@ -11,7 +11,6 @@ RUN ./gradlew bootJar
 RUN apt-get update && \
    apt-get install -y wget unzip xvfb libxi6 libgconf-2-4 default-jdk libgbm-dev && \
    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-   printf "export PATH=/usr/bin/google-chrome:\$PATH\n" > /etc/profile.d/google-chrome.sh
 
 
 # NOTE dpkg -i exits nonzero due to missing dependencies
