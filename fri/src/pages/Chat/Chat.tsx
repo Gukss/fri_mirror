@@ -17,6 +17,7 @@ export type IMessage = {
   message :  string;
   memberId : string;
   profile : string;
+  time : string;
 }
 
 export default function Chat() {
@@ -85,6 +86,15 @@ export default function Chat() {
   const publishMessage = async (msg: string) => {
     console.log("채팅을 입력해서 pub이벤트 발생!");
     console.log(msg);
+    const now = new Date();
+    let h = String(now.getHours());
+    const m = String(now.getMinutes());
+    let day = "오전";
+    if(13 <= Number(h) && Number(h) <= 24)
+    { 
+      h = String(Number(h) - 12);
+      day = "오후";
+    }
     if (!client.current?.connected) {
       return;
     }
@@ -92,8 +102,10 @@ export default function Chat() {
       destination: "/pub/message",
       body: JSON.stringify({
         roomId: 1,
-        message,
+        msg,
         memberId: 1,
+        profile : "string",
+        time : `${day} ${h}:${m}`
         // 밑에 코드로 실제 값들을 넘겨줘야함
         // roomId: roomInfo.roomId,
         // message,
@@ -104,7 +116,8 @@ export default function Chat() {
       roomId : 1, // roomId
       message :  msg,
       memberId : "true",
-      profile : "string"
+      profile : "string",
+      time : `${day} ${h}:${m}`,
     }
     setMessage([data, ...message])  
   }
@@ -113,7 +126,6 @@ export default function Chat() {
     publishMessage(text);    
   }
 
-  console.log(message)
   // 채팅에 관한 pub이벤트가 발생하는 시점은 채팅을 입력했을때!!
   const submitMessage = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -147,20 +159,19 @@ export default function Chat() {
         <ChatContent msg={message} />
       </div>
       <div className="footer">
-      <div className="chat-footer">
-      <div className="gallery">
-        <img src={Image} alt="gallery" />
+        <div className="chat-footer">
+          <div className="gallery">
+            <img src={Image} alt="gallery" />
+          </div>
+          <div className="text-input">
+            <textarea ref={textareaRef} onChange={submitMessage} />
+            <button className="send-message" ref={btnRef} onClick={sendMessage}>
+              <img src={Up} alt="up-arrow" />
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="text-input">
-        <textarea ref={textareaRef} onChange={submitMessage} />
-        <button className="send-message" ref={btnRef} onClick={sendMessage}>
-          <img src={Up} alt="up-arrow" />
-        </button>
-      </div>
-    </div>
-        {/* <ChatFooter msg={message} e={e}/> */}
-      </div>
-      <ChatDetail isOpen={isOpen} onClose={sendMessage} />
+      <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} />
     </div>
   );
 }

@@ -13,11 +13,14 @@ export default function ChatContent({msg} : msgType) {
   
   return (
     <div className="chat-contents">
-      <Others />
-      <Others />
-      <Mine />
-      <Mine />
-      <Mine />
+      {
+        msg.map((msg, index) => (
+          msg.memberId === "true" ?
+          <Mine key={index} msg={msg.message} time={msg.time} />
+          :
+          <Others key={index} msg={msg.message} profile={msg.profile} time={msg.time} nick={msg.memberId}/>
+        ))
+      }
     </div>
   );
 }

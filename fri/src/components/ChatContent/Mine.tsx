@@ -1,13 +1,18 @@
 import "./ChatContent.scss";
 
-export default function Mine() {
+interface msgType {
+  msg : string;
+  time : string;
+}
+export default function Mine({msg, time} : msgType) {
+  console.log(time)
   return (
     <div className="chat-content">
       <div className="chat-box">
         <div className="message-box mine">
-          <span className="time">오전 10:48</span>
+          <span className="time">{time}</span>
           <div className="message mine">
-            메세지 보내기 메세지 보내기 메세지 보내기 메세지 보내기메세지
+            {msg}
           </div>
         </div>
       </div>
