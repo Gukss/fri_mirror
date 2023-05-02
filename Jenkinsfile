@@ -28,6 +28,7 @@ pipeline{
         stage('Deploy'){
             steps {  
                 sh "docker run -d --name=${BACK_SPRING_CONTAINER_NAME} -p 8080:8080 -e JAVA_OPTS=-Djasypt.encryptor.password=hellofri ${BACK_SPRING_NAME}"
+                //sh "docker run -d --name=${BACK_SPRING_CONTAINER_NAME} -p 8080:8080 -e JAVA_OPTS=-Djasypt.encryptor.password=hellofri -v /home/ubuntu/share:/usr/bin/ ${BACK_SPRING_NAME}"
                 //sh "docker run -d --name=${BACK_SPRING_CONTAINER_NAME} -p 8080:8080 ${BACK_SPRING_NAME}"
                 sh "docker image prune --force"
             }

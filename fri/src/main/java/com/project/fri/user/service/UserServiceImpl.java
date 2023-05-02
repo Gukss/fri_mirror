@@ -5,11 +5,7 @@ import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
-import com.project.fri.user.dto.CertifiedUserRequest;
-import com.project.fri.user.dto.CreateUserRequest;
-import com.project.fri.user.dto.UpdateUserRoomRequest;
-import com.project.fri.user.dto.UpdateUserRoomResponse;
-import com.project.fri.user.dto.UpdateUserReadyResponse;
+import com.project.fri.user.dto.*;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +43,8 @@ public class UserServiceImpl implements UserService {
 
   private static final String URL = "https://edu.ssafy.com/comm/login/SecurityLoginForm.do";
   private static final String LOCAL_PATH = "D:\\Guk\\fri\\chromedriver.exe";
-  private static final String SERVER_PATH = "/home/ubuntu/chromedriver";
-
+  private static final String SERVER_PATH = "/usr/bin/chromedriver";
+  private static final String containerIp = "172.17.0.5";
   @Override
   public User findById(long userId) {
     return userRepository.findById(userId)
@@ -210,10 +206,15 @@ public class UserServiceImpl implements UserService {
     //브라우저 열 때 옵션
     ChromeOptions options = new ChromeOptions();
     options.setHeadless(true);
-    options.addArguments("--remote-allow-origins=*");
+//    options.setBinary("/usr/bin/chromium-browser");
+//    options.addArguments("--remote-debugging-address=" + containerIp);
+//    options.addArguments("--remote-allow-origins=*");
     options.addArguments("--lang=ko");
+    options.addArguments("--no-sandbox");
+    options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--remote-allow-origins=*");
     options.addArguments("--disable-popup-blocking");       //팝업안띄움
-    options.addArguments("headless");                       //브라우저 안띄움
+    options.addArguments("--headless");                       //브라우저 안띄움
     options.addArguments("--disable-gpu");			//gpu 비활성화
     options.addArguments("--blink-settings=imagesEnabled=false"); //이미지 다운 안받음
     options.setCapability("ignoreProtectedModeSettings", true);
@@ -282,4 +283,19 @@ public class UserServiceImpl implements UserService {
     }
     return result;
   }
+
+  @Override
+  public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
+    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
+    if (user.isPresent()) {
+      User findUser = user.get();
+      // 패스워드 일치 확인
+      if (findUser.getPassword().equals(signInUserRequest.getPassword())) {
+        return new SignInUserResponse(findUser);
+      }
+      return null;
+    }
+    return null;
+  }
+
 }
