@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./redux/store";
 import "./App.css";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Main from "./pages/Main/mainPage";
@@ -13,22 +16,26 @@ import Chat from "./pages/Chat/Chat";
 
 function App() {
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Onboarding />} />
-          <Route path="/main" element={<Main />} />
-          <Route path="/more" element={<More />} />
-          <Route path="/wait/:room" element={<GameWait />} />
-          <Route path="/game/:room" element={<Game />} />
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/add" element={<Add />} />
-          <Route path="/my" element={<My />} />
-          <Route path="/chatting/:id" element={<Chat />} />
-        </Routes>
-      </Router>
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <div className="App">
+          <Router>
+            <Routes>
+              <Route path="/" element={<Onboarding />} />
+              <Route path="/main" element={<Main />} />
+              <Route path="/more" element={<More />} />
+              <Route path="/wait/:room" element={<GameWait />} />
+              <Route path="/game/:room" element={<Game />} />
+              <Route path="/login" element={<LogIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/add" element={<Add />} />
+              <Route path="/my" element={<My />} />
+              <Route path="/chatting/:id" element={<Chat />} />
+            </Routes>
+          </Router>
+        </div>
+      </PersistGate>
+    </Provider>
   );
 }
 
