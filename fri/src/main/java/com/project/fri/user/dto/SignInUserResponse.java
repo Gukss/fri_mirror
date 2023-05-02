@@ -11,8 +11,8 @@ public class SignInUserResponse {
     private Long userId;
     private Category location;
     private int heart;
-    private Long roomId;
-    private Long gameRoomId;
+    private String roomId;
+    private String gameRoomId;
 
     public SignInUserResponse(User user) {
         userId = user.getId();
@@ -20,15 +20,15 @@ public class SignInUserResponse {
         heart = user.getHeart();
 
         if (user.getRoom() == null) {
-            roomId = null;
+            roomId = "참여한 방이 없습니다.";
         } else {
-            roomId = user.getRoom().getId();
+            roomId = user.getRoom().getId().toString();
         }
 
         if (user.getGameRoom() == null) {
-            gameRoomId = null;
+            gameRoomId = "참여한 방이 없습니다.";
         } else {
-            gameRoomId = user.getGameRoom().getId();
+            gameRoomId = user.getGameRoom().getId().toString();
         }
     }
 }
