@@ -22,7 +22,7 @@ public interface RoomService {
    * @param request
    * @return 만든 방 제목
    */
-  CreateRoomResponse createRoom(CreateRoomRequest request);
+  CreateRoomResponse createRoom(CreateRoomRequest request,Long userId);
 
   /**
    * desc: 전체 방 리스트를 조회, area에 따라 해당 지역의 방 리스트를 조회한다.
@@ -36,8 +36,6 @@ public interface RoomService {
    * @return 카테고리 별 방 목록 더보기
    */
   List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category area, com.project.fri.room.entity.Category roomCategory);
-
-  List<Room> findAllByArea(String areaString);
 
   FindAllRoomResponse findAllByArea(Category areaString);
 
