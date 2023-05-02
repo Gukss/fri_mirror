@@ -6,6 +6,7 @@ COPY settings.gradle .
 COPY src src
 RUN chmod =x ./gradlew
 RUN ./gradlew bootJar
+FROM openjdk:11
 
 # Selenium 사용 위해 Chrome 및 Chrome WebDriver 설치
 RUN apt-get update && \
@@ -22,7 +23,6 @@ RUN wget https://chromedriver.storage.googleapis.com/112.0.5615.49/chromedriver_
     mv chromedriver /usr/bin/chromedriver && \
     chmod +x /usr/bin/chromedriver
 
-FROM openjdk:11
 COPY --from=builder build/libs/fri-0.0.1-SNAPSHOT.jar fri.jar
 
 EXPOSE 8080
