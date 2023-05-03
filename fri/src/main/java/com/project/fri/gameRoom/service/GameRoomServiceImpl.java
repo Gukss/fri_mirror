@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -175,4 +176,34 @@ public class GameRoomServiceImpl implements GameRoomService{
         UpdateGameRoomParticipationResponse updateGameRoomParticipation = UpdateGameRoomParticipationResponse.create(isParticipate, gameRoom);
         return updateGameRoomParticipation;
     }
+
+    /**
+     * 게임방 목록 조회
+     * @param areaCategory
+     * @return 게임방 10개 리스트
+     */
+    @Override
+    public List<FindGameRoomInstance> findGameRoomList(Category areaCategory) {
+        Area findArea = areaRepository.findByCategory(areaCategory)
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
+        List<GameRoom> gameRoomList = gameRoomRepository.findAllByAreaOrderByCreatedAtDesc(findArea);
+        // todo : 게임방이 많으면 전체 게임방을 다들고와서 리스트를 만드는건 비효율적으로 보임
+        List<FindGameRoomInstance> result = new ArrayList<>();
+
+        for (GameRoom r : gameRoomList) {
+            List<User> foundUserList = userRepository.findAllByGameRoom(r);
+            int userSize = foundUserList.size(); //방에 참여한 인원수
+
+            if (userSize < r.getHeadCount()) {
+                result.add(FindGameRoomInstance.create(r, userSize));
+            }
+
+            if (result.size() > 9) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
 }
