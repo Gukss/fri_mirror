@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailWithArea(@Param("email") String email);
     @Query("SELECT u FROM User u JOIN FETCH u.area WHERE u.id = :userId")
     Optional<User> findByIdWithArea(@Param("userId") Long userId);
+
+    Optional<User> findByEmail(String email);
 }

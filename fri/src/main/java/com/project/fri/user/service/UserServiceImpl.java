@@ -203,6 +203,14 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
     HttpStatus responseStatus = null;
+    Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+    if(optionalUser.isPresent()){ //이메일로 등록된 유저가 있을 때 400바로 반환한다.
+      responseStatus = HttpStatus.BAD_REQUEST;
+      return responseStatus;
+    }
+
+    //todo: 이메일 중복 확인 => 같은 이메일로 user table에 들어있으면 다시 가입안되도록 막아야한다.
+    // db에 등록되있는 email이면 가입안되게 => error or status 반환
     if(certification.isConfirmedCode() && certification.isConfirmedEdu()){ //둘 다 true일 때
       String salt=Encrypt.getSalt();
       String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
