@@ -37,21 +37,21 @@ public class Certification {
 
   private boolean isConfirmedEdu;
 
-  private boolean isConfirmedKey;
+  private boolean isConfirmedCode;
 
-  public static Certification init(String email, String code, boolean isConfirmedEdu, boolean isConfirmedKey){
+  public static Certification init(String email, String code, boolean isConfirmedEdu, boolean isConfirmedCode){
     return Certification.builder()
         .email(email)
         .code(code)
         .isConfirmedEdu(isConfirmedEdu) //edu 인증을 마친 것만 db에 들어간다.
-        .isConfirmedKey(isConfirmedKey)
+        .isConfirmedCode(isConfirmedCode)
         .build();
   }
 
-  public Certification update(String code, boolean isConfirmedEdu, boolean isConfirmedKey){
+  public Certification update(String code, boolean isConfirmedEdu, boolean isConfirmedCode){
     this.code = code;
     this.isConfirmedEdu = isConfirmedEdu;
-    this.isConfirmedKey = isConfirmedKey;
+    this.isConfirmedCode = isConfirmedCode;
     return this;
   }
 }

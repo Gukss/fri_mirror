@@ -191,15 +191,26 @@ public class UserServiceImpl implements UserService {
    * @return
    */
   @Override
-  public void createUser(CreateUserRequest request) {
+  public HttpStatus createUser(CreateUserRequest request) {
 
     // area 찾기
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
-    // user db에 저장
-    User user = User.create(request, area);
-    User saveUser = userRepository.save(user);
+    //certification 이메일로 뒤져서 isConfirmedEdu, isConfirmedCode 둘 다 true일 때 가입시켜주기
+    Certification certification = certificationRepository.findByEmail(request.getEmail())
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
+    HttpStatus responseStatus = null;
+    if(certification.isConfirmedCode() && certification.isConfirmedEdu()){ //둘 다 true일 때
+      // user db에 저장
+      User user = User.create(request, area);
+      User saveUser = userRepository.save(user);
+      responseStatus = HttpStatus.CREATED;
+    }else{
+      responseStatus = HttpStatus.UNAUTHORIZED;
+    }
+    return responseStatus;
   }
 
   /**
@@ -214,7 +225,7 @@ public class UserServiceImpl implements UserService {
     String email = certifiedEduRequest.getEmail();
     //크롬 드라이버 셋팅 (드라이버 설치한 경로 입력)
 //    System.setProperty("webdriver.chrome.driver", LOCAL_PATH);
-    System.setProperty("webdriver.chrome.driver", LOCAL_PATH);
+    System.setProperty("webdriver.chrome.driver", SERVER_PATH);
 
     System.setProperty("webdriver.chrome.whitelistedIps", "");
     //브라우저 열 때 옵션
@@ -250,12 +261,12 @@ public class UserServiceImpl implements UserService {
       //key db에 email이랑 같이 저장해주기
       Certification initCertification = Certification.init(email, key, true, false);
       boolean confirmedEdu = initCertification.isConfirmedEdu();
-      boolean confirmedKey = initCertification.isConfirmedKey();
+      boolean confirmedCode = initCertification.isConfirmedCode();
       String code = initCertification.getCode();
       Optional<Certification> optionalCertification = certificationRepository.findByEmail(email);
       if (optionalCertification.isPresent()) { //존재할 때는 update 해야한다.
         Certification certification = optionalCertification.get();
-        certification.update(code, confirmedEdu, confirmedKey);
+        certification.update(code, confirmedEdu, confirmedCode);
       } else { //없으면 저장해줘야한다.
         certificationRepository.save(initCertification); //edu 만 true인 상태
       }
@@ -405,9 +416,23 @@ public class UserServiceImpl implements UserService {
     }
   }
 
-  public CertifiedCodeResponse certifiedKey(CertifiedCodeRequest certifiedCodeRequest){
-
-    return null;
+  @Transactional
+  public CertifiedCodeResponse certifiedCode(CertifiedCodeRequest certifiedCodeRequest) {
+    String code = certifiedCodeRequest.getCode();
+    String email = certifiedCodeRequest.getEmail();
+    CertifiedCodeResponse certifiedCodeResponse = null;
+    Certification certification = certificationRepository.findByEmail(email)
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
+    boolean confirmedEdu = certification.isConfirmedEdu();
+    String certificationCode = certification.getCode();
+    if (certificationCode.equals(code)) { //코드가 일치할 때
+      certification.update(code, confirmedEdu, true); //true로 업데이트
+      certifiedCodeResponse = new CertifiedCodeResponse(true);
+    } else {//일치하지 않을 때 아무동작 안한다.
+      certifiedCodeResponse = new CertifiedCodeResponse(false);
+    }
+    return certifiedCodeResponse;
   }
 
 }

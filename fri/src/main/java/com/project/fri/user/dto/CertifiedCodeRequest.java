@@ -17,5 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CertifiedCodeRequest {
   @NotNull
+  private String email;
+  @NotNull
   private String code;
 }
