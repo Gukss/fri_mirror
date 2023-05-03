@@ -1,7 +1,6 @@
 package com.project.fri.user.controller;
 
 import com.project.fri.user.dto.*;
-import com.project.fri.user.entity.User;
 import com.project.fri.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,16 +55,14 @@ public class UserController {
     return ResponseEntity.status(201).build();
   }
 
-  @PostMapping("/certified")
-  public ResponseEntity<CertifiedUserResponse> certifiedUser(@RequestBody CertifiedUserRequest certifiedUserRequest){
-      boolean result = false;
-      result = userService.certifiedUser(certifiedUserRequest);
-      CertifiedUserResponse certifiedUserResponse = new CertifiedUserResponse(result);
-      ResponseEntity<CertifiedUserResponse> res = null;
-      if(result){
-        res = ResponseEntity.ok().body(certifiedUserResponse);
+  @PostMapping("/certified/edu")
+  public ResponseEntity<CertifiedEduResponse> certifiedUser(@RequestBody CertifiedEduRequest certifiedEduRequest){
+      CertifiedEduResponse certifiedEduResponse = userService.certifiedEdu(certifiedEduRequest);
+      ResponseEntity<CertifiedEduResponse> res = null;
+      if(certifiedEduResponse.isCertifiedEdu()){
+        res = ResponseEntity.ok().body(certifiedEduResponse);
       }else{
-        res = ResponseEntity.badRequest().body(certifiedUserResponse);
+        res = ResponseEntity.badRequest().body(certifiedEduResponse);
       }
       return res;
   }

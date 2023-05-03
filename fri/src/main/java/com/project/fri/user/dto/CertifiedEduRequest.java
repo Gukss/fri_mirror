@@ -7,13 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * packageName    : com.project.fri.user.dto fileName       : CreateUserResponse date           :
+ * packageName    : com.project.fri.user.dto fileName       : CertifiedUserRequest date           :
  * 2023-04-30 description    :
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 @AllArgsConstructor
 @Builder
-public class CertifiedUserResponse {
-  private boolean certified;
+public class CertifiedEduRequest {
+  private String email;
 }
