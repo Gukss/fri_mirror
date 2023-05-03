@@ -204,19 +204,16 @@ public class UserServiceImpl implements UserService {
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
     HttpStatus responseStatus = null;
     if(certification.isConfirmedCode() && certification.isConfirmedEdu()){ //둘 다 true일 때
+      String salt=Encrypt.getSalt();
+      String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
       // user db에 저장
-      User user = User.create(request, area);
+      User user = User.create(request, area,salt,encrypt);
       User saveUser = userRepository.save(user);
       responseStatus = HttpStatus.CREATED;
     }else{
       responseStatus = HttpStatus.UNAUTHORIZED;
     }
     return responseStatus;
-    String salt=Encrypt.getSalt();
-    String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
-    // user db에 저장
-    User user = User.create(request, area,salt,encrypt);
-    User saveUser = userRepository.save(user);
   }
 
   /**
