@@ -14,13 +14,15 @@ public class FindAllGameRoomResponse {
     private String title;
     private int headCount;
     private String location;
+    private int participationCount;
 
-    public static FindAllGameRoomResponse create(GameRoom gameroom) {
+    public static FindAllGameRoomResponse create(GameRoom gameroom, int participationCount) {
         FindAllGameRoomResponse findAllGameRoomResponse = FindAllGameRoomResponse.builder()
                 .gameRoomId(gameroom.getId())
                 .title(gameroom.getTitle())
                 .headCount(gameroom.getHeadCount())
                 .location(gameroom.getLocation())
+                .participationCount(participationCount)
                 .build();
         return findAllGameRoomResponse;
     }

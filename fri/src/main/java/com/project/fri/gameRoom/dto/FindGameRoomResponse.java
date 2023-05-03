@@ -19,6 +19,7 @@ public class FindGameRoomResponse {
     private int headCount;
     private boolean isParticipate;
     private List<FindAllUserByGameRoomId> participation;
+    private int participantCount;
 
     public static FindGameRoomResponse create(GameRoom gameRoom, List<FindAllUserByGameRoomId> users, boolean isParticipate) {
         FindGameRoomResponse findGameRoomResponse = FindGameRoomResponse.builder()
@@ -28,6 +29,7 @@ public class FindGameRoomResponse {
                 .headCount(gameRoom.getHeadCount())
                 .isParticipate(isParticipate)
                 .participation(users)
+                .participantCount(users.size())
                 .build();
         return findGameRoomResponse;
     }
