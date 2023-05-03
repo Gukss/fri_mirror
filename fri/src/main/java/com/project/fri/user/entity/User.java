@@ -76,6 +76,10 @@ public class User extends BaseTimeEntity {
   @JoinColumn(name = "game_room_id")
   private GameRoom gameRoom;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "anonymous_profile_image_id")
+  private AnonymousProfileImage anonymousProfileImage;
+
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
@@ -124,6 +128,7 @@ public class User extends BaseTimeEntity {
         .password(encrypt)
         .salt(salt)
         .heart(5)
+        .anonymousProfileImage(AnonymousProfileImage.builder().id(1L).build()) // todo : 나중에 랜덤 값으로 변경
         .nickname(request.getNickname())
         .isCertified(false)  // 인증 전
         .baseEntity(BaseEntity.builder()
