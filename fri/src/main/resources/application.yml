@@ -19,6 +19,36 @@ spring:
 #    username: root
 #    password: ssafy
 
+#  email:
+#    properties:
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: no.reply.eggfri@gmail.com
+#    password: xueepbwrdkjymbup
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+
+# admin 구글 계정
+AdminMail:
+  id: no.reply.eggfri@gmail.com
+  password: xueepbwrdkjymbup
 
 
   jpa:

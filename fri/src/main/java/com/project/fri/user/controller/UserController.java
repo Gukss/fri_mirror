@@ -1,8 +1,8 @@
 package com.project.fri.user.controller;
 
 import com.project.fri.user.dto.*;
-import com.project.fri.user.entity.User;
 import com.project.fri.user.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -52,31 +52,41 @@ public class UserController {
   @PostMapping
   public ResponseEntity createUser(@RequestBody CreateUserRequest createUserRequest) {
     // todo: 프로필 파일 + @requestPart
-    userService.createUser(createUserRequest);
-    return ResponseEntity.status(201).build();
+    HttpStatus status = userService.createUser(createUserRequest);
+    return ResponseEntity.status(status).build();
   }
 
-  @PostMapping("/certified")
-  public ResponseEntity<CertifiedUserResponse> certifiedUser(@RequestBody CertifiedUserRequest certifiedUserRequest){
-      boolean result = false;
-      result = userService.certifiedUser(certifiedUserRequest);
-      CertifiedUserResponse certifiedUserResponse = new CertifiedUserResponse(result);
-      ResponseEntity<CertifiedUserResponse> res = null;
-      if(result){
-        res = ResponseEntity.ok().body(certifiedUserResponse);
+  @PostMapping("/certified/edu")
+  public ResponseEntity<CertifiedEduResponse> certifiedEdu(@RequestBody CertifiedEduRequest certifiedEduRequest){
+      CertifiedEduResponse certifiedEduResponse = userService.certifiedEdu(certifiedEduRequest);
+      ResponseEntity<CertifiedEduResponse> res = null;
+      if(certifiedEduResponse.isCertifiedEdu()){
+        res = ResponseEntity.ok().body(certifiedEduResponse);
       }else{
-        res = ResponseEntity.badRequest().body(certifiedUserResponse);
+        res = ResponseEntity.badRequest().body(certifiedEduResponse);
       }
       return res;
   }
 
-    @PostMapping("/sign-in")
-    public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response) {
-        SignInUserResponse result = userService.signIn(signInUserRequest);
+  @PostMapping("/certified/code")
+  public ResponseEntity<CertifiedCodeResponse> certifiedCode(@RequestBody CertifiedCodeRequest certifiedCodeRequest){
+    CertifiedCodeResponse certifiedCodeResponse = userService.certifiedCode(certifiedCodeRequest);
+    ResponseEntity<CertifiedCodeResponse> res = null;
+    if(certifiedCodeResponse.isCertifiedCode()){
+      res = ResponseEntity.ok().body(certifiedCodeResponse);
+    }else{
+      res = ResponseEntity.badRequest().body(certifiedCodeResponse);
+    }
+    return res;
+  }
 
-        if (result == null) {
-            return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
-        }
+  @PostMapping("/sign-in")
+  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response, HttpServletRequest request) {
+      SignInUserResponse result = userService.signIn(signInUserRequest);
+
+      if (result == null) {
+          return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
+      }
 
         Cookie cookie = new Cookie("Authorization", result.getUserId().toString());
         response.addCookie(cookie);

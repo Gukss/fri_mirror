@@ -6,8 +6,14 @@ import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.dto.*;
+import com.project.fri.user.entity.Certification;
 import com.project.fri.user.entity.User;
+import com.project.fri.user.repository.CertificationRepository;
 import com.project.fri.user.repository.UserRepository;
+import java.util.Random;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 import com.project.fri.util.Encrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +25,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,13 +46,18 @@ public class UserServiceImpl implements UserService {
   private final RoomRepository roomRepository;
   private final AreaRepository areaRepository;
   private final UserRepository userRepository;
+  private final CertificationRepository certificationRepository;
 
   private WebDriver driver;
+  private final JavaMailSender emailSender;
+
+//  public static final String ePw = createKey();
 
   private static final String URL = "https://edu.ssafy.com/comm/login/SecurityLoginForm.do";
   private static final String LOCAL_PATH = "D:\\Guk\\fri\\chromedriver.exe";
   private static final String SERVER_PATH = "/usr/bin/chromedriver";
   private static final String containerIp = "172.17.0.5";
+
   @Override
   public User findById(long userId) {
     return userRepository.findById(userId)
@@ -74,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     ResponseEntity res = null;
     UpdateUserRoomResponse updateUserRoomResponse = null;
-    log.info("findUser.getRoom(): "+findUser.getRoom());
+    log.info("findUser.getRoom(): " + findUser.getRoom());
     if (findUser.getRoom() == null) {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
       if (findUser.getHeart() >= 1) { //하트 1이상일 때
@@ -180,12 +192,26 @@ public class UserServiceImpl implements UserService {
    * @return
    */
   @Override
-  public void createUser(CreateUserRequest request) {
+  public HttpStatus createUser(CreateUserRequest request) {
 
     // area 찾기
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
+    //certification 이메일로 뒤져서 isConfirmedEdu, isConfirmedCode 둘 다 true일 때 가입시켜주기
+    Certification certification = certificationRepository.findByEmail(request.getEmail())
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
+    HttpStatus responseStatus = null;
+    if(certification.isConfirmedCode() && certification.isConfirmedEdu()){ //둘 다 true일 때
+      // user db에 저장
+      User user = User.create(request, area);
+      User saveUser = userRepository.save(user);
+      responseStatus = HttpStatus.CREATED;
+    }else{
+      responseStatus = HttpStatus.UNAUTHORIZED;
+    }
+    return responseStatus;
     String salt=Encrypt.getSalt();
     String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
     // user db에 저장
@@ -195,12 +221,14 @@ public class UserServiceImpl implements UserService {
 
   /**
    * desc: 셀레니움을 이용한 유저 이메일 검증
-   * @param certifiedUserRequest
+   *
+   * @param certifiedEduRequest
    */
   @Override
-  public boolean certifiedUser(CertifiedUserRequest certifiedUserRequest) {
-    boolean result = false;
-
+  @Transactional
+  public CertifiedEduResponse certifiedEdu(CertifiedEduRequest certifiedEduRequest) {
+    boolean isConfirmedEdu = false;
+    String email = certifiedEduRequest.getEmail();
     //크롬 드라이버 셋팅 (드라이버 설치한 경로 입력)
 //    System.setProperty("webdriver.chrome.driver", LOCAL_PATH);
     System.setProperty("webdriver.chrome.driver", SERVER_PATH);
@@ -218,7 +246,7 @@ public class UserServiceImpl implements UserService {
     options.addArguments("--remote-allow-origins=*");
     options.addArguments("--disable-popup-blocking");       //팝업안띄움
     options.addArguments("--headless");                       //브라우저 안띄움
-    options.addArguments("--disable-gpu");			//gpu 비활성화
+    options.addArguments("--disable-gpu");      //gpu 비활성화
     options.addArguments("--blink-settings=imagesEnabled=false"); //이미지 다운 안받음
     options.setCapability("ignoreProtectedModeSettings", true);
 
@@ -226,15 +254,42 @@ public class UserServiceImpl implements UserService {
     driver = new ChromeDriver(options);
 
     //로직
-    try{
-      result = checkEmail(certifiedUserRequest.getEmail());
-    }catch(Exception e){
-      //셀레니움 예외처리
+    try {
+      isConfirmedEdu = checkEmail(email);
+    } catch (Exception e) {
+      //todo: 셀레니움 예외처리
+    }
+
+    CertifiedEduResponse certifiedEduResponse = null;
+    String key = "";
+    if (isConfirmedEdu) { //에듀싸피에 유효한 이메일이면 메일을 보낸다.
+      key = createKey();
+      //key db에 email이랑 같이 저장해주기
+      Certification initCertification = Certification.init(email, key, true, false);
+      boolean confirmedEdu = initCertification.isConfirmedEdu();
+      boolean confirmedCode = initCertification.isConfirmedCode();
+      String code = initCertification.getCode();
+      Optional<Certification> optionalCertification = certificationRepository.findByEmail(email);
+      if (optionalCertification.isPresent()) { //존재할 때는 update 해야한다.
+        Certification certification = optionalCertification.get();
+        certification.update(code, confirmedEdu, confirmedCode);
+      } else { //없으면 저장해줘야한다.
+        certificationRepository.save(initCertification); //edu 만 true인 상태
+      }
+      //이메일 검증이 들어오면 항상 init 상태로 반환하면 된다.
+      certifiedEduResponse = new CertifiedEduResponse(confirmedEdu, code);
+      try {
+        sendSimpleMessage(email, key);
+      } catch (Exception e) {
+        //todo: email 예외처리
+      }
+    } else {
+      certifiedEduResponse = new CertifiedEduResponse(false, key);
     }
 
     driver.close(); //탭 닫기
     driver.quit(); //브라우저 닫기
-    return result;
+    return certifiedEduResponse;
   }
 
   private boolean checkEmail(String email) throws InterruptedException {
@@ -244,15 +299,18 @@ public class UserServiceImpl implements UserService {
     JavascriptExecutor js = (JavascriptExecutor) driver;
 
     //css id가 userId로 돼있는 email input 창 가져오기
-    WebElement userId = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[1]/input"));
+    WebElement userId = driver.findElement(
+        By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[1]/input"));
     userId.sendKeys(email); //email 입력하기
 
     // css id가 userPwd로 돼있는 비밀번호 input 창 가져오기
-    WebElement userPwd = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[2]/input"));
+    WebElement userPwd = driver.findElement(
+        By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[1]/div[2]/input"));
     userPwd.sendKeys("1"); //1 입력하기 => 틀리기 위해
 
     //css class가 btn-primary로 돼있는 "로그인" 버튼 가지고오기
-    WebElement loginButton = driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[3]/a"));
+    WebElement loginButton = driver.findElement(
+        By.xpath("/html/body/div[1]/div/div/div[2]/form/div/div[2]/div[3]/a"));
 
     // 클릭한다. 사실 element.click()로도 클릭이 가능한데 가끔 호환성 에러가 발생하는 경우가 있다.
     js.executeScript("arguments[0].click();", loginButton);
@@ -264,7 +322,7 @@ public class UserServiceImpl implements UserService {
     String message = messageBox.getText();
     log.info(message);
     boolean result = false;
-    switch(message){
+    switch (message) {
       case "비밀번호가 일치하지 않습니다.":
         log.info("등록돼있는 유저");
         result = true;
@@ -273,7 +331,7 @@ public class UserServiceImpl implements UserService {
         log.info("등록안된 유저");
         result = false;
         break;
-        //이 아래는 나오면 안되는 값이다.
+      //이 아래는 나오면 안되는 값이다.
       case "[아이디]은(는) 필수값입니다.":
         result = false;
         break;
@@ -310,6 +368,87 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
+  private String createKey() {
+    StringBuffer key = new StringBuffer();
+    Random rnd = new Random();
+
+    for (int i = 0; i < 8; i++) { // 인증코드 8자리
+      int index = rnd.nextInt(3); // 0~2 까지 랜덤
+
+      switch (index) {
+        case 0:
+          key.append((char) ((int) (rnd.nextInt(26)) + 97));
+          //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+          break;
+        case 1:
+          key.append((char) ((int) (rnd.nextInt(26)) + 65));
+          //  A~Z
+          break;
+        case 2:
+          key.append((rnd.nextInt(10)));
+          // 0~9
+          break;
+      }
+    }
+    return key.toString();
+  }
+
+  private MimeMessage createMessage(String to, String ePw) throws Exception {
+    System.out.println("보내는 대상 : " + to);
+    System.out.println("인증 번호 : " + ePw);
+    MimeMessage message = emailSender.createMimeMessage();
+
+    message.addRecipients(RecipientType.TO, to);//보내는 대상
+    message.setSubject("fri 이메일 확인 코드입니다.");//제목
+
+    String msgg = "";
+    msgg += "<div style='margin:20px;'>";
+    msgg += "<h1> 안녕하세요 fri입니다. </h1>";
+    msgg += "<br>";
+    msgg += "<p>아래 코드를 복사해 입력해주세요<p>";
+    msgg += "<br>";
+    msgg += "<p>감사합니다.<p>";
+    msgg += "<br>";
+    msgg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
+    msgg += "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
+    msgg += "<div style='font-size:130%'>";
+    msgg += "CODE : <strong>";
+    msgg += ePw + "</strong><div><br/> ";
+    msgg += "</div>";
+    message.setText(msgg, "utf-8", "html");//내용
+    message.setFrom(new InternetAddress("no.reply.eggfri@gmail.com", "fri"));//보내는 사람
+
+    return message;
+  }
+
+  public void sendSimpleMessage(String to, String ePw) throws Exception {
+    MimeMessage message = createMessage(to, ePw);
+    try {//예외처리
+      emailSender.send(message);
+    } catch (MailException es) {
+      es.printStackTrace();
+//      throw new IllegalArgumentException();
+    }
+  }
+
+  @Transactional
+  public CertifiedCodeResponse certifiedCode(CertifiedCodeRequest certifiedCodeRequest) {
+    String code = certifiedCodeRequest.getCode();
+    String email = certifiedCodeRequest.getEmail();
+    CertifiedCodeResponse certifiedCodeResponse = null;
+    Certification certification = certificationRepository.findByEmail(email)
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
+    boolean confirmedEdu = certification.isConfirmedEdu();
+    String certificationCode = certification.getCode();
+    if (certificationCode.equals(code)) { //코드가 일치할 때
+      certification.update(code, confirmedEdu, true); //true로 업데이트
+      certifiedCodeResponse = new CertifiedCodeResponse(true);
+    } else {//일치하지 않을 때 아무동작 안한다.
+      certifiedCodeResponse = new CertifiedCodeResponse(false);
+    }
+    return certifiedCodeResponse;
+  }
   /**
    * desc 유저정보 조회
    * @param userId
@@ -321,6 +460,5 @@ public class UserServiceImpl implements UserService {
     User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     return new FindUserResponse(findUser);
   }
-
 
 }

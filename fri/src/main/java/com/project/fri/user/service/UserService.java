@@ -2,6 +2,7 @@ package com.project.fri.user.service;
 
 import com.project.fri.user.dto.*;
 import com.project.fri.user.entity.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -37,9 +38,16 @@ public interface UserService {
    * desc: 회원가입
    * @return
    */
-  void createUser(CreateUserRequest request);
+  HttpStatus createUser(CreateUserRequest request);
 
-  boolean certifiedUser(CertifiedUserRequest certifiedUserRequest);
+  /**
+   * desc: 에듀싸피에 등록된 이메일인지 검증
+   * @param certifiedEduRequest
+   * @return
+   */
+  CertifiedEduResponse certifiedEdu(CertifiedEduRequest certifiedEduRequest);
+
+  CertifiedCodeResponse certifiedCode(CertifiedCodeRequest certifiedCodeRequest);
 
   /**
    * desc: 로그인요청시 email, password 확인 맞으면 해당 User 객체, 틀리면 null 반환
