@@ -48,7 +48,7 @@ mail:
 # admin 구글 계정
 AdminMail:
   id: no.reply.eggfri@gmail.com
-  password: xueepbwrdkjymbup
+  password: ENC(6lYSRkQQ3fJQ6qKTjHXYCMD+dmB7BCkXmdXNIpNOZCk=)
 
 
   jpa:
