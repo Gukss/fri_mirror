@@ -37,16 +37,15 @@ public class RoomController {
 
   @GetMapping
   //todo: queryString을 enum으로 하면 자동으로 String이 enum으로 바뀐다. 수정해도 되고, 안해도 되고.
-  public ResponseEntity<FindAllRoomResponse> findAllByArea(@RequestParam("area") String stringArea){
+  public ResponseEntity<FindAllRoomResponse> findAllByArea(@RequestParam("area") String stringArea, @RequestHeader("Authorization") Long userId){
     //String 값 Enum으로 바꿔서 roomList 찾기
     Category area = Category.valueOf(stringArea);
-    FindAllRoomResponse findAllRoomResponse = roomService.findAllByArea(area);
+    FindAllRoomResponse findAllRoomResponse = roomService.findAllByArea(area, userId);
     return ResponseEntity.ok().body(findAllRoomResponse);
   }
 
   @GetMapping("/{roomId}")
-  public ResponseEntity<FindRoomResponse> findRoom(@PathVariable("roomId") Long roomId) {
-    Long userId = 4L;
+  public ResponseEntity<FindRoomResponse> findRoom(@PathVariable("roomId") Long roomId, @RequestHeader("Authorization") Long userId) {
     FindRoomResponse result = roomService.findRoom(roomId, userId);
     return ResponseEntity.status(200).body(result);
   }

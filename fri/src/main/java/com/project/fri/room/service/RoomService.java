@@ -41,7 +41,7 @@ public interface RoomService {
       com.project.fri.room.entity.Category roomCategory, int page,
       Pageable pageable);
 
-  FindAllRoomResponse findAllByArea(Category areaString);
+  FindAllRoomResponse findAllByArea(Category areaString, Long userId);
 
   /**
    * desc: 요청한 방 한개에 대한 상세 정보 조회

@@ -42,7 +42,7 @@ public class ChattingController {
   }
 
   @PostMapping()
-  public ResponseEntity<?> createChatting(@RequestBody CreateChattingMessageRequest request,@RequestHeader Long userId){
+  public ResponseEntity<?> createChatting(@RequestBody CreateChattingMessageRequest request, @RequestHeader("Authorization") Long userId){
     chattingService.createChatting(request,userId);
     return ResponseEntity.ok("ok");
   }
