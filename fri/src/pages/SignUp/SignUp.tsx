@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/Logo.png";
 import Back from "../../components/Back";
+import axios from "axios";
 import "./SignUp.scss";
 
 interface SignUp {
@@ -12,6 +13,7 @@ interface SignUp {
   nickname: string;
   password: string;
   passwordCheck: string;
+  code : string;
 }
 
 interface Error {
@@ -22,9 +24,11 @@ interface Error {
   nickname: boolean;
   password: boolean;
   passwordCheck: boolean;
+  code : boolean;
 }
 
 export default function SignUp() {
+  const api_url = process.env.REACT_APP_REST_API;
   const navigate = useNavigate();
   const [form, setForm] = useState<SignUp>({
     area: "",
@@ -33,7 +37,8 @@ export default function SignUp() {
     id: "",
     nickname: "",
     password: "",
-    passwordCheck: ""
+    passwordCheck: "",
+    code: ""
   });
   const [message, setMessage] = useState<SignUp>({
     area: "",
@@ -42,7 +47,8 @@ export default function SignUp() {
     id: "",
     nickname: "",
     password: "",
-    passwordCheck: ""
+    passwordCheck: "",
+    code: ""
   });
   const [error, setError] = useState<Error>({
     area: false,
@@ -51,10 +57,15 @@ export default function SignUp() {
     id: false,
     nickname: false,
     password: false,
-    passwordCheck: false
+    passwordCheck: false,
+    code: false
   });
 
   const [major, setMajor] = useState<boolean>(true);
+  const [isemail, setEmail] = useState<boolean>(false);
+  const [isCer, setCer] = useState<boolean>(false);
+  const [isCon, setCon] = useState<boolean>(false);
+  const [num, setNum] = useState("");
 
   const handleMajorChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,12 +89,31 @@ export default function SignUp() {
       const isFormValid = Object.values(error).every((value) => value === true);
 
       if (isFormValid) {
-        // 회원가입 axios
-        console.log("회원가입~");
-      } else {
-        console.log("다시");
-        // 모달 띄우거나
-        // 안채운거 빨갛게
+        let area = "";
+        if(form.area == "대전") area="DAEJEON";
+        else if(form.area == "서울") area = "SEOUL";
+        else if(form.area == "광주") area = "GWANJU";
+        else if(form.area == "구미") area = "GUMI";
+        else if(form.area == "부울경") area = "BUSAN";
+
+        const data = {
+          "name": form.name,
+          "email": form.id,
+          "password": form.password,
+          "nickname": form.nickname,	
+          "area": area,
+          "year": String(form.year),
+          "isMajor": major
+        }
+
+        const go = async () => {
+          try {
+            axios.post(api_url + "user", data);        
+            navigate("/");
+          }
+          catch(e){alert("입력된 값을 확인해 주세요.")}
+        }
+        
       }
     },
     [form, error, message]
@@ -141,14 +171,17 @@ export default function SignUp() {
         setMessage({ ...message, [name]: "필수 입력 사항입니다!" });
         setMessageColor("red", "id");
         setError({ ...error, [name]: false });
+        setEmail(false);
       } else if (!emailRegex.test(value)) {
         setMessage({ ...message, [name]: "이메일 형식이 맞지 않습니다." });
         setMessageColor("red", "id");
         setError({ ...error, [name]: false });
+        setEmail(false);
       } else {
         setMessage({ ...message, [name]: "가능합니다!" });
         setMessageColor("green", "id");
         setError({ ...error, [name]: true });
+        setEmail(true);
       }
     } else if (name === "nickname") {
       if (!value || value.trim().length === 0) {
@@ -189,6 +222,16 @@ export default function SignUp() {
         setMessageColor("green", "passwordCheck");
         setError({ ...error, [name]: true });
       }
+    } else if (name === "code") {
+      if (!value || value.trim().length === 0) {
+        setMessage({ ...message, [name]: "필수 입력 사항입니다!" });
+        setMessageColor("red", "code");
+        setError({ ...error, [name]: false });
+      } else {
+        setMessage({ ...message, [name]: "" });
+        setMessageColor("green", "code");
+        setError({ ...error, [name]: true });
+      }
     }
   };
 
@@ -202,6 +245,32 @@ export default function SignUp() {
     }
   };
 
+  const goEdu = async () => {
+    console.log("에듀싸피인?")
+    try {
+      await axios.post(api_url + "user/certified/edu", {"email" : form.id})
+      setCon(true)
+      setEmail(false)
+    }
+    catch(e : any){
+      if(e.response.status === 400) alert("이미 가입된 이메일입니다.")
+      else alert("싸피인이 맞습니까? 에듀싸피 이메일을 입력해주세요.")
+    }
+  }
+
+  const goCertification = async () => {
+    try {
+      const data = {
+        "email" : form.id,
+        "code" : form.code
+      }
+      await axios.post(api_url + "user/certified/code", data)
+      setCer(true)
+      setCon(false)
+    }
+    catch(e) {alert("아메일로 받은 코드를 정확히 입력해주세요.")}
+  }
+
   return (
     <div className="signup">
       <Back />
@@ -212,9 +281,6 @@ export default function SignUp() {
         <div className="signup-form">
           <form onSubmit={handleSubmit}>
             <div className="signup-box">
-              <div className="signup-label" id="label">
-                # 전공자 / 비전공자 <span>(클릭해 주세요.)</span>
-              </div>
               <div className="signup-input radio">
                 <div className="switch">
                   <div className="quality">
@@ -226,7 +292,7 @@ export default function SignUp() {
                       checked={major}
                       onChange={handleMajorChange}
                     />
-                    <label htmlFor="major">전공자</label>
+                    <label htmlFor="major">전공</label>
                   </div>
                   <div className="quality">
                     <input
@@ -237,19 +303,66 @@ export default function SignUp() {
                       checked={!major}
                       onChange={handleMajorChange}
                     />
-                    <label htmlFor="nonMajor">비전공자</label>
+                    <label htmlFor="nonMajor">비전공</label>
                   </div>
                 </div>
               </div>
             </div>
             <div className="signup-box">
+              <div className="signup-label"># 에듀싸피 아이디</div>
+              <div className="signup-input">
+                <input
+                  className="emailInput"
+                  placeholder="싸피 이메일을 입력해주세요."
+                  type="email"
+                  name="id"
+                  id="id"
+                  onChange={handleInput}
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div id="idmessage" className="message">
+                {message.id}
+              </div>
+              {
+                isemail ?
+                <div className="edu_certi" onClick={goEdu}>인증</div>
+                :
+                null
+              }
+              {
+                isCon ?                <>
+                <div className="signup-input">
+                <input
+                  className="codeInput"
+                  placeholder="인증번호"
+                  type="text"
+                  id="code"
+                  name="code"
+                  onChange={handleInput}
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div id="codemessage" className="message">
+                {message.code}
+              </div>
+              <div className="email_certi" onClick={goCertification}>확인</div>
+                </>
+                :
+                null
+              }
+            </div>
+{
+  isCer?
+  <>
+            <div className="signup-box">
               <div className="signup-label" id="label">
-                # 캠퍼스 <span>(지역만 입력해주세요.)</span>
+                # 캠퍼스
               </div>
               <div className="signup-input">
                 <input
                   className="campusInput"
-                  placeholder="캠퍼스를 입력해주세요. ex) 대전, 서울"
+                  placeholder="지역만 ex) 대전, 서울"
                   type="text"
                   id="area"
                   name="area"
@@ -263,12 +376,12 @@ export default function SignUp() {
             </div>
             <div className="signup-box">
               <div className="signup-label">
-                # 기수 <span>(숫자만 입력해주세요.)</span>
+                # 기수
               </div>
               <div className="signup-input">
                 <input
                   className="yearInput"
-                  placeholder="기수를 입력해주세요. ex) 8"
+                  placeholder="숫자만 ex) 8, 9"
                   type="number"
                   id="year"
                   name="year"
@@ -295,23 +408,6 @@ export default function SignUp() {
               </div>
               <div id="namemessage" className="message">
                 {message.name}
-              </div>
-            </div>
-            <div className="signup-box">
-              <div className="signup-label"># 에듀싸피 아이디</div>
-              <div className="signup-input">
-                <input
-                  className="emailInput"
-                  placeholder="싸피 이메일을 입력해주세요."
-                  type="email"
-                  name="id"
-                  id="id"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="idmessage" className="message">
-                {message.id}
               </div>
             </div>
             <div className="signup-box">
@@ -368,6 +464,8 @@ export default function SignUp() {
             <div className="signup-box">
               <button className="signup-btn">회원가입</button>
             </div>
+            </> : null
+            }
           </form>
         </div>
       </div>

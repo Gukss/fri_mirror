@@ -351,3 +351,90 @@
   width: 15px;
   height: 30px;
 }
+
+
+// not found 페이지
+
+@keyframes cloud-ani {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(40px, -20px);
+  }
+
+  20% {
+    transform: translate(80px, 20px);
+  }
+
+  30% {
+    transform: translate(120px, -20px);
+  }
+
+  40% {
+    transform: translate(160px, 20px);
+  }
+
+  50% {
+    transform: translate(200px, -20px);
+  }
+
+  60% {
+    transform: translate(240px, 20px);
+  }
+
+  70% {
+    transform: translate(280px, -20px);
+  }
+
+  80% {
+    transform: translate(320px, 20px);
+  }
+
+  90% {
+    transform: translate(360px, -20px);
+  }
+
+  100% {
+    transform: translate(400px, 20px);
+  }
+}
+
+.notfound {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #CDEAF0 50.31%, #FFF0C3 100%);
+  padding-top: 140px;
+
+  .main {
+    display: flex wrap;
+    justify-content: center;
+    width: 100vw;
+
+    #not_duck {
+      margin-top: 40px;
+      position: fixed;
+      bottom: 5vh;
+      left: 15vw;
+      width: 70vw;
+      height: 70vw;
+    }
+
+    #not_404 {
+      position: fixed;
+      left: -41vw;
+      top: 20vh;
+      width: 60vw;
+      height: 60vw;
+      animation: cloud-ani 18s linear infinite;
+    }
+  }
+
+  #not_logo {
+    width: 100px;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
+}

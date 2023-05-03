@@ -1,6 +1,7 @@
 .signup {
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
@@ -97,14 +98,14 @@
             outline-offset: 0;
           }
 
-          &:checked ~ label {
+          &:checked~label {
             background-color: #ffc000;
             color: #111;
             font-weight: bold;
             font-size: 1.25rem;
           }
 
-          &:active ~ label {
+          &:active~label {
             transform: scale(1.05);
           }
         }
@@ -175,4 +176,29 @@
   &:hover {
     background: #ffce3c;
   }
+}
+
+
+
+
+.edu_certi {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: #ffce3c;
+  font-size: large;
+  font-weight: 700;
+  float: right;
+  margin-right: 24px;
+}
+
+.email_certi {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: #ffce3c;
+  font-size: large;
+  font-weight: 700;
+  float: right;
+  margin: 10px 24px 0 0;
 }
