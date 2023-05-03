@@ -105,7 +105,6 @@ export default function SignUp() {
           "year": String(form.year),
           "isMajor": major
         }
-
         const go = async () => {
           try {
             axios.post(api_url + "user", data);        
@@ -113,7 +112,7 @@ export default function SignUp() {
           }
           catch(e){alert("입력된 값을 확인해 주세요.")}
         }
-        
+        go()
       }
     },
     [form, error, message]
