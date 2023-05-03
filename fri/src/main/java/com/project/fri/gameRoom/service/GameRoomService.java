@@ -50,4 +50,11 @@ public interface GameRoomService {
      * @return
      */
     UpdateGameRoomParticipationResponse updateGameRoomParticipation(Long gameRoomId, UpdateGameRoomParticipationRequest request, Long userId);
+
+    /**
+     * desc 게임방 목록 조회
+     * @param areaCategory
+     * @return
+     */
+    List<FindGameRoomInstance> findGameRoomList(Category areaCategory);
 }
