@@ -8,14 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * packageName    : com.project.fri.user.dto fileName       : CertifiedUserRequest date           :
- * 2023-04-30 description    :
+ * packageName    : com.project.fri.user.dto fileName       : CertifiedKeyRequest date           :
+ * 2023-05-03 description    :
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 @AllArgsConstructor
 @Builder
-public class CertifiedEduRequest {
+public class CertifiedCodeRequest {
   @NotNull
-  private String email;
+  private String code;
 }

@@ -46,6 +46,8 @@ public interface UserService {
    */
   CertifiedEduResponse certifiedEdu(CertifiedEduRequest certifiedEduRequest);
 
+  CertifiedCodeResponse certifiedKey(CertifiedCodeRequest certifiedCodeRequest);
+
   /**
    * desc: 로그인요청시 email, password 확인 맞으면 해당 User 객체, 틀리면 null 반환
    * @param signInUserRequest

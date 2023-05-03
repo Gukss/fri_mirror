@@ -249,10 +249,18 @@ public class UserServiceImpl implements UserService {
       key = createKey();
       //key db에 email이랑 같이 저장해주기
       Certification initCertification = Certification.init(email, key, true, false);
-      certificationRepository.save(initCertification); //edu 만 true인 상태
-      certifiedEduResponse = new CertifiedEduResponse(initCertification.isConfirmedEdu(),
-          initCertification.getCode());
-      //todo: keyApi요청이 들어오면 이메일로 certification 조회해서 key 검증하기
+      boolean confirmedEdu = initCertification.isConfirmedEdu();
+      boolean confirmedKey = initCertification.isConfirmedKey();
+      String code = initCertification.getCode();
+      Optional<Certification> optionalCertification = certificationRepository.findByEmail(email);
+      if (optionalCertification.isPresent()) { //존재할 때는 update 해야한다.
+        Certification certification = optionalCertification.get();
+        certification.update(code, confirmedEdu, confirmedKey);
+      } else { //없으면 저장해줘야한다.
+        certificationRepository.save(initCertification); //edu 만 true인 상태
+      }
+      //이메일 검증이 들어오면 항상 init 상태로 반환하면 된다.
+      certifiedEduResponse = new CertifiedEduResponse(confirmedEdu, code);
       try {
         sendSimpleMessage(email, key);
       } catch (Exception e) {
@@ -395,6 +403,11 @@ public class UserServiceImpl implements UserService {
       es.printStackTrace();
 //      throw new IllegalArgumentException();
     }
+  }
+
+  public CertifiedCodeResponse certifiedKey(CertifiedCodeRequest certifiedCodeRequest){
+
+    return null;
   }
 
 }

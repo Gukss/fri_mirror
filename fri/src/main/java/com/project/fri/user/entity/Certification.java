@@ -47,4 +47,11 @@ public class Certification {
         .isConfirmedKey(isConfirmedKey)
         .build();
   }
+
+  public Certification update(String code, boolean isConfirmedEdu, boolean isConfirmedKey){
+    this.code = code;
+    this.isConfirmedEdu = isConfirmedEdu;
+    this.isConfirmedKey = isConfirmedKey;
+    return this;
+  }
 }
