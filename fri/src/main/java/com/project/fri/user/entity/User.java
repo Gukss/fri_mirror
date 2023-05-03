@@ -60,6 +60,8 @@ public class User extends BaseTimeEntity {
   private boolean isCertified;
 
   private boolean isDelete;
+  @NotNull
+  private String salt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "area_id")
@@ -103,7 +105,7 @@ public class User extends BaseTimeEntity {
 //  }
 
   //==생성메서드==//
-  public static User create(CreateUserRequest request, Area area) {
+  public static User create(CreateUserRequest request, Area area,String salt,String encrypt) {
     User user = User.builder()
         .name(request.getName())
         .area(area)
@@ -111,7 +113,8 @@ public class User extends BaseTimeEntity {
         .year(request.getYear())
         .email(request.getEmail())
         .profileUrl("test") // todo:실제 url로 변경
-        .password(request.getPassword())
+        .password(encrypt)
+        .salt(salt)
         .heart(5)
         .nickname(request.getNickname())
         .isCertified(false)  // 인증 전

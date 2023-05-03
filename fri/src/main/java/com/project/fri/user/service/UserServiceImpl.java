@@ -8,6 +8,7 @@ import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.dto.*;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
+import com.project.fri.util.Encrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -185,8 +186,10 @@ public class UserServiceImpl implements UserService {
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
+    String salt=Encrypt.getSalt();
+    String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
     // user db에 저장
-    User user = User.create(request, area);
+    User user = User.create(request, area,salt,encrypt);
     User saveUser = userRepository.save(user);
   }
 
@@ -289,8 +292,14 @@ public class UserServiceImpl implements UserService {
     Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
     if (user.isPresent()) {
       User findUser = user.get();
+      String salt=findUser.getSalt();
+      String encrypt = Encrypt.getEncrypt(signInUserRequest.getPassword(), salt);
+      System.out.println(encrypt);
+      System.out.println("여기닷");
+      System.out.println(findUser.getPassword());
+      // 다르넹...
       // 패스워드 일치 확인
-      if (findUser.getPassword().equals(signInUserRequest.getPassword())) {
+      if (findUser.getPassword().equals(encrypt)) {
         return new SignInUserResponse(findUser);
       }
       return null;
