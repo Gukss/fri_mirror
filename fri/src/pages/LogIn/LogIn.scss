@@ -80,7 +80,8 @@
 
     &:focus {
       outline: 0;
-      border: 1px solid #727272;
+      border: 2px solid #ffc000;
+      box-shadow: 0px 0.075rem 0.075rem #ffbf007b;
     }
   }
 }

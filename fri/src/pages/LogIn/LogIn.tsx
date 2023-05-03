@@ -1,15 +1,14 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/user";
-
+import axios from "axios";
 import logo from "../../assets/images/Logo.png";
 import Back from "../../components/Back";
 import "./LogIn.scss";
 
 interface SingInForm {
-  id: string;
+  email: string;
   password: string;
 }
 
@@ -22,35 +21,41 @@ export default function LogIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState<SingInForm>({ id: "", password: "" });
+  const [form, setForm] = useState<SingInForm>({ email: "", password: "" });
 
   useEffect(() => {
     preloadImage("/assets/images/Logo.png");
   }, []);
 
-  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  }, []);
+  const handleInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setForm({ ...form, [name]: value });
+      console.log(form);
+    },
+    [form]
+  );
+
+  console.log(form);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       // 로그인 axios
-      // 로그인 받고 dispatch
-      dispatch(
-        login({
-          userId: 1,
-          location: "SEOUL",
-          heart: 5,
-          roomId: 1,
-          gameRoomId: "참여한 방이 없습니다"
+      axios({
+        method: "post",
+        url: "https://k8b204.p.ssafy.io/api/user/sign-in",
+        data: form
+      })
+        .then((res) => {
+          console.log(res.data);
+          dispatch(login(res.data));
+          setForm({ email: "", password: "" });
+          navigate("/main");
         })
-      );
-      navigate("/main");
-
-      // 초기화
-      setForm({ id: "", password: "" });
+        .catch((err) => {
+          console.log(err.status);
+        });
     },
     [form]
   );
@@ -78,7 +83,8 @@ export default function LogIn() {
                   className="emailInput"
                   placeholder="아이디"
                   type="text"
-                  name="id"
+                  name="email"
+                  value={form.email}
                   onChange={handleInput}
                 />
               </div>
@@ -89,6 +95,7 @@ export default function LogIn() {
                 placeholder="비밀번호"
                 type="password"
                 name="password"
+                value={form.password}
                 onChange={handleInput}
               />
             </div>
