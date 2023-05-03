@@ -52,9 +52,8 @@ public class RoomServiceImpl implements RoomService {
    */
   @Override
   @Transactional
-  public CreateRoomResponse createRoom(CreateRoomRequest request, Long userId) {
-
-    User user = userRepository.findById(userId)
+  public CreateRoomResponse createRoom(CreateRoomRequest request,Long userId) {
+    User findUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
 
@@ -66,21 +65,17 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     // request dto를 저장
-    Room room = Room.create(request, user, roomCategory, area);
+    Room room = Room.create(request, findUser, roomCategory, area);
+
     roomRepository.save(room);
 
     // user 테이블에 방번호 추가
-    user.updateRoomNumber(room);
+    findUser.updateRoomNumber(room);
 
     // response dto로 변환
-    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room, user);
+    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room);
 
     return createRoomResponse;
-  }
-
-  @Override
-  public List<Room> findAllByArea(String areaString) {
-    return null;
   }
 
   @Override
@@ -238,6 +233,7 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
 
+    // todo : user테이블과 room테이블을 join해서 가져올 수 있을거 같음 (이렇게 바꾸면 모든 값을 가져와서 map을 돌리지 않고 db에서 가져올때부터 필요한 값만 가져올 수 있음)
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
         roomCategory);
