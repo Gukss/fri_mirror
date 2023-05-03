@@ -73,8 +73,9 @@ public class GameRoomServiceImpl implements GameRoomService{
 
     /**
      * 게임 방 더보기
+     * @param stringArea
      * @param page
-     * @param size
+     * @param pageable
      * @return 게임 방 리스트 20개씩 잘라서 주기
      */
     @Override
@@ -89,8 +90,9 @@ public class GameRoomServiceImpl implements GameRoomService{
         Pageable newPagable = PageRequest.of(page, pageable.getPageSize(),pageable.getSort());  // page별로 20개씩 잘라주기
         List<GameRoom> findAllGameRoomByArea = gameRoomRepository.findAllByArea(area, newPagable);
 
+        // todo: 쿼리 dsl
         List<FindAllGameRoomResponse> findAllGameRoom = findAllGameRoomByArea.stream()
-                .map(gameRoom -> FindAllGameRoomResponse.create(gameRoom))
+                .map(gameRoom -> FindAllGameRoomResponse.create(gameRoom, userRepository.findAllByGameRoom(gameRoom).size()))
                 .collect(Collectors.toList());
 
         return findAllGameRoom;
