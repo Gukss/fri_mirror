@@ -48,14 +48,9 @@ public class RoomController {
     return ResponseEntity.status(200).body(result);
   }
 
-  /**
-   * 방 생성
-   * @param request
-   * @return
-   */
-  @PostMapping
-  public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request) {
-    CreateRoomResponse createRoomResponse = roomService.createRoom(request);
+  @PostMapping // Authorization을 사용하는 이유는 보통 토큰 인증값이 Authorization에 담아지는데 현재는 필요없지만 나중에 토큰 확장 가능성때문에 달아줌
+  public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request,@RequestHeader("Authorization") Long userId) {
+    CreateRoomResponse createRoomResponse = roomService.createRoom(request,userId);
     return ResponseEntity.status(201).body(createRoomResponse);
   }
 

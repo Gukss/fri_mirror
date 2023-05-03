@@ -38,21 +38,23 @@ public class Room extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="room_id")
   private Long id;
-
+  @NotNull
   private String title;
 
   private int headCount;
 
   private boolean isDelete;
-
+  @NotNull
   private String location;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "room_category_id")
+  @NotNull
   private RoomCategory roomCategory;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "area_id")
+  @NotNull
   private Area area;
 
   @Embedded
@@ -82,10 +84,10 @@ public class Room extends BaseTimeEntity {
 //  }
 
   //==생성 메서드==//
-  public static Room create(CreateRoomRequest request, User user, int headCount, RoomCategory roomCategory, Area area) {
+  public static Room create(CreateRoomRequest request, User user, RoomCategory roomCategory, Area area) {
     Room room = Room.builder()
         .title(request.getTitle())
-        .headCount(headCount)
+        .headCount(request.getHeadCount())
         .location(request.getLocation())
         .roomCategory(roomCategory)
         .area(area)

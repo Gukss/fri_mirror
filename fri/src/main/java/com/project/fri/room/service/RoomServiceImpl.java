@@ -52,10 +52,7 @@ public class RoomServiceImpl implements RoomService {
    */
   @Override
   @Transactional
-  public CreateRoomResponse createRoom(CreateRoomRequest request) {
-
-    // todo: 가짜 user 찾기
-    Long userId = 1L; // 예시로 userId를 1L로 설정합니다.
+  public CreateRoomResponse createRoom(CreateRoomRequest request,Long userId) {
     User findUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
@@ -67,28 +64,18 @@ public class RoomServiceImpl implements RoomService {
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
-    // headCount 내기 방 제외 DB 저장 전에 x2
-    int headCount = request.getHeadCount();
-    // if (roomCategory.getCategory() != BETTING) {
-    //   headCount *= 2;
-    // }
-
     // request dto를 저장
-    Room room = Room.create(request, findUser, headCount, roomCategory, area);
+    Room room = Room.create(request, findUser, roomCategory, area);
+
     roomRepository.save(room);
 
-    // todo: user테이블에 방번호 추가(update)
+    // user 테이블에 방번호 추가
     findUser.updateRoomNumber(room);
 
     // response dto로 변환
-    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room, findUser);
+    CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room);
 
     return createRoomResponse;
-  }
-
-  @Override
-  public List<Room> findAllByArea(String areaString) {
-    return null;
   }
 
   @Override
@@ -246,6 +233,7 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
 
+    // todo : user테이블과 room테이블을 join해서 가져올 수 있을거 같음 (이렇게 바꾸면 모든 값을 가져와서 map을 돌리지 않고 db에서 가져올때부터 필요한 값만 가져올 수 있음)
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
         roomCategory);

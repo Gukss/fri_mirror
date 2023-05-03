@@ -1,7 +1,6 @@
 package com.project.fri.room.dto;
 
 import com.project.fri.room.entity.Room;
-import com.project.fri.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,7 @@ public class CreateRoomResponse {
   private Long roomId;
   private String title;
 
-  public static CreateRoomResponse create(Room room, User user) {
+  public static CreateRoomResponse create(Room room) {
     CreateRoomResponse createRoomResponse = CreateRoomResponse.builder()
         .roomId(room.getId())
         .title(room.getTitle())

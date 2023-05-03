@@ -14,6 +14,7 @@ import java.util.Random;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
+import com.project.fri.util.Encrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -211,6 +212,11 @@ public class UserServiceImpl implements UserService {
       responseStatus = HttpStatus.UNAUTHORIZED;
     }
     return responseStatus;
+    String salt=Encrypt.getSalt();
+    String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
+    // user db에 저장
+    User user = User.create(request, area,salt,encrypt);
+    User saveUser = userRepository.save(user);
   }
 
   /**
@@ -339,13 +345,22 @@ public class UserServiceImpl implements UserService {
     return result;
   }
 
+  /**
+   * desc 로그인요청시 응답
+   * @param signInUserRequest
+   * @return
+   */
   @Override
   public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
-    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
+//    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
+    Optional<User> user = userRepository.findByEmailWithArea(signInUserRequest.getEmail());
     if (user.isPresent()) {
       User findUser = user.get();
+      String salt=findUser.getSalt();
+      String encrypt = Encrypt.getEncrypt(signInUserRequest.getPassword(), salt);
+      // 다르넹...
       // 패스워드 일치 확인
-      if (findUser.getPassword().equals(signInUserRequest.getPassword())) {
+      if (findUser.getPassword().equals(encrypt)) {
         return new SignInUserResponse(findUser);
       }
       return null;
@@ -433,6 +448,17 @@ public class UserServiceImpl implements UserService {
       certifiedCodeResponse = new CertifiedCodeResponse(false);
     }
     return certifiedCodeResponse;
+  }
+  /**
+   * desc 유저정보 조회
+   * @param userId
+   * @return
+   */
+  @Override
+  public FindUserResponse findUser(Long userId) {
+    Optional<User> user = userRepository.findByIdWithArea(userId);
+    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    return new FindUserResponse(findUser);
   }
 
 }
