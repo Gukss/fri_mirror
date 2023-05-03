@@ -34,10 +34,9 @@ public class GameRoomController {
      * @return
      */
     @GetMapping("/{gameRoomId}")
-    public ResponseEntity<FindGameRoomResponse> findGameRoom(@PathVariable("gameRoomId") Long gameRoomId) {
-
-        // todo: header에 담긴 userId로 교체
-        Long userId = 4l;
+    public ResponseEntity<FindGameRoomResponse> findGameRoom(
+            @PathVariable("gameRoomId") Long gameRoomId,
+            @RequestHeader("Authorization") Long userId) {
 
         FindGameRoomResponse gameRoom = gameRoomService.findGameRoom(gameRoomId, userId);
         return ResponseEntity.status(200).body(gameRoom);
@@ -63,10 +62,9 @@ public class GameRoomController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<CreateGameRoomResponse> createGameRoom(@RequestBody @Valid CreateGameRoomRequest request) {
-
-        // todo: header에 담긴 userId로 교체
-        Long userId = 2l;
+    public ResponseEntity<CreateGameRoomResponse> createGameRoom(
+            @RequestBody @Valid CreateGameRoomRequest request,
+            @RequestHeader("Authorization") Long userId) {
 
         CreateGameRoomResponse createGameRoom = gameRoomService.createGameRoom(request, userId);
         return ResponseEntity.status(201).body(createGameRoom);
@@ -81,10 +79,8 @@ public class GameRoomController {
     @PatchMapping("/{gameRoomId}/participation")
     public ResponseEntity<UpdateGameRoomParticipationResponse> updateGameRoomParticipation(
             @PathVariable("gameRoomId") Long gameRoomId,
-            @RequestBody UpdateGameRoomParticipationRequest request) {
-
-        // todo: header에 담긴 userId로 교체
-        Long userId = 2l;
+            @RequestBody UpdateGameRoomParticipationRequest request,
+            @RequestHeader("Authorization") Long userId) {
 
         UpdateGameRoomParticipationResponse updateGameRoomParticipation = gameRoomService.updateGameRoomParticipation(gameRoomId, request, userId);
         if (updateGameRoomParticipation == null) {
