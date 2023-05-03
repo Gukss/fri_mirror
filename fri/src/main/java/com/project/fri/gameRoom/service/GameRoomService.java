@@ -5,6 +5,7 @@ import com.project.fri.gameRoom.dto.*;
 import com.project.fri.user.entity.User;
 
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /**
  *packageName    : com.project.fri.gameRoom.service
@@ -32,7 +33,7 @@ public interface GameRoomService {
      * @param size
      * @return 게임 방 리스트 20개씩 잘라서 주기
      */
-    List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, int size);
+    List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, Pageable pageable);
 
     /**
      * 게임 방 생성

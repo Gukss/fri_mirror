@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +79,7 @@ public class RoomServiceImpl implements RoomService {
 
     return createRoomResponse;
   }
+
 
   @Override
   public FindAllRoomResponse findAllByArea(Category areaString) {
@@ -222,9 +225,12 @@ public class RoomServiceImpl implements RoomService {
    * @param stringCategory
    * @return
    */
+
   @Override
   public List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category stringArea,
-      com.project.fri.room.entity.Category stringCategory) {
+      com.project.fri.room.entity.Category stringCategory, int page, Pageable pageable) {
+
+    Pageable newPageable= PageRequest.of(page,pageable.getPageSize(),pageable.getSort());
 
     // enum 타입으로 객체를 찾음
     Area area = areaRepository.findByCategory(stringArea)
@@ -236,7 +242,7 @@ public class RoomServiceImpl implements RoomService {
     // todo : user테이블과 room테이블을 join해서 가져올 수 있을거 같음 (이렇게 바꾸면 모든 값을 가져와서 map을 돌리지 않고 db에서 가져올때부터 필요한 값만 가져올 수 있음)
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
-        roomCategory);
+        roomCategory,newPageable);
 
     // 찾은 방 목록으로 user찾아서 전공, 비전공자 참여자 수 추가해서 dto로 반환하기
     List<FindAllRoomByCategoryResponse> seeMoreRoom = findAllRoom.stream()
