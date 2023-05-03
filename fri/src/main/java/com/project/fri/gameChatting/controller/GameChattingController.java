@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameChattingController {
   private final GameChattingServiceImpl gameChattingService;
   @PostMapping()
-  public ResponseEntity<?> createGameChatting(@RequestBody CreateGameChattingMessageRequest request,@RequestHeader Long userId){
+  public ResponseEntity<?> createGameChatting(@RequestBody CreateGameChattingMessageRequest request, @RequestHeader("Authorization") Long userId){
     gameChattingService.createGameChatting(request,userId);
     return ResponseEntity.ok("ok");
   }

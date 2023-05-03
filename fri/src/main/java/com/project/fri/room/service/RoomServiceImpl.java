@@ -82,12 +82,12 @@ public class RoomServiceImpl implements RoomService {
 
 
   @Override
-  public FindAllRoomResponse findAllByArea(Category areaString) {
+  public FindAllRoomResponse findAllByArea(Category areaString, Long userId) {
     Area foundArea = areaRepository.findByCategory(areaString)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     //todo: login 완료되면 id 말고 다른 값으로 찾을꺼같다. => 바꿔주기
-    User foundUser = userRepository.findById(1L)
+    User foundUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     Long enrollRoomId = foundUser.getRoom().getId();
 

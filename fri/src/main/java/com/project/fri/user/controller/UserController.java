@@ -34,10 +34,8 @@ public class UserController {
     private final UserService userService;
 
     @PatchMapping("/room/{roomId}")
-    public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId, @RequestBody UpdateUserRoomRequest request) {
-        Long userId = 4L;
-      ResponseEntity<UpdateUserRoomResponse> res = userService.updateUserRoom(
-          roomId, request, userId);
+    public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId, @RequestBody UpdateUserRoomRequest request, @RequestHeader("Authorization") Long userId) {
+      ResponseEntity<UpdateUserRoomResponse> res = userService.updateUserRoom(roomId, request, userId);
       return res;
     }
 
@@ -81,7 +79,7 @@ public class UserController {
   }
 
   @PostMapping("/sign-in")
-  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response, HttpServletRequest request) {
+  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response) {
       SignInUserResponse result = userService.signIn(signInUserRequest);
 
       if (result == null) {
