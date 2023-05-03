@@ -118,7 +118,7 @@ public class User extends BaseTimeEntity {
 
   //==생성메서드==//
   public static User create(CreateUserRequest request, Area area,String salt,String encrypt) {
-    User user = User.builder()
+    return User.builder()
         .name(request.getName())
         .area(area)
         .isMajor(request.isMajor())
@@ -130,12 +130,11 @@ public class User extends BaseTimeEntity {
         .heart(5)
         .anonymousProfileImage(AnonymousProfileImage.builder().id(1L).build()) // todo : 나중에 랜덤 값으로 변경
         .nickname(request.getNickname())
-        .isCertified(false)  // 인증 전
+        .isCertified(true)  // 인증이 완료되어야만 생성할 수 있기 때문에 true 하지만 추후 확장성을 위해 필드는 놔둠
         .baseEntity(BaseEntity.builder()
             .constructor(request.getName())
             .updater(request.getName())
             .build())
         .build();
-    return user;
   }
 }
