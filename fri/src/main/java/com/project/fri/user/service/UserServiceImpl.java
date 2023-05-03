@@ -300,9 +300,6 @@ public class UserServiceImpl implements UserService {
       User findUser = user.get();
       String salt=findUser.getSalt();
       String encrypt = Encrypt.getEncrypt(signInUserRequest.getPassword(), salt);
-      System.out.println(encrypt);
-      System.out.println("여기닷");
-      System.out.println(findUser.getPassword());
       // 다르넹...
       // 패스워드 일치 확인
       if (findUser.getPassword().equals(encrypt)) {
