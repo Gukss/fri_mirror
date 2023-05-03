@@ -19,21 +19,54 @@ spring:
     username: root
     password: ssafy
 
+#  email:
+#    properties:
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: no.reply.eggfri@gmail.com
+#    password: xueepbwrdkjymbup
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+
 
 
   jpa:
     open-in-view: false
     show-sql: true
     hibernate:
+#      ddl-auto: create
 #      ddl-auto: none
       ddl-auto: update
-#      ddl-auto: create
+      
     properties:
       hibernate:
         # sql 변수 생성 시 자동으로 ``으로 감싸준다.
         globally_quoted_identifiers: true
         # 콘솔에 뜨는 sql 보기 좋게 만들어준다.
         format_sql: true
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+
+# admin 구글 계정
+AdminMail:
+  id: no.reply.eggfri@gmail.com
+  password: ENC(6lYSRkQQ3fJQ6qKTjHXYCMD+dmB7BCkXmdXNIpNOZCk=)
 
 jasypt:
   encryptor:

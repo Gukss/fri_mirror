@@ -48,7 +48,7 @@ public class GameRoomController {
      * @param page
      * @return
      */
-    @GetMapping
+    @GetMapping("/category")
     public ResponseEntity<List<FindAllGameRoomResponse>> findAllGameRoom(
             @RequestParam("area") Category area,
             @RequestParam("page") int page,
@@ -93,6 +93,19 @@ public class GameRoomController {
             return ResponseEntity.status(201).body(updateGameRoomParticipation);
         }
 
+    }
+
+    /**
+     * 게임방 목록조회
+     * @param areaCategory
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<FindGameRoomListResponse> findGameRoomList(@RequestParam("area") Category areaCategory) {
+        List<FindGameRoomInstance> gameRoomList = gameRoomService.findGameRoomList(areaCategory);
+        FindGameRoomListResponse result = new FindGameRoomListResponse(gameRoomList);
+
+        return ResponseEntity.ok().body(result);
     }
 
 }
