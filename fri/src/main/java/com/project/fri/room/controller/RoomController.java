@@ -9,6 +9,9 @@ import com.project.fri.room.service.RoomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
@@ -63,12 +66,15 @@ public class RoomController {
   @GetMapping("/category")
   public ResponseEntity<List<FindAllRoomByCategoryResponse>> findAllByAreaAndRoomCategory(
       @RequestParam("area") Category area,
-      @RequestParam("category") com.project.fri.room.entity.Category category) {
+      @RequestParam("category") com.project.fri.room.entity.Category category,
+      @RequestParam("page") int page,
+      @PageableDefault(size = 20,sort = "createdAt",direction = Direction.DESC) Pageable pageable) {
 
     List<FindAllRoomByCategoryResponse> seeMoreRoom = roomService.findAllByAreaAndRoomCategory(
-        area, category);
+        area, category,page,pageable);
     return ResponseEntity.status(200).body(seeMoreRoom);
   }
+
 
 
 }

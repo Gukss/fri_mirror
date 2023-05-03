@@ -5,6 +5,7 @@ import com.project.fri.room.entity.Room;
 import com.project.fri.room.entity.RoomCategory;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
   List<Room> findAllByAreaOrderByCreatedAtDesc(Area area);
-  List<Room> findAllByAreaAndRoomCategory(Area area, RoomCategory roomCategory);
+  List<Room> findAllByAreaAndRoomCategory(Area area, RoomCategory roomCategory, Pageable pageable);
   @Query("SELECT r FROM Room r JOIN FETCH r.roomCategory WHERE r.id = :roomId")
   Optional<Room> findRoomWithCategoryById(@Param("roomId") Long roomId);
 }
