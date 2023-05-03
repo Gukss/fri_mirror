@@ -13,7 +13,7 @@ interface SignUp {
   nickname: string;
   password: string;
   passwordCheck: string;
-  code : string;
+  code: string;
 }
 
 interface Error {
@@ -24,7 +24,7 @@ interface Error {
   nickname: boolean;
   password: boolean;
   passwordCheck: boolean;
-  code : boolean;
+  code: boolean;
 }
 
 export default function SignUp() {
@@ -79,8 +79,38 @@ export default function SignUp() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setForm({ ...form, [name]: value });
+      if (name === "id") {
+        const emailRegex =
+          /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!value || value.trim().length === 0) {
+          setMessage({ ...message, [name]: "필수 입력 사항입니다!" });
+          setMessageColor("red", "id");
+          setError({ ...error, [name]: false });
+          setEmail(false);
+        } else if (!emailRegex.test(value)) {
+          setMessage({ ...message, [name]: "이메일 형식이 맞지 않습니다." });
+          setMessageColor("red", "id");
+          setError({ ...error, [name]: false });
+          setEmail(false);
+        } else {
+          setMessage({ ...message, [name]: "가능합니다!" });
+          setMessageColor("green", "id");
+          setError({ ...error, [name]: true });
+          setEmail(true);
+        }
+      } else if (name === "passwordCheck") {
+        if (value !== form.password) {
+          setMessage({ ...message, [name]: "비밀번호가 동일하지 않습니다!" });
+          setMessageColor("red", "passwordCheck");
+          setError({ ...error, [name]: false });
+        } else {
+          setMessage({ ...message, [name]: "비밀번호가 동일합니다!" });
+          setMessageColor("green", "passwordCheck");
+          setError({ ...error, [name]: true });
+        }
+      }
     },
-    [form]
+    [form, error, message]
   );
 
   const handleSubmit = useCallback(
@@ -90,29 +120,30 @@ export default function SignUp() {
 
       if (isFormValid) {
         let area = "";
-        if(form.area == "대전") area="DAEJEON";
-        else if(form.area == "서울") area = "SEOUL";
-        else if(form.area == "광주") area = "GWANJU";
-        else if(form.area == "구미") area = "GUMI";
-        else if(form.area == "부울경") area = "BUSAN";
+        if (form.area == "대전") area = "DAEJEON";
+        else if (form.area == "서울") area = "SEOUL";
+        else if (form.area == "광주") area = "GWANJU";
+        else if (form.area == "구미") area = "GUMI";
+        else if (form.area == "부울경") area = "BUSAN";
 
         const data = {
-          "name": form.name,
-          "email": form.id,
-          "password": form.password,
-          "nickname": form.nickname,	
-          "area": area,
-          "year": String(form.year),
-          "isMajor": major
-        }
+          name: form.name,
+          email: form.id,
+          password: form.password,
+          nickname: form.nickname,
+          area: area,
+          year: String(form.year),
+          isMajor: major
+        };
         const go = async () => {
           try {
-            axios.post(api_url + "user", data);        
+            axios.post(api_url + "user", data);
             navigate("/");
+          } catch (e) {
+            alert("입력된 값을 확인해 주세요.");
           }
-          catch(e){alert("입력된 값을 확인해 주세요.")}
-        }
-        go()
+        };
+        go();
       }
     },
     [form, error, message]
@@ -245,30 +276,30 @@ export default function SignUp() {
   };
 
   const goEdu = async () => {
-    console.log("에듀싸피인?")
+    console.log("에듀싸피인?");
     try {
-      await axios.post(api_url + "user/certified/edu", {"email" : form.id})
-      setCon(true)
-      setEmail(false)
+      await axios.post(api_url + "user/certified/edu", { email: form.id });
+      setCon(true);
+      setEmail(false);
+    } catch (e: any) {
+      if (e.response.status === 400) alert("이미 가입된 이메일입니다.");
+      else alert("싸피인이 맞습니까? 에듀싸피 이메일을 입력해주세요.");
     }
-    catch(e : any){
-      if(e.response.status === 400) alert("이미 가입된 이메일입니다.")
-      else alert("싸피인이 맞습니까? 에듀싸피 이메일을 입력해주세요.")
-    }
-  }
+  };
 
   const goCertification = async () => {
     try {
       const data = {
-        "email" : form.id,
-        "code" : form.code
-      }
-      await axios.post(api_url + "user/certified/code", data)
-      setCer(true)
-      setCon(false)
+        email: form.id,
+        code: form.code
+      };
+      await axios.post(api_url + "user/certified/code", data);
+      setCer(true);
+      setCon(false);
+    } catch (e) {
+      alert("아메일로 받은 코드를 정확히 입력해주세요.");
     }
-    catch(e) {alert("아메일로 받은 코드를 정확히 입력해주세요.")}
-  }
+  };
 
   return (
     <div className="signup">
@@ -323,148 +354,144 @@ export default function SignUp() {
               <div id="idmessage" className="message">
                 {message.id}
               </div>
-              {
-                isemail ?
-                <div className="edu_certi" onClick={goEdu}>인증</div>
-                :
-                null
-              }
-              {
-                isCon ?                <>
-                <div className="signup-input">
-                <input
-                  className="codeInput"
-                  placeholder="인증번호"
-                  type="text"
-                  id="code"
-                  name="code"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="codemessage" className="message">
-                {message.code}
-              </div>
-              <div className="email_certi" onClick={goCertification}>확인</div>
+              {isemail ? (
+                <div className="edu_certi" onClick={goEdu}>
+                  인증
+                </div>
+              ) : null}
+              {isCon ? (
+                <>
+                  <div className="signup-input">
+                    <input
+                      className="codeInput"
+                      placeholder="인증번호"
+                      type="text"
+                      id="code"
+                      name="code"
+                      onChange={handleInput}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="codemessage" className="message">
+                    {message.code}
+                  </div>
+                  <div className="email_certi" onClick={goCertification}>
+                    확인
+                  </div>
                 </>
-                :
-                null
-              }
+              ) : null}
             </div>
-{
-  isCer?
-  <>
-            <div className="signup-box">
-              <div className="signup-label" id="label">
-                # 캠퍼스
-              </div>
-              <div className="signup-input">
-                <input
-                  className="campusInput"
-                  placeholder="지역만 ex) 대전, 서울"
-                  type="text"
-                  id="area"
-                  name="area"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="areamessage" className="message">
-                {message.area}
-              </div>
-            </div>
-            <div className="signup-box">
-              <div className="signup-label">
-                # 기수
-              </div>
-              <div className="signup-input">
-                <input
-                  className="yearInput"
-                  placeholder="숫자만 ex) 8, 9"
-                  type="number"
-                  id="year"
-                  name="year"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="yearmessage" className="message">
-                {message.year}
-              </div>
-            </div>
-            <div className="signup-box">
-              <div className="signup-label"># 이름</div>
-              <div className="signup-input">
-                <input
-                  className="nameInput"
-                  placeholder="이름을 입력해주세요."
-                  type="text"
-                  id="name"
-                  name="name"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="namemessage" className="message">
-                {message.name}
-              </div>
-            </div>
-            <div className="signup-box">
-              <div className="signup-label"># 닉네임</div>
-              <div className="signup-input">
-                <input
-                  className="nicknameInput"
-                  placeholder="닉네임을 입력해주세요."
-                  type="text"
-                  id="nickname"
-                  name="nickname"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="nicknamemessage" className="message">
-                {message.nickname}
-              </div>
-            </div>
-            <div className="signup-box">
-              <div className="signup-label"># 비밀번호</div>
-              <div className="signup-input">
-                <input
-                  className="pwInput"
-                  placeholder="비밀번호를 입력해주세요."
-                  type="password"
-                  id="password"
-                  name="password"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="passwordmessage" className="message">
-                {message.password}
-              </div>
-            </div>
-            <div className="signup-box">
-              <div className="signup-label"># 비밀번호 재확인</div>
-              <div className="signup-input">
-                <input
-                  className="pwInput"
-                  placeholder="비밀번호를 재입력해주세요."
-                  type="password"
-                  id="passwordCheck"
-                  name="passwordCheck"
-                  onChange={handleInput}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div id="passwordCheckmessage" className="message">
-                {message.passwordCheck}
-              </div>
-            </div>
-            <div className="signup-box">
-              <button className="signup-btn">회원가입</button>
-            </div>
-            </> : null
-            }
+            {isCer ? (
+              <>
+                <div className="signup-box">
+                  <div className="signup-label" id="label">
+                    # 캠퍼스
+                  </div>
+                  <div className="signup-input">
+                    <input
+                      className="campusInput"
+                      placeholder="지역만 ex) 대전, 서울"
+                      type="text"
+                      id="area"
+                      name="area"
+                      onChange={handleInput}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="areamessage" className="message">
+                    {message.area}
+                  </div>
+                </div>
+                <div className="signup-box">
+                  <div className="signup-label"># 기수</div>
+                  <div className="signup-input">
+                    <input
+                      className="yearInput"
+                      placeholder="숫자만 ex) 8, 9"
+                      type="number"
+                      id="year"
+                      name="year"
+                      onChange={handleInput}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="yearmessage" className="message">
+                    {message.year}
+                  </div>
+                </div>
+                <div className="signup-box">
+                  <div className="signup-label"># 이름</div>
+                  <div className="signup-input">
+                    <input
+                      className="nameInput"
+                      placeholder="이름을 입력해주세요."
+                      type="text"
+                      id="name"
+                      name="name"
+                      onChange={handleInput}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="namemessage" className="message">
+                    {message.name}
+                  </div>
+                </div>
+                <div className="signup-box">
+                  <div className="signup-label"># 닉네임</div>
+                  <div className="signup-input">
+                    <input
+                      className="nicknameInput"
+                      placeholder="닉네임을 입력해주세요."
+                      type="text"
+                      id="nickname"
+                      name="nickname"
+                      onChange={handleInput}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="nicknamemessage" className="message">
+                    {message.nickname}
+                  </div>
+                </div>
+                <div className="signup-box">
+                  <div className="signup-label"># 비밀번호</div>
+                  <div className="signup-input">
+                    <input
+                      className="pwInput"
+                      placeholder="비밀번호를 입력해주세요."
+                      type="password"
+                      id="password"
+                      name="password"
+                      onChange={handleInput}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="passwordmessage" className="message">
+                    {message.password}
+                  </div>
+                </div>
+                <div className="signup-box">
+                  <div className="signup-label"># 비밀번호 재확인</div>
+                  <div className="signup-input">
+                    <input
+                      className="pwInput"
+                      placeholder="비밀번호를 재입력해주세요."
+                      type="password"
+                      id="passwordCheck"
+                      name="passwordCheck"
+                      onChange={handleInput}
+                      // onBlur={handleBlur}
+                    />
+                  </div>
+                  <div id="passwordCheckmessage" className="message">
+                    {message.passwordCheck}
+                  </div>
+                </div>
+                <div className="signup-box">
+                  <button className="signup-btn">회원가입</button>
+                </div>
+              </>
+            ) : null}
           </form>
         </div>
       </div>

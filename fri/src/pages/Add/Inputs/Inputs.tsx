@@ -170,60 +170,50 @@ export default function Inputs({
       area: ""
     });
     setForm({ ...form, people: "", area: "" });
-    setError({ ...error, name: false, place: false, people: false, area: false });
+    setError({
+      ...error,
+      name: false,
+      place: false,
+      people: false,
+      area: false
+    });
   }, []);
 
   return (
     <>
       <div className="add-input-box">
-      <div className="input-label" id="label">
+        <div className="input-label" id="label">
           # 지역 설정
         </div>
         <div className="component">
-            <button
-              className={`select-button ${
-                form.area === ""
-                  ? ""
-                  : "checked"
-              }`}
-              type="button"
-              id="people"
-              name="area"
-              onClick={onClickArea}
-            >
-              <div
-                className={`select ${
-                  form.area === ""
-                    ? ""
-                    : "checked"
-                }`}
-              >
-                {form.area === ""
-                  ? "지역을 선택해주세요."
-                  : form.area}
-              </div>
-            </button>
-            <div className="message">
-              {form.area === ""
-                ? ""
-                : "가능합니다!"}
+          <button
+            className={`select-button ${form.area === "" ? "" : "checked"}`}
+            type="button"
+            id="people"
+            name="area"
+            onClick={onClickArea}
+          >
+            <div className={`select ${form.area === "" ? "" : "checked"}`}>
+              {form.area === "" ? "지역을 선택해주세요." : form.area}
             </div>
-            {isAreaDown && (
-              <div className="drop-down">
-                {area.map((area) => (
-                  <button
-                    className="option"
-                    value={area}
-                    key={area}
-                    onClick={onClickAreaOption}
-                    name="area"
-                  >
-                    {area}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          </button>
+          <div className="message">{form.area === "" ? "" : "가능합니다!"}</div>
+          {isAreaDown && (
+            <div className="drop-down">
+              {area.map((area) => (
+                <button
+                  className="option"
+                  value={area}
+                  key={area}
+                  onClick={onClickAreaOption}
+                  name="area"
+                >
+                  {area}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="input-label" id="label">
           # 방 이름 설정
         </div>
