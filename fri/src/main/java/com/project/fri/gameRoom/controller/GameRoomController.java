@@ -5,6 +5,9 @@ import com.project.fri.gameRoom.dto.*;
 import com.project.fri.gameRoom.service.GameRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +51,9 @@ public class GameRoomController {
     @GetMapping("/category")
     public ResponseEntity<List<FindAllGameRoomResponse>> findAllGameRoom(
             @RequestParam("area") Category area,
-            @RequestParam("page") int page) {
-        List<FindAllGameRoomResponse> allGameRoom = gameRoomService.findAllGameRoom(area, page, 20);
+            @RequestParam("page") int page,
+        @PageableDefault(size = 20,sort = "createdAt",direction = Direction.DESC) Pageable pageable) {
+        List<FindAllGameRoomResponse> allGameRoom = gameRoomService.findAllGameRoom(area, page, pageable);
         return ResponseEntity.status(200).body(allGameRoom);
     }
 

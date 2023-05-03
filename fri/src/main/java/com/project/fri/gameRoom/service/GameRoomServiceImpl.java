@@ -12,7 +12,6 @@ import com.project.fri.user.repository.UserRepository;
 import com.sun.jdi.request.InvalidRequestStateException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +78,7 @@ public class GameRoomServiceImpl implements GameRoomService{
      * @return 게임 방 리스트 20개씩 잘라서 주기
      */
     @Override
-    public List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, int size) {
+    public List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, Pageable pageable) {
         // 지역명으로 area 찾기
         Area area = areaRepository.findByCategory(stringArea)
                 .orElseThrow(() -> new NotFoundExceptionMessage(
@@ -88,8 +86,8 @@ public class GameRoomServiceImpl implements GameRoomService{
                 ));
         
         // 지역별 게임방
-        Pageable pagable = PageRequest.of(page, size);  // page별로 20개씩 잘라주기
-        List<GameRoom> findAllGameRoomByArea = gameRoomRepository.findAllByArea(area, pagable);
+        Pageable newPagable = PageRequest.of(page, pageable.getPageSize(),pageable.getSort());  // page별로 20개씩 잘라주기
+        List<GameRoom> findAllGameRoomByArea = gameRoomRepository.findAllByArea(area, newPagable);
 
         List<FindAllGameRoomResponse> findAllGameRoom = findAllGameRoomByArea.stream()
                 .map(gameRoom -> FindAllGameRoomResponse.create(gameRoom))
