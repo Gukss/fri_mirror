@@ -33,22 +33,7 @@ spring:
 #          auth: true
 #          starttls:
 #            enable: true
-mail:
-  smtp:
-    auth: true
-    starttls:
-      required: true
-      enable: true
-    socketFactory:
-      class: javax.net.ssl.SSLSocketFactory
-      fallback: false
-      port: 465
-    port: 465
 
-# admin 구글 계정
-AdminMail:
-  id: no.reply.eggfri@gmail.com
-  password: ENC(6lYSRkQQ3fJQ6qKTjHXYCMD+dmB7BCkXmdXNIpNOZCk=)
 
 
   jpa:
@@ -65,6 +50,23 @@ AdminMail:
         globally_quoted_identifiers: true
         # 콘솔에 뜨는 sql 보기 좋게 만들어준다.
         format_sql: true
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+
+# admin 구글 계정
+AdminMail:
+  id: no.reply.eggfri@gmail.com
+  password: ENC(6lYSRkQQ3fJQ6qKTjHXYCMD+dmB7BCkXmdXNIpNOZCk=)
 
 jasypt:
   encryptor:
