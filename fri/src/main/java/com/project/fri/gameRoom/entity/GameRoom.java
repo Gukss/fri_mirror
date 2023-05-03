@@ -71,5 +71,4 @@ public class GameRoom extends BaseTimeEntity {
             .build();
     return gameRoom;
   }
-
 }

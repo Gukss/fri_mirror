@@ -66,9 +66,10 @@ public class RoomServiceImpl implements RoomService {
 
     // request dto를 저장
     Room room = Room.create(request, findUser, roomCategory, area);
+
     roomRepository.save(room);
 
-    // todo: user테이블에 방번호 추가(update)
+    // user 테이블에 방번호 추가
     findUser.updateRoomNumber(room);
 
     // response dto로 변환

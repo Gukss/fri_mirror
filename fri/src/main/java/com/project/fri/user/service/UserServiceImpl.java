@@ -287,9 +287,15 @@ public class UserServiceImpl implements UserService {
     return result;
   }
 
+  /**
+   * desc 로그인요청시 응답
+   * @param signInUserRequest
+   * @return
+   */
   @Override
   public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
-    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
+//    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
+    Optional<User> user = userRepository.findByEmailWithArea(signInUserRequest.getEmail());
     if (user.isPresent()) {
       User findUser = user.get();
       String salt=findUser.getSalt();
@@ -306,5 +312,18 @@ public class UserServiceImpl implements UserService {
     }
     return null;
   }
+
+  /**
+   * desc 유저정보 조회
+   * @param userId
+   * @return
+   */
+  @Override
+  public FindUserResponse findUser(Long userId) {
+    Optional<User> user = userRepository.findByIdWithArea(userId);
+    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    return new FindUserResponse(findUser);
+  }
+
 
 }
