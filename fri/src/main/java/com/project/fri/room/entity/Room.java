@@ -38,21 +38,23 @@ public class Room extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="room_id")
   private Long id;
-
+  @NotNull
   private String title;
 
   private int headCount;
 
   private boolean isDelete;
-
+  @NotNull
   private String location;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "room_category_id")
+  @NotNull
   private RoomCategory roomCategory;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "area_id")
+  @NotNull
   private Area area;
 
   @Embedded
