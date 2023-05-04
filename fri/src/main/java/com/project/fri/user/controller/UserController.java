@@ -31,20 +31,15 @@ import javax.validation.Valid;
 @Slf4j
 
 public class UserController {
-    private final UserService userService;
 
-    @PatchMapping("/room/{roomId}")
-    public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId, @RequestBody UpdateUserRoomRequest request, @RequestHeader("Authorization") Long userId) {
-      ResponseEntity<UpdateUserRoomResponse> res = userService.updateUserRoom(roomId, request, userId);
-      return res;
-    }
+  private final UserService userService;
 
-  @PatchMapping("{roomId}/ready")
-  public ResponseEntity<UpdateUserReadyResponse> updateUserReady(@PathVariable Long roomId) {
-    //todo: userId는 토큰에서 가지고 와서 넣어주기(updateUserReady에서)
-    UpdateUserReadyResponse updateUserReadyResponse = userService.updateUserReady(1L, roomId);
-    URI uri = URI.create(roomId+"/ready");
-    return ResponseEntity.created(uri).body(updateUserReadyResponse);
+  @PatchMapping("/room/{roomId}")
+  public ResponseEntity<UpdateUserRoomResponse> updateUserRoom(@PathVariable("roomId") Long roomId,
+      @RequestBody UpdateUserRoomRequest request, @RequestHeader("Authorization") Long userId) {
+    ResponseEntity<UpdateUserRoomResponse> res = userService.updateUserRoom(roomId, request,
+        userId);
+    return res;
   }
 
   @PostMapping
@@ -55,48 +50,44 @@ public class UserController {
   }
 
   @PostMapping("/certified/edu")
-  public ResponseEntity<CertifiedEduResponse> certifiedEdu(@RequestBody CertifiedEduRequest certifiedEduRequest){
-      CertifiedEduResponse certifiedEduResponse = userService.certifiedEdu(certifiedEduRequest);
-      ResponseEntity<CertifiedEduResponse> res = null;
-      if(certifiedEduResponse.isCertifiedEdu()){
-        res = ResponseEntity.ok().body(certifiedEduResponse);
-      }else{
-        res = ResponseEntity.badRequest().body(certifiedEduResponse);
-      }
-      return res;
+  public ResponseEntity<CertifiedEduResponse> certifiedEdu(
+      @RequestBody CertifiedEduRequest certifiedEduRequest) {
+    CertifiedEduResponse certifiedEduResponse = userService.certifiedEdu(certifiedEduRequest);
+    ResponseEntity<CertifiedEduResponse> res = null;
+    if (certifiedEduResponse.isCertifiedEdu()) {
+      res = ResponseEntity.ok().body(certifiedEduResponse);
+    } else {
+      res = ResponseEntity.badRequest().body(certifiedEduResponse);
+    }
+    return res;
   }
 
   @PostMapping("/certified/code")
-  public ResponseEntity<CertifiedCodeResponse> certifiedCode(@RequestBody CertifiedCodeRequest certifiedCodeRequest){
+  public ResponseEntity<CertifiedCodeResponse> certifiedCode(
+      @RequestBody CertifiedCodeRequest certifiedCodeRequest) {
     CertifiedCodeResponse certifiedCodeResponse = userService.certifiedCode(certifiedCodeRequest);
     ResponseEntity<CertifiedCodeResponse> res = null;
-    if(certifiedCodeResponse.isCertifiedCode()){
+    if (certifiedCodeResponse.isCertifiedCode()) {
       res = ResponseEntity.ok().body(certifiedCodeResponse);
-    }else{
+    } else {
       res = ResponseEntity.badRequest().body(certifiedCodeResponse);
     }
     return res;
   }
 
   @PostMapping("/sign-in")
-  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest, HttpServletResponse response) {
-      SignInUserResponse result = userService.signIn(signInUserRequest);
+  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest,
+      HttpServletResponse response) {
+    SignInUserResponse result = userService.signIn(signInUserRequest);
 
-      if (result == null) {
-          return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
-      }
-
-        Cookie cookie = new Cookie("Authorization", result.getUserId().toString());
-        response.addCookie(cookie);
-        return ResponseEntity.ok().body(result);
+    if (result == null) {
+      return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
     }
 
-    @GetMapping
-    public ResponseEntity<FindUserResponse> findUser(@RequestHeader("Authorization") Long userId) {
-        FindUserResponse result = userService.findUser(userId);
-
-        return ResponseEntity.ok().body(result);
-    }
+    Cookie cookie = new Cookie("Authorization", result.getUserId().toString());
+    response.addCookie(cookie);
+    return ResponseEntity.ok().body(result);
+  }
 
     @PatchMapping
     public ResponseEntity<Object> updateUserProfile(
@@ -110,4 +101,12 @@ public class UserController {
         }
         return ResponseEntity.ok().body(result);
     }
+
+  @GetMapping
+  public ResponseEntity<FindUserResponse> findUser(@RequestHeader("Authorization") Long userId) {
+    FindUserResponse result = userService.findUser(userId);
+
+    return ResponseEntity.ok().body(result);
+  }
+
 }

@@ -138,57 +138,6 @@ public class UserServiceImpl implements UserService {
     return res;
   }
 
-  public UpdateUserReadyResponse updateUserReady(long userId, long roomId) {
-    //todo: 처음에 pathVariable로 받아온 roomId와 user에서 꺼내온 roomId를 비교한다.
-    // 비교하고 다르면 404를 던진다?
-    User foundUser = userRepository.findById(userId)
-        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-    Room room = foundUser.getRoom();
-    Long foundUserRoomId = room.getId();
-//    boolean curReady = foundUser.isReady(); //현재 ready 상태
-//    boolean curConfirmed = room.isConfirmed();
-    UpdateUserReadyResponse updateUserReadyResponse = null; //반환할 객체 미리 선언하기
-
-    if (foundUserRoomId == roomId) { //같을 때 => 정상 진행
-      //해당 방에 속한 user 찾아와서 본인 빼고 모두 ready 눌렀는지 확인하기
-      List<User> userList = userRepository.findAllByRoom(room);
-      boolean isAllReady = true;
-      //todo: 본인은 반복문에서 검사를 안하는데
-      // 본인이 true인 경우 다시 false로 바꿔주면 안되기 때문에
-      // 적절한 조치가 필요해보인다.
-      for (User x : userList) {
-        log.info("userID: " + x.getId());
-        if (x.equals(foundUser)) { //본인이면
-          continue;
-        }
-//        if(!x.isReady()){ //ready가 안됐으면 return => 다른 사람들이 ready하도록 기다려야 한다.
-//          isAllReady = false;
-//          break;
-//        }
-      }
-      //일단 나의 ready를 not해서 바꿔준다.
-//      boolean nextReady = !curReady;
-//      boolean nextConfirmed = curConfirmed;
-//
-//      foundUser.updateReady(nextReady);
-//      if(isAllReady){
-//        //isAllReady가 true면 나 빼고 모두 완료했다는 의미다. => 현재 방의 isConfirmed를 바꿔준다.
-//        nextConfirmed = !curConfirmed;
-//        room.updateIsConfirmed(nextConfirmed);
-//      }
-
-      updateUserReadyResponse = UpdateUserReadyResponse.builder()
-//          .ready(nextReady)
-//          .isConfirmed(nextConfirmed)
-          .roomId(roomId)
-          .build();
-
-    } else { //여기로 넘어오면 비정상적인 요청이다.
-      //todo: 반환 객체 updateUserReadyResponse 에 error 담아서 보내기?
-    }
-    return updateUserReadyResponse;
-  }
-
   /**
    * desc: 회원가입
    *
@@ -207,21 +156,21 @@ public class UserServiceImpl implements UserService {
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CERTIFICATION));
     HttpStatus responseStatus = null;
     Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
-    if(optionalUser.isPresent()){ //이메일로 등록된 유저가 있을 때 400바로 반환한다.
+    if (optionalUser.isPresent()) { //이메일로 등록된 유저가 있을 때 400바로 반환한다.
       responseStatus = HttpStatus.BAD_REQUEST;
       return responseStatus;
     }
 
     //todo: 이메일 중복 확인 => 같은 이메일로 user table에 들어있으면 다시 가입안되도록 막아야한다.
     // db에 등록되있는 email이면 가입안되게 => error or status 반환
-    if(certification.isConfirmedCode() && certification.isConfirmedEdu()){ //둘 다 true일 때
-      String salt=Encrypt.getSalt();
+    if (certification.isConfirmedCode() && certification.isConfirmedEdu()) { //둘 다 true일 때
+      String salt = Encrypt.getSalt();
       String encrypt = Encrypt.getEncrypt(request.getPassword(), salt);
       // user db에 저장
-      User user = User.create(request, area,salt,encrypt);
+      User user = User.create(request, area, salt, encrypt);
       User saveUser = userRepository.save(user);
       responseStatus = HttpStatus.CREATED;
-    }else{
+    } else {
       responseStatus = HttpStatus.UNAUTHORIZED;
     }
     return responseStatus;
@@ -355,6 +304,7 @@ public class UserServiceImpl implements UserService {
 
   /**
    * desc 로그인요청시 응답
+   *
    * @param signInUserRequest
    * @return
    */
@@ -364,7 +314,7 @@ public class UserServiceImpl implements UserService {
 
     if (user.isPresent()) {
       User findUser = user.get();
-      String salt=findUser.getSalt();
+      String salt = findUser.getSalt();
       String encrypt = Encrypt.getEncrypt(signInUserRequest.getPassword(), salt);
       // 다르넹...
       // 패스워드 일치 확인
@@ -457,15 +407,18 @@ public class UserServiceImpl implements UserService {
     }
     return certifiedCodeResponse;
   }
+
   /**
    * desc 유저정보 조회
+   *
    * @param userId
    * @return
    */
   @Override
   public FindUserResponse findUser(Long userId) {
     Optional<User> user = userRepository.findByIdWithAreaAndAnonymousProfileImage(userId);
-    User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    User findUser = user.orElseThrow(
+        () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     return new FindUserResponse(findUser);
   }
 
