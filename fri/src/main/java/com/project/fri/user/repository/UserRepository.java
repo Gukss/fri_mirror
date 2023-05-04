@@ -26,6 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailWithArea(@Param("email") String email);
     @Query("SELECT u FROM User u JOIN FETCH u.area JOIN FETCH u.anonymousProfileImage WHERE u.id = :userId")
     Optional<User> findByIdWithAreaAndAnonymousProfileImage(@Param("userId") Long userId);
-
+    @Query("SELECT u FROM User u JOIN FETCH u.anonymousProfileImage WHERE u.id = :userId")
+    Optional<User> findByIdWithAnonymousProfileImage(@Param("userId") Long userId);
     Optional<User> findByEmail(String email);
+    Optional<User> findByNickname(String nickname);
 }
