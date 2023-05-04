@@ -18,10 +18,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * packageName    : com.project.fri.gameRoom.controller fileName       : GameRoomController author
- *       : hagnoykmik date           : 2023-04-25 description    : ===========================================================
- * DATE              AUTHOR             NOTE -----------------------------------------------------------
- * 2023-04-25        hagnoykmik       최초 생성
+ * packageName    : com.project.fri.gameRoom.controller fileName       : GameRoomController author :
+ * hagnoykmik date           : 2023-04-25 description    :
+ * =========================================================== DATE              AUTHOR
+ * NOTE ----------------------------------------------------------- 2023-04-25        hagnoykmik
+ * 최초 생성
  */
 @RestController
 @RequiredArgsConstructor
@@ -29,93 +30,101 @@ import java.util.List;
 @Slf4j
 public class GameRoomController {
 
-    private final GameRoomService gameRoomService;
-    private final SimpMessageSendingOperations messagingTemplate;
+  private final GameRoomService gameRoomService;
+  private final SimpMessageSendingOperations messagingTemplate;
 
 
-    /**
-     * 게임 방 정보조회
-     * @param gameRoomId
-     * @return
-     */
-    @GetMapping("/{gameRoomId}")
-    public ResponseEntity<FindGameRoomResponse> findGameRoom(
-            @PathVariable("gameRoomId") Long gameRoomId,
-            @RequestHeader("Authorization") Long userId) {
+  /**
+   * 게임 방 정보조회
+   *
+   * @param gameRoomId
+   * @return
+   */
+  @GetMapping("/{gameRoomId}")
+  public ResponseEntity<FindGameRoomResponse> findGameRoom(
+      @PathVariable("gameRoomId") Long gameRoomId,
+      @RequestHeader("Authorization") Long userId) {
 
-        FindGameRoomResponse gameRoom = gameRoomService.findGameRoom(gameRoomId, userId);
-        return ResponseEntity.status(200).body(gameRoom);
+    FindGameRoomResponse gameRoom = gameRoomService.findGameRoom(gameRoomId, userId);
+    return ResponseEntity.status(200).body(gameRoom);
+  }
+
+  /**
+   * 게임 방 더보기
+   *
+   * @param page
+   * @return
+   */
+  @GetMapping("/category")
+  public ResponseEntity<List<FindAllGameRoomResponse>> findAllGameRoom(
+      @RequestParam("area") Category area,
+      @RequestParam("page") int page,
+      @PageableDefault(size = 20, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+    List<FindAllGameRoomResponse> allGameRoom = gameRoomService.findAllGameRoom(area, page,
+        pageable);
+    return ResponseEntity.status(200).body(allGameRoom);
+  }
+
+  /**
+   * 게임 방 생성
+   *
+   * @param request
+   * @return
+   */
+  @PostMapping
+  public ResponseEntity<CreateGameRoomResponse> createGameRoom(
+      @RequestBody @Valid CreateGameRoomRequest request,
+      @RequestHeader("Authorization") Long userId) {
+
+    CreateGameRoomResponse createGameRoom = gameRoomService.createGameRoom(request, userId);
+    return ResponseEntity.status(201).body(createGameRoom);
+  }
+
+  /**
+   * 게임 방 참여하기, 나가기
+   *
+   * @param gameRoomId
+   * @param request
+   * @return
+   */
+  @PatchMapping("/{gameRoomId}/participation")
+  public ResponseEntity<UpdateGameRoomParticipationResponse> updateGameRoomParticipation(
+      @PathVariable("gameRoomId") Long gameRoomId,
+      @RequestBody UpdateGameRoomParticipationRequest request,
+      @RequestHeader("Authorization") Long userId) {
+
+    UpdateGameRoomParticipationResponse updateGameRoomParticipation = gameRoomService.updateGameRoomParticipation(
+        gameRoomId, request, userId);
+    if (updateGameRoomParticipation == null) {
+      return ResponseEntity.unprocessableEntity().build(); // todo: 클라이언트 요청이 유효하지 않은 경우
+    } else {
+      return ResponseEntity.status(201).body(updateGameRoomParticipation);
     }
 
-    /**
-     * 게임 방 더보기
-     * @param page
-     * @return
-     */
-    @GetMapping("/category")
-    public ResponseEntity<List<FindAllGameRoomResponse>> findAllGameRoom(
-            @RequestParam("area") Category area,
-            @RequestParam("page") int page,
-        @PageableDefault(size = 20,sort = "createdAt",direction = Direction.DESC) Pageable pageable) {
-        List<FindAllGameRoomResponse> allGameRoom = gameRoomService.findAllGameRoom(area, page, pageable);
-        return ResponseEntity.status(200).body(allGameRoom);
-    }
+  }
 
-    /**
-     * 게임 방 생성
-     * @param request
-     * @return
-     */
-    @PostMapping
-    public ResponseEntity<CreateGameRoomResponse> createGameRoom(
-            @RequestBody @Valid CreateGameRoomRequest request,
-            @RequestHeader("Authorization") Long userId) {
+  /**
+   * 게임방 목록조회
+   *
+   * @param areaCategory
+   * @return
+   */
+  @GetMapping
+  public ResponseEntity<FindGameRoomListResponse> findGameRoomList(
+      @RequestParam("area") Category areaCategory) {
+    List<FindGameRoomInstance> gameRoomList = gameRoomService.findGameRoomList(areaCategory);
+    FindGameRoomListResponse result = new FindGameRoomListResponse(gameRoomList);
 
-        CreateGameRoomResponse createGameRoom = gameRoomService.createGameRoom(request, userId);
-        return ResponseEntity.status(201).body(createGameRoom);
-    }
+    return ResponseEntity.ok().body(result);
+  }
 
-    /**
-     * 게임 방 참여하기, 나가기
-     * @param gameRoomId
-     * @param request
-     * @return
-     */
-    @PatchMapping("/{gameRoomId}/participation")
-    public ResponseEntity<UpdateGameRoomParticipationResponse> updateGameRoomParticipation(
-            @PathVariable("gameRoomId") Long gameRoomId,
-            @RequestBody UpdateGameRoomParticipationRequest request,
-            @RequestHeader("Authorization") Long userId) {
+  @MessageMapping("/gameRoom/ready")
+  public void message(SocketGameRoomStatusRequestAndResponse message) {
+    messagingTemplate.convertAndSend("/sub/gameRoom/ready" + message.getGameRoomId(), message);
+  }
 
-        UpdateGameRoomParticipationResponse updateGameRoomParticipation = gameRoomService.updateGameRoomParticipation(gameRoomId, request, userId);
-        if (updateGameRoomParticipation == null) {
-            return ResponseEntity.unprocessableEntity().build(); // todo: 클라이언트 요청이 유효하지 않은 경우
-        } else {
-            return ResponseEntity.status(201).body(updateGameRoomParticipation);
-        }
-
-    }
-
-    /**
-     * 게임방 목록조회
-     * @param areaCategory
-     * @return
-     */
-    @GetMapping
-    public ResponseEntity<FindGameRoomListResponse> findGameRoomList(@RequestParam("area") Category areaCategory) {
-        List<FindGameRoomInstance> gameRoomList = gameRoomService.findGameRoomList(areaCategory);
-        FindGameRoomListResponse result = new FindGameRoomListResponse(gameRoomList);
-
-        return ResponseEntity.ok().body(result);
-    }
-
-    @MessageMapping("/gameRoom/ready")
-    public void message(SocketGameRoomStatusRequestAndResponse message){
-        messagingTemplate.convertAndSend("/sub/gameRoom/ready" + message.getGameRoomId(), message);
-    }
-
-    @MessageMapping("/gameRoom/stop")
-    public void message(SocketGameRoomStopRequestAndResponse message){
-        messagingTemplate.convertAndSend("/sub/gameRoom/stop" + message.getGameRoomId(), message);
-    }
+  @MessageMapping("/gameRoom/stop")
+  public void message(SocketGameRoomStopRequestAndResponse message) {
+    messagingTemplate.convertAndSend("/sub/gameRoom/stop" + message.getGameRoomId(), message);
+  }
 }
