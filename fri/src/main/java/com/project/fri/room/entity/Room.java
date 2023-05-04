@@ -32,11 +32,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name="room")
+@Table(name = "room")
 public class Room extends BaseTimeEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="room_id")
+  @Column(name = "room_id")
   private Long id;
   @NotNull
   private String title;
@@ -61,7 +62,8 @@ public class Room extends BaseTimeEntity {
   @NotNull
   private BaseEntity baseEntity;
 
-  public FindAllRoomInstance createFindRoomResponse(Category roomCategory, int majorCount, int nonMajorCount){
+  public FindAllRoomInstance createFindRoomResponse(Category roomCategory, int majorCount,
+      int nonMajorCount) {
     return FindAllRoomInstance.builder()
         .roomId(this.id)
         .title(this.title)
@@ -78,20 +80,14 @@ public class Room extends BaseTimeEntity {
     isDelete = true;
   }
 
-//  public Room updateIsConfirmed(boolean isConfirmed) {
-//    this.isConfirmed = isConfirmed;
-//    return this;
-//  }
-
-  //==생성 메서드==//
-  public static Room create(CreateRoomRequest request, User user, RoomCategory roomCategory, Area area) {
+  public static Room create(CreateRoomRequest request, User user, RoomCategory roomCategory,
+      Area area) {
     Room room = Room.builder()
         .title(request.getTitle())
         .headCount(request.getHeadCount())
         .location(request.getLocation())
         .roomCategory(roomCategory)
         .area(area)
-        // todo: user부분
         .baseEntity(BaseEntity.builder()
             .constructor(user.getName())
             .updater(user.getName())

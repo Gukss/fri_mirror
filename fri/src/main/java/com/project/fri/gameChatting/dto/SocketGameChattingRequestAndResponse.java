@@ -1,4 +1,4 @@
-package com.project.fri.chatting.dto;
+package com.project.fri.gameChatting.dto;
 
 import lombok.Data;
 
