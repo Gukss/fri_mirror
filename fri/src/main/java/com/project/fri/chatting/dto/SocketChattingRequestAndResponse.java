@@ -8,7 +8,7 @@ public class SocketChattingRequestAndResponse {
   private Long roomId;
   private String message;
   private Long memberId;
-  private String profileUrl;
+  private String anonymousProfileImageUrl;
   private String nickname;
   private String time;
 }
