@@ -11,6 +11,7 @@ public class NotFoundExceptionMessage extends RuntimeException{
   public static final String NOT_FOUND_AREA = "존재하지 않는 지역입니다.";
   public static final String NOT_FOUND_ROOM_CATEGORY = "존재하지 않는 지역입니다.";
   public static final String NOT_FOUND_CERTIFICATION = "존재하지 않는 검증입니다.";
+  public static final String NOT_FOUND_AnonymousProfileImage = "존재하지 않는 이미지입니다.";
 
   public NotFoundExceptionMessage() {
     super();
