@@ -39,7 +39,7 @@ function More() {
 				}
 				else
 				{
-					res = await axios.get(api_url + `game-room?area=${region}&page=0`, {headers : header})
+					res = await axios.get(api_url + `game-room/category?area=${region}&page=0`, {headers : header})
 					setGame(res?.data)
 				}
 			}
