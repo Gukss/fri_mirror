@@ -12,7 +12,7 @@ public class FindUserResponse {
     private Category area;
     private String year;
     private boolean isMajor;
-    private String profileUrl;
+    private String anonymousProfileImageId;
     private String roomId;
     private String gameRoomId;
 
@@ -23,7 +23,7 @@ public class FindUserResponse {
         area = user.getArea().getCategory();
         year = user.getYear();
         isMajor = user.isMajor();
-        profileUrl = user.getProfileUrl();
+        anonymousProfileImageId = user.getAnonymousProfileImage().getImageUrl();
 
         if (user.getRoom() == null) {
             roomId = "참여한 방이 없습니다.";
