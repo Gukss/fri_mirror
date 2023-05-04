@@ -31,13 +31,9 @@ export default function LogIn() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setForm({ ...form, [name]: value });
-      console.log(form);
     },
     [form]
   );
-
-  console.log(form);
-
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -48,7 +44,6 @@ export default function LogIn() {
         data: form
       })
         .then((res) => {
-          console.log(res.data);
           dispatch(login(res.data));
           setForm({ email: "", password: "" });
           navigate("/main");

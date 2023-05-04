@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import Nav from "../../components/navEgg";
 import my from "../../assets/my_img.png";
 import plus from "../../assets/plus_btn.png";
@@ -26,18 +28,21 @@ function MyPage() {
   const [data, setData] = useState<myData>();
   const [isget, setGet] = useState<boolean>(false);
   const api_url = process.env.REACT_APP_REST_API;
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  })
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios.get(api_url + "user", {headers : {"Authorization" : 1}});
+      const header = {
+        "Content-Type" : "application/json",
+        "Authorization" : Number(userId),
+      }
+      const res = await axios.get(api_url + "user", {headers : header});
       setData(res.data)
     }
     getData();
   }, [])
-
-  // function getImg() {
-    
-  // }
 
   return (
     <div className="my">
@@ -54,7 +59,7 @@ function MyPage() {
       }
       <p id="nick">{data?.nickname}</p>
     
-      <p id="egg_cnt">현재 달걀 개수</p>
+      <p id="egg_cnt">내 알</p>
       <div id="eggs">
         <img src={egg} alt="egg" />
       </div>

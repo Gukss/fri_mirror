@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import ChatContent from "../../components/ChatContent/ChatContent";
-// import ChatFooter from "../../components/ChatFooter/ChatFooter";
 import Image from "../../assets/Add photo alternate.png";
 import Up from "../../assets/Arrow upward.png";
 import ChatNav from "../../components/ChatNav/ChatNav";
@@ -9,14 +10,14 @@ import ChatDetail from "../../components/ChatDetail/ChatDetail";
 import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-import axios from "axios"
+import axios from "axios";
 import "./Chat.scss";
 
 export type IMessage = {
   roomId : number;
   message :  string;
   memberId : string;
-  profile : string;
+  anonymousProfileImageId : string;
   time : string;
 }
 
@@ -27,13 +28,17 @@ export default function Chat() {
   const [message, setMessage] = useState<IMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState<string>("");
+  const roomId = useSelector((state: RootState) => {
+    return state.strr.roomId;
+  });
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  });
 
   // 소켓객체와 connect되면 subscribe함수를 동작시켜서 서버에 있는 주소로 sub
   const subscribeChatting = async () => {
-    console.log("채팅 구독");
     await client.current?.subscribe(
-      `/sub/room/1`,
-      // `/sub/room/${roomInfo.roomId}`,  // 이부분 나중에 실제 룸 넘버로 변경
+      `/sub/room/${roomId}`,
       ({ body }) => {
         console.log(body);
         setMessage((prev) => [...prev, JSON.parse(body)]);
@@ -46,7 +51,6 @@ export default function Chat() {
   const connect = async () => {
     client.current = new StompJs.Client({
       webSocketFactory: () => new SockJS("https://k8b204.p.ssafy.io/api/ws-stomp"),
-      // new SockJS('https://i8b202.p.ssafy.io/api/ws-stomp'), // proxy를 통한 접속
       connectHeaders: {},
       debug: (str) => {
         console.log(str);
@@ -101,22 +105,18 @@ export default function Chat() {
     await client.current.publish({
       destination: "/pub/message",
       body: JSON.stringify({
-        roomId: 1,
+        roomId: roomId,
         msg,
-        memberId: 1,
-        profile : "string",
+        memberId: userId,
+        anonymousProfileImageId : "string",
         time : `${day} ${h}:${m}`
-        // 밑에 코드로 실제 값들을 넘겨줘야함
-        // roomId: roomInfo.roomId,
-        // message,
-        // memberId: userInfo.memberId,
       }),
     });
     const data = {
-      roomId : 1, // roomId
+      roomId : roomId,
       message :  msg,
-      memberId : "true",
-      profile : "string",
+      memberId : String(userId),
+      anonymousProfileImageId : "string",
       time : `${day} ${h}:${m}`,
     }
     setMessage([data, ...message])  

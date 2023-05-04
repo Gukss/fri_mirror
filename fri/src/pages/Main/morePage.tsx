@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import axios from "axios";
 import Room from "../../components/MeetingRoom";
 import GameRoom from "../../components/GameRoom";
@@ -16,22 +18,28 @@ function More() {
 	const navigate = useNavigate();
 	const [isnav, setIsnav] = useState(false);
 	const api_url = process.env.REACT_APP_REST_API;
+	const userId = useSelector((state: RootState) => {
+		return state.strr.userId;
+	  })
 
 	const [game, setGame] = useState([]);
 	const [room, setRoom] = useState([]);
 
 	useEffect(() => {
-		const userId = 1;
 		const getData = async () => {
 			try {
 				let res;
+				const header = {
+					"Content-Type" : "application/json",
+					"Authorization" : Number(userId)
+				}
 				if(category !== "BETTING"){
-					res = await axios.get(api_url + `room/category?area=${region}&category=${category}`)
+					res = await axios.get(api_url + `room/category?area=${region}&category=${category}&page=0`, {headers : header})
 					setRoom(res?.data)
 				}
 				else
 				{
-					res = await axios.get(api_url + `game-room?area=${region}&page=0`)
+					res = await axios.get(api_url + `game-room?area=${region}&page=0`, {headers : header})
 					setGame(res?.data)
 				}
 			}

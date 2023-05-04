@@ -1,9 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { RootState } from "../../redux/store";
+import { meeting, game } from "../../redux/user";
+import { useSelector, useDispatch } from "react-redux";
 import Categories from "./Categories/Categories";
-import Back from "../../components/Back";
+import Back from "../../assets/back.png";
 import Inputs from "./Inputs/Inputs";
 import logo from "../../assets/small_logo.png";
+
 import axios from "axios";
 import "./Add.scss";
 
@@ -37,6 +41,10 @@ export default function Add() {
   const tab = searchparams.get("tab");
   const cate = searchparams.get("cate");
   const api_url = process.env.REACT_APP_REST_API;
+  const dispatch = useDispatch();
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  })
 
   const [form, setForm] = useState<AddForm>({
     cate: "",
@@ -70,8 +78,19 @@ export default function Add() {
 
   const createRoom = async (data: object, url: string) => {
     try {
-      const res = await axios.post(url, data);
-      navigate(`/chat?roomId=${res.data.roomId}&title=${res.data.title}`);
+      const header = {
+        "Content-Type" : "application/json",
+        "Authorization" : userId
+      }
+      const res = await axios.post(url, data, {headers : header});
+      if(cate !== "bet"){
+        dispatch(meeting(res.data.roomId));
+        navigate(`/chatting/${res.data.roomId}`);
+      }
+      else {
+        dispatch(game(res.data.gameRoomId));
+        navigate(`/wait/${res.data.gameRoomId}`);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -98,6 +117,7 @@ export default function Add() {
           else if (form.people === "4:4") people = 8;
           else if (form.people === "5:5") people = 10;
           else if (form.people === "6:6") people = 12;
+
           data = {
             title: form.name,
             headCount: people, // 내기방 제외 DB 저장 전에 x2
@@ -113,7 +133,6 @@ export default function Add() {
             area: area,
             location: form.place
           };
-          console.log(form.people);
         }
         createRoom(data, url);
       } else {
@@ -125,12 +144,11 @@ export default function Add() {
 
   return (
     <div className="add-room">
-      <Back />
+      <img src={Back} alt="<" id="back" onClick={()=>navigate("/main")}/>
       <div className="add-container">
         <div className="small-logo">
           <img src={logo} alt="Logo" />
         </div>
-        {/* <div className="add-title">미팅방 생성</div> */}
         <div className="add-form">
           <form onSubmit={handleSubmit}>
             {tab === "cate" && (

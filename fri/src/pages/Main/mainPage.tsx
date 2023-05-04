@@ -1,4 +1,6 @@
 import Topheader from "../../components/LogoEgg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import Meeting from "../../components/MeetingRoom";
@@ -27,7 +29,14 @@ export type GameType = {
 };
 
 const Main: React.FC = () => {
-  const [region, setRegion] = useState("SEOUL");
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  });
+  const area = useSelector((state: RootState) => {
+    return state.strr.location;
+  });
+  
+  const [region, setRegion] = useState(area);
   const [isnav, setIsnav] = useState(false);
   const [game, setGame] = useState([]);
   const [dinner, setDinner] = useState([]);
@@ -36,7 +45,7 @@ const Main: React.FC = () => {
   const [exercise, setExercise] = useState([]);
   const [study, setStudy] = useState([]);
   const [etc, setEtc] = useState([]);
-
+  
   const api_url = process.env.REACT_APP_REST_API;
 
   const navigate = useNavigate();
@@ -53,7 +62,7 @@ const Main: React.FC = () => {
     }
 
     let temp = "";
-    if(category === "BET"){
+    if(category === "BETTING"){
       if(game?.length) temp = categories.game;
       else return;
     }
@@ -85,10 +94,14 @@ const Main: React.FC = () => {
     }
 
   const changeRegion = async (area : string) => {
-      const userId = 1;
+      const header = {
+        "Authorization" : Number(userId),
+        "Content-Type": "application/json",
+      }
       try{
-        const res = await axios.get(api_url + `room?area=${area}`, {headers : {'userId' : userId}})
-        setGame(res.data.bet)
+        const res = await axios.get(api_url + `room?area=${area}`, {headers : header})
+        const game = await axios.get(api_url + `game-room?area=${area}`, {headers : header})
+        setGame(game.data.game)
         setDrink(res.data.drink)
         setEtc(res.data.etc)
         setPlay(res.data.game)
@@ -102,9 +115,14 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const userId = 1;
+      const header = {
+        "Authorization" : Number(userId),
+        "Content-Type" : "application/json",
+      }
       try{
-        const res = await axios.get(api_url + `room?area=${region}`, {headers : {'userId' : userId}})
+        const res = await axios.get(api_url + `room?area=${region}`, {headers : header})
+        const game = await axios.get(api_url + `game-room?area=${region}`, {headers : header})
+        setGame(game.data.game)
         setGame(res.data.betting)
         setDrink(res.data.drink)
         setEtc(res.data.etc)

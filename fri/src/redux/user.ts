@@ -27,9 +27,18 @@ const userSlice = createSlice({
     },
     logout() {
       return initialState;
+    },
+    meeting(state, action: PayloadAction<number>){
+      state.roomId = action.payload;
+    },
+    game(state, action : PayloadAction<string>) {
+      state.gameRoomId = action.payload;
+    },
+    useegg(state, action : PayloadAction<number>){
+      state.heart--;
     }
   }
 });
 
 export default userSlice.reducer;
-export const { login, logout } = userSlice.actions;
+export const { login, logout, meeting, game, useegg } = userSlice.actions;
