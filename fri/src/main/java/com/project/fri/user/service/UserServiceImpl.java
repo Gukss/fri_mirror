@@ -461,7 +461,7 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public FindUserResponse findUser(Long userId) {
-    Optional<User> user = userRepository.findByIdWithArea(userId);
+    Optional<User> user = userRepository.findByIdWithAreaAndAnonymousProfileImage(userId);
     User findUser = user.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     return new FindUserResponse(findUser);
   }

@@ -24,8 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByGameRoom(GameRoom gameRoom);
     @Query("SELECT u FROM User u JOIN FETCH u.area WHERE u.email = :email")
     Optional<User> findByEmailWithArea(@Param("email") String email);
-    @Query("SELECT u FROM User u JOIN FETCH u.area WHERE u.id = :userId")
-    Optional<User> findByIdWithArea(@Param("userId") Long userId);
+    @Query("SELECT u FROM User u JOIN FETCH u.area JOIN FETCH u.anonymousProfileImage WHERE u.id = :userId")
+    Optional<User> findByIdWithAreaAndAnonymousProfileImage(@Param("userId") Long userId);
 
     Optional<User> findByEmail(String email);
 }
