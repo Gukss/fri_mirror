@@ -46,10 +46,13 @@
     .signup-input {
       width: 100%;
 
+      box-sizing: border-box;
+
       .switch {
         position: relative;
+        box-sizing: border-box;
         width: 100%;
-        height: 40px;
+        height: 50px;
         border: 3px solid #ffc000;
         color: #ffe598;
         font-size: 25px;
@@ -77,6 +80,9 @@
 
         label {
           position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           top: 0;
           left: 0;
           width: 100%;
@@ -98,14 +104,14 @@
             outline-offset: 0;
           }
 
-          &:checked~label {
+          &:checked ~ label {
             background-color: #ffc000;
             color: #111;
             font-weight: bold;
             font-size: 1.25rem;
           }
 
-          &:active~label {
+          &:active ~ label {
             transform: scale(1.05);
           }
         }
@@ -157,6 +163,95 @@
     opacity: 0;
     /* fade-out 효과로 숨김 */
   }
+
+  .component {
+    width: 100%;
+    position: relative;
+  }
+
+  .select-button {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+
+    border-radius: 0.5rem;
+    border: 2px solid #c0c0c0;
+    background-color: #ffffff;
+    box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
+    align-self: center;
+
+    &.checked {
+      border: 2px solid green;
+    }
+
+    + .message {
+      color: green;
+    }
+
+    &:focus {
+      outline: 0;
+      border: 2px solid #ffc000;
+      box-shadow: 0px 0.075rem 0.075rem #ffbf007b;
+    }
+  }
+
+  .select {
+    width: 100%;
+    outline: none;
+    border: none;
+    color: #777777;
+    font-size: 1rem;
+    text-align: left;
+
+    &.checked {
+      color: #000000;
+      font-size: 1.25rem;
+    }
+  }
+
+  .drop-down {
+    position: absolute;
+    z-index: 1;
+    top: 55px;
+    width: 100%;
+    border-radius: 0.5rem;
+    height: 160px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border: 2px solid #c0c0c0;
+    background-color: #ffffff;
+    box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
+
+    @keyframes dropdown {
+      0% {
+        transform: translateY(-5%);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+    animation: dropdown 0.3s ease;
+  }
+
+  .option {
+    box-sizing: border-box;
+    width: 100%;
+    color: #000000;
+    font-size: 1rem;
+    height: 45px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #ededed;
+    background: #ffffff;
+
+    &:hover {
+      border-radius: 0.5rem;
+      background-color: #ffe493;
+      cursor: pointer;
+    }
+  }
 }
 
 .signup-btn {
@@ -178,27 +273,128 @@
   }
 }
 
-
-
-
 .edu_certi {
-  display: inline-flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  margin-top: 0.5rem;
   padding: 7px 10px;
-  border-radius: 12px;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 1px #000000;
   background: #ffce3c;
-  font-size: large;
+  font-size: 1.25rem;
   font-weight: 700;
-  float: right;
-  margin-right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .email_certi {
   display: inline-flex;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 40px;
   padding: 7px 10px;
-  border-radius: 12px;
+  border-radius: 0.5rem;
   background: #ffce3c;
-  font-size: large;
+  box-shadow: 1px 1px 1px #000000;
   font-weight: 700;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  display: block;
+  border-radius: 50%;
+  transform: scale(0.8);
+}
+
+.spinner-wrapper {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  left: calc(50% - 1rem);
+}
+
+.spinner-wrapper::after {
+  content: "";
+  background: #ffefbe;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+}
+
+.rotator {
+  position: relative;
+  width: 2rem;
+  border-radius: 2rem;
+  overflow: hidden;
+  animation: rotate 2000ms infinite linear;
+}
+
+.rotator:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  border-radius: 100%;
+}
+
+.inner-spin {
+  background: #000000;
+  height: 2rem;
+  width: 1rem;
+}
+
+.inner-spin {
+  animation: rotate-left 2500ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  border-radius: 1rem 0 0 1rem;
+  transform-origin: 1rem 1rem;
+}
+
+.inner-spin:last-child {
+  animation: rotate-right 2500ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  margin-top: -2rem;
+  border-radius: 0 1rem 1rem 0;
   float: right;
-  margin: 10px 24px 0 0;
+  transform-origin: 0 50%;
+}
+
+@keyframes rotate-left {
+  60%,
+  75%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-right {
+  0%,
+  25%,
+  45% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
