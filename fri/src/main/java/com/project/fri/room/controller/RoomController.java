@@ -32,9 +32,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/room")
 @Slf4j
 public class RoomController {
-
   private final RoomService roomService;
 
+  /**
+   * 방 목록조회
+   * @param stringArea
+   * @param userId
+   * @return
+   */
   @GetMapping
   //todo: queryString을 enum으로 하면 자동으로 String이 enum으로 바뀐다. 수정해도 되고, 안해도 되고.
   public ResponseEntity<FindAllRoomResponse> findAllByArea(@RequestParam("area") String stringArea, @RequestHeader("Authorization") Long userId){
@@ -44,12 +49,24 @@ public class RoomController {
     return ResponseEntity.ok().body(findAllRoomResponse);
   }
 
+  /**
+   * 방 정보 조회
+   * @param roomId
+   * @param userId
+   * @return
+   */
   @GetMapping("/{roomId}")
   public ResponseEntity<FindRoomResponse> findRoom(@PathVariable("roomId") Long roomId, @RequestHeader("Authorization") Long userId) {
     FindRoomResponse result = roomService.findRoom(roomId, userId);
     return ResponseEntity.status(200).body(result);
   }
 
+  /**
+   * 방 생성
+   * @param request
+   * @param userId
+   * @return
+   */
   @PostMapping // Authorization을 사용하는 이유는 보통 토큰 인증값이 Authorization에 담아지는데 현재는 필요없지만 나중에 토큰 확장 가능성때문에 달아줌
   public ResponseEntity<CreateRoomResponse> createRoom(@RequestBody @Validated CreateRoomRequest request,@RequestHeader("Authorization") Long userId) {
     CreateRoomResponse createRoomResponse = roomService.createRoom(request,userId);

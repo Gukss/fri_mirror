@@ -80,16 +80,14 @@ public class RoomServiceImpl implements RoomService {
     return createRoomResponse;
   }
 
-
   @Override
   public FindAllRoomResponse findAllByArea(Category areaString, Long userId) {
     Area foundArea = areaRepository.findByCategory(areaString)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
-    //todo: login 완료되면 id 말고 다른 값으로 찾을꺼같다. => 바꿔주기
     User foundUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-//    Long enrollRoomId = foundUser.getRoom().getId();
+
     Long enrollRoomId = null;
     if (foundUser.getRoom() != null) {
       enrollRoomId = foundUser.getRoom().getId();
@@ -109,6 +107,7 @@ public class RoomServiceImpl implements RoomService {
     List<FindAllRoomInstance> etcList = new ArrayList<>();
 
     for (Room x : roomList) {
+      if(x.isDelete()==true)continue;
       com.project.fri.room.entity.Category category = x.getRoomCategory().getCategory();
       List<User> foundUserList = userRepository.findAllByRoom(x);
       int size = foundUserList.size(); //방에 참여한 인원수
@@ -191,8 +190,7 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public FindRoomResponse findRoom(Long roomId, Long userId) {
     //정보 조회할 방 가져오기
-    Optional<Room> room = roomRepository.findRoomWithCategoryById(roomId);
-    Room findRoom = room.orElseThrow(
+    Room findRoom = roomRepository.findRoomWithCategoryById(roomId).orElseThrow(
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
     //가져온 방에 속해있는 userList 가져오기
