@@ -10,4 +10,5 @@ public class SocketChattingRequestAndResponse {
   private Long memberId;
   private String profileUrl;
   private String nickname;
+  private String time;
 }
