@@ -2,6 +2,7 @@
   height: 100%;
   margin: 0 1rem;
   overflow-y: auto;
+  padding: 14px 0;
 
   .chat-content {
     height: fit-content;
@@ -31,6 +32,7 @@
       display: flex;
       flex-direction: column;
       align-items: start;
+      text-align: left;
       flex-grow: 1;
       row-gap: 0.25rem;
 
@@ -43,9 +45,9 @@
         align-items: flex-end;
 
         &.mine {
-          width: 90%;
+          width: auto;
+          margin-right: 15px;
           align-self: flex-end;
-          float: right;
         }
 
         .message {

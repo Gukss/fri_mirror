@@ -1,5 +1,5 @@
 import "./ChatContent.scss";
-import Egg from "../../assets/egg_fri.png";
+// import Egg from "../../assets/egg_fri.png";
 
 interface msgType{
   msg : string;
@@ -13,7 +13,7 @@ export default function Others({msg, anonymousProfileImageId, time, nick} : msgT
   return (
     <div className="chat-content">
       <div className="profile">
-        <img src={Egg} alt="profile" />
+        <img src="anonymousProfileImageId" alt="profile" />
       </div>
       <div className="chat-box">
         <div className="name">{nick}</div>

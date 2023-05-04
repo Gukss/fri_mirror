@@ -88,7 +88,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
         { headers: header }
       );
       dispatch(meeting(res.data.roomId));
-      navigate(`/chatting/${res.data.roomId}`);
+      navigate(`/chatting/${res.data.roomId}?isuser=false`);
     } catch (e) {
       console.log(e);
     }

@@ -5,7 +5,7 @@ interface msgType {
   time : string;
 }
 export default function Mine({msg, time} : msgType) {
-  console.log(time)
+
   return (
     <div className="chat-content">
       <div className="chat-box">
