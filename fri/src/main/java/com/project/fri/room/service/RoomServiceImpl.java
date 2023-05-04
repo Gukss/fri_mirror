@@ -54,7 +54,7 @@ public class RoomServiceImpl implements RoomService {
    */
   @Override
   @Transactional
-  public CreateRoomResponse createRoom(CreateRoomRequest request,Long userId) {
+  public CreateRoomResponse createRoom(CreateRoomRequest request, Long userId) {
     User findUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
@@ -216,7 +216,10 @@ public class RoomServiceImpl implements RoomService {
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
     //참여 여부 판별
-    Boolean isParticipated = findUser.getRoom().equals(findRoom);
+    boolean isParticipated = false;
+    if (findUser != null) { //방에 참여하지 않으면 기본 false로 반환
+      isParticipated = findUser.getRoom().equals(findRoom);
+    }
 
     return new FindRoomResponse(findRoom, isParticipated, majorList, nonMajorList);
   }
@@ -234,7 +237,7 @@ public class RoomServiceImpl implements RoomService {
   public List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category stringArea,
       com.project.fri.room.entity.Category stringCategory, int page, Pageable pageable) {
 
-    Pageable newPageable= PageRequest.of(page,pageable.getPageSize(),pageable.getSort());
+    Pageable newPageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
     // enum 타입으로 객체를 찾음
     Area area = areaRepository.findByCategory(stringArea)
@@ -246,7 +249,7 @@ public class RoomServiceImpl implements RoomService {
     // todo : user테이블과 room테이블을 join해서 가져올 수 있을거 같음 (이렇게 바꾸면 모든 값을 가져와서 map을 돌리지 않고 db에서 가져올때부터 필요한 값만 가져올 수 있음)
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
-        roomCategory,newPageable);
+        roomCategory, newPageable);
 
     // 찾은 방 목록으로 user찾아서 전공, 비전공자 참여자 수 추가해서 dto로 반환하기
     List<FindAllRoomByCategoryResponse> seeMoreRoom = findAllRoom.stream()
