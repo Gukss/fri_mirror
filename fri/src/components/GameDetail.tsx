@@ -1,5 +1,7 @@
 import { GameType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 
@@ -12,15 +14,20 @@ interface roomType {
 function GameDetail({ room, open, setOpen }: roomType) {
   const { gameRoomId, title, headCount, location } = room;
   const navigate = useNavigate();
-
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  })
   
   useEffect(() => {
     const api_url = process.env.REACT_APP_REST_API;
     const getData = async () => {
       if(api_url === undefined) return;
       try {
-        const res = await axios.get(api_url + "game-room/" + gameRoomId);
-        console.log(res.data)
+        const header = {
+          "Content-Type" : "application/json",
+          "Authorization" : userId
+        }
+        await axios.get(api_url + "game-room/" + gameRoomId, {headers : header});
       }
       catch(e){console.log(e)}
     }

@@ -3,12 +3,12 @@ import Egg from "../../assets/egg_fri.png";
 
 interface msgType{
   msg : string;
-  profile : string;
+  anonymousProfileImageId : string;
   time : string;
   nick : string;
 }
 
-export default function Others({msg, profile, time, nick} : msgType) {
+export default function Others({msg, anonymousProfileImageId, time, nick} : msgType) {
    
   return (
     <div className="chat-content">

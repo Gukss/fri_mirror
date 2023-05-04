@@ -34,9 +34,6 @@ export default function LogIn() {
     },
     [form]
   );
-
-  console.log(form);
-
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();

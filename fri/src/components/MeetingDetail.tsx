@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import {MeetType} from "../pages/Main/mainPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 import axios from "axios";
 
 interface roomType {
@@ -11,13 +13,19 @@ interface roomType {
 function MeetingDetail({room, open, setOpen} : roomType) {
 	const {headCount, location, major, nonMajor, roomId, title, roomCategory, is_com} = room; 
 	const [data, setData] = useState({});
-
+	const userId = useSelector((state: RootState) => {
+		return state.strr.userId;
+	});
 	const api_url = process.env.REACT_APP_REST_API;
 
 	useEffect(() => {
 		const getDetail = async () => {
 			try {
-				const res = await axios.get(api_url + "room/" + roomId);
+				const header = {
+					"Content-Type" : "application/json",
+					"Authorization" : userId
+				}
+				const res = await axios.get(api_url + "room/" + roomId, {headers: header});
 				setData(res?.data);
 			}
 			catch(e){console.log(e)}
