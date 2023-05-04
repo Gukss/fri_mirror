@@ -49,7 +49,8 @@ export default function LogIn() {
           navigate("/main");
         })
         .catch((err) => {
-          console.log(err.status);
+          if (err.response.status === 400)
+            alert("아이디 또는 비밀번호가 잘못되었습니다 ");
         });
     },
     [form]

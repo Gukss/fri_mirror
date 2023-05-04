@@ -27,6 +27,9 @@ interface Error {
   code: boolean;
 }
 
+const area = ["서울", "대전", "광주", "구미", "부울경"];
+const year = [9, 8, 7, 6, 5, 4, 3, 2, 1];
+
 export default function SignUp() {
   const api_url = process.env.REACT_APP_REST_API;
   const navigate = useNavigate();
@@ -63,9 +66,42 @@ export default function SignUp() {
 
   const [major, setMajor] = useState<boolean>(true);
   const [isemail, setEmail] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [isCer, setCer] = useState<boolean>(false);
   const [isCon, setCon] = useState<boolean>(false);
   const [num, setNum] = useState("");
+
+  const [isAreaDown, setIsAreaDown] = useState(false);
+
+  const onClickArea = useCallback(() => {
+    setIsAreaDown(!isAreaDown);
+  }, [isAreaDown]);
+
+  const onClickAreaOption = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { name, value } = e.currentTarget;
+      setIsAreaDown(false);
+      setForm({ ...form, [name]: value });
+      setError({ ...error, [name]: true });
+    },
+    [form, error]
+  );
+
+  const [isYearDown, setIsYearDown] = useState(false);
+
+  const onClickYear = useCallback(() => {
+    setIsYearDown(!isYearDown);
+  }, [isYearDown]);
+
+  const onClickYearOption = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { name, value } = e.currentTarget;
+      setIsYearDown(false);
+      setForm({ ...form, [name]: value });
+      setError({ ...error, [name]: true });
+    },
+    [form, error]
+  );
 
   const handleMajorChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +142,20 @@ export default function SignUp() {
         } else {
           setMessage({ ...message, [name]: "비밀번호가 동일합니다!" });
           setMessageColor("green", "passwordCheck");
+          setError({ ...error, [name]: true });
+        }
+      } else if (name === "code") {
+        if (!value || value.trim().length === 0) {
+          setMessage({ ...message, [name]: "필수 입력 사항입니다!" });
+          setMessageColor("red", "code");
+          setError({ ...error, [name]: false });
+        } else if (value.trim().length < 8 || value.trim().length > 8) {
+          setMessage({ ...message, [name]: "인증번호는 8글자입니다!" });
+          setMessageColor("red", "code");
+          setError({ ...error, [name]: false });
+        } else {
+          setMessage({ ...message, [name]: "" });
+          setMessageColor("green", "code");
           setError({ ...error, [name]: true });
         }
       }
@@ -257,6 +307,10 @@ export default function SignUp() {
         setMessage({ ...message, [name]: "필수 입력 사항입니다!" });
         setMessageColor("red", "code");
         setError({ ...error, [name]: false });
+      } else if (value.trim().length < 8 || value.trim().length > 8) {
+        setMessage({ ...message, [name]: "인증번호는 8글자입니다!" });
+        setMessageColor("red", "code");
+        setError({ ...error, [name]: false });
       } else {
         setMessage({ ...message, [name]: "" });
         setMessageColor("green", "code");
@@ -277,17 +331,21 @@ export default function SignUp() {
 
   const goEdu = async () => {
     console.log("에듀싸피인?");
+    setLoading(true);
     try {
       await axios.post(api_url + "user/certified/edu", { email: form.id });
       setCon(true);
       setEmail(false);
+      setLoading(false);
     } catch (e: any) {
+      setLoading(false);
       if (e.response.status === 400) alert("이미 가입된 이메일입니다.");
       else alert("싸피인이 맞습니까? 에듀싸피 이메일을 입력해주세요.");
     }
   };
 
   const goCertification = async () => {
+    setLoading(true);
     try {
       const data = {
         email: form.id,
@@ -296,8 +354,10 @@ export default function SignUp() {
       await axios.post(api_url + "user/certified/code", data);
       setCer(true);
       setCon(false);
+      setLoading(false);
     } catch (e) {
-      alert("아메일로 받은 코드를 정확히 입력해주세요.");
+      setLoading(false);
+      alert("이메일로 받은 코드를 정확히 입력해주세요.");
     }
   };
 
@@ -355,13 +415,40 @@ export default function SignUp() {
                 {message.id}
               </div>
               {isemail ? (
-                <div className="edu_certi" onClick={goEdu}>
-                  인증
+                <div
+                  className="edu_certi"
+                  onClick={goEdu}
+                  style={{
+                    pointerEvents: loading ? "none" : "auto",
+                    background: loading ? "#ffefbe" : "#ffce3c"
+                  }}
+                >
+                  {!loading ? (
+                    <div
+                      style={{
+                        height: "2rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                    >
+                      인증
+                    </div>
+                  ) : (
+                    <div className="spinner">
+                      <div className="spinner-wrapper">
+                        <div className="rotator">
+                          <div className="inner-spin"></div>
+                          <div className="inner-spin"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : null}
               {isCon ? (
                 <>
-                  <div className="signup-input">
+                  <div className="signup-input" style={{ marginTop: "0.5rem" }}>
                     <input
                       className="codeInput"
                       placeholder="인증번호"
@@ -375,9 +462,38 @@ export default function SignUp() {
                   <div id="codemessage" className="message">
                     {message.code}
                   </div>
-                  <div className="email_certi" onClick={goCertification}>
-                    확인
-                  </div>
+                  {error.code && (
+                    <div
+                      className="email_certi"
+                      onClick={goCertification}
+                      style={{
+                        pointerEvents: loading ? "none" : "auto",
+                        background: loading ? "#ffefbe" : "#ffce3c"
+                      }}
+                    >
+                      {!loading ? (
+                        <div
+                          style={{
+                            height: "2rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                          }}
+                        >
+                          확인
+                        </div>
+                      ) : (
+                        <div className="spinner">
+                          <div className="spinner-wrapper">
+                            <div className="rotator">
+                              <div className="inner-spin"></div>
+                              <div className="inner-spin"></div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </>
               ) : null}
             </div>
@@ -387,36 +503,78 @@ export default function SignUp() {
                   <div className="signup-label" id="label">
                     # 캠퍼스
                   </div>
-                  <div className="signup-input">
-                    <input
-                      className="campusInput"
-                      placeholder="지역만 ex) 대전, 서울"
-                      type="text"
-                      id="area"
+                  <div className="component">
+                    <button
+                      className={`select-button ${
+                        form.area === "" ? "" : "checked"
+                      }`}
+                      type="button"
+                      id="people"
                       name="area"
-                      onChange={handleInput}
-                      onBlur={handleBlur}
-                    />
-                  </div>
-                  <div id="areamessage" className="message">
-                    {message.area}
+                      onClick={onClickArea}
+                    >
+                      <div
+                        className={`select ${
+                          form.area === "" ? "" : "checked"
+                        }`}
+                      >
+                        {form.area === "" ? "지역을 선택해주세요." : form.area}
+                      </div>
+                    </button>
+
+                    {isAreaDown && (
+                      <div className="drop-down">
+                        {area.map((area) => (
+                          <button
+                            className="option"
+                            value={area}
+                            key={area}
+                            onClick={onClickAreaOption}
+                            name="area"
+                          >
+                            {area}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="signup-box">
                   <div className="signup-label"># 기수</div>
-                  <div className="signup-input">
-                    <input
-                      className="yearInput"
-                      placeholder="숫자만 ex) 8, 9"
-                      type="number"
-                      id="year"
+                  <div className="component">
+                    <button
+                      className={`select-button ${
+                        form.year === "" ? "" : "checked"
+                      }`}
+                      type="button"
+                      id="people"
                       name="year"
-                      onChange={handleInput}
-                      onBlur={handleBlur}
-                    />
-                  </div>
-                  <div id="yearmessage" className="message">
-                    {message.year}
+                      onClick={onClickYear}
+                    >
+                      <div
+                        className={`select ${
+                          form.year === "" ? "" : "checked"
+                        }`}
+                      >
+                        {form.year === "" ? "기수를 선택해주세요." : form.year}
+                      </div>
+                    </button>
+
+                    {isYearDown && (
+                      <div className="drop-down">
+                        {year.map((year) => (
+                          <button
+                            className="option"
+                            value={year}
+                            key={year}
+                            onClick={onClickYearOption}
+                            name="year"
+                          >
+                            {year}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="signup-box">
@@ -488,7 +646,23 @@ export default function SignUp() {
                   </div>
                 </div>
                 <div className="signup-box">
-                  <button className="signup-btn">회원가입</button>
+                  <button
+                    className="signup-btn"
+                    style={{
+                      pointerEvents: Object.values(error).every(
+                        (value) => value === true
+                      )
+                        ? "auto"
+                        : "none",
+                      background: Object.values(error).every(
+                        (value) => value === true
+                      )
+                        ? "#ffce3c"
+                        : "#ffefbe"
+                    }}
+                  >
+                    회원가입
+                  </button>
                 </div>
               </>
             ) : null}
