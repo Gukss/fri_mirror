@@ -22,10 +22,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByGameRoom_Id(Long id);  // list는 null이면 빈배열로 넘어와서 optional로 안감싸줘도 된다.
     List<User> findAllByRoom(Room room);
     List<User> findAllByGameRoom(GameRoom gameRoom);
-    @Query("SELECT u FROM User u JOIN FETCH u.area WHERE u.email = :email")
-    Optional<User> findByEmailWithArea(@Param("email") String email);
+    @Query("SELECT u FROM User u JOIN FETCH u.area JOIN FETCH u.anonymousProfileImage WHERE u.email = :email")
+    Optional<User> findByEmailWithAreaAndAnonymousProfileImage(@Param("email") String email);
     @Query("SELECT u FROM User u JOIN FETCH u.area JOIN FETCH u.anonymousProfileImage WHERE u.id = :userId")
     Optional<User> findByIdWithAreaAndAnonymousProfileImage(@Param("userId") Long userId);
-
+    @Query("SELECT u FROM User u JOIN FETCH u.anonymousProfileImage WHERE u.id = :userId")
+    Optional<User> findByIdWithAnonymousProfileImage(@Param("userId") Long userId);
     Optional<User> findByEmail(String email);
+    Optional<User> findByNickname(String nickname);
 }
