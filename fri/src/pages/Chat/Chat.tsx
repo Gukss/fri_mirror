@@ -14,7 +14,7 @@ import axios from "axios";
 import "./Chat.scss";
 
 export type IMessage = {
-  roomId : number;
+  roomId : string;
   message :  string;
   memberId : string;
   anonymousProfileImageId : string;
