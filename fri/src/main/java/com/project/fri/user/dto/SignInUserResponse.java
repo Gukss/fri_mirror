@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SignInUserResponse {
     private Long userId;
     private String anonymousProfileImageUrl;
+    private String nickname;
     private Category location;
     private int heart;
     private String roomId;
@@ -18,6 +19,7 @@ public class SignInUserResponse {
     public SignInUserResponse(User user) {
         userId = user.getId();
         anonymousProfileImageUrl = user.getAnonymousProfileImage().getImageUrl();
+        nickname = user.getNickname();
         location = user.getArea().getCategory();
         heart = user.getHeart();
 
