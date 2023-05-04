@@ -360,8 +360,8 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
-//    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
-    Optional<User> user = userRepository.findByEmailWithArea(signInUserRequest.getEmail());
+    Optional<User> user = userRepository.findByEmailWithAreaAndAnonymousProfileImage(signInUserRequest.getEmail());
+
     if (user.isPresent()) {
       User findUser = user.get();
       String salt=findUser.getSalt();
