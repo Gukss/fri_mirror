@@ -12,13 +12,15 @@ import SockJS from "sockjs-client";
 
 import axios from "axios";
 import "./Chat.scss";
+import { useLocation } from "react-router-dom";
 
 export type IMessage = {
   roomId : string;
   message :  string;
-  memberId : string;
+  memberId : number;
   anonymousProfileImageId : string;
-  time : string;
+  times : string;
+  nick : string;
 }
 
 export default function Chat() {
@@ -28,19 +30,25 @@ export default function Chat() {
   const [message, setMessage] = useState<IMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState<string>("");
+  const api_url = process.env.REACT_APP_REST_API;
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search);
+  const isuser = queryParams.get("isuser");
   const roomId = useSelector((state: RootState) => {
     return state.strr.roomId;
   });
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
+  const nick = useSelector((state: RootState) => {
+    return state.strr.nickname;
+  });
 
   // 소켓객체와 connect되면 subscribe함수를 동작시켜서 서버에 있는 주소로 sub
-  const subscribeChatting = async () => {
-    await client.current?.subscribe(
+  const subscribeChatting = () => {
+    client.current?.subscribe(
       `/sub/room/${roomId}`,
       ({ body }) => {
-        console.log(body);
         setMessage((prev) => [...prev, JSON.parse(body)]);
       }
     );
@@ -48,48 +56,59 @@ export default function Chat() {
 
   // 현재는 app컴포넌트 생성과 동시에 소켓 객체가 연결이 되고 sub로 구독함!
   // 이 코드를 방에 들어갈때 연결하면 됨!
-  const connect = async () => {
-    client.current = new StompJs.Client({
-      webSocketFactory: () => new SockJS("https://k8b204.p.ssafy.io/api/ws-stomp"),
-      connectHeaders: {},
-      debug: (str) => {
-        console.log(str);
-      },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-      onConnect: () => {
-        console.log("커넥트 되는 시점");
-        subscribeChatting();
-      },
-      onStompError: (frame) => {
-        console.error(frame);
-      },
-    });
-    console.log("connect");
-    await stompActive();
-  };
-
-  const stompActive = async () => {
-    if(client.current !== undefined) await client.current.activate();
+  const stompActive = () => {
+    if(client.current !== undefined) client.current.activate();
   };
 
   // 웹 소켓 끊기.
   const disconnect = () => {
-    console.log("disconnect");
     if(client.current !== undefined) client.current.deactivate();
   };
 
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
-    console.log("방 처음");
-    connect();
+    const connect = async () => {   
+      try {
+        client.current = new StompJs.Client({
+          webSocketFactory: () => new SockJS("https://k8b204.p.ssafy.io/api/ws-stomp"),
+          connectHeaders: {},
+          reconnectDelay: 5000,
+          heartbeatIncoming: 4000,
+          heartbeatOutgoing: 4000,
+          onConnect: () => {
+            subscribeChatting();
+          },
+          debug: () => {
+            null;
+          },
+          onStompError: (frame) => {
+            console.error(frame);
+          },
+        });
+      await stompActive();
+      } catch(e) {console.log}
+    };
+    connect()
     return () => disconnect();
   }, []);
 
+  const pushMsg = async (time : string) => {
+    const data = {
+      "roomId" : roomId,
+      "message" : text
+    }
+    const header = {
+      "Content-Type" : "application/json",
+      "Authorization" : userId
+    }
+
+    try {
+      await axios.post(api_url + "chatting", data, {headers : header})
+    }
+    catch(e){console.log(e)}
+  }
+
   const publishMessage = async () => {
-    console.log("채팅을 입력해서 pub이벤트 발생!");
-    console.log(text);
     const now = new Date();
     let h = String(now.getHours());
     const m = String(now.getMinutes());
@@ -102,6 +121,7 @@ export default function Chat() {
     if (!client.current?.connected) {
       return;
     }
+    pushMsg(`${day} ${h}:${m}`);
     client.current.publish({
       destination: "/pub/chatting",
       body: JSON.stringify({
@@ -109,18 +129,23 @@ export default function Chat() {
         message: text,
         memberId: userId,
         anonymousProfileImageId : "string",
-        time : `${day} ${h}:${m}`
+        times : `${day} ${h}:${m}`,
+        nick : nick,
       }),
     });
-    // const data = {
-    //   roomId : roomId,
-    //   message :  text,
-    //   memberId : String(userId),
-    //   anonymousProfileImageId : "string",
-    //   time : `${day} ${h}:${m}`,
-    // }
-    // setMessage([data, ...message])  
   }
+
+  useEffect(() => {
+    const getChat = async () => {
+      try {
+        const res = await axios.get(api_url + `chatting/${roomId}`)
+        console.log(res.data)
+        setMessage(res.data)
+      }
+      catch(e){console.log(e)}
+    }
+    if(isuser === "true") getChat()
+  }, [])
 
 
   // 채팅에 관한 pub이벤트가 발생하는 시점은 채팅을 입력했을때!!

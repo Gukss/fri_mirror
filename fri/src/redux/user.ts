@@ -7,6 +7,7 @@ interface UserState {
   heart: number;
   roomId: string;
   gameRoomId: string;
+  nickname : string;
 }
 
 // 초기 상태
@@ -15,7 +16,8 @@ const initialState: UserState = {
   location: "",
   heart: 0,
   roomId: "",
-  gameRoomId: ""
+  gameRoomId: "",
+  nickname: ""
 };
 
 const userSlice = createSlice({
@@ -35,10 +37,13 @@ const userSlice = createSlice({
       state.gameRoomId = action.payload;
     },
     useegg(state, action : PayloadAction<number>){
-      state.heart--;
+      state.heart = state.heart - action.payload;
+    },
+    changeNick(state, action : PayloadAction<string>){
+      state.nickname = action.payload;
     }
   }
 });
 
 export default userSlice.reducer;
-export const { login, logout, meeting, game, useegg } = userSlice.actions;
+export const { login, logout, meeting, game, useegg, changeNick } = userSlice.actions;

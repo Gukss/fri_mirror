@@ -22,7 +22,7 @@ function Nav({isnav, setIsnav} : navType) {
 			alert("현재 참여중인 방이 없습니다.")
 			return;
 		}
-		else navigate(`/chatting/${roomId}`);
+		else navigate(`/chatting/${roomId}?isuser=true`);
 	};
 
 	return (

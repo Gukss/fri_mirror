@@ -52,7 +52,7 @@ function MeetingDetail({room, open, setOpen} : roomType) {
 		try {
 			const res = await axios.patch(api_url + `user/room/${roomId}`, {"isParticipate" : false}, {headers : header});
 			dispatch(meeting(res.data.roomId))
-			navigate(`/chatting/${res.data.roomId}`);
+			navigate(`/chatting/${res.data.roomId}?isuser=false`);
 		}
 		catch(e){console.log(e)}
 	}

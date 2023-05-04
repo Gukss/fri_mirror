@@ -14,15 +14,15 @@ export default function ChatContent({msg} : msgType) {
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
-  console.log(userId)
+
   return (
     <div className="chat-contents">
       {
         msg.map((msg, index) => (
-          msg.memberId === String(userId) ?
-          <Mine key={index} msg={msg.message} time={msg.time} />
+          msg.memberId === userId ?
+          <Mine key={index} msg={msg.message} time={msg.times} />
           :
-          <Others key={index} msg={msg.message} anonymousProfileImageId={msg.anonymousProfileImageId} time={msg.time} nick={msg.memberId}/>
+          <Others key={index} msg={msg.message} anonymousProfileImageId={msg.anonymousProfileImageId} time={msg.times} nick={msg.nick}/>
         ))
       }
     </div>
