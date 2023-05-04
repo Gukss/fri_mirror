@@ -108,6 +108,7 @@ public class User extends BaseTimeEntity {
 
   /**
    * desc: 사용자가 ready를 눌렀을 때 입력받은 값으로 ready를 update한다.
+   *
    * @param //ready
    * @return
    */
@@ -115,6 +116,19 @@ public class User extends BaseTimeEntity {
 //    this.ready = ready;
 //    return this;
 //  }
+
+  /**
+   * desc: 프로필 수정
+   * @param anonymousProfileImage
+   * @param nickname
+   * @return
+   */
+  public User updateUserProfile(AnonymousProfileImage anonymousProfileImage, String nickname) {
+    this.anonymousProfileImage = anonymousProfileImage;
+    this.nickname = nickname;
+
+    return this;
+  }
 
   //==생성메서드==//
   public static User create(CreateUserRequest request, Area area,String salt,String encrypt) {

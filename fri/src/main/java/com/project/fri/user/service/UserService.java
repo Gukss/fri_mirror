@@ -54,4 +54,12 @@ public interface UserService {
    * @return
    */
   FindUserResponse findUser(Long userId);
+
+  /**
+   * 유저 프로필수정 (닉네임, 사진)
+   * @param updateUserProfileRequest
+   * @param userId
+   * @return
+   */
+  UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, Long userId);
 }

@@ -89,10 +89,24 @@ public class UserController {
     return ResponseEntity.ok().body(result);
   }
 
+    @PatchMapping
+    public ResponseEntity<Object> updateUserProfile(
+            @RequestBody UpdateUserProfileRequest updateUserProfileRequest,
+            @RequestHeader("Authorization") Long userId) {
+        UpdateUserProfileResponse result = userService.updateUserProfile(updateUserProfileRequest, userId);
+
+        // 중복닉네임일때 null 반환
+        if (result == null) {
+            return ResponseEntity.badRequest().body(new SignInErrorResponse("이미 사용중인 닉네임입니다."));
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
   @GetMapping
   public ResponseEntity<FindUserResponse> findUser(@RequestHeader("Authorization") Long userId) {
     FindUserResponse result = userService.findUser(userId);
 
     return ResponseEntity.ok().body(result);
   }
+
 }

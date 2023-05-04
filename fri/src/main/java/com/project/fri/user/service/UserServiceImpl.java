@@ -6,8 +6,10 @@ import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.dto.*;
+import com.project.fri.user.entity.AnonymousProfileImage;
 import com.project.fri.user.entity.Certification;
 import com.project.fri.user.entity.User;
+import com.project.fri.user.repository.AnonymousProfileImageRepository;
 import com.project.fri.user.repository.CertificationRepository;
 import com.project.fri.user.repository.UserRepository;
 import java.util.Random;
@@ -47,6 +49,7 @@ public class UserServiceImpl implements UserService {
   private final AreaRepository areaRepository;
   private final UserRepository userRepository;
   private final CertificationRepository certificationRepository;
+  private final AnonymousProfileImageRepository anonymousProfileImageRepository;
 
   private WebDriver driver;
   private final JavaMailSender emailSender;
@@ -307,8 +310,8 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
-//    Optional<User> user = userRepository.findByEmail(signInUserRequest.getEmail());
-    Optional<User> user = userRepository.findByEmailWithArea(signInUserRequest.getEmail());
+    Optional<User> user = userRepository.findByEmailWithAreaAndAnonymousProfileImage(signInUserRequest.getEmail());
+
     if (user.isPresent()) {
       User findUser = user.get();
       String salt = findUser.getSalt();
@@ -418,5 +421,37 @@ public class UserServiceImpl implements UserService {
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     return new FindUserResponse(findUser);
   }
+
+  /**
+   * 유저 프로필수정 (닉네임, 사진)
+   * @param updateUserProfileRequest
+   * @param userId
+   * @return
+   */
+  @Override
+  @Transactional
+  public UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, Long userId) {
+    User userNickName = userRepository.findByNickname(updateUserProfileRequest.getNickname())
+            .orElse(null);
+
+    // 중복된 닉네임 유저 있는지 확인
+    if (userNickName != null) {
+      return null;
+    }
+
+    User findUser = userRepository.findByIdWithAnonymousProfileImage(userId)
+            .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    Optional<AnonymousProfileImage> anonymousProfileImage = anonymousProfileImageRepository.findById(updateUserProfileRequest.getAnonymousProfileImageId());
+    AnonymousProfileImage findAnonymousProfileImage = anonymousProfileImage.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AnonymousProfileImage));
+
+    User updateUser = findUser.updateUserProfile(findAnonymousProfileImage, updateUserProfileRequest.getNickname());
+
+    return UpdateUserProfileResponse.builder()
+            .anonymousProfileImageUrl(updateUser.getAnonymousProfileImage().getImageUrl())
+            .nickname(updateUser.getNickname())
+            .build();
+  }
+
 
 }
