@@ -63,8 +63,10 @@ public class GameRoomServiceImpl implements GameRoomService{
                         NotFoundExceptionMessage.NOT_FOUND_USER
                 ));
         boolean isParticipate = false;
-        if (user.getGameRoom().getId().equals(gameRoomId)) {
-            isParticipate = true;
+        if(user.getGameRoom() != null){ //gameRoom이 없으면 가져올 수 없다.
+            if (user.getGameRoom().getId().equals(gameRoomId)) {
+                isParticipate = true;
+            }
         }
 
         // response dto로 변환
