@@ -10,6 +10,7 @@ import com.project.fri.gameRoom.repository.GameRoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import com.sun.jdi.request.InvalidRequestStateException;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -117,8 +118,11 @@ public class GameRoomServiceImpl implements GameRoomService{
                         NotFoundExceptionMessage.NOT_FOUND_USER
                 ));
 
+        //랜덤 시간 만들기
+        double time = Math.round((((Math.random() * 9) + 1) * 100)) / 100.0; //1~10초사이 랜덤값 => 소수점 아래 두 번째 자리
+
         // db에 저장
-        GameRoom gameRoom = GameRoom.create(request, area, user);
+        GameRoom gameRoom = GameRoom.create(request, area, user, time);
         gameRoomRepository.save(gameRoom);
 
         // 응답 dto로 변환
