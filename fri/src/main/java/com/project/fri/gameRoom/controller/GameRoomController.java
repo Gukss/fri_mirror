@@ -1,6 +1,6 @@
 package com.project.fri.gameRoom.controller;
 
-import com.project.fri.chatting.dto.SocketGameRoomStopRequestAndResponse;
+import com.project.fri.gameRoom.dto.SocketGameRoomStopRequestAndResponse;
 import com.project.fri.common.entity.Category;
 import com.project.fri.gameRoom.dto.*;
 import com.project.fri.gameRoom.service.GameRoomService;
@@ -110,12 +110,12 @@ public class GameRoomController {
     }
 
     @MessageMapping("/gameRoom/ready")
-    public void message(SocketGameRoomStatusRequestAndResponse message){
-        messagingTemplate.convertAndSend("/sub/gameRoom/ready" + message.getGameRoomId(), message);
+    public void message(SocketGameRoomStatusRequestAndResponse status){
+        messagingTemplate.convertAndSend("/sub/gameRoom/ready" + status.getGameRoomId(), status);
     }
 
     @MessageMapping("/gameRoom/stop")
-    public void message(SocketGameRoomStopRequestAndResponse message){
-        messagingTemplate.convertAndSend("/sub/gameRoom/stop" + message.getGameRoomId(), message);
+    public void message(SocketGameRoomStopRequestAndResponse stop){
+        messagingTemplate.convertAndSend("/sub/gameRoom/stop" + stop.getGameRoomId(), stop);
     }
 }
