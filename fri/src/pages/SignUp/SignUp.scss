@@ -17,14 +17,26 @@
   width: 100vw;
 }
 
+.signup-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+
 .signup-logo {
   //   position: absolute;
   //   transform: translate(-50%, -50%);
   //   transform: translateX(-50%);
   //   top: 60px;
   //   left: 50%;
-  width: 100px;
+  width: 50px;
   margin-top: 24px;
+  margin-bottom: 8px;
 }
 
 .signup-form {

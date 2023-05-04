@@ -363,9 +363,9 @@ export default function SignUp() {
 
   return (
     <div className="signup">
-      <Back />
       <div className="signup-container">
-        <div>
+        <div className="signup-nav">
+          <Back />
           <img src={logo} alt="Logo" className="signup-logo" />
         </div>
         <div className="signup-form">

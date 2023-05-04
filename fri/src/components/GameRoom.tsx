@@ -14,17 +14,14 @@ function GameRoom({ room }: roomType) {
       {/* {current_cnt === total_cnt ? (
         <div className="meeting_room_full">게임중</div>
       ) : ( */}
-        <div className="game_room" onClick={() => setOpen(true)}>
-          <p className="place"># {location}</p>
-          <p className="title">{title}</p>
-          <p className="cnt">
-            {" "}
-            참가자{" "}
-            <span>
-              0/{headCount}
-            </span>
-          </p>
-        </div>
+      <div className="game_room" onClick={() => setOpen(true)}>
+        <p className="place"># {location}</p>
+        <p className="title">{title}</p>
+        <p className="cnt">
+          {" "}
+          참가자 <span>0/{headCount}</span>
+        </p>
+      </div>
       {/* )} */}
       <Room room={room} open={open} setOpen={setOpen} />
     </div>
