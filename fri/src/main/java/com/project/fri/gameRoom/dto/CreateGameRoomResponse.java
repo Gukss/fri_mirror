@@ -14,6 +14,7 @@ public class CreateGameRoomResponse {
     private String title;
     private int headCount;
     private String nickname;
+    private double randomTime;
 
     public static CreateGameRoomResponse create(GameRoom gameRoom, User user) {
         CreateGameRoomResponse createGameRoomResponse = CreateGameRoomResponse.builder()
@@ -21,6 +22,7 @@ public class CreateGameRoomResponse {
                 .title(gameRoom.getTitle())
                 .headCount(gameRoom.getHeadCount())
                 .nickname(user.getNickname())
+                .randomTime(gameRoom.getRandomTime())
                 .build();
         return createGameRoomResponse;
     }
