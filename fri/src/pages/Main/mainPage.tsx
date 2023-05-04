@@ -123,7 +123,6 @@ const Main: React.FC = () => {
         const res = await axios.get(api_url + `room?area=${region}`, {headers : header})
         const game = await axios.get(api_url + `game-room?area=${region}`, {headers : header})
         setGame(game.data.game)
-        setGame(res.data.betting)
         setDrink(res.data.drink)
         setEtc(res.data.etc)
         setPlay(res.data.game)

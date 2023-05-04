@@ -5,7 +5,7 @@ interface UserState {
   userId: number;
   location: string;
   heart: number;
-  roomId: number;
+  roomId: string;
   gameRoomId: string;
 }
 
@@ -14,7 +14,7 @@ const initialState: UserState = {
   userId: 0,
   location: "",
   heart: 0,
-  roomId: 0,
+  roomId: "",
   gameRoomId: ""
 };
 
@@ -28,7 +28,7 @@ const userSlice = createSlice({
     logout() {
       return initialState;
     },
-    meeting(state, action: PayloadAction<number>){
+    meeting(state, action: PayloadAction<string>){
       state.roomId = action.payload;
     },
     game(state, action : PayloadAction<string>) {
