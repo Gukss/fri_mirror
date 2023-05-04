@@ -7,6 +7,6 @@ public class SocketGameChattingRequestAndResponse {
   private Long gameRoomId;
   private String message;
   private Long memberId;
-  private String profileUrl;
+  private String anonymousProfileImageUrl;
   private String nickname;
 }

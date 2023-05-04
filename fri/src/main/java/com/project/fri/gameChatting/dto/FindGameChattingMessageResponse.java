@@ -9,7 +9,7 @@ public class FindGameChattingMessageResponse {
   private String message;
   private Long userId;
   private String nickname;
-  private String profileUrl;
+  private String anonymousProfileImageUrl;
   private boolean isMajor;
   private String year;
 
@@ -18,7 +18,7 @@ public class FindGameChattingMessageResponse {
     this.message=gameChattingMessage.getMessage();
     this.userId=gameChattingMessage.getUser().getId();
     this.nickname=gameChattingMessage.getUser().getNickname();
-    this.profileUrl=gameChattingMessage.getUser().getProfileUrl();
+    this.anonymousProfileImageUrl=gameChattingMessage.getUser().getAnonymousProfileImage().getImageUrl();
     this.isMajor=gameChattingMessage.getUser().isMajor();
     this.year=gameChattingMessage.getUser().getYear();
   }
