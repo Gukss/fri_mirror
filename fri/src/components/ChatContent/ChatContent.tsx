@@ -14,7 +14,7 @@ export default function ChatContent({msg} : msgType) {
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
-  
+  console.log(userId)
   return (
     <div className="chat-contents">
       {

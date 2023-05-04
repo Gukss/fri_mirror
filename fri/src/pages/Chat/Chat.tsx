@@ -87,9 +87,9 @@ export default function Chat() {
     return () => disconnect();
   }, []);
 
-  const publishMessage = async (msg: string) => {
+  const publishMessage = async () => {
     console.log("채팅을 입력해서 pub이벤트 발생!");
-    console.log(msg);
+    console.log(text);
     const now = new Date();
     let h = String(now.getHours());
     const m = String(now.getMinutes());
@@ -102,29 +102,26 @@ export default function Chat() {
     if (!client.current?.connected) {
       return;
     }
-    await client.current.publish({
-      destination: "/pub/message",
+    client.current.publish({
+      destination: "/pub/chatting",
       body: JSON.stringify({
         roomId: roomId,
-        msg,
+        message: text,
         memberId: userId,
         anonymousProfileImageId : "string",
         time : `${day} ${h}:${m}`
       }),
     });
-    const data = {
-      roomId : roomId,
-      message :  msg,
-      memberId : String(userId),
-      anonymousProfileImageId : "string",
-      time : `${day} ${h}:${m}`,
-    }
-    setMessage([data, ...message])  
+    // const data = {
+    //   roomId : roomId,
+    //   message :  text,
+    //   memberId : String(userId),
+    //   anonymousProfileImageId : "string",
+    //   time : `${day} ${h}:${m}`,
+    // }
+    // setMessage([data, ...message])  
   }
 
-  function sendMessage(){
-    publishMessage(text);    
-  }
 
   // 채팅에 관한 pub이벤트가 발생하는 시점은 채팅을 입력했을때!!
   const submitMessage = useCallback(
@@ -165,7 +162,7 @@ export default function Chat() {
           </div>
           <div className="text-input">
             <textarea ref={textareaRef} onChange={submitMessage} />
-            <button className="send-message" ref={btnRef} onClick={sendMessage}>
+            <button className="send-message" ref={btnRef} onClick={publishMessage}>
               <img src={Up} alt="up-arrow" />
             </button>
           </div>

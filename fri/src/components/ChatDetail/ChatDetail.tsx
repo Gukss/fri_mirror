@@ -1,5 +1,10 @@
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../redux/store";
+import { meeting } from "../../redux/user";
+import { useNavigate } from "react-router-dom";
 import Close from "../../assets/back.png";
 import Egg from "../../assets/egg_fri.png";
+import axios from  "axios";
 import "../../pages/Chat/Chat.scss";
 
 export default function ChatDetail({ isOpen, onClose }: any) {
@@ -8,6 +13,30 @@ export default function ChatDetail({ isOpen, onClose }: any) {
       onClose();
     }
   };
+
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  })
+  const roomId = useSelector((state: RootState) => {
+    return state.strr.roomId;
+  })
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const api_url = process.env.REACT_APP_REST_API;
+
+  const outChat = async () => {
+    const header = {
+      "Content-Type" : "application/json",
+      "Authorization" : userId
+    }
+    try {
+			const res = await axios.patch(api_url + `user/room/${roomId}`, {"isParticipate" : true}, {headers : header})
+			dispatch(meeting("참여한 방이 없습니다"))
+			navigate("/main");
+		}
+		catch(e){console.log(e)}
+  }
+
   return (
     <div
       className={`chat-detail ${isOpen ? "open" : ""}`}
@@ -73,7 +102,7 @@ export default function ChatDetail({ isOpen, onClose }: any) {
           </div>
         </div>
         <div className="exit">
-          <button>채팅방 나가기</button>
+          <button onClick={outChat}>채팅방 나가기</button>
         </div>
       </div>
     </div>
