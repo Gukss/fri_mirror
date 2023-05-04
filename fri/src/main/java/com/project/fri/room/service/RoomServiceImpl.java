@@ -89,7 +89,11 @@ public class RoomServiceImpl implements RoomService {
     //todo: login 완료되면 id 말고 다른 값으로 찾을꺼같다. => 바꿔주기
     User foundUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-    Long enrollRoomId = foundUser.getRoom().getId();
+//    Long enrollRoomId = foundUser.getRoom().getId();
+    Long enrollRoomId = null;
+    if (foundUser.getRoom() != null) {
+      enrollRoomId = foundUser.getRoom().getId();
+    }
 
     //이 roomList에서 해당 방으로 userList를 찾아서 size()를 찾아서 가득찬 방 없애야한다.
     //user마다 전공 여부도 체크해줘야한다.
@@ -124,7 +128,7 @@ public class RoomServiceImpl implements RoomService {
         }
       }
 
-      if (x.getId() == enrollRoomId) { //참여중인 방이면 화면에 출력되지 않는다.
+      if (enrollRoomId != null && x.getId() == enrollRoomId) { //참여중인 방이면 화면에 출력되지 않는다.
         continue;
       }
       switch (category) {
