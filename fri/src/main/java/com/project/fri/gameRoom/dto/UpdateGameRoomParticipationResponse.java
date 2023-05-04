@@ -13,6 +13,7 @@ public class UpdateGameRoomParticipationResponse {
     private Long gameRoomId;
     private String title;
     private boolean participate;
+    private double randomTime;
 
     public static UpdateGameRoomParticipationResponse create(boolean isParticipate, GameRoom gameRoom) {
 
@@ -21,6 +22,7 @@ public class UpdateGameRoomParticipationResponse {
 //                    .gameRoomId() todo: 어떻게 주지?
                     .title("참여중인 게임방이 없습니다.")
                     .participate(isParticipate)
+                    .randomTime(gameRoom.getRandomTime())
                     .build();
             return updateGameRoomParticipationResponse;
 
@@ -29,6 +31,7 @@ public class UpdateGameRoomParticipationResponse {
                     .gameRoomId(gameRoom.getId())
                     .title(gameRoom.getTitle())
                     .participate(isParticipate)
+                    .randomTime(gameRoom.getRandomTime())
                     .build();
             return updateGameRoomParticipationResponse;
         }

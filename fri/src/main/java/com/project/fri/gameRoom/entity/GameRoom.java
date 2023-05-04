@@ -46,6 +46,8 @@ public class GameRoom extends BaseTimeEntity {
   @NotNull
   private String location;
 
+  private double randomTime;
+
   private boolean isDelete;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -58,10 +60,11 @@ public class GameRoom extends BaseTimeEntity {
   private BaseEntity baseEntity;
 
   //==생성메서드==//
-  public static GameRoom create(CreateGameRoomRequest request, Area area, User user) {
+  public static GameRoom create(CreateGameRoomRequest request, Area area, User user, double time) {
     GameRoom gameRoom = GameRoom.builder()
             .title(request.getTitle())
             .headCount(request.getHeadCount())
+            .randomTime(time)
             .area(area)
             .location(request.getLocation())
             .baseEntity(BaseEntity.builder()
