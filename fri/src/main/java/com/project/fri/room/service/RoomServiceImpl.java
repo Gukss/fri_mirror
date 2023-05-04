@@ -217,7 +217,7 @@ public class RoomServiceImpl implements RoomService {
 
     //참여 여부 판별
     boolean isParticipated = false;
-    if (findUser != null) { //방에 참여하지 않으면 기본 false로 반환
+    if (findUser.getRoom() != null) { //방에 참여하지 않으면 기본 false로 반환
       isParticipated = findUser.getRoom().equals(findRoom);
     }
 
