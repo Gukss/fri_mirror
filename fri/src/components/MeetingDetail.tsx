@@ -3,7 +3,7 @@ import { MeetType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
-import { meeting } from "../redux/user";
+import { meeting, useegg } from "../redux/user";
 import axios from "axios";
 
 interface roomType {
@@ -88,6 +88,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
         { headers: header }
       );
       dispatch(meeting(res.data.roomId));
+      dispatch(useegg(1))
       navigate(`/chatting/${res.data.roomId}?isuser=false`);
     } catch (e) {
       console.log(e);

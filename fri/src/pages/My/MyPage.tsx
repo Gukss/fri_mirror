@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Nav from "../../components/navEgg";
-import my from "../../assets/my_img.png";
 import plus from "../../assets/plus_btn.png";
 import egg from "../../assets/egg.png";
+import fri from "../../assets/egg_fri.png"
 import logo from "../../assets/images/Logo.png";
 import Back from "../../components/Back";
 import axios from "axios";
@@ -17,7 +17,7 @@ interface myData {
   major : boolean,
   name : string,
   nickname : string,
-  profileUrl : string,
+  anonymousProfileImageId : string,
   roomId : string,
   year : string
 }
@@ -31,6 +31,17 @@ function MyPage() {
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   })
+  const egg_cnt = useSelector((state: RootState) => {
+		return state.strr.heart
+	})
+
+	const heart = () => {
+		const result = []
+		for(let i = 0; i < egg_cnt; i++){
+			result.push(<img src={egg} alt="egg" id="main_egg" key={i}/>)
+		}
+		return result;
+	}
 
   useEffect(() => {
     const getData = async () => {
@@ -41,15 +52,15 @@ function MyPage() {
       const res = await axios.get(api_url + "user", {headers : header});
       setData(res.data)
     }
-    getData();
+    getData()
+    if(data === undefined) return;
   }, [])
-
   return (
     <div className="my">
       <Back />
-      <img src={logo} alt="logo" />
+      <img src={logo} alt="logo" id="logo"/>
       <p>마잉 페이지</p>
-      <img src={my} alt="profile" id="profile"/>
+      <img src={data?.anonymousProfileImageId} alt="profile" id="profile"/>
       <img src={plus} alt="plus" id="plus" onClick={() => setGet(true)}/>
       {
         isget ? 
@@ -61,7 +72,9 @@ function MyPage() {
     
       <p id="egg_cnt">내 알</p>
       <div id="eggs">
-        <img src={egg} alt="egg" />
+        {
+          egg_cnt ? heart() : <img src={fri} alt="fri" id="fri" />
+        }
       </div>
       <Nav isnav={isnav} setIsnav={setIsnav}/>
     </div>

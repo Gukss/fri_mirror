@@ -3,20 +3,19 @@ import "./ChatContent.scss";
 
 interface msgType{
   msg : string;
-  anonymousProfileImageId : string;
+  anonymousProfileImageUrl : string;
   time : string;
-  nick : string;
+  nickname : string;
 }
 
-export default function Others({msg, anonymousProfileImageId, time, nick} : msgType) {
-   
+export default function Others({msg, anonymousProfileImageUrl, time, nickname} : msgType) {
   return (
     <div className="chat-content">
       <div className="profile">
-        <img src="anonymousProfileImageId" alt="profile" />
+        <img src={anonymousProfileImageUrl} alt="profile" />
       </div>
       <div className="chat-box">
-        <div className="name">{nick}</div>
+        <div className="name">{nickname}</div>
         <div className="message-box">
           <div className="message">
             {msg}

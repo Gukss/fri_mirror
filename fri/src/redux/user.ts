@@ -8,6 +8,7 @@ interface UserState {
   roomId: string;
   gameRoomId: string;
   nickname : string;
+  anonymousProfileImageUrl : string;
 }
 
 // 초기 상태
@@ -17,7 +18,8 @@ const initialState: UserState = {
   heart: 0,
   roomId: "",
   gameRoomId: "",
-  nickname: ""
+  nickname: "",
+  anonymousProfileImageUrl : "",
 };
 
 const userSlice = createSlice({

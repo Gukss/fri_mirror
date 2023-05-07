@@ -1,9 +1,11 @@
 import { GameType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import { game } from "../redux/user";
 import axios from "axios";
+
 
 interface roomType {
   room: GameType;
@@ -20,6 +22,8 @@ interface Gamedetail {
 function GameDetail({ room, open, setOpen }: roomType) {
   const { gameRoomId, title, headCount, location } = room;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const api_url = process.env.REACT_APP_REST_API;
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
@@ -31,8 +35,21 @@ function GameDetail({ room, open, setOpen }: roomType) {
     participation: []
   });
 
+  const goGame = async () => {
+    try {
+      const header = {
+        "Content-Type" : "application/json",
+        "Authorization" : userId
+      }
+      const res = await axios.patch(api_url + `game-room/${gameRoomId}/participation`, {"isParticipate" : false}, {headers : header})
+      console.log(res.data)
+      dispatch(game(String(room.gameRoomId)))
+      navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}`)    
+    }
+    catch(e){console.log(e)}
+  }
+
   useEffect(() => {
-    const api_url = process.env.REACT_APP_REST_API;
     const getData = async () => {
       if (api_url === undefined) return;
       try {
@@ -43,7 +60,6 @@ function GameDetail({ room, open, setOpen }: roomType) {
         const res = await axios.get(api_url + "game-room/" + gameRoomId, {
           headers: header
         });
-        console.log("게임방 정보", res.data);
         const participantCount = res.data.participantCount;
         const participate = res.data.participate;
         const participation = res.data.participation;
@@ -91,7 +107,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 )}
               </div>
             </div>
-            <div className="join_game" onClick={() => navigate("/wait/1")}>
+            <div className="join_game" onClick={goGame}>
               참여하기
             </div>
           </div>
