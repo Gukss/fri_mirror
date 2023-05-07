@@ -18,9 +18,10 @@ export type IMessage = {
   roomId : string;
   message :  string;
   memberId : number;
-  anonymousProfileImageId : string;
+  anonymousProfileImageUrl : string;
   times : string;
-  nick : string;
+  nickname : string;
+  userId : number;
 }
 
 export default function Chat() {
@@ -42,6 +43,9 @@ export default function Chat() {
   });
   const nick = useSelector((state: RootState) => {
     return state.strr.nickname;
+  });
+  const image = useSelector((state: RootState) => {
+    return state.strr.anonymousProfileImageUrl;
   });
 
   // 소켓객체와 connect되면 subscribe함수를 동작시켜서 서버에 있는 주소로 sub
@@ -92,7 +96,7 @@ export default function Chat() {
     return () => disconnect();
   }, []);
 
-  const pushMsg = async (time : string) => {
+  const pushMsg = async () => {
     const data = {
       "roomId" : roomId,
       "message" : text
@@ -121,14 +125,14 @@ export default function Chat() {
     if (!client.current?.connected) {
       return;
     }
-    pushMsg(`${day} ${h}:${m}`);
+    pushMsg();
     client.current.publish({
       destination: "/pub/chatting",
       body: JSON.stringify({
         roomId: roomId,
         message: text,
         memberId: userId,
-        anonymousProfileImageId : "string",
+        anonymousProfileImageId : image,
         times : `${day} ${h}:${m}`,
         nick : nick,
       }),
@@ -139,7 +143,6 @@ export default function Chat() {
     const getChat = async () => {
       try {
         const res = await axios.get(api_url + `chatting/${roomId}`)
-        console.log(res.data)
         setMessage(res.data)
       }
       catch(e){console.log(e)}
