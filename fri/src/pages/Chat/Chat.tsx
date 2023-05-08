@@ -88,8 +88,7 @@ export default function Chat() {
     const connect = async () => {
       try {
         client.current = new StompJs.Client({
-          webSocketFactory: () =>
-            new SockJS("https://meetingfri.com/api/ws-stomp"),
+          webSocketFactory: () => new SockJS("https://meetingfri.com/api/ws-stomp"),
           connectHeaders: {},
           reconnectDelay: 5000,
           heartbeatIncoming: 4000,
@@ -97,8 +96,8 @@ export default function Chat() {
           onConnect: () => {
             subscribeChatting();
           },
-          debug: () => {
-            null;
+          debug: (str) => {
+            console.log(str);
           },
           onStompError: (frame) => {
             console.error(frame);

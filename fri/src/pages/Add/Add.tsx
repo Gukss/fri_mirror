@@ -89,7 +89,7 @@ export default function Add() {
       }
       else {
         dispatch(game(res.data.gameRoomId));
-        navigate(`/wait/${res.data.gameRoomId}`);
+        navigate(`/wait/${res.data.gameRoomId}?time=${res.data.randomTime}`);
       }
     } catch (e) {
       console.log(e);

@@ -14,9 +14,9 @@ import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 export type gameMessage = {
-  gameRoomId: number;
-  userList: [];
-};
+  gameRoomId : number;
+  userList :  userInfo[];
+}
 
 export type userInfo = {
   userId: number;
@@ -35,9 +35,9 @@ export type gameType = {
 };
 
 export type participationType = {
-  name: string;
-  profileUrl: string;
-};
+  name : string;
+  anonymousProfileImageUrl : string;
+}
 
 function GameWaiting() {
   const navigate = useNavigate();
@@ -48,10 +48,9 @@ function GameWaiting() {
   const client = useRef<StompJs.Client>();
   const [gameinfo, setGame] = useState<gameType | null>(null);
   const [isLgm, setIsLgm] = useState(true);
-  const [state, setState] = useState<userInfo[]>([]);
   const [ready, setIsready] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
-
+  
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
   });
@@ -63,8 +62,19 @@ function GameWaiting() {
   });
   const nickname = useSelector((state: RootState) => {
     return state.strr.nickname;
-  });
-
+  })
+  const [state, setState] = useState<gameMessage>({
+    gameRoomId : Number(gameRoomId),
+    userList : [{
+      userId : userId,
+      userProfile : profile,
+      nickname : nickname,
+      ready : false,
+      result : 0.00
+    },
+  ]   
+  })
+  
   const goGame = async () => {
     try {
       await axios.get(api_url + "game-room/start");
@@ -75,24 +85,24 @@ function GameWaiting() {
   };
 
   const subscribeChatting = () => {
+    console.log("게임 구독")
     client.current?.subscribe(
       `/sub/gameRoom/ready/${gameRoomId}`,
       ({ body }) => {
-        setState((prev) => [...prev, JSON.parse(body)]);
+        console.log(body)
+        state.userList.push(JSON.parse(body))
       }
     );
-
-    console.log(state);
-
-    let flag = true;
-    for (let i = 0; i < state.length; i++) {
-      if (state[i].ready === false) {
+    publishInit();
+    let flag = true
+    for(let i = 0; i < state.userList.length; i++){
+      if(state.userList[i].ready === false){
         flag = false;
         break;
       }
     }
-    if (flag && gameinfo?.headCount === state.length) {
-      goGame();
+    if(flag && gameinfo?.headCount === state.userList.length){
+      goGame()
     }
   };
 
@@ -112,45 +122,27 @@ function GameWaiting() {
       return;
     }
 
-    for (let i = 0; i < state.length; i++) {
-      if (state[i].userId === userId) {
-        state[i].ready = true;
+    for(let i = 0; i < state.userList.length; i++){
+      if(state.userList[i].userId === userId){
+        state.userList[i].ready = true;
         break;
       }
     }
 
     client.current.publish({
-      destination: "/pub/gameRoom/ready",
-      body: JSON.stringify({
-        gameRoomId: gameRoomId,
-        userList: state
-      })
+      destination: "/pub/gameRoom/ready/"+ gameRoomId,
+      body: JSON.stringify(state),
     });
-
-    console.log(state);
-  };
+  }
 
   const publishInit = async () => {
     if (!client.current?.connected) {
       return;
     }
 
-    const data = {
-      userId: userId,
-      userProfile: profile,
-      nickname: nickname,
-      ready: false,
-      result: 0.0
-    };
-
-    if (!state.length) setState([data, ...state]);
-
     client.current.publish({
-      destination: "/pub/gameRoom/ready",
-      body: JSON.stringify({
-        gameRoomId: gameRoomId,
-        userList: state
-      })
+      destination:  "/pub/gameRoom/ready/"+ gameRoomId,
+      body: JSON.stringify(state),
     });
   };
 
@@ -178,18 +170,17 @@ function GameWaiting() {
     const connect = async () => {
       try {
         client.current = new StompJs.Client({
-          webSocketFactory: () =>
-            new SockJS("https://meetingfri.com/api/ws-stomp"),
+          webSocketFactory: () => new SockJS("https://meetingfri.com/api/ws-stomp"),
           connectHeaders: {},
           reconnectDelay: 5000,
           heartbeatIncoming: 4000,
           heartbeatOutgoing: 4000,
           onConnect: () => {
+            console.log("커넥트 되는 시점");
             subscribeChatting();
-            // publishInit();
           },
-          debug: () => {
-            null;
+          debug: (str) => {
+            console.log(str);
           },
           onStompError: (frame) => {
             console.error(frame);
@@ -200,7 +191,8 @@ function GameWaiting() {
         console.log;
       }
     };
-    connect();
+    console.log("방 처음");
+    connect()
     return () => disconnect();
   }, []);
 
@@ -215,16 +207,15 @@ function GameWaiting() {
   useEffect(() => {
     const getData = async () => {
       const header = {
-        "Content-Type": "application/json",
-        Authorization: userId
-      };
-      const res = await axios.get(api_url + "game-room/" + gameRoomId, {
-        headers: header
-      });
-      setGame(res.data);
-    };
-    getData();
-  }, []);
+        "Content-Type" : "application/json",
+        "Authorization" : userId
+      }
+      const res = await axios.get(api_url + "game-room/" + gameRoomId, {headers : header})
+      setGame(res.data)
+      console.log(res.data)
+    }
+    getData()
+  }, [])
 
   return (
     <div className="wait_game">
@@ -266,7 +257,7 @@ function GameWaiting() {
               <div className="player" key={index}>
                 <div className="player-profile">
                   <img
-                    src={player?.profileUrl}
+                    src={player?.anonymousProfileImageUrl}
                     alt="player-profile"
                     className="profile-img"
                   />
