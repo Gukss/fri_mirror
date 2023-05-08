@@ -118,14 +118,14 @@ public class GameRoomController {
     return ResponseEntity.ok().body(result);
   }
 
-    @MessageMapping("/gameRoom/ready")
-    public void message(SocketGameRoomStatusRequestAndResponse status){
-        messagingTemplate.convertAndSend("/sub/gameRoom/ready" + status.getGameRoomId(), status);
-    }
+  @MessageMapping("/gameRoom/ready")
+  public void message(SocketGameRoomStatusRequestAndResponse message) {
+    System.out.println("message = " + message);
+    messagingTemplate.convertAndSend("/sub/gameRoom/ready" + message.getGameRoomId(), message);
+  }
 
-    @MessageMapping("/gameRoom/stop")
-    public void message(SocketGameRoomStopRequestAndResponse stop){
-        messagingTemplate.convertAndSend("/sub/gameRoom/stop" + stop.getGameRoomId(), stop);
-    }
-
+  @MessageMapping("/gameRoom/stop")
+  public void message(SocketGameRoomStopRequestAndResponse stop){
+      messagingTemplate.convertAndSend("/sub/gameRoom/stop" + stop.getGameRoomId(), stop);
+  }
 }
