@@ -39,6 +39,11 @@ public interface UserService {
    */
   CertifiedEduResponse certifiedEdu(CertifiedEduRequest certifiedEduRequest);
 
+  /**
+   * desc: 이메일로 보낸 코드와 일치하는지 검증
+   * @param certifiedCodeRequest
+   * @return
+   */
   CertifiedCodeResponse certifiedCode(CertifiedCodeRequest certifiedCodeRequest);
 
   /**
@@ -62,4 +67,6 @@ public interface UserService {
    * @return
    */
   UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, Long userId);
+
+  HttpStatus certifiedNickname(CertifiedNicknameRequest certifiedNicknameRequest);
 }

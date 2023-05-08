@@ -109,4 +109,9 @@ public class UserController {
     return ResponseEntity.ok().body(result);
   }
 
+  @PostMapping("/certified/nickname")
+  public ResponseEntity certifiedNickname(@RequestBody CertifiedNicknameRequest certifiedNicknameRequest){
+    HttpStatus httpStatus = userService.certifiedNickname(certifiedNicknameRequest);
+    return ResponseEntity.status(httpStatus).build();
+  }
 }
