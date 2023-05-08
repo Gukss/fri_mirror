@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class UpdateUserRoomRequest {
-    private Boolean isParticipate;
+    private boolean participate;
 }
