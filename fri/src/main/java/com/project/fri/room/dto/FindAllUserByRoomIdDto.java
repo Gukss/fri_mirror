@@ -1,14 +1,15 @@
 package com.project.fri.room.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.project.fri.user.entity.User;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-@Builder
 public class FindAllUserByRoomIdDto {
     private String name;
-    private String url;
+    private String anonymousProfileImageUrl;
 
+    public FindAllUserByRoomIdDto(User user) {
+        name = user.getName();
+        anonymousProfileImageUrl = user.getAnonymousProfileImage().getImageUrl();
+    }
 }
