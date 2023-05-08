@@ -86,13 +86,15 @@ function GameWaiting() {
 
   const subscribeChatting = () => {
     console.log("게임 구독")
-    client.current?.subscribe(
-      `/sub/gameRoom/ready/${gameRoomId}`,
-      ({ body }) => {
-        console.log(body)
-        state.userList.push(JSON.parse(body))
-      }
-    );
+    try {
+      client.current?.subscribe(
+        `/sub/game-room/ready/${gameRoomId}`,
+        ({ body }) => {
+          console.log(body)
+          setState(JSON.parse(body))
+        }
+      );
+    }catch(e){console.log}
     publishInit();
     let flag = true
     for(let i = 0; i < state.userList.length; i++){
@@ -128,9 +130,9 @@ function GameWaiting() {
         break;
       }
     }
-
+    console.log(state)
     client.current.publish({
-      destination: "/pub/gameRoom/ready/"+ gameRoomId,
+      destination: "/pub/game-room/ready",
       body: JSON.stringify(state),
     });
   }
@@ -141,7 +143,7 @@ function GameWaiting() {
     }
 
     client.current.publish({
-      destination:  "/pub/gameRoom/ready/"+ gameRoomId,
+      destination:  "/pub/game-room/ready",
       body: JSON.stringify(state),
     });
   };

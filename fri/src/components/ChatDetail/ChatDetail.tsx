@@ -3,7 +3,6 @@ import { RootState } from "../../redux/store";
 import { meeting } from "../../redux/user";
 import { useNavigate } from "react-router-dom";
 import Close from "../../assets/x_btn.png";
-import Egg from "../../assets/egg_fri.png";
 import axios from "axios";
 import "../../pages/Chat/Chat.scss";
 
@@ -13,8 +12,6 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
       onClose();
     }
   };
-
-  console.log(data);
 
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;

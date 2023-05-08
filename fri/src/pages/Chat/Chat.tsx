@@ -70,6 +70,7 @@ export default function Chat() {
     client.current?.subscribe(`/sub/room/${roomId}`, ({ body }) => {
       setMessage((prev) => [...prev, JSON.parse(body)]);
     });
+    
   };
 
   // 현재는 app컴포넌트 생성과 동시에 소켓 객체가 연결이 되고 sub로 구독함!
@@ -96,8 +97,8 @@ export default function Chat() {
           onConnect: () => {
             subscribeChatting();
           },
-          debug: (str) => {
-            console.log(str);
+          debug: () => {
+            null
           },
           onStompError: (frame) => {
             console.error(frame);
@@ -148,9 +149,9 @@ export default function Chat() {
         roomId: roomId,
         message: text,
         memberId: userId,
-        anonymousProfileImageId: image,
+        anonymousProfileImageUrl: image,
         times: `${day} ${h}:${m}`,
-        nick: nick
+        nickname: nick
       })
     });
   };

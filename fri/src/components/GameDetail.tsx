@@ -42,7 +42,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
       };
       const res = await axios.patch(
         api_url + `game-room/${gameRoomId}/participation`,
-        { isParticipate: false },
+        { participate: false },
         { headers: header }
       );
       console.log(res.data);

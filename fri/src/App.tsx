@@ -14,6 +14,7 @@ import Add from "./pages/Add/Add";
 import My from "./pages/My/MyPage";
 import Chat from "./pages/Chat/Chat";
 import Not from "./pages/NotFound"
+import Test from "./pages/Game/game_test"
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/add" element={<Add />} />
               <Route path="/my" element={<My />} />
               <Route path="/chatting/:id" element={<Chat />} />
+              <Route path="/test" element={<Test />} />
               <Route path="*" element={<Not />} />
             </Routes>
           </Router>
