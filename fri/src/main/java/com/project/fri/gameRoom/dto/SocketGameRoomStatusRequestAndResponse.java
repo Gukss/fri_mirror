@@ -11,5 +11,9 @@ import lombok.Data;
 public class SocketGameRoomStatusRequestAndResponse {
   private long gameRoomId;
 
-  private ArrayList<SocketGameRoomStatusUserListInstance> userList;
+  private Long userId;
+  private String userProfile;
+  private String nickname;
+  private boolean ready;
+  private double result;
 }
