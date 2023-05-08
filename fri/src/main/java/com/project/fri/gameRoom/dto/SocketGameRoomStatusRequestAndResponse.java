@@ -1,6 +1,6 @@
 package com.project.fri.gameRoom.dto;
 
-import java.util.List;
+import java.util.ArrayList;
 import lombok.Data;
 
 /**
@@ -11,5 +11,5 @@ import lombok.Data;
 public class SocketGameRoomStatusRequestAndResponse {
   private long gameRoomId;
 
-  private List<SocketGameRoomStatusUserListInstance> userList;
+  private ArrayList<SocketGameRoomStatusUserListInstance> userList;
 }
