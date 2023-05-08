@@ -69,7 +69,7 @@ export default function SignUp() {
   const [loading, setLoading] = useState<boolean>(false);
   const [isCer, setCer] = useState<boolean>(false);
   const [isCon, setCon] = useState<boolean>(false);
-  const [num, setNum] = useState("");
+  const [nicknameCheck, setNicknameCheck] = useState<boolean>(false);
 
   const [isAreaDown, setIsAreaDown] = useState(false);
 
@@ -269,9 +269,9 @@ export default function SignUp() {
         setMessageColor("red", "nickname");
         setError({ ...error, [name]: false });
       } else {
-        setMessage({ ...message, [name]: "가능합니다!" });
-        setMessageColor("green", "nickname");
-        setError({ ...error, [name]: true });
+        setMessage({ ...message, [name]: "중복확인이 필요합니다!" });
+        setMessageColor("red", "nickname");
+        setError({ ...error, [name]: false });
       }
     } else if (name === "password") {
       const passwordRegex =
@@ -360,6 +360,25 @@ export default function SignUp() {
       alert("이메일로 받은 코드를 정확히 입력해주세요.");
     }
   };
+
+  const duplicateCheck = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = {
+        nickname: "닉네임"
+      };
+      await axios.post(api_url + "user/certified/nickname", data);
+      // 이쪽 수정
+      setNicknameCheck(true);
+      setMessage({ ...message, nickname: "가능합니다!" });
+      setMessageColor("green", "nickname");
+      setError({ ...error, nickname: true });
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      alert("이미 닉네임이 존재합니다. 다른 닉네임으로 재시도해주세요.");
+    }
+  }, []);
 
   return (
     <div className="signup">
@@ -451,12 +470,13 @@ export default function SignUp() {
                   <div className="signup-input" style={{ marginTop: "0.5rem" }}>
                     <input
                       className="codeInput"
-                      placeholder="인증번호"
+                      placeholder="인증번호 8자리"
                       type="text"
                       id="code"
                       name="code"
                       onChange={handleInput}
                       onBlur={handleBlur}
+                      autoFocus
                     />
                   </div>
                   <div id="codemessage" className="message">
@@ -610,6 +630,11 @@ export default function SignUp() {
                   <div id="nicknamemessage" className="message">
                     {message.nickname}
                   </div>
+                  {!nicknameCheck && form.nickname !== "" && (
+                    <div className="nickname_certi" onClick={duplicateCheck}>
+                      중복확인
+                    </div>
+                  )}
                 </div>
                 <div className="signup-box">
                   <div className="signup-label"># 비밀번호</div>

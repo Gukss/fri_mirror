@@ -14,9 +14,9 @@ import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 export type gameMessage = {
-  gameRoomId : number;
-  userList :  userInfo[];
-}
+  gameRoomId: number;
+  userList: userInfo[];
+};
 
 export type userInfo = {
   userId: number;
@@ -35,9 +35,9 @@ export type gameType = {
 };
 
 export type participationType = {
-  name : string;
-  anonymousProfileImageUrl : string;
-}
+  name: string;
+  anonymousProfileImageUrl: string;
+};
 
 function GameWaiting() {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ function GameWaiting() {
   const [isLgm, setIsLgm] = useState(true);
   const [ready, setIsready] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
-  
+
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
   });
@@ -62,19 +62,13 @@ function GameWaiting() {
   });
   const nickname = useSelector((state: RootState) => {
     return state.strr.nickname;
-  })
+  });
   const [state, setState] = useState<gameMessage>({
-    gameRoomId : Number(gameRoomId),
-    userList : [{
-      userId : userId,
-      userProfile : profile,
-      nickname : nickname,
-      ready : false,
-      result : 0.00
-    },
-  ]   
-  })
-  
+    gameRoomId: Number(gameRoomId),
+    userList: [
+    ]
+  });
+
   const goGame = async () => {
     try {
       await axios.get(api_url + "game-room/start");
@@ -93,19 +87,23 @@ function GameWaiting() {
           console.log(body)
           setState(JSON.parse(body))
         }
-      );
+        );
+        publishInit();
     }catch(e){console.log}
-    publishInit();
-    let flag = true
-    for(let i = 0; i < state.userList.length; i++){
-      if(state.userList[i].ready === false){
+
+    let flag = true;
+    for (let i = 0; i < state.userList.length; i++) {
+      if (state.userList[i].ready === false) {
         flag = false;
+        console.log(state.userList[i].ready)
         break;
       }
     }
-    if(flag && gameinfo?.headCount === state.userList.length){
-      goGame()
+    if (flag && gameinfo?.headCount === state.userList.length) {
+      goGame();
     }
+
+    console.log(flag, gameinfo?.headCount, state.userList.length)
   };
 
   const stompActive = () => {
@@ -124,8 +122,8 @@ function GameWaiting() {
       return;
     }
 
-    for(let i = 0; i < state.userList.length; i++){
-      if(state.userList[i].userId === userId){
+    for (let i = 0; i < state.userList.length; i++) {
+      if (state.userList[i].userId === userId) {
         state.userList[i].ready = true;
         break;
       }
@@ -135,12 +133,21 @@ function GameWaiting() {
       destination: "/pub/game-room/ready",
       body: JSON.stringify(state),
     });
-  }
+  };
 
   const publishInit = async () => {
     if (!client.current?.connected) {
       return;
     }
+    const data = {
+      userId: userId,
+      userProfile: profile,
+      nickname: nickname,
+      ready: false,
+      result: 0.0
+    }
+    state.userList.push(data)
+    console.log(state)
 
     client.current.publish({
       destination:  "/pub/game-room/ready",
@@ -172,7 +179,8 @@ function GameWaiting() {
     const connect = async () => {
       try {
         client.current = new StompJs.Client({
-          webSocketFactory: () => new SockJS("https://meetingfri.com/api/ws-stomp"),
+          webSocketFactory: () =>
+            new SockJS("https://meetingfri.com/api/ws-stomp"),
           connectHeaders: {},
           reconnectDelay: 5000,
           heartbeatIncoming: 4000,
@@ -194,7 +202,7 @@ function GameWaiting() {
       }
     };
     console.log("방 처음");
-    connect()
+    connect();
     return () => disconnect();
   }, []);
 
@@ -209,15 +217,17 @@ function GameWaiting() {
   useEffect(() => {
     const getData = async () => {
       const header = {
-        "Content-Type" : "application/json",
-        "Authorization" : userId
-      }
-      const res = await axios.get(api_url + "game-room/" + gameRoomId, {headers : header})
-      setGame(res.data)
-      console.log(res.data)
-    }
-    getData()
-  }, [])
+        "Content-Type": "application/json",
+        Authorization: userId
+      };
+      const res = await axios.get(api_url + "game-room/" + gameRoomId, {
+        headers: header
+      });
+      setGame(res.data);
+      console.log(res.data);
+    };
+    getData();
+  }, []);
 
   return (
     <div className="wait_game">

@@ -2,7 +2,7 @@ import { GameType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { game } from "../redux/user";
 import axios from "axios";
 
@@ -13,13 +13,13 @@ interface roomType {
 }
 
 interface Gamedetail {
-  participantCount: number;
+  participationCount: number;
   participate: boolean;
   participation: { name: string; profileUrl: string }[];
 }
 
 function GameDetail({ room, open, setOpen }: roomType) {
-  const { gameRoomId, title, headCount, location } = room;
+  const { gameRoomId, title, headCount, location, participationCount } = room;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const api_url = process.env.REACT_APP_REST_API;
@@ -29,12 +29,13 @@ function GameDetail({ room, open, setOpen }: roomType) {
 
   // game detail data
   const [data, setData] = useState<Gamedetail>({
-    participantCount: 0,
+    participationCount: 0,
     participate: false,
     participation: []
   });
 
-  const goGame = async () => {
+  // useCallback 추가
+  const goGame = useCallback(async () => {
     try {
       const header = {
         "Content-Type": "application/json",
@@ -45,13 +46,12 @@ function GameDetail({ room, open, setOpen }: roomType) {
         { participate: false },
         { headers: header }
       );
-      console.log(res.data);
       dispatch(game(String(room.gameRoomId)));
       navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}`);
     } catch (e) {
       console.log(e);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -64,12 +64,12 @@ function GameDetail({ room, open, setOpen }: roomType) {
         const res = await axios.get(api_url + "game-room/" + gameRoomId, {
           headers: header
         });
-        const participantCount = res.data.participantCount;
+        const participationCount = res.data.participationCount;
         const participate = res.data.participate;
         const participation = res.data.participation;
         setData({
           ...data,
-          participantCount: participantCount,
+          participationCount: participationCount,
           participate: participate,
           participation: participation
         });
@@ -79,6 +79,17 @@ function GameDetail({ room, open, setOpen }: roomType) {
     };
     getData();
   }, []);
+
+  const isPossible = useSelector((state: RootState) => {
+    if (state.strr.gameRoomId !== "참여한 방이 없습니다.") {
+      return "already";
+    } else if (headCount <= participationCount) {
+      return "tooMany";
+    } else {
+      return true;
+    }
+  });
+
   return (
     <>
       {open ? (
@@ -95,10 +106,10 @@ function GameDetail({ room, open, setOpen }: roomType) {
               <div className="header">
                 <div>참가자</div>
                 <div className="total">
-                  {data.participantCount}/{headCount}
+                  {data.participationCount}/{headCount}
                 </div>
               </div>
-              {data.participantCount === 0 ? (
+              {data.participationCount === 0 ? (
                 <div className="profile">
                   <div>참여자가 없습니다.</div>
                 </div>
@@ -113,19 +124,33 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 </div>
               )}
             </div>
-            <div
-              className="join_game"
-              onClick={goGame}
-              // 참여자가 총인원보다 작을때는 누를 수 있지만, 같거나 클 때는 참여가 불가능함
-              style={{
-                pointerEvents:
-                  data.participantCount <= headCount ? "auto" : "none",
-                background:
-                  data.participantCount <= headCount ? "#ffce3c" : "#ffefbe"
-              }}
-            >
-              참여하기
-            </div>
+            {isPossible === "already" ? (
+              <div
+                className="join_game"
+                style={{
+                  background: "#ffefbe"
+                }}
+              >
+                이미 게임에 참여중이에요!
+              </div>
+            ) : isPossible === "tooMany" ? (
+              <div
+                className="join_game"
+                style={{
+                  background: "#ffefbe"
+                }}
+              >
+                참여할 수 없습니다!
+              </div>
+            ) : (
+              <div
+                className="join_game"
+                onClick={goGame}
+                // 참여자가 총인원보다 작을때는 누를 수 있지만, 같거나 클 때는 참여가 불가능함
+              >
+                참여하기
+              </div>
+            )}
           </div>
         </div>
       ) : null}
