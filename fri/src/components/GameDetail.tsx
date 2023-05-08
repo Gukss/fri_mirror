@@ -41,7 +41,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
         "Content-Type" : "application/json",
         "Authorization" : userId
       }
-      const res = await axios.patch(api_url + `game-room/${gameRoomId}/participation`, {"isParticipate" : false}, {headers : header})
+      const res = await axios.patch(api_url + `game-room/${gameRoomId}/participation`, {"participate" : false}, {headers : header})
       console.log(res.data)
       dispatch(game(String(room.gameRoomId)))
       navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}`)    

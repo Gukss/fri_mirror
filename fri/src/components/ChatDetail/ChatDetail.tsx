@@ -30,7 +30,7 @@ export default function ChatDetail({ isOpen, onClose }: any) {
       "Authorization" : userId
     }
     try {
-			const res = await axios.patch(api_url + `user/room/${roomId}`, {"isParticipate" : true}, {headers : header})
+			const res = await axios.patch(api_url + `user/room/${roomId}`, {"participate" : true}, {headers : header})
 			dispatch(meeting("참여한 방이 없습니다."))
 			navigate("/main");
 		}

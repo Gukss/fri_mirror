@@ -40,7 +40,7 @@ export default function LogIn() {
       // 로그인 axios
       axios({
         method: "post",
-        url: "https://k8b204.p.ssafy.io/api/user/sign-in",
+        url: "https://meetingfri.com/api/user/sign-in",
         data: form
       })
         .then((res) => {

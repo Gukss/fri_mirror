@@ -15,7 +15,7 @@ import SockJS from "sockjs-client";
 
 export type gameMessage = {
   gameRoomId : number;
-  userList :  [];
+  userList :  userInfo[];
 }
 
 export type userInfo = {
@@ -36,7 +36,7 @@ export type gameType = {
 
 export type participationType = {
   name : string;
-  profileUrl : string;
+  anonymousProfileImageUrl : string;
 }
 
 function GameWaiting() {
@@ -48,10 +48,9 @@ function GameWaiting() {
   const client = useRef<StompJs.Client>();
   const [gameinfo, setGame] = useState<gameType | null>(null);
   const [isLgm, setIsLgm] = useState(true);
-  const [state, setState] = useState<userInfo[]>([])
   const [ready, setIsready] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
-
+  
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
   })
@@ -64,6 +63,17 @@ function GameWaiting() {
   const nickname = useSelector((state: RootState) => {
     return state.strr.nickname;
   })
+  const [state, setState] = useState<gameMessage>({
+    gameRoomId : Number(gameRoomId),
+    userList : [{
+      userId : userId,
+      userProfile : profile,
+      nickname : nickname,
+      ready : false,
+      result : 0.00
+    },
+  ]   
+  })
   
   const goGame = async () => {
     try {
@@ -74,23 +84,23 @@ function GameWaiting() {
   };
 
   const subscribeChatting = () => {
+    console.log("게임 구독")
     client.current?.subscribe(
       `/sub/gameRoom/ready/${gameRoomId}`,
       ({ body }) => {
-        setState((prev) => [...prev, JSON.parse(body)]);
+        console.log(body)
+        state.userList.push(JSON.parse(body))
       }
     );
-
-    console.log(state)
-    
+    publishInit();
     let flag = true
-    for(let i = 0; i < state.length; i++){
-      if(state[i].ready === false){
+    for(let i = 0; i < state.userList.length; i++){
+      if(state.userList[i].ready === false){
         flag = false;
         break;
       }
     }
-    if(flag && gameinfo?.headCount === state.length){
+    if(flag && gameinfo?.headCount === state.userList.length){
       goGame()
     }
   };
@@ -111,22 +121,17 @@ function GameWaiting() {
       return;
     }
 
-    for(let i = 0; i < state.length; i++){
-      if(state[i].userId === userId){
-        state[i].ready = true;
+    for(let i = 0; i < state.userList.length; i++){
+      if(state.userList[i].userId === userId){
+        state.userList[i].ready = true;
         break;
       }
     }
 
     client.current.publish({
-      destination: "/pub/gameRoom/ready",
-      body: JSON.stringify({
-        gameRoomId: gameRoomId,
-        userList : state        
-      }),
+      destination: "/pub/gameRoom/ready/"+ gameRoomId,
+      body: JSON.stringify(state),
     });
-
-    console.log(state)
   }
 
   const publishInit = async () => {
@@ -134,22 +139,9 @@ function GameWaiting() {
       return;
     }
 
-    const data = {
-      userId : userId,
-      userProfile : profile,
-      nickname : nickname,
-      ready : false,
-      result : 0.00
-    }
-
-    if(!state.length) setState([data, ...state])
-
     client.current.publish({
-      destination: "/pub/gameRoom/ready",
-      body: JSON.stringify({
-        gameRoomId: gameRoomId,
-        userList : state        
-      }),
+      destination:  "/pub/gameRoom/ready/"+ gameRoomId,
+      body: JSON.stringify(state),
     });
   }
 
@@ -172,17 +164,17 @@ function GameWaiting() {
     const connect = async () => {   
       try {
         client.current = new StompJs.Client({
-          webSocketFactory: () => new SockJS("https://k8b204.p.ssafy.io/api/ws-stomp"),
+          webSocketFactory: () => new SockJS("https://meetingfri.com/api/ws-stomp"),
           connectHeaders: {},
           reconnectDelay: 5000,
           heartbeatIncoming: 4000,
           heartbeatOutgoing: 4000,
           onConnect: () => {
+            console.log("커넥트 되는 시점");
             subscribeChatting();
-            // publishInit();
           },
-          debug: () => {
-            null;
+          debug: (str) => {
+            console.log(str);
           },
           onStompError: (frame) => {
             console.error(frame);
@@ -191,6 +183,7 @@ function GameWaiting() {
       await stompActive();
       } catch(e) {console.log}
     };
+    console.log("방 처음");
     connect()
     return () => disconnect();
   }, []);
@@ -212,6 +205,7 @@ function GameWaiting() {
       }
       const res = await axios.get(api_url + "game-room/" + gameRoomId, {headers : header})
       setGame(res.data)
+      console.log(res.data)
     }
     getData()
   }, [])
@@ -247,7 +241,7 @@ function GameWaiting() {
             <div className="player" key={index}>
               <div className="player-profile">
                 <img
-                  src={player?.profileUrl}
+                  src={player?.anonymousProfileImageUrl}
                   alt="player-profile"
                   className="profile-img"
                 />

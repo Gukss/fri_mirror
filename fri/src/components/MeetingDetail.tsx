@@ -13,7 +13,7 @@ interface roomType {
 }
 
 interface Roomdetail {
-  isParticipate: boolean;
+  participate: boolean;
   majors: { name: string; url: string }[];
   nonMajors: { name: string; url: string }[];
 }
@@ -41,7 +41,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
 
   // room detail 정보
   const [data, setData] = useState<Roomdetail>({
-    isParticipate: false,
+    participate: false,
     majors: [],
     nonMajors: []
   });
@@ -56,12 +56,12 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
         const res = await axios.get(api_url + "room/" + roomId, {
           headers: header
         });
-        const isParticipate = res.data.isParticipate;
+        const participate = res.data.participate;
         const majors = res.data.major;
         const nonMajors = res.data.nonMajor;
         setData({
           ...data,
-          isParticipate: isParticipate,
+          participate: participate,
           majors: majors,
           nonMajors: nonMajors
         });
@@ -84,7 +84,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
     try {
       const res = await axios.patch(
         api_url + `user/room/${roomId}`,
-        { isParticipate: false },
+        { participate: false },
         { headers: header }
       );
       dispatch(meeting(res.data.roomId));
@@ -149,8 +149,8 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
             <div
               className="join_game"
               style={{
-                pointerEvents: data.isParticipate ? "none" : "auto",
-                background: data.isParticipate ? "#ffefbe" : "#ffce3c"
+                pointerEvents: data.participate ? "none" : "auto",
+                background: data.participate ? "#ffefbe" : "#ffce3c"
               }}
               onClick={goChat}
             >
