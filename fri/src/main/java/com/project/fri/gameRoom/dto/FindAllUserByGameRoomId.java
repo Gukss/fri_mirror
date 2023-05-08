@@ -13,12 +13,12 @@ import java.util.List;
 public class FindAllUserByGameRoomId {
 
     private String name;
-    private String profileUrl;
+    private String anonymousProfileImageUrl;
 
     public static FindAllUserByGameRoomId create(User users) {
         FindAllUserByGameRoomId findAllUserByGameRoomId = FindAllUserByGameRoomId.builder()
                 .name(users.getName())
-                .profileUrl(users.getProfileUrl())
+                .anonymousProfileImageUrl(users.getProfileUrl())
                 .build();
         return findAllUserByGameRoomId;
     }

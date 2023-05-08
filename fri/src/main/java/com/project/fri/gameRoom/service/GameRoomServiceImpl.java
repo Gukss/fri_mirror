@@ -118,6 +118,7 @@ public class GameRoomServiceImpl implements GameRoomService {
   @Override
   @Transactional
   public CreateGameRoomResponse createGameRoom(CreateGameRoomRequest request, Long userId) {
+
     // area로 지역 객체 만들기
     Area area = areaRepository.findByCategory(request.getArea())
         .orElseThrow(() -> new NotFoundExceptionMessage(
@@ -137,6 +138,9 @@ public class GameRoomServiceImpl implements GameRoomService {
     // db에 저장
     GameRoom gameRoom = GameRoom.create(request, area, user, time);
     gameRoomRepository.save(gameRoom);
+
+    // user db에 gameRoom 추가
+    user.updateGameRoomNumber(gameRoom);
 
     // 응답 dto로 변환
     CreateGameRoomResponse createGameRoom = CreateGameRoomResponse.create(gameRoom, user);
