@@ -424,9 +424,9 @@ public class UserServiceImpl implements UserService {
 
   /**
    * 유저 프로필수정 (닉네임, 사진)
-   * @param updateUserProfileRequest
-   * @param userId
-   * @return
+   * @param updateUserProfileRequest 프로필 수정 요청
+   * @param userId 수정할 유저
+   * @return 프로필 수정 응답
    */
   @Override
   @Transactional
@@ -435,7 +435,7 @@ public class UserServiceImpl implements UserService {
             .orElse(null);
 
     // 중복된 닉네임 유저 있는지 확인
-    if (userNickName != null) {
+    if (userNickName != null && !userNickName.getId().equals(userId)) {
       return null;
     }
 
