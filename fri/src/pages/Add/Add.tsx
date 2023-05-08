@@ -44,7 +44,7 @@ export default function Add() {
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
-  })
+  });
 
   const [form, setForm] = useState<AddForm>({
     cate: "",
@@ -79,15 +79,14 @@ export default function Add() {
   const createRoom = async (data: object, url: string) => {
     try {
       const header = {
-        "Content-Type" : "application/json",
-        "Authorization" : userId
-      }
-      const res = await axios.post(url, data, {headers : header});
-      if(cate !== "bet"){
+        "Content-Type": "application/json",
+        Authorization: userId
+      };
+      const res = await axios.post(url, data, { headers: header });
+      if (cate !== "bet") {
         dispatch(meeting(res.data.roomId));
         navigate(`/chatting/${res.data.roomId}`);
-      }
-      else {
+      } else {
         dispatch(game(res.data.gameRoomId));
         navigate(`/wait/${res.data.gameRoomId}?time=${res.data.randomTime}`);
       }
@@ -144,7 +143,7 @@ export default function Add() {
 
   return (
     <div className="add-room">
-      <img src={Back} alt="<" id="back" onClick={()=>navigate("/main")}/>
+      <img src={Back} alt="<" id="back" onClick={() => navigate("/main")} />
       <div className="add-container">
         <div className="small-logo">
           <img src={logo} alt="Logo" />

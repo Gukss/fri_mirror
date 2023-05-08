@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MeetType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,16 +19,7 @@ interface Roomdetail {
 }
 
 function MeetingDetail({ room, open, setOpen }: roomType) {
-  const {
-    headCount,
-    location,
-    major,
-    nonMajor,
-    roomId,
-    title,
-    roomCategory,
-    is_com
-  } = room;
+  const { headCount, location, major, nonMajor, roomId, title } = room;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => {
@@ -37,6 +28,19 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
   const isRoom = useSelector((state: RootState) => {
     return state.strr.roomId;
   });
+
+  const isPossible = useSelector((state: RootState) => {
+    if (state.strr.roomId !== "참여한 방이 없습니다.") {
+      return "already";
+    } else if (state.strr.major === false && nonMajor >= headCount / 2) {
+      return "full";
+    } else if (state.strr.major === true && major >= headCount / 2) {
+      return "full";
+    } else {
+      return true;
+    }
+  });
+
   const api_url = process.env.REACT_APP_REST_API;
 
   // room detail 정보
@@ -56,7 +60,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
         const res = await axios.get(api_url + "room/" + roomId, {
           headers: header
         });
-        const participate = res.data.participate;
+        const participate = res.data.isParticipate;
         const majors = res.data.major;
         const nonMajors = res.data.nonMajor;
         setData({
@@ -88,12 +92,12 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
       );
       dispatch(meeting(res.data.roomId));
       dispatch(useegg(1));
-      console.log(data);
-      navigate(`/chatting/${res.data.roomId}?isuser=false`, { state: data });
+      navigate(`/chatting/${res.data.roomId}?isuser=false`);
     } catch (e) {
       console.log(e);
     }
   };
+
   return (
     <>
       {open ? (
@@ -110,11 +114,11 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
               <div className="header">
                 <div>전공</div>
                 <div className="total">
-                  {data.majors.length}/{headCount / 2}
+                  {major} / {headCount / 2}
                 </div>
               </div>
               <div className="profile">
-                {data.majors.length === 0 ? (
+                {major === 0 ? (
                   <div>참여자가 없습니다.</div>
                 ) : (
                   data.majors.map((info: any) => (
@@ -130,11 +134,11 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
               <div className="header">
                 <div>비전공</div>
                 <div className="total">
-                  {data.nonMajors.length}/{headCount / 2}
+                  {nonMajor} / {headCount / 2}
                 </div>
               </div>
               <div className="profile">
-                {data.nonMajors.length === 0 ? (
+                {nonMajor === 0 ? (
                   <div>참여자가 없습니다.</div>
                 ) : (
                   data.nonMajors.map((info: any) => (
@@ -146,16 +150,43 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
                 )}
               </div>
             </div>
-            <div
-              className="join_game"
-              style={{
-                pointerEvents: data.participate ? "none" : "auto",
-                background: data.participate ? "#ffefbe" : "#ffce3c"
-              }}
-              onClick={goChat}
-            >
-              참여하기
-            </div>
+            {isPossible === "already" ? (
+              <div className="join_game" onClick={goChat}>
+                참여하기
+              </div>
+            ) : isPossible === "full" ? (
+              <div
+                className="join_game"
+                style={{
+                  background: isPossible ? "#ffce3c" : "#ffefbe"
+                }}
+              >
+                방이 꽉 찼어요ㅜㅜ
+              </div>
+            ) : (
+              <div
+                className="join_game"
+                style={{
+                  background: isPossible ? "#ffce3c" : "#ffefbe"
+                }}
+              >
+                이미 다른 채팅방에 들어가 있어요!
+              </div>
+            )}
+            {isPossible ? (
+              <div className="join_game" onClick={goChat}>
+                참여하기
+              </div>
+            ) : (
+              <div
+                className="join_game"
+                style={{
+                  background: isPossible ? "#ffce3c" : "#ffefbe"
+                }}
+              >
+                이미 다른 채팅방에 들어가 있어요!
+              </div>
+            )}
           </div>
         </div>
       ) : null}
