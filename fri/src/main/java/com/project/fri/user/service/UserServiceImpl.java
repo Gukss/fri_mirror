@@ -453,5 +453,16 @@ public class UserServiceImpl implements UserService {
             .build();
   }
 
-
+  @Override
+  public HttpStatus certifiedNickname(CertifiedNicknameRequest certifiedNicknameRequest) {
+    String nickname = certifiedNicknameRequest.getNickname();
+    Optional<User> optionalUser = userRepository.findByNickname(nickname);
+    HttpStatus returnStatus = null;
+    if(optionalUser.isPresent()){ //해당 닉네임 유저가 존재한다.
+      returnStatus = HttpStatus.BAD_REQUEST;
+    }else{ //해당 닉네임 유저가 존재하지 않는다.
+      returnStatus = HttpStatus.OK;
+    }
+    return returnStatus;
+  }
 }
