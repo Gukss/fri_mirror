@@ -80,6 +80,8 @@ function GameWaiting() {
         setState((prev) => [...prev, JSON.parse(body)]);
       }
     );
+
+    console.log(state)
     
     let flag = true
     for(let i = 0; i < state.length; i++){
@@ -155,11 +157,11 @@ function GameWaiting() {
     try {
       const header = {
         "Content-Type" : "application/json",
-        "Authorization" : userId
+        "Authorization" : Number(userId)
       }
-      const res = await axios.patch(api_url + `game-room/${gameRoomId}/participation`, {"isParticipate" : true}, {headers : header})
+      const res = await axios.patch(api_url + `game-room/${gameRoomId}/participation`, {"participate" : true}, {headers : header})
       console.log(res.data)
-      dispatch(game("참여한 방이 없습니다"))
+      dispatch(game("참여한 방이 없습니다."))
       navigate("/main")    
     }
     catch(e){console.log(e)}
@@ -177,7 +179,7 @@ function GameWaiting() {
           heartbeatOutgoing: 4000,
           onConnect: () => {
             subscribeChatting();
-            publishInit();
+            // publishInit();
           },
           debug: () => {
             null;

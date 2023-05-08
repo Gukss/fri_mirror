@@ -18,7 +18,7 @@ function Nav({isnav, setIsnav} : navType) {
 	});
 
 	function goChat() {
-		if(roomId === "참여한 방이 없습니다"){
+		if(roomId === "참여한 방이 없습니다."){
 			alert("현재 참여중인 방이 없습니다.")
 			return;
 		}

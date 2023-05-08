@@ -31,7 +31,7 @@ export default function ChatDetail({ isOpen, onClose }: any) {
     }
     try {
 			const res = await axios.patch(api_url + `user/room/${roomId}`, {"isParticipate" : true}, {headers : header})
-			dispatch(meeting("참여한 방이 없습니다"))
+			dispatch(meeting("참여한 방이 없습니다."))
 			navigate("/main");
 		}
 		catch(e){console.log(e)}

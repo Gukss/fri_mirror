@@ -73,7 +73,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
   }, []);
 
   const goChat = async () => {
-    if (isRoom !== "참여한 방이 없습니다") {
+    if (isRoom !== "참여한 방이 없습니다.") {
       alert("이미 다른 방에 참여중입니다.");
       return;
     }
