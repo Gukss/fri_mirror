@@ -9,7 +9,7 @@
     }
 }
 
-.my>img {
+.my>#logo {
     width: 129px;
     margin-top: 50px;
 }
@@ -50,6 +50,18 @@
     text-align: center;
 }
 
-#eggs>img {
-    margin-top: 30px;
+#eggs {
+
+    img {
+        margin-top: 30px;
+    }
+
+    #fri {
+        width: 55px;
+    }
+
+    #main_egg {
+        width: 20px;
+        margin: 30px 3px 0 3px;
+    }
 }

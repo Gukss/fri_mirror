@@ -11,7 +11,7 @@ interface msgType {
 
 export default function ChatContent({msg} : msgType) {
   
-  const userId = useSelector((state: RootState) => {
+  const user = useSelector((state: RootState) => {
     return state.strr.userId;
   });
 
@@ -19,10 +19,10 @@ export default function ChatContent({msg} : msgType) {
     <div className="chat-contents">
       {
         msg.map((msg, index) => (
-          msg.memberId === userId ?
+          Number(msg.memberId || msg.userId) === Number(user) ?
           <Mine key={index} msg={msg.message} time={msg.times} />
           :
-          <Others key={index} msg={msg.message} anonymousProfileImageId={msg.anonymousProfileImageId} time={msg.times} nick={msg.nick}/>
+          <Others key={index} msg={msg.message} anonymousProfileImageUrl={msg.anonymousProfileImageUrl} time={msg.times} nickname={msg.nickname}/>
         ))
       }
     </div>
