@@ -78,7 +78,6 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
       return;
     }
     const header = {
-      "Content-Type": "application/json",
       Authorization: userId
     };
     try {
@@ -88,8 +87,9 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
         { headers: header }
       );
       dispatch(meeting(res.data.roomId));
-      dispatch(useegg(1))
-      navigate(`/chatting/${res.data.roomId}?isuser=false`);
+      dispatch(useegg(1));
+      console.log(data);
+      navigate(`/chatting/${res.data.roomId}?isuser=false`, { state: data });
     } catch (e) {
       console.log(e);
     }

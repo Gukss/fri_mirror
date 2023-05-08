@@ -77,9 +77,20 @@
         &.last {
           border-bottom: none;
           display: block;
+          overflow-y: auto;
 
           .top {
             margin-bottom: 1rem;
+          }
+
+          .sub {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+          }
+
+          .none {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
           }
         }
 
@@ -128,10 +139,10 @@
 
     .close-btn {
       position: absolute;
-      top: 0.5rem;
-      left: 85%;
-      width: 8vw;
-      height: 8vw;
+      top: 1.75rem;
+      left: 82%;
+      width: 24px;
+      height: 24px;
 
       img {
         width: 100%;
@@ -154,11 +165,6 @@
     }
   }
 }
-
-
-
-
-
 
 .chat-footer {
   height: 100%;
@@ -206,7 +212,7 @@
       &.autoHeight {
         height: auto;
 
-        +button.send-message {
+        + button.send-message {
           position: absolute;
           left: calc(100% - 2.25rem);
           top: 1rem;

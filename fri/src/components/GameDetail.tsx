@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { game } from "../redux/user";
 import axios from "axios";
 
-
 interface roomType {
   room: GameType;
   open: boolean;
@@ -38,16 +37,21 @@ function GameDetail({ room, open, setOpen }: roomType) {
   const goGame = async () => {
     try {
       const header = {
-        "Content-Type" : "application/json",
-        "Authorization" : userId
-      }
-      const res = await axios.patch(api_url + `game-room/${gameRoomId}/participation`, {"participate" : false}, {headers : header})
-      console.log(res.data)
-      dispatch(game(String(room.gameRoomId)))
-      navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}`)    
+        "Content-Type": "application/json",
+        Authorization: userId
+      };
+      const res = await axios.patch(
+        api_url + `game-room/${gameRoomId}/participation`,
+        { isParticipate: false },
+        { headers: header }
+      );
+      console.log(res.data);
+      dispatch(game(String(room.gameRoomId)));
+      navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}`);
+    } catch (e) {
+      console.log(e);
     }
-    catch(e){console.log(e)}
-  }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -94,20 +98,32 @@ function GameDetail({ room, open, setOpen }: roomType) {
                   {data.participantCount}/{headCount}
                 </div>
               </div>
-              <div className="game-profile">
-                {data.participantCount === 0 ? (
+              {data.participantCount === 0 ? (
+                <div className="profile">
                   <div>참여자가 없습니다.</div>
-                ) : (
-                  data.participation.map((info: any) => (
+                </div>
+              ) : (
+                <div className="game-profile">
+                  {data.participation.map((info: any) => (
                     <div key={info.name} className="info">
                       <div className="profile-img">{info.url}</div>
                       <div className="name">{info.name}</div>
                     </div>
-                  ))
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="join_game" onClick={goGame}>
+            <div
+              className="join_game"
+              onClick={goGame}
+              // 참여자가 총인원보다 작을때는 누를 수 있지만, 같거나 클 때는 참여가 불가능함
+              style={{
+                pointerEvents:
+                  data.participantCount <= headCount ? "auto" : "none",
+                background:
+                  data.participantCount <= headCount ? "#ffce3c" : "#ffefbe"
+              }}
+            >
               참여하기
             </div>
           </div>

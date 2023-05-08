@@ -304,11 +304,11 @@
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
     background-color: #fff;
-    transition: linear 0.5s;
+    transition: linear 0.3s;
     text-align: left;
 
-    animation: moveup 1s;
-    -webkit-animation: moveup 1s;
+    animation: moveup 0.5s;
+    -webkit-animation: moveup 0.5s;
 
     .place {
       margin: 0.5rem 24px;

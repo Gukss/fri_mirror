@@ -26,6 +26,7 @@ export type GameType = {
   title: string;
   headCount: number;
   gameRoomId: number;
+  participantCount: number;
 };
 
 const Main: React.FC = () => {
