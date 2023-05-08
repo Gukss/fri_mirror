@@ -13,7 +13,7 @@ public class FindGameRoomInstance {
     private String title;
     private int headCount;
     private String location;
-    private int participantCount;
+    private int participationCount;
 
 
     public static FindGameRoomInstance create(GameRoom gameroom, int participantCount) {
@@ -22,7 +22,7 @@ public class FindGameRoomInstance {
                 .title(gameroom.getTitle())
                 .headCount(gameroom.getHeadCount())
                 .location(gameroom.getLocation())
-                .participantCount(participantCount)
+                .participationCount(participantCount)
                 .build();
     }
 }
