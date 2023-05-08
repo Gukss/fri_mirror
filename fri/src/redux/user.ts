@@ -7,8 +7,9 @@ interface UserState {
   heart: number;
   roomId: string;
   gameRoomId: string;
-  nickname : string;
-  anonymousProfileImageUrl : string;
+  nickname: string;
+  anonymousProfileImageUrl: string;
+  major: boolean | null;
 }
 
 // 초기 상태
@@ -19,7 +20,8 @@ const initialState: UserState = {
   roomId: "",
   gameRoomId: "",
   nickname: "",
-  anonymousProfileImageUrl : "",
+  anonymousProfileImageUrl: "",
+  major: null
 };
 
 const userSlice = createSlice({
@@ -32,20 +34,21 @@ const userSlice = createSlice({
     logout() {
       return initialState;
     },
-    meeting(state, action: PayloadAction<string>){
+    meeting(state, action: PayloadAction<string>) {
       state.roomId = action.payload;
     },
-    game(state, action : PayloadAction<string>) {
+    game(state, action: PayloadAction<string>) {
       state.gameRoomId = action.payload;
     },
-    useegg(state, action : PayloadAction<number>){
+    useegg(state, action: PayloadAction<number>) {
       state.heart = state.heart - action.payload;
     },
-    changeNick(state, action : PayloadAction<string>){
+    changeNick(state, action: PayloadAction<string>) {
       state.nickname = action.payload;
     }
   }
 });
 
 export default userSlice.reducer;
-export const { login, logout, meeting, game, useegg, changeNick } = userSlice.actions;
+export const { login, logout, meeting, game, useegg, changeNick } =
+  userSlice.actions;

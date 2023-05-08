@@ -26,7 +26,7 @@ export type GameType = {
   title: string;
   headCount: number;
   gameRoomId: number;
-  participantCount: number;
+  participationCount: number;
 };
 
 const Main: React.FC = () => {
@@ -136,6 +136,11 @@ const Main: React.FC = () => {
         setDrink(res.data.drink);
         setEtc(res.data.etc);
         setPlay(res.data.game);
+        console.log(
+          api_url + `game-room?area=${region}`,
+          "메인페이지",
+          game.data.game
+        );
         setDinner(res.data.meal);
         setStudy(res.data.study);
         setExercise(res.data.exercise);

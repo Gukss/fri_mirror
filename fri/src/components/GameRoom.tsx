@@ -7,8 +7,8 @@ interface roomType {
 }
 function GameRoom({ room }: roomType) {
   const [open, setOpen] = useState(false);
-  const { gameRoomId, title, headCount, location, participantCount } = room;
-
+  const { title, headCount, location, participationCount } = room;
+  console.log(room);
   return (
     <div className="room_component">
       {/* {current_cnt === total_cnt ? (
@@ -18,9 +18,9 @@ function GameRoom({ room }: roomType) {
         <p className="place"># {location}</p>
         <p className="title">{title}</p>
         <p className="cnt">
-          참가자{" "}
+          참가자
           <span>
-            {participantCount}/{headCount}
+            {participationCount}/{headCount}
           </span>
         </p>
       </div>
