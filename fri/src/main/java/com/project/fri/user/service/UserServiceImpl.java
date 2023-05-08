@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
     if (findUser.getRoom() == null) {
       // 해당 유저가 어떤방에도 입장하지 않은 상태일 때 -> 바로 입장
       if (findUser.getHeart() >= 1) { //하트 1이상일 때
-        if (Boolean.FALSE.equals(request.getIsParticipate())) { //false로 오면 참여하기를 누른거다.
+        if (Boolean.FALSE.equals(request.isParticipate())) { //false로 오면 참여하기를 누른거다.
           //하트가 1이상인지 검사하고, 1이상이면 입장 후 하트-=1, 1미만이면 입장하면 안된다.
           findUser.updateRoomNumber(findRoom);
           findUser.minusHeart();
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         return res = ResponseEntity.status(HttpStatus.FORBIDDEN).body(updateUserRoomResponse);
       }
     } else if (findUser.getRoom().equals(findRoom) && Boolean.TRUE.equals(
-        request.getIsParticipate())) {
+        request.isParticipate())) {
       // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제 및 유저 ready상태 false
       findUser.updateRoomNumber(null);
       //ready 상태 false만들기 -> merge 하고난 후
