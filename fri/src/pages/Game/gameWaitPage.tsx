@@ -66,13 +66,6 @@ function GameWaiting() {
   const [state, setState] = useState<gameMessage>({
     gameRoomId: Number(gameRoomId),
     userList: [
-      {
-        userId: userId,
-        userProfile: profile,
-        nickname: nickname,
-        ready: false,
-        result: 0.0
-      }
     ]
   });
 
@@ -86,25 +79,31 @@ function GameWaiting() {
   };
 
   const subscribeChatting = () => {
-    console.log("게임 구독");
-    client.current?.subscribe(
-      `/sub/gameRoom/ready/${gameRoomId}`,
-      ({ body }) => {
-        console.log(body);
-        state.userList.push(JSON.parse(body));
-      }
-    );
-    publishInit();
+    console.log("게임 구독")
+    try {
+      client.current?.subscribe(
+        `/sub/game-room/ready/${gameRoomId}`,
+        ({ body }) => {
+          console.log(body)
+          setState(JSON.parse(body))
+        }
+        );
+        publishInit();
+    }catch(e){console.log}
+
     let flag = true;
     for (let i = 0; i < state.userList.length; i++) {
       if (state.userList[i].ready === false) {
         flag = false;
+        console.log(state.userList[i].ready)
         break;
       }
     }
     if (flag && gameinfo?.headCount === state.userList.length) {
       goGame();
     }
+
+    console.log(flag, gameinfo?.headCount, state.userList.length)
   };
 
   const stompActive = () => {
@@ -129,10 +128,10 @@ function GameWaiting() {
         break;
       }
     }
-
+    console.log(state)
     client.current.publish({
-      destination: "/pub/gameRoom/ready/" + gameRoomId,
-      body: JSON.stringify(state)
+      destination: "/pub/game-room/ready",
+      body: JSON.stringify(state),
     });
   };
 
@@ -140,10 +139,19 @@ function GameWaiting() {
     if (!client.current?.connected) {
       return;
     }
+    const data = {
+      userId: userId,
+      userProfile: profile,
+      nickname: nickname,
+      ready: false,
+      result: 0.0
+    }
+    state.userList.push(data)
+    console.log(state)
 
     client.current.publish({
-      destination: "/pub/gameRoom/ready/" + gameRoomId,
-      body: JSON.stringify(state)
+      destination:  "/pub/game-room/ready",
+      body: JSON.stringify(state),
     });
   };
 
