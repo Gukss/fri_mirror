@@ -16,10 +16,9 @@ public class FindAllUserByGameRoomId {
     private String anonymousProfileImageUrl;
 
     public static FindAllUserByGameRoomId create(User users) {
-        FindAllUserByGameRoomId findAllUserByGameRoomId = FindAllUserByGameRoomId.builder()
+        return FindAllUserByGameRoomId.builder()
                 .name(users.getName())
-                .anonymousProfileImageUrl(users.getProfileUrl())
+                .anonymousProfileImageUrl(users.getAnonymousProfileImage().getImageUrl())
                 .build();
-        return findAllUserByGameRoomId;
     }
 }
