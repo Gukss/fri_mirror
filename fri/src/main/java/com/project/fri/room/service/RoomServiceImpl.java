@@ -48,7 +48,6 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * 방 생성
-   *
    * @param request
    * @return 만든 방 제목
    */
@@ -183,7 +182,6 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * desc: 요청한 방 한개에 대한 상세 정보 조회
-   *
    * @param roomId 찾으려는 방 Id (pathvariable)
    * @return 요청한 방에 대한 상세 정보
    */
@@ -199,13 +197,13 @@ public class RoomServiceImpl implements RoomService {
     //전공인 사람 list로 묶기
     List<FindAllUserByRoomIdDto> majorList = findUserList.stream()
         .filter(User::isMajor)
-        .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+        .map(FindAllUserByRoomIdDto::new)
         .collect(Collectors.toList());
 
     //비전공인 사람 list로 묶깅
     List<FindAllUserByRoomIdDto> nonMajorList = findUserList.stream()
         .filter(user -> !user.isMajor())
-        .map(user -> new FindAllUserByRoomIdDto(user.getName(), user.getProfileUrl()))
+        .map(FindAllUserByRoomIdDto::new)
         .collect(Collectors.toList());
 
     //본인 객체 가지고 오기
@@ -225,7 +223,6 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * desc: 방 더보기
-   *
    * @param stringArea
    * @param stringCategory
    * @return
