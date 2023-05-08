@@ -99,7 +99,7 @@ public class User extends BaseTimeEntity {
   }
 
   /**
-   * 게임 방 참여하기 눌렀을 때, 게임 방 update
+   * 게임 방 참여하기 눌렀을 때, 생성했을 때 게임 방 update
    */
   public GameRoom updateGameRoomNumber(GameRoom saveGameRoom) {
     this.gameRoom = saveGameRoom;

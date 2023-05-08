@@ -62,16 +62,16 @@ public class GameRoom extends BaseTimeEntity {
   //==생성메서드==//
   public static GameRoom create(CreateGameRoomRequest request, Area area, User user, double time) {
     GameRoom gameRoom = GameRoom.builder()
-            .title(request.getTitle())
-            .headCount(request.getHeadCount())
-            .randomTime(time)
-            .area(area)
-            .location(request.getLocation())
-            .baseEntity(BaseEntity.builder()
-                    .constructor(user.getName())
-                    .updater(user.getName())
-                    .build())
-            .build();
+        .title(request.getTitle())
+        .headCount(request.getHeadCount())
+        .randomTime(time)
+        .area(area)
+        .location(request.getLocation())
+        .baseEntity(BaseEntity.builder()
+            .constructor(user.getName())
+            .updater(user.getName())
+            .build())
+        .build();
     return gameRoom;
   }
 }
