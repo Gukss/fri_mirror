@@ -120,6 +120,7 @@ public class GameRoomController {
 
   @MessageMapping("/gameRoom/ready")
   public void message(SocketGameRoomStatusRequestAndResponse message) {
+    System.out.println("message = " + message);
     messagingTemplate.convertAndSend("/sub/gameRoom/ready" + message.getGameRoomId(), message);
   }
 
