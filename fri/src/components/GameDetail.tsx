@@ -78,20 +78,32 @@ function GameDetail({ room, open, setOpen }: roomType) {
                   {data.participantCount}/{headCount}
                 </div>
               </div>
-              <div className="game-profile">
-                {data.participantCount === 0 ? (
+              {data.participantCount === 0 ? (
+                <div className="profile">
                   <div>참여자가 없습니다.</div>
-                ) : (
-                  data.participation.map((info: any) => (
+                </div>
+              ) : (
+                <div className="game-profile">
+                  {data.participation.map((info: any) => (
                     <div key={info.name} className="info">
                       <div className="profile-img">{info.url}</div>
                       <div className="name">{info.name}</div>
                     </div>
-                  ))
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="join_game" onClick={() => navigate("/wait/1")}>
+            <div
+              className="join_game"
+              onClick={() => navigate("/wait/1")}
+              // 참여자가 총인원보다 작을때는 누를 수 있지만, 같거나 클 때는 참여가 불가능함
+              style={{
+                pointerEvents:
+                  data.participantCount <= headCount ? "auto" : "none",
+                background:
+                  data.participantCount <= headCount ? "#ffce3c" : "#ffefbe"
+              }}
+            >
               참여하기
             </div>
           </div>
