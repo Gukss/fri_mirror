@@ -18,22 +18,20 @@ public class UpdateGameRoomParticipationResponse {
     public static UpdateGameRoomParticipationResponse create(boolean isParticipate, GameRoom gameRoom) {
 
         if (gameRoom == null) { // gameRoom.equals(null)은 내용비교라서 항상 false
-            UpdateGameRoomParticipationResponse updateGameRoomParticipationResponse = UpdateGameRoomParticipationResponse.builder()
-//                    .gameRoomId() todo: 어떻게 주지?
+            return UpdateGameRoomParticipationResponse.builder()
+//                    .gameRoomId()
                     .title("참여중인 게임방이 없습니다.")
                     .participate(isParticipate)
-                    .randomTime(gameRoom.getRandomTime())
+//                    .randomTime(gameRoom.getRandomTime())
                     .build();
-            return updateGameRoomParticipationResponse;
 
         } else {
-            UpdateGameRoomParticipationResponse updateGameRoomParticipationResponse = UpdateGameRoomParticipationResponse.builder()
+            return UpdateGameRoomParticipationResponse.builder()
                     .gameRoomId(gameRoom.getId())
                     .title(gameRoom.getTitle())
                     .participate(isParticipate)
                     .randomTime(gameRoom.getRandomTime())
                     .build();
-            return updateGameRoomParticipationResponse;
         }
     }
 }
