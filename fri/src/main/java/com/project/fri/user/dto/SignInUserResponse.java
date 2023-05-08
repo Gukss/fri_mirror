@@ -15,6 +15,8 @@ public class SignInUserResponse {
     private int heart;
     private String roomId;
     private String gameRoomId;
+    private String name;
+    private boolean major;
 
     public SignInUserResponse(User user) {
         userId = user.getId();
@@ -22,6 +24,8 @@ public class SignInUserResponse {
         nickname = user.getNickname();
         location = user.getArea().getCategory();
         heart = user.getHeart();
+        name = user.getName();
+        major = user.isMajor();
 
         if (user.getRoom() == null) {
             roomId = "참여한 방이 없습니다.";
