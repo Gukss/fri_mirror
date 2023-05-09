@@ -106,9 +106,8 @@ public class GameRoomServiceImpl implements GameRoomService {
         ));
 
     // 자신이 속한 게임방은 보여주지 않기
-    if (findAllGameRoomByArea.contains(user.getGameRoom())) {  // 내가 속한 게임방이 리스트에 포함되면
-      findAllGameRoomByArea.remove(user.getGameRoom());        // 리스트에서 제거해준다
-    }
+//    if (findAllGameRoomByArea.contains(user.getGameRoom())) {  // 내가 속한 게임방이 리스트에 포함되면 -> 이 처리 필요X
+    findAllGameRoomByArea.remove(user.getGameRoom());        // 리스트에서 제거해준다
 
     // todo: 쿼리 dsl
     // 응답 dto로 변환

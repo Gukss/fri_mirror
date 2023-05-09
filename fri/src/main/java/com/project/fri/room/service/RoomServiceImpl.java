@@ -282,9 +282,9 @@ public class RoomServiceImpl implements RoomService {
             NotFoundExceptionMessage.NOT_FOUND_USER
         ));
 
-    if (findAllRoom.contains(user.getRoom())) { // 방 리스트에 user가 참여한 방이있으면 제거한다.
-      findAllRoom.remove(user.getRoom());
-    }
+    // 방 리스트에 user가 참여한 방이있으면 제거한다.
+    // list.contains()로 확인안해도 remove()에서 알아서 검사하고 있으면 삭제해줌
+    findAllRoom.remove(user.getRoom());
 
     // 찾은 방 목록으로 user찾아서 전공, 비전공자 참여자 수 추가해서 dto로 반환하기
     List<FindAllRoomByCategoryResponse> seeMoreRoom = findAllRoom.stream()
