@@ -59,8 +59,9 @@ public class GameRoomController {
   public ResponseEntity<List<FindAllGameRoomResponse>> findAllGameRoom(
       @RequestParam("area") Category area,
       @RequestParam("page") int page,
-      @PageableDefault(size = 20, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
-    List<FindAllGameRoomResponse> allGameRoom = gameRoomService.findAllGameRoom(area, page,
+      @PageableDefault(size = 20, sort = "createdAt", direction = Direction.DESC) Pageable pageable,
+      @RequestHeader("Authorization") Long userId) {
+    List<FindAllGameRoomResponse> allGameRoom = gameRoomService.findAllGameRoom(userId, area, page,
         pageable);
     return ResponseEntity.status(200).body(allGameRoom);
   }

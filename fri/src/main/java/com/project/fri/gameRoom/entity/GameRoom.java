@@ -74,4 +74,13 @@ public class GameRoom extends BaseTimeEntity {
         .build();
     return gameRoom;
   }
+
+  //==비즈니스로직==//
+  /**
+   * 삭제 여부 변경
+   */
+  public GameRoom updateIsDelete(boolean isDelete) {
+    this.isDelete = isDelete;
+    return this;
+  }
 }

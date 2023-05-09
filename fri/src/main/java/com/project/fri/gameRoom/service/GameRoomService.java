@@ -29,11 +29,10 @@ public interface GameRoomService {
 
     /**
      * 게임 방 더보기
-     * @param page
-     * @param size
+     * @param userId, stringArea, page, pageable
      * @return 게임 방 리스트 20개씩 잘라서 주기
      */
-    List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page, Pageable pageable);
+    List<FindAllGameRoomResponse> findAllGameRoom(Long userId, Category stringArea, int page, Pageable pageable);
 
     /**
      * 게임 방 생성
