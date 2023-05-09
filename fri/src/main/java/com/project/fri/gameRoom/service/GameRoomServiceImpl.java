@@ -10,7 +10,7 @@ import com.project.fri.gameRoom.repository.GameRoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 import com.sun.jdi.request.InvalidRequestStateException;
-import java.util.Random;
+import org.apache.logging.log4j.Logger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -56,7 +56,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     // 해당 gameRoom에 참여한 유저 찾고 + 원하는 dto 형식으로 반환
     List<User> users = userRepository.findAllByGameRoom_Id(gameRoomId);
     List<FindAllUserByGameRoomId> findUsers = users.stream()
-        .map(user -> FindAllUserByGameRoomId.create(user))  // todo: 리팩토링 필요
+        .map(FindAllUserByGameRoomId::create)  // todo: 리팩토링 필요
         .collect(Collectors.toList());
 
     // 해당 gameRoom에 내가 참여했는지 확인
@@ -86,7 +86,7 @@ public class GameRoomServiceImpl implements GameRoomService {
    * @return 게임 방 리스트 20개씩 잘라서 주기
    */
   @Override
-  public List<FindAllGameRoomResponse> findAllGameRoom(Category stringArea, int page,
+  public List<FindAllGameRoomResponse> findAllGameRoom(Long userId, Category stringArea, int page,
       Pageable pageable) {
     // 지역명으로 area 찾기
     Area area = areaRepository.findByCategory(stringArea)
@@ -99,7 +99,19 @@ public class GameRoomServiceImpl implements GameRoomService {
         pageable.getSort());  // page별로 20개씩 잘라주기
     List<GameRoom> findAllGameRoomByArea = gameRoomRepository.findAllByArea(area, newPagable);
 
+    // user가 속한 게임방 찾기
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundExceptionMessage(
+            NotFoundExceptionMessage.NOT_FOUND_USER
+        ));
+
+    // 자신이 속한 게임방은 보여주지 않기
+    if (findAllGameRoomByArea.contains(user.getGameRoom())) {  // 내가 속한 게임방이 리스트에 포함되면
+      findAllGameRoomByArea.remove(user.getGameRoom());        // 리스트에서 제거해준다
+    }
+
     // todo: 쿼리 dsl
+    // 응답 dto로 변환
     List<FindAllGameRoomResponse> findAllGameRoom = findAllGameRoomByArea.stream()
         .map(gameRoom -> FindAllGameRoomResponse.create(gameRoom,
             userRepository.findAllByGameRoom(gameRoom).size()))
@@ -183,15 +195,20 @@ public class GameRoomServiceImpl implements GameRoomService {
             NotFoundExceptionMessage.NOT_FOUND_ROOM
         ));
 
-    if (!isParticipate) {       // false이고 참여한 방이 없을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
-      log.info("요청값 확인");
+    if (!isParticipate) {       // enterRoom: false이고 참여한 방이 없을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
       isParticipate = true;
       user.updateGameRoomNumber(gameRoom);
 
-    } else {                    // true일 때 -> 게임방번호 null로
+    } else {                    // exitRoom: true일 때 -> 게임방번호 null로
       isParticipate = false;
       user.updateGameRoomNumber(null);
-      gameRoom = null;
+      // 내가 나갈 때, 참여인원이 0명이면 방 삭제처리
+      List<User> allParticipant = userRepository.findAllByGameRoom(gameRoom);
+      if (allParticipant.isEmpty()) {  // 아무도 없으면 삭제처리
+        gameRoom.updateIsDelete(true);
+      }
+      gameRoom = null;                 // 방나감 처리
+
     }
 
     // 응답 dto로 반환
