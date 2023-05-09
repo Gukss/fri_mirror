@@ -233,14 +233,18 @@ public class GameRoomServiceImpl implements GameRoomService {
 
     List<GameRoom> gameRoomList = gameRoomRepository.findAllByAreaOrderByCreatedAtDesc(findArea);
     // todo : 게임방이 많으면 전체 게임방을 다들고와서 리스트를 만드는건 비효율적으로 보임
+
+    // 내가 들어가 있는 game방 제거
+    gameRoomList.remove(findUser.getGameRoom());
+
     List<FindGameRoomInstance> result = new ArrayList<>();
 
     for (GameRoom r : gameRoomList) {
       List<User> foundUserList = userRepository.findAllByGameRoom(r);
       int userSize = foundUserList.size(); //방에 참여한 인원수
 
-      // 입장 인원이 다 차지않고, 해당 유저가 들어가 있지 않은 경우에만 추가
-      if (userSize < r.getHeadCount() && (findUser.getGameRoom() == null || !findUser.getGameRoom().equals(r))) {
+      // 입장 인원이 다 차지않은 경우
+      if (userSize < r.getHeadCount()) {
         result.add(FindGameRoomInstance.create(r, userSize));
       }
 
