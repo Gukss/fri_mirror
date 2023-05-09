@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -293,5 +294,17 @@ public class RoomServiceImpl implements RoomService {
     return seeMoreRoom;
   }
 
+  /*
+  매주 금요일 23시 11분 모든방 삭제처리
+   */
+  @Override
+  @Scheduled(cron = "0 11 23 ? * FRI")
+  @Transactional
+  public void deleteRoomScheduler() {
+    List<Room> allRoomList = roomRepository.findAll();
+    for (Room r : allRoomList) {
+      r.deleteRoom();
+    }
+  }
 
 }
