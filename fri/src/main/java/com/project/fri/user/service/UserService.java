@@ -62,11 +62,22 @@ public interface UserService {
 
   /**
    * 유저 프로필수정 (닉네임, 사진)
-   * @param updateUserProfileRequest
-   * @param userId
-   * @return
+   * @param updateUserProfileRequest 프로필 수정 요청
+   * @param userId 변경 유저
+   * @return 프로필 수정 응답
    */
   UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, Long userId);
 
+  /**
+   * 닉네임 중복 체크
+   * @param certifiedNicknameRequest
+   * @return
+   */
   HttpStatus certifiedNickname(CertifiedNicknameRequest certifiedNicknameRequest);
+
+  /**
+   * 매일 00시 유저 하트수 1개씩 증가
+   */
+  void updateUserHeartScheduler();
+
 }

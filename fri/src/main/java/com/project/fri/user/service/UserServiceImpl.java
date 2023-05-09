@@ -29,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -465,4 +466,15 @@ public class UserServiceImpl implements UserService {
     }
     return returnStatus;
   }
+
+  @Override
+  @Scheduled(cron = "0 0 0 1/1 * ?")
+  @Transactional
+  public void updateUserHeartScheduler() {
+    List<User> findUserList = userRepository.findByHeartLessThanEqual(4);
+    for (User u : findUserList) {
+      u.plusHeart();
+    }
+  }
+
 }
