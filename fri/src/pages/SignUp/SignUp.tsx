@@ -330,7 +330,6 @@ export default function SignUp() {
   };
 
   const goEdu = async () => {
-    console.log("에듀싸피인?");
     setLoading(true);
     try {
       await axios.post(api_url + "user/certified/edu", { email: form.id });

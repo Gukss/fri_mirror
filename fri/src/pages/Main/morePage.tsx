@@ -45,11 +45,6 @@ function More() {
             api_url + `game-room/category?area=${region}&page=0`,
             { headers: header }
           );
-          console.log(
-            api_url + `game-room/category?area=${region}&page=0`,
-            "더보기 눌렀을때",
-            res.data
-          );
           setGame(res?.data);
         }
       } catch (e) {

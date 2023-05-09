@@ -8,7 +8,6 @@ interface roomType {
 function GameRoom({ room }: roomType) {
   const [open, setOpen] = useState(false);
   const { title, headCount, location, participationCount } = room;
-  console.log(room);
   return (
     <div className="room_component">
       {/* {current_cnt === total_cnt ? (
