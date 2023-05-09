@@ -30,4 +30,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdWithAnonymousProfileImage(@Param("userId") Long userId);
     Optional<User> findByEmail(String email);
     Optional<User> findByNickname(String nickname);
+    List<User> findByHeartLessThanEqual(int value);
 }

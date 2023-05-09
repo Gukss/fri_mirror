@@ -99,6 +99,13 @@ public class User extends BaseTimeEntity {
   }
 
   /**
+   * 하트수 증가
+   */
+  public void plusHeart() {
+    this.heart += 1;
+  }
+
+  /**
    * 게임 방 참여하기 눌렀을 때, 생성했을 때 게임 방 update
    */
   public GameRoom updateGameRoomNumber(GameRoom saveGameRoom) {

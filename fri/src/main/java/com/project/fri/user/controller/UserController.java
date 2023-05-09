@@ -114,4 +114,10 @@ public class UserController {
     HttpStatus httpStatus = userService.certifiedNickname(certifiedNicknameRequest);
     return ResponseEntity.status(httpStatus).build();
   }
+
+  @GetMapping("/profile-image")
+  public ResponseEntity<FindAnonymousProfileImagesResponse> FindAnonymousProfileImages() {
+    FindAnonymousProfileImagesResponse result = userService.findAnonymousProfileImages();
+    return ResponseEntity.ok().body(result);
+  }
 }

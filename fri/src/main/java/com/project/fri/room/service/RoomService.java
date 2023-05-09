@@ -51,4 +51,8 @@ public interface RoomService {
    */
   FindRoomResponse findRoom(Long roomId, Long userId);
 
+  /**
+   * 매주 금요일 23시 11분 방 삭제 처리
+   */
+  void deleteRoomScheduler();
 }

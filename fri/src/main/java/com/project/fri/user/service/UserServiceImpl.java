@@ -29,11 +29,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * packageName    : com.project.fri.user.service fileName       : UserServiceImpl date           :
@@ -465,4 +467,31 @@ public class UserServiceImpl implements UserService {
     }
     return returnStatus;
   }
+
+  @Override
+  @Scheduled(cron = "0 0 0 1/1 * ?")
+  @Transactional
+  public void updateUserHeartScheduler() {
+    List<User> findUserList = userRepository.findByHeartLessThanEqual(4);
+    for (User u : findUserList) {
+      u.plusHeart();
+    }
+  }
+
+  /**
+   * 유저 프로필 수정을 위한 사진 리스트 조회
+   * @return FindAnonymousProfileImagesResponse
+   */
+  @Override
+  public FindAnonymousProfileImagesResponse findAnonymousProfileImages() {
+    List<AnonymousProfileImage> findImages = anonymousProfileImageRepository.findAll();
+    List<FindAnonymousProfileImageDto> result = findImages.stream()
+            .map(i -> FindAnonymousProfileImageDto.builder()
+                    .anonymousImageId(i.getId())
+                    .anonymousImageUrl(i.getImageUrl())
+                    .build())
+            .collect(Collectors.toList());
+    return new FindAnonymousProfileImagesResponse(result);
+  }
+
 }
