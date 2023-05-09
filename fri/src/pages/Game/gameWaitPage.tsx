@@ -68,18 +68,17 @@ function GameWaiting() {
     userList: [
     ]
   });
+  const [player, setPlayer] = useState<gameMessage>({
+    gameRoomId: Number(gameRoomId),
+    userList: [
+    ]
+  });
 
-  const goGame = async () => {
-    try {
-      await axios.get(api_url + "game-room/start");
+  const goGame =  () => {
       navigate(`game/${gameRoomId}?time=${gameTime}`);
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   const subscribeChatting = () => {
-    console.log("게임 구독")
     try {
       client.current?.subscribe(
         `/sub/game-room/ready/${gameRoomId}`,
@@ -89,9 +88,7 @@ function GameWaiting() {
         }
         );
         publishInit();
-    }catch(e){console.log}
-
-    let flag = true;
+        let flag = true;
     for (let i = 0; i < state.userList.length; i++) {
       if (state.userList[i].ready === false) {
         flag = false;
@@ -104,6 +101,8 @@ function GameWaiting() {
     }
 
     console.log(flag, gameinfo?.headCount, state.userList.length)
+
+    }catch(e){console.log}    
   };
 
   const stompActive = () => {
@@ -128,7 +127,6 @@ function GameWaiting() {
         break;
       }
     }
-    console.log(state)
     client.current.publish({
       destination: "/pub/game-room/ready",
       body: JSON.stringify(state),
@@ -146,7 +144,14 @@ function GameWaiting() {
       ready: false,
       result: 0.0
     }
-    state.userList.push(data)
+    let flag = true;
+    for(let i = 0; i < state.userList.length; i++){
+      if(state.userList[i].userId === userId){
+        flag = false;
+        break;
+      }
+    }
+    if(flag) state.userList.push(data);
     console.log(state)
 
     client.current.publish({
@@ -189,8 +194,8 @@ function GameWaiting() {
             console.log("커넥트 되는 시점");
             subscribeChatting();
           },
-          debug: (str) => {
-            console.log(str);
+          debug: () => {
+            null;
           },
           onStompError: (frame) => {
             console.error(frame);
