@@ -2,6 +2,7 @@ package com.project.fri.chatting.dto;
 
 import com.project.fri.chatting.entity.ChattingMessage;
 import com.querydsl.core.annotations.QueryProjection;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,7 @@ public class FindChattingMessageResponse {
   private String anonymousProfileImageUrl;
   private boolean isMajor;
   private String year;
+  private LocalDateTime createdAt;
 
   @QueryProjection
   public FindChattingMessageResponse(ChattingMessage chattingMessage){
@@ -21,5 +23,6 @@ public class FindChattingMessageResponse {
     this.anonymousProfileImageUrl=chattingMessage.getUser().getAnonymousProfileImage().getImageUrl();
     this.isMajor=chattingMessage.getUser().isMajor();
     this.year=chattingMessage.getUser().getYear();
+    this.createdAt=chattingMessage.getUpdatedAt();
   }
 }

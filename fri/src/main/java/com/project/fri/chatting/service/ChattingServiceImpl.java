@@ -31,7 +31,7 @@ public class ChattingServiceImpl implements ChattingService{
         .orElseThrow(()->new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
     Room room=roomRepository.findById(request.getRoomId())
-            .orElseThrow(()->new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
+        .orElseThrow(()->new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
     ChattingMessage chattingMessage = ChattingMessage.create(request, user, room);
 
@@ -40,9 +40,11 @@ public class ChattingServiceImpl implements ChattingService{
 
   @Override
   public List<FindChattingMessageResponse> findChatting(Long roomId) {
+    Room room=roomRepository.findById(roomId)
+        .orElseThrow(()->new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
 
     List<FindChattingMessageResponse> chattingMessageAndUser = chattingRepository.findChattingMessageAndUser(
-        roomId);
+        roomId,room.getCreatedAt());
 
     return chattingMessageAndUser;
   }
