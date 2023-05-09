@@ -260,7 +260,7 @@ public class RoomServiceImpl implements RoomService {
 
   @Override
   public List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category stringArea,
-      com.project.fri.room.entity.Category stringCategory, int page, Pageable pageable) {
+      com.project.fri.room.entity.Category stringCategory, int page, Pageable pageable, Long userId) {
 
     Pageable newPageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
@@ -275,6 +275,16 @@ public class RoomServiceImpl implements RoomService {
     // 지역과 카테고리로 방 목록을 찾음
     List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
         roomCategory, newPageable);
+    
+    // 방 리스트에서 내가 참여한 방 안보이게 하기
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundExceptionMessage(
+            NotFoundExceptionMessage.NOT_FOUND_USER
+        ));
+
+    if (findAllRoom.contains(user.getRoom())) { // 방 리스트에 user가 참여한 방이있으면 제거한다.
+      findAllRoom.remove(user.getRoom());
+    }
 
     // 찾은 방 목록으로 user찾아서 전공, 비전공자 참여자 수 추가해서 dto로 반환하기
     List<FindAllRoomByCategoryResponse> seeMoreRoom = findAllRoom.stream()
@@ -282,7 +292,7 @@ public class RoomServiceImpl implements RoomService {
 
           // 방으로 참여 user 찾기
           List<User> users = userRepository.findAllByRoom(findRoom);
-          long major = users.stream().filter(user -> user.isMajor() == true).count();    // 전공자
+          long major = users.stream().filter(u -> u.isMajor() == true).count();    // 전공자
           long nonMajor = users.size() - major;                                          // 비전공자
 
           // response dto로 반환

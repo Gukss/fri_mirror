@@ -84,10 +84,11 @@ public class RoomController {
       @RequestParam("area") Category area,
       @RequestParam("category") com.project.fri.room.entity.Category category,
       @RequestParam("page") int page,
-      @PageableDefault(size = 20,sort = "createdAt",direction = Direction.DESC) Pageable pageable) {
+      @PageableDefault(size = 20,sort = "createdAt",direction = Direction.DESC) Pageable pageable,
+      @RequestHeader("Authorization") Long userId) {
 
     List<FindAllRoomByCategoryResponse> seeMoreRoom = roomService.findAllByAreaAndRoomCategory(
-        area, category,page,pageable);
+        area, category,page,pageable, userId);
     return ResponseEntity.status(200).body(seeMoreRoom);
   }
 
