@@ -1,6 +1,7 @@
 package com.project.fri.gameChatting.entity;
 
 import com.project.fri.gameChatting.dto.CreateGameChattingMessageRequest;
+import com.project.fri.gameRoom.entity.GameRoom;
 import com.project.fri.room.entity.Room;
 import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
@@ -45,15 +46,16 @@ public class GameChattingMessage extends BaseTimeEntity {
   @NotNull
   private User user;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="room_id")
+  @JoinColumn(name="game_room_id")
   @NotNull
-  private Room room;
+  private GameRoom gameRoom;
 
-  public static GameChattingMessage create(CreateGameChattingMessageRequest request,User user,Room room){
+  public static GameChattingMessage create(CreateGameChattingMessageRequest request,User user,
+      GameRoom room){
     GameChattingMessage response=GameChattingMessage.builder()
         .message(request.getMessage())
         .user(user)
-        .room(room)
+        .gameRoom(room)
         .isDelete(false)
         .baseEntity(BaseEntity.builder()
             .constructor(user.getName())

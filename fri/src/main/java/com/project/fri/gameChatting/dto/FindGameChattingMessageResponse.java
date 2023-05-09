@@ -2,6 +2,7 @@ package com.project.fri.gameChatting.dto;
 
 import com.project.fri.gameChatting.entity.GameChattingMessage;
 import com.querydsl.core.annotations.QueryProjection;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -12,6 +13,7 @@ public class FindGameChattingMessageResponse {
   private String anonymousProfileImageUrl;
   private boolean isMajor;
   private String year;
+  private LocalDateTime createdAt;
 
   @QueryProjection
   public FindGameChattingMessageResponse(GameChattingMessage gameChattingMessage){
@@ -21,5 +23,6 @@ public class FindGameChattingMessageResponse {
     this.anonymousProfileImageUrl=gameChattingMessage.getUser().getAnonymousProfileImage().getImageUrl();
     this.isMajor=gameChattingMessage.getUser().isMajor();
     this.year=gameChattingMessage.getUser().getYear();
+    this.createdAt=gameChattingMessage.getCreatedAt();
   }
 }
