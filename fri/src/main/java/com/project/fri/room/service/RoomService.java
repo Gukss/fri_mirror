@@ -39,7 +39,7 @@ public interface RoomService {
    */
   List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category area,
       com.project.fri.room.entity.Category roomCategory, int page,
-      Pageable pageable);
+      Pageable pageable, Long userId);
 
   FindAllRoomResponse findAllByArea(Category areaString, Long userId);
 
