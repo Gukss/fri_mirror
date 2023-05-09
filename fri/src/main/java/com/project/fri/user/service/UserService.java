@@ -80,4 +80,9 @@ public interface UserService {
    */
   void updateUserHeartScheduler();
 
+  /**
+   * 유저 프로필 수정을 위한 사진 리스트 조회
+   * @return FindAnonymousProfileImagesResponse
+   */
+  FindAnonymousProfileImagesResponse findAnonymousProfileImages();
 }
