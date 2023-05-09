@@ -48,6 +48,7 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * 방 생성
+   *
    * @param request
    * @return 만든 방 제목
    */
@@ -105,8 +106,22 @@ public class RoomServiceImpl implements RoomService {
     List<FindAllRoomInstance> bettingList = new ArrayList<>();
     List<FindAllRoomInstance> etcList = new ArrayList<>();
 
+    boolean fullDrinkList = false;
+    boolean fullMealList = false;
+    boolean fullGameList = false;
+    boolean fullExerciseList = false;
+    boolean fullStudyList = false;
+    boolean fullBettingList = false;
+    boolean fullEtcList = false;
+
     for (Room x : roomList) {
-      if(x.isDelete()==true)continue;
+      if (fullDrinkList && fullMealList && fullGameList && fullExerciseList && fullStudyList
+          && fullBettingList && fullEtcList) { //모든 리스트가 가득 찼으면 더이상 반복안해도 된다.
+        break;
+      }
+      if (x.isDelete() == true) {
+        continue;
+      }
       com.project.fri.room.entity.Category category = x.getRoomCategory().getCategory();
       List<User> foundUserList = userRepository.findAllByRoom(x);
       int size = foundUserList.size(); //방에 참여한 인원수
@@ -132,33 +147,45 @@ public class RoomServiceImpl implements RoomService {
       switch (category) {
         //총 7개 + etc
         case DRINK:
-          if (drinkList.size() < 10) {
+          if (!fullDrinkList && drinkList.size() < 10) {
             drinkList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }else{
+            fullDrinkList = true;
           }
           break;
         case MEAL:
-          if (mealList.size() < 10) {
+          if (!fullMealList && mealList.size() < 10) {
             mealList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }else{
+            fullMealList = true;
           }
           break;
         case GAME:
-          if (gameList.size() < 10) {
+          if (!fullGameList && gameList.size() < 10) {
             gameList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }else{
+            fullGameList = true;
           }
           break;
         case EXERCISE:
-          if (exerciseList.size() < 10) {
+          if (!fullExerciseList && exerciseList.size() < 10) {
             exerciseList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }else{
+            fullExerciseList = true;
           }
           break;
         case STUDY:
-          if (studyList.size() < 10) {
+          if (!fullStudyList && studyList.size() < 10) {
             studyList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }else{
+            fullStudyList = true;
           }
           break;
         case ETC:
-          if (etcList.size() < 10) {
+          if (!fullEtcList && etcList.size() < 10) {
             etcList.add(x.createFindRoomResponse(category, majorCount, nonMajorCount));
+          }else{
+            fullEtcList = true;
           }
           break;
         default:
@@ -182,6 +209,7 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * desc: 요청한 방 한개에 대한 상세 정보 조회
+   *
    * @param roomId 찾으려는 방 Id (pathvariable)
    * @return 요청한 방에 대한 상세 정보
    */
@@ -223,6 +251,7 @@ public class RoomServiceImpl implements RoomService {
 
   /**
    * desc: 방 더보기
+   *
    * @param stringArea
    * @param stringCategory
    * @return
