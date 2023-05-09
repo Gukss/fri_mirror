@@ -224,9 +224,13 @@ public class GameRoomServiceImpl implements GameRoomService {
    * @return 게임방 10개 리스트
    */
   @Override
-  public List<FindGameRoomInstance> findGameRoomList(Category areaCategory) {
+  public List<FindGameRoomInstance> findGameRoomList(Category areaCategory, Long userId) {
     Area findArea = areaRepository.findByCategory(areaCategory)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
+
+    User findUser = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
     List<GameRoom> gameRoomList = gameRoomRepository.findAllByAreaOrderByCreatedAtDesc(findArea);
     // todo : 게임방이 많으면 전체 게임방을 다들고와서 리스트를 만드는건 비효율적으로 보임
     List<FindGameRoomInstance> result = new ArrayList<>();
@@ -235,7 +239,8 @@ public class GameRoomServiceImpl implements GameRoomService {
       List<User> foundUserList = userRepository.findAllByGameRoom(r);
       int userSize = foundUserList.size(); //방에 참여한 인원수
 
-      if (userSize < r.getHeadCount()) {
+      // 입장 인원이 다 차지않고, 해당 유저가 들어가 있지 않은 경우에만 추가
+      if (userSize < r.getHeadCount() && (findUser.getGameRoom() == null || !findUser.getGameRoom().equals(r))) {
         result.add(FindGameRoomInstance.create(r, userSize));
       }
 

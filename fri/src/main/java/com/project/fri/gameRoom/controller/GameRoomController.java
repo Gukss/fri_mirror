@@ -112,8 +112,9 @@ public class GameRoomController {
    */
   @GetMapping
   public ResponseEntity<FindGameRoomListResponse> findGameRoomList(
-      @RequestParam("area") Category areaCategory) {
-    List<FindGameRoomInstance> gameRoomList = gameRoomService.findGameRoomList(areaCategory);
+      @RequestParam("area") Category areaCategory,
+      @RequestHeader("Authorization") Long userId) {
+    List<FindGameRoomInstance> gameRoomList = gameRoomService.findGameRoomList(areaCategory, userId);
     FindGameRoomListResponse result = new FindGameRoomListResponse(gameRoomList);
 
     return ResponseEntity.ok().body(result);
