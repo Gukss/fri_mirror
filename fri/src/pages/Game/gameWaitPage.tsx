@@ -87,7 +87,7 @@ function GameWaiting() {
     `/sub/game-room/ready/${gameRoomId}`,
     ({ body }) => {
       setState(JSON.parse(body))
-      if(totalCnt === state.userList.length){
+      if(totalCnt === JSON.parse(body).userList.length){
         setView(true);
         checkReady(JSON.parse(body));
       } 
@@ -130,6 +130,10 @@ function GameWaiting() {
       destination:  "/pub/game-room/ready",
       body: JSON.stringify(state),
     });
+    if(totalCnt === state.userList.length){
+      setView(true);
+      checkReady(state);
+    }
   };
 
   useEffect(() => {
@@ -155,10 +159,10 @@ function GameWaiting() {
       }
       await connect()
       if(gameinfo?.headCount !== undefined && gameinfo?.headCount === state.userList.length)
-    {
-      setView(true);
-      checkReady(state);
-    }
+        {
+          setView(true);
+          checkReady(state);
+        }
     };
     getData();
   }, []);
@@ -175,7 +179,7 @@ function GameWaiting() {
         "Content-Type": "application/json",
         Authorization: Number(userId)
       };
-      const res = await axios.patch(
+      await axios.patch(
         api_url + `game-room/${gameRoomId}/participation`,
         { participate: true },
         { headers: header }
@@ -204,11 +208,11 @@ function GameWaiting() {
         debug: () => {
           null;
         },
-        onStompError: (frame) => {
-          console.error(frame);
+        onStompError: () => {
+          null;
         }
       });
-      await stompActive();
+      stompActive();
     } catch (e) {
       console.log(e);
     }
