@@ -75,7 +75,8 @@ function GameMain() {
   };
 
   const resultSort = async (body:userInfo[]) => {
-    body.sort((a, b) => Math.abs(Number(gameTime) - a.gameTime) - Math.abs(Number(gameTime) - b.gameTime))
+    body.sort((a:userInfo, b:userInfo): number => {return Math.abs(Number(gameTime) - a.gameTime) - Math.abs(Number(gameTime) - b.gameTime)})
+    console.log(state, body)
     await resultSet(body)
   }
 
