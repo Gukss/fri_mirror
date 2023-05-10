@@ -1,5 +1,6 @@
 package com.project.fri.board.entity;
 
+import com.project.fri.board.dto.CreateBoardRequest;
 import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
@@ -27,15 +28,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name="board")
+@Table(name = "board")
 public class Board extends BaseTimeEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="board_id")
+  @Column(name = "board_id")
   private long id;
   @NotNull
   private String title;
   @NotNull
+  @Column(length = 3000)
   private String content;
 
   private boolean isDelete;
@@ -50,4 +53,23 @@ public class Board extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  public static Board create(CreateBoardRequest createBoardRequest, User user,
+      BoardCategory boardCategory) {
+    return Board.builder()
+        .title(createBoardRequest.getTitle())
+        .content(createBoardRequest.getContent())
+        .boardCategory(boardCategory)
+        .user(user)
+        .baseEntity(BaseEntity.builder()
+            .constructor(user.getNickname())
+            .updater(user.getNickname())
+            .build())
+        .build();
+  }
+
+  public Board updateIsDelete(boolean isDelete){
+    this.isDelete = isDelete;
+    return this;
+  }
 }
