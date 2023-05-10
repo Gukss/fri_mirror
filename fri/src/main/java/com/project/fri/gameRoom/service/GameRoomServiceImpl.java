@@ -143,7 +143,7 @@ public class GameRoomServiceImpl implements GameRoomService {
         ));
 
     // 만약 다른 방에 참여하고 있으면 방생성할 수 없다
-    if (user.getGameRoom() != null || user.getRoom() != null) {
+    if (user.getGameRoom() != null) {
       throw new InvalidRequestStateException("이미 참여중인 방이 있습니다.");
     }
 
