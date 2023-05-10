@@ -36,6 +36,7 @@ public class Board extends BaseTimeEntity {
   @NotNull
   private String title;
   @NotNull
+  @Column(length = 3000)
   private String content;
 
   private boolean isDelete;
