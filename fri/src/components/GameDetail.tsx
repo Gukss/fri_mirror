@@ -43,11 +43,11 @@ function GameDetail({ room, open, setOpen }: roomType) {
       };
       const res = await axios.patch(
         api_url + `game-room/${gameRoomId}/participation`,
-        { isParticipate: false },
+        { participate: false },
         { headers: header }
       );
       dispatch(game(String(room.gameRoomId)));
-      navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}`);
+      navigate(`/wait/${room.gameRoomId}?time=${res.data.randomTime}&head=${res.data.headCount}`);
     } catch (e) {
       console.log(e);
     }
@@ -81,7 +81,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
   }, []);
 
   const isPossible = useSelector((state: RootState) => {
-    if (state.strr.roomId !== "참여한 방이 없습니다.") {
+    if (state.strr.gameRoomId !== "참여한 방이 없습니다.") {
       return "already";
     } else if (headCount <= participationCount) {
       return "tooMany";

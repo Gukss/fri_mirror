@@ -26,8 +26,8 @@ function App() {
               <Route path="/" element={<Onboarding />} />
               <Route path="/main" element={<Main />} />
               <Route path="/more" element={<More />} />
-              <Route path="/wait/:room" element={<GameWait />} />
               <Route path="/game/:room" element={<Game />} />
+              <Route path="/wait/:room" element={<GameWait />} />
               <Route path="/login" element={<LogIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/add" element={<Add />} />

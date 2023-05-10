@@ -206,9 +206,28 @@
             border: 0.5rem #ffc000 solid;
             box-shadow: 2px 2px 1px #000000;
             border-radius: 0.5rem;
-            display: grid;
-            grid-template-columns: 2fr 3fr 3fr;
             font-weight: 600;
+
+            .result {
+                display: flex;
+                justify-content: center;
+
+                .number {
+                    width: 40px;
+                    font-size: 18px;
+                }
+
+                .name {
+                    width: 60px;
+                    font-size: 18px;
+                    overflow-x: scroll;
+                }
+
+                .time {
+                    width: 60px;
+                    font-size: 18px;
+                }
+            }
         }
 
         .result-btn {

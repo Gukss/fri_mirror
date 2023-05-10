@@ -1,11 +1,35 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import lgm from "../../assets/lgm.png"
 import mgl from "../../assets/mgl.png"
 import egg from "../../assets/egg_fri.png"
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../redux/store";
+import { game } from "../../redux/user";
+import axios from "axios";
 
-function game() {
+import "./game.scss";
+import * as StompJs from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+
+export type userInfo = {
+  gameRoomId : number;
+  userId: number;
+  userProfile: string;
+  nickname: string;
+  ready: boolean;
+  gameTime: number;
+};
+
+export type partici = {
+  userId : number;
+  name : string;
+  profileUrl : string;
+}
+
+function GameMain() {
   const navigate = useNavigate();
+  const client = useRef<StompJs.Client>();
   const [seconds, setSeconds] = useState<number>(3);
   const [timer, setTimer] = useState<number>(10);
   const [modal, setModal] = useState<boolean>(true);
@@ -16,9 +40,143 @@ function game() {
   const timerRef = useRef<NodeJS.Timeout>();
   const lgmRef = useRef<NodeJS.Timeout>();
   const resultRef = useRef<HTMLDivElement>(null);
-
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const queryParams = new URLSearchParams(location.search);
+  const gameTime = queryParams.get("time");
+  const totalCnt = queryParams.get("head");
+  const [area, setArea] = useState<string>("");
   const [flip, setFlip] = useState<boolean>(false);
   const [result, setResult] = useState<boolean>(false);
+  const [looser, setLooser] = useState("");
+  const res:userInfo[] = [];
+  const api_url = process.env.REACT_APP_REST_API;
+  
+  const gameRoomId = useSelector((state: RootState) => {
+    return state.strr.gameRoomId;
+  });
+  const userId = useSelector((state: RootState) => {
+    return state.strr.userId;
+  });
+  const profile = useSelector((state: RootState) => {
+    return state.strr.anonymousProfileImageUrl;
+  });
+  const [nickname, setNick] = useState<string>("");
+  
+  const [state, setState] = useState<userInfo[]>([]);
+
+  const resultSet = async () => {
+    if(Number(totalCnt) === res.length){
+      const num = res.length
+      setLooser(res[num-1].nickname)
+    }
+  }
+
+  const resultSort = async () => {
+    state.sort((a, b) => (Number(gameTime) - a.gameTime) - (Number(gameTime) - b.gameTime))
+    await resultSet()
+  }
+
+  const outGame = async () => {
+    try {
+      const header = {
+        "Content-Type": "application/json",
+        Authorization: Number(userId)
+      };
+      await axios.patch(
+        api_url + `game-room/${gameRoomId}/participation`,
+        { participate: true },
+        { headers: header }
+      );
+      dispatch(game("참여한 방이 없습니다."));
+      navigate("/main");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const publishMessage = async (time : number) => {
+    if (!client.current?.connected) {
+      return;
+    }
+    client.current.publish({
+      destination: "/pub/game-room/stop",
+      body: JSON.stringify({
+        "gameRoomId": gameRoomId, // 필요한지 모르겟음
+        "userId": userId,
+        "gameTime": time,
+        "anonymousProfileImageId" : profile,
+        "nickname": nickname,
+      }),
+    });
+  };
+
+  const subscribeChatting = async () => {     
+    client.current?.subscribe(
+    `/sub/game-room/stop/${gameRoomId}`,
+    ({ body }) => {
+      res.push(JSON.parse(body))
+      setState((prev) => [...prev, JSON.parse(body)])
+      if(res.length === Number(totalCnt)) resultSort();
+    });
+  };
+
+  const stompActive = () => {
+    if (client.current !== undefined) {
+      client.current.activate();
+    }
+  };
+
+  // 웹 소켓 끊기.
+  const disconnect = () => {
+    if (client.current !== undefined) client.current.deactivate();
+  };
+
+  // 방 시작 후 웹 소켓 연결
+  const connect = async () => {
+    try {
+      client.current = new StompJs.Client({
+        webSocketFactory: () =>
+          new SockJS("https://meetingfri.com/api/ws-stomp"),
+        connectHeaders: {},
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+        onConnect: () => {
+          subscribeChatting();
+        },
+        debug: () => {
+          null;
+        },
+        onStompError: () => {
+          null;
+        }
+      });
+      stompActive();
+    } catch (e) {
+      console.log(e);
+    }
+    return () => disconnect();
+  };
+
+  // 소켓 연결 시점
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const header = {
+          "Content-Type": "application/json",
+          Authorization: userId
+        };
+        const res = await axios.get(api_url + "game-room/" + gameRoomId, {headers: header});
+        setArea(res.data.location)
+        res.data.participation.map((player:partici) => {
+          if(player.userId === userId) setNick(player.name)
+        })
+      }catch(e){console.log(e)}
+    }
+    getData();
+    connect();
+  }, [])
 
   // 이미지 로딩
   useEffect(() => {
@@ -67,8 +225,7 @@ function game() {
     if (timer < 0.01) {
       clearInterval(timerRef.current);
       clearInterval(lgmRef.current);
-      // 여기서도 보내기
-      console.log("여기서 소켓으로 점수 보내기", timer.toFixed(2));
+      publishMessage(0.00)
     }
   }, [timer]);
 
@@ -88,7 +245,7 @@ function game() {
     setFlip(true);
     clearInterval(timerRef.current);
     clearInterval(lgmRef.current);
-    console.log("여기서 소켓으로 점수 보내기", timer.toFixed(2));
+    publishMessage(Number(timer.toFixed(2)))
     setResult(true);
   };
 
@@ -126,52 +283,24 @@ function game() {
           <div className="game-result" ref={resultRef}>
             <div className="header">결과</div>
             <div className="name">
-              대전 2반 배성현 <br /> 잘먹겠습니다~
+              {looser} 잘 먹을게요~~
             </div>
-            <div className="time">5분 뒤 카페에서 만나요</div>
+            <div className="time">5분 뒤 {area}에서 만나요</div>
             <div className="result-table">
-              {/* 받아온 데이터로 띄우기 */}
-              <div>1등</div>
-              <div>배성현</div>
-              <div>4.35</div>
-              <div>2등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>3등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>4등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>5등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>6등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>7등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>8등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>9등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>10등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>11등</div>
-              <div>1</div>
-              <div>1</div>
-              <div>12등</div>
-              <div>1</div>
-              <div>1</div>
+              {
+                state.map((player, index) => (
+                  <div className="result" key={index}>
+                    <div className="number">{index+1}등</div>
+                    <div className="name">{player.nickname}</div>
+                    <div className="time">{player.gameTime}</div>
+                  </div>
+                ))
+              }
             </div>
             <button
               className="result-btn"
               onClick={() => {
-                navigate("/main");
+                outGame();
               }}
             >
               나가기
@@ -193,7 +322,7 @@ function game() {
           }
         </div>
         <div className="game-content">
-          <span>4.3</span>초에 <br /> 프라이를 눌러주세요.
+          <span>{gameTime}</span>초에 <br /> 프라이를 눌러주세요.
         </div>
         <div className="game-btn">
           <img
@@ -208,4 +337,4 @@ function game() {
   );
 }
 
-export default game;
+export default GameMain;
