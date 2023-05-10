@@ -6,7 +6,6 @@ export default function Onboarding() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    window.location.reload();
     const img = document.getElementById("gif");
     if (img) {
       img.classList.add("hidden");
