@@ -68,7 +68,7 @@ function GameWaiting() {
 
   const goGame = () => {
     navigate(
-      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}&location=${gameinfo?.location}`
+      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}`
     );
   };
 
@@ -163,6 +163,7 @@ function GameWaiting() {
         state.userList.push(data);
       }
       totalCnt = res.data.headCount;
+      gameTime = res.data.randomTime;
       await connect();
       if (
         gameinfo?.headCount !== undefined &&
