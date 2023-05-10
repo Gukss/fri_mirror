@@ -86,15 +86,17 @@ function GameWaiting() {
 
   const subscribeChatting = async () => {
     client.current?.subscribe(
-      `/sub/game-room/ready/${gameRoomId}`,
-      ({ body }) => {
-        setState(JSON.parse(body));
-        if (totalCnt === JSON.parse(body).userList.length) {
-          setView(true);
-          checkReady(JSON.parse(body));
-        }
-      }
-    );
+    `/sub/game-room/ready/${gameRoomId}`,
+    ({ body }) => {
+      player = (JSON.parse(body).userList)
+      console.log(JSON.parse(body).userList)
+      setState(JSON.parse(body))
+      console.log(isconnect, player)
+      if(connect_switch && totalCnt === JSON.parse(body).userList.length){
+        setView(true);
+        checkReady(JSON.parse(body));
+      } 
+    });
   };
 
   const stompActive = () => {
