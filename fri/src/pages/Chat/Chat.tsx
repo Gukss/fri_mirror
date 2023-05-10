@@ -6,6 +6,9 @@ import Image from "../../assets/Add photo alternate.png";
 import Up from "../../assets/Arrow upward.png";
 import ChatNav from "../../components/ChatNav/ChatNav";
 import ChatDetail from "../../components/ChatDetail/ChatDetail";
+import Egg from "../../assets/egg_fri.png";
+import lgm from "../../assets/lgm.png";
+import mgl from "../../assets/mgl.png";
 
 import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -90,6 +93,8 @@ export default function Chat() {
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
     const connect = async () => {
+      console.log("dd");
+      setLoading(true);
       try {
         client.current = new StompJs.Client({
           webSocketFactory: () =>
@@ -228,7 +233,33 @@ export default function Chat() {
   if (loading) {
     return (
       <div className="chatting-room">
-        <div>로딩중</div>
+        <div className="chat-loading">
+          <div className="wave">
+            <div className="ball">
+              <img src={Egg} alt="egg" />
+            </div>
+            <div className="ball">
+              <img src={lgm} alt="egg" />
+            </div>
+            <div className="ball">
+              <img src={Egg} alt="egg" />
+            </div>
+            <div className="ball">
+              <img src={mgl} alt="egg" />
+            </div>
+            <div className="ball">
+              <img src={Egg} alt="egg" />
+            </div>
+          </div>
+          <div className="wave load">
+            <div className="ball">로</div>
+            <div className="ball">딩</div>
+            <div className="ball">중</div>
+            <div className="ball">.</div>
+            <div className="ball">.</div>
+            <div className="ball">.</div>
+          </div>
+        </div>
       </div>
     );
   } else {

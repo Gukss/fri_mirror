@@ -185,7 +185,7 @@ export default function SignUp() {
           nickname: form.nickname,
           area: area,
           year: String(form.year),
-          isMajor: major
+          major: major
         };
         const go = async () => {
           try {
@@ -434,6 +434,7 @@ export default function SignUp() {
                   onChange={handleInput}
                   onBlur={handleBlur}
                   disabled={isCer ? true : false}
+                  autoFocus
                 />
               </div>
               <div id="idmessage" className="message">
