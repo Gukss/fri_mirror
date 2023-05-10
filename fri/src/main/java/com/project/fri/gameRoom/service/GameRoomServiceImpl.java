@@ -142,9 +142,17 @@ public class GameRoomServiceImpl implements GameRoomService {
             NotFoundExceptionMessage.NOT_FOUND_USER
         ));
 
+    // 만약 다른 방에 참여하고 있으면 방생성할 수 없다
+    if (user.getGameRoom() != null || user.getRoom() != null) {
+      throw new InvalidRequestStateException("이미 참여중인 방이 있습니다.");
+    }
+
     //랜덤 시간 만들기
     double time =
         Math.round((((Math.random() * 9) + 1) * 100)) / 100.0; //1~10초사이 랜덤값 => 소수점 아래 두 번째 자리
+
+    // 방에 들어가면서 하트 1개 소진
+    user.minusHeart();
 
     // db에 저장
     GameRoom gameRoom = GameRoom.create(request, area, user, time);

@@ -17,6 +17,7 @@ import com.project.fri.room.repository.RoomCategoryRepository;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
+import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,9 +57,15 @@ public class RoomServiceImpl implements RoomService {
   @Override
   @Transactional
   public CreateRoomResponse createRoom(CreateRoomRequest request, Long userId) {
-    User findUser = userRepository.findById(userId)
+
+    User user = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    // 만약 다른 방에 참여하고 있으면 방생성할 수 없다
+    if (user.getGameRoom() != null || user.getRoom() != null) {
+      throw new InvalidRequestStateException("이미 참여중인 방이 있습니다.");
+    }
 
     // 방, 지역 카테고리 객체화
     RoomCategory roomCategory = roomCategoryRepository.findByCategory(request.getRoomCategory())
@@ -68,12 +75,12 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     // request dto를 저장
-    Room room = Room.create(request, findUser, roomCategory, area);
+    Room room = Room.create(request, user, roomCategory, area);
 
     roomRepository.save(room);
 
     // user 테이블에 방번호 추가
-    findUser.updateRoomNumber(room);
+    user.updateRoomNumber(room);
 
     // response dto로 변환
     CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room);
