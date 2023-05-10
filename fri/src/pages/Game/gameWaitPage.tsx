@@ -45,14 +45,17 @@ function GameWaiting() {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const gameTime = queryParams.get("time");
-  const totalCnt = Number(queryParams.get("head"));
+  // const gameTime = queryParams.get("time");
+  // const totalCnt = Number(queryParams.get("head"));
+  let gameTime:number;
+  let totalCnt:number;
   const client = useRef<StompJs.Client>();
   const [gameinfo, setGame] = useState<gameType | null>(null);
   const [isLgm, setIsLgm] = useState(true);
   const [ready, setIsready] = useState(false);
   const [view, setView] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
+  const [isconnect, setIsconnect] = useState(false);
 
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
@@ -146,6 +149,9 @@ function GameWaiting() {
         headers: header
       });
       setGame(res.data);
+      console.log(res.data)
+      totalCnt = res.data.participationCount;
+      gameTime = res.data.randomTime;
       for(let i = 0; i < res.data.participation.length; i++){
         const info = res.data.participation[i]
         const data = {
@@ -204,6 +210,7 @@ function GameWaiting() {
         onConnect: () => {
           subscribeChatting();
           publishInit();
+          setIsconnect(true)
         },
         debug: () => {
           null;
@@ -229,7 +236,9 @@ function GameWaiting() {
 
   return (
     <div className="wait_game">
-      {view ? null : <img src={Back} alt="<" id="back" onClick={outGame} />}
+      {view ? null : <img src={Back} alt="<" id="back" onClick={outGame} 
+      style={isconnect ? {display: "block"} : {display : "none"}}
+      />}
       <div className="top">{gameinfo?.title}</div>
       <div>
         {isLgm ? (

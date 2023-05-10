@@ -46,7 +46,8 @@ export default function LogIn() {
         .then((res) => {
           dispatch(login(res.data));
           setForm({ email: "", password: "" });
-          navigate("/main");
+          if(res.data.gameRoomId === "참여한 방이 없습니다.") navigate("/main");
+          else navigate(`/wait/${res.data.gameRoomId}`)
         })
         .catch((err) => {
           if (err.response.status === 400)
