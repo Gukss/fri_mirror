@@ -443,12 +443,11 @@ public class UserServiceImpl implements UserService {
 
     User findUser = userRepository.findByIdWithAnonymousProfileImage(userId)
             .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-            
-    System.out.println(updateUserProfileRequest.getAnonymousProfileImageId());
-    System.out.println(updateUserProfileRequest.getNickname());
-    System.out.println("여기요 여기");
-    Optional<AnonymousProfileImage> anonymousProfileImage = anonymousProfileImageRepository.findById(updateUserProfileRequest.getAnonymousProfileImageId());
-    AnonymousProfileImage findAnonymousProfileImage = anonymousProfileImage.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AnonymousProfileImage));
+
+    Optional<AnonymousProfileImage> anonymousProfileImage = anonymousProfileImageRepository.findById(
+            updateUserProfileRequest.getAnonymousProfileImageId());
+    AnonymousProfileImage findAnonymousProfileImage = anonymousProfileImage
+            .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AnonymousProfileImage));
 
     User updateUser = findUser.updateUserProfile(findAnonymousProfileImage, updateUserProfileRequest.getNickname());
 
