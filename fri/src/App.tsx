@@ -13,7 +13,8 @@ import SignUp from "./pages/SignUp/SignUp";
 import Add from "./pages/Add/Add";
 import My from "./pages/My/MyPage";
 import Chat from "./pages/Chat/Chat";
-import Not from "./pages/NotFound"
+import Not from "./pages/NotFound";
+import MyEdit from "./pages/My/MyEdit";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/add" element={<Add />} />
               <Route path="/my" element={<My />} />
+              <Route path="/my/edit" element={<MyEdit />} />
               <Route path="/chatting/:id" element={<Chat />} />
               <Route path="*" element={<Not />} />
             </Routes>
