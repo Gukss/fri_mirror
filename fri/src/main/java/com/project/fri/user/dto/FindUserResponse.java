@@ -11,6 +11,7 @@ public class FindUserResponse {
     private String nickname;
     private Category area;
     private String year;
+    private int heart;
     private boolean isMajor;
     private String anonymousProfileImageId;
     private String roomId;
@@ -22,6 +23,7 @@ public class FindUserResponse {
         nickname = user.getNickname();
         area = user.getArea().getCategory();
         year = user.getYear();
+        heart = user.getHeart();
         isMajor = user.isMajor();
         anonymousProfileImageId = user.getAnonymousProfileImage().getImageUrl();
 
