@@ -85,13 +85,12 @@ function GameWaiting() {
   };
 
   const subscribeChatting = async () => {
+    connect_switch = true;
     client.current?.subscribe(
     `/sub/game-room/ready/${gameRoomId}`,
     ({ body }) => {
       player = (JSON.parse(body).userList)
-      console.log(JSON.parse(body).userList)
       setState(JSON.parse(body))
-      console.log(isconnect, player)
       if(connect_switch && totalCnt === JSON.parse(body).userList.length){
         setView(true);
         checkReady(JSON.parse(body));
@@ -163,6 +162,7 @@ function GameWaiting() {
         };
         state.userList.push(data);
       }
+      totalCnt = res.data.headCount;
       await connect();
       if (
         gameinfo?.headCount !== undefined &&
