@@ -82,6 +82,7 @@ export default function LogIn() {
                   name="email"
                   value={form.email}
                   onChange={handleInput}
+                  autoFocus
                 />
               </div>
             </div>

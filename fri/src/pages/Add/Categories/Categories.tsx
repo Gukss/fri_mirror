@@ -59,9 +59,7 @@ export default function Categories({
           onClick={() => handleClick("내기")}
         >
           <div className="title">내기</div>
-          <div className="content">
-            점심시간 커피 내기?
-          </div>
+          <div className="content">점심시간 커피 내기?</div>
         </div>
         <div
           className="select-box"
@@ -69,9 +67,7 @@ export default function Categories({
           onClick={() => handleClick("DRINK")}
         >
           <div className="title">술</div>
-          <div className="content">
-            이번 주 금요일에 술
-          </div>
+          <div className="content">이번 주 금요일에 술</div>
         </div>
         <div
           className="select-box"
@@ -79,9 +75,7 @@ export default function Categories({
           onClick={() => handleClick("MEAL")}
         >
           <div className="title">밥</div>
-          <div className="content">
-            이번 주 금요일에 밥
-          </div>
+          <div className="content">이번 주 금요일에 밥</div>
         </div>
         <div
           className="select-box"
@@ -89,18 +83,15 @@ export default function Categories({
           onClick={() => handleClick("GAME")}
         >
           <div className="title">게임</div>
-          <div className="content">
-            이번 주 금요일에 게임
-          </div>
-        </div><div
+          <div className="content">이번 주 금요일에 게임</div>
+        </div>
+        <div
           className="select-box"
           id={select === "EXERCISE" ? "select" : ""}
           onClick={() => handleClick("EXERCISE")}
         >
           <div className="title">운동</div>
-          <div className="content">
-            이번 주 금요일에 운동
-          </div>
+          <div className="content">이번 주 금요일에 운동</div>
         </div>
         <div
           className="select-box"

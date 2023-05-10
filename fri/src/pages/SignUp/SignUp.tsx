@@ -158,6 +158,8 @@ export default function SignUp() {
           setMessageColor("green", "code");
           setError({ ...error, [name]: true });
         }
+      } else if (name === "nickname") {
+        setNicknameCheck(false);
       }
     },
     [form, error, message]
@@ -188,7 +190,7 @@ export default function SignUp() {
         const go = async () => {
           try {
             axios.post(api_url + "user", data);
-            navigate("/");
+            navigate("/login");
           } catch (e) {
             alert("입력된 값을 확인해 주세요.");
           }
@@ -365,10 +367,11 @@ export default function SignUp() {
     setLoading(true);
     try {
       const data = {
-        nickname: "닉네임"
+        nickname: form.nickname
       };
+
       await axios.post(api_url + "user/certified/nickname", data);
-      // 이쪽 수정
+      // // 이쪽 수정
       setNicknameCheck(true);
       setMessage({ ...message, nickname: "가능합니다!" });
       setMessageColor("green", "nickname");
@@ -377,8 +380,11 @@ export default function SignUp() {
     } catch (e) {
       setLoading(false);
       alert("이미 닉네임이 존재합니다. 다른 닉네임으로 재시도해주세요.");
+      setMessage({ ...message, nickname: "이미 존재하는 닉네임 입니다." });
+      setMessageColor("red", "nickname");
+      setError({ ...error, nickname: false });
     }
-  }, []);
+  }, [form]);
 
   return (
     <div className="signup">
@@ -428,6 +434,7 @@ export default function SignUp() {
                   id="id"
                   onChange={handleInput}
                   onBlur={handleBlur}
+                  disabled={isCer ? true : false}
                 />
               </div>
               <div id="idmessage" className="message">
@@ -632,7 +639,18 @@ export default function SignUp() {
                   </div>
                   {!nicknameCheck && form.nickname !== "" && (
                     <div className="nickname_certi" onClick={duplicateCheck}>
-                      중복확인
+                      {loading ? (
+                        <div className="spinner">
+                          <div className="spinner-wrapper dupli">
+                            <div className="rotator">
+                              <div className="inner-spin"></div>
+                              <div className="inner-spin"></div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div>중복확인</div>
+                      )}
                     </div>
                   )}
                 </div>

@@ -46,6 +46,11 @@
   //   transform: translate(-50%, -50%);
   margin: 1.5rem;
 
+  &.edit {
+    margin: 0;
+    margin-top: 1.5rem;
+  }
+
   .signup-box {
     border-radius: 0.5rem;
     // padding: 0.5rem;
@@ -103,6 +108,7 @@
           transition: transform 0.1s, color 0.1s, background-color 0.1s;
           font-size: 1rem;
           cursor: pointer;
+          color: #111;
         }
 
         input {
@@ -352,6 +358,17 @@
 .spinner-wrapper::after {
   content: "";
   background: #ffefbe;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+}
+
+.spinner-wrapper.dupli::after {
+  content: "";
+  background: #ffce3c;
   border-radius: 50%;
   width: 1.5rem;
   height: 1.5rem;

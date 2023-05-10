@@ -45,10 +45,20 @@ const userSlice = createSlice({
     },
     changeNick(state, action: PayloadAction<string>) {
       state.nickname = action.payload;
+    },
+    changeProfile(state, action: PayloadAction<string>) {
+      state.anonymousProfileImageUrl = action.payload;
     }
   }
 });
 
 export default userSlice.reducer;
-export const { login, logout, meeting, game, useegg, changeNick } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  meeting,
+  game,
+  useegg,
+  changeNick,
+  changeProfile
+} = userSlice.actions;

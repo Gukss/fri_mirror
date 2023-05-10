@@ -14,8 +14,6 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
     }
   };
 
-  console.log(data);
-
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
