@@ -9,7 +9,7 @@ public class FindAllUserByRoomIdDto {
     private String anonymousProfileImageUrl;
 
     public FindAllUserByRoomIdDto(User user) {
-        name = user.getName();
+        name = user.getNickname();
         anonymousProfileImageUrl = user.getAnonymousProfileImage().getImageUrl();
     }
 }
