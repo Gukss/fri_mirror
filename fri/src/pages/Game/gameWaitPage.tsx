@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { game } from "../../redux/user";
@@ -43,10 +43,6 @@ export type participationType = {
 function GameWaiting() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  // const gameTime = queryParams.get("time");
-  // const totalCnt = Number(queryParams.get("head"));
   let gameTime:number;
   let totalCnt:number;
   const client = useRef<StompJs.Client>();
@@ -56,6 +52,8 @@ function GameWaiting() {
   const [view, setView] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
   const [isconnect, setIsconnect] = useState(false);
+  let player:userInfo[];
+  let connect_switch = false;
 
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
@@ -80,17 +78,20 @@ function GameWaiting() {
         flag = false;
       }
     })
-    if (flag && totalCnt === state.userList.length) {
+    if (flag && totalCnt === body.userList.length) {
       goGame();
     }
   }
 
-  const subscribeChatting = async () => {     
+  const subscribeChatting = async () => {   
+    setIsconnect(true)  
     client.current?.subscribe(
     `/sub/game-room/ready/${gameRoomId}`,
     ({ body }) => {
+      player = (JSON.parse(body).userList)
       setState(JSON.parse(body))
-      if(totalCnt === JSON.parse(body).userList.length){
+      console.log(isconnect, player)
+      if(connect_switch && totalCnt === JSON.parse(body).userList.length){
         setView(true);
         checkReady(JSON.parse(body));
       } 
@@ -129,11 +130,12 @@ function GameWaiting() {
     if (!client.current?.connected) {
       return;
     }
+    setIsconnect(true);
     client.current.publish({
       destination:  "/pub/game-room/ready",
       body: JSON.stringify(state),
     });
-    if(totalCnt === state.userList.length){
+    if(connect_switch && totalCnt === player.length){
       setView(true);
       checkReady(state);
     }
@@ -149,8 +151,7 @@ function GameWaiting() {
         headers: header
       });
       setGame(res.data);
-      console.log(res.data)
-      totalCnt = res.data.participationCount;
+      totalCnt = res.data.headCount;
       gameTime = res.data.randomTime;
       for(let i = 0; i < res.data.participation.length; i++){
         const info = res.data.participation[i]
@@ -162,9 +163,10 @@ function GameWaiting() {
           result: 0.0
         }
         state.userList.push(data)
+        console.log(res.data, totalCnt)
       }
       await connect()
-      if(gameinfo?.headCount !== undefined && gameinfo?.headCount === state.userList.length)
+      if(isconnect && totalCnt === state.userList.length)
         {
           setView(true);
           checkReady(state);
@@ -196,7 +198,6 @@ function GameWaiting() {
       console.log(e);
     }
   };
-
   // 방 시작 후 웹 소켓 연결
   const connect = async () => {
     try {
@@ -211,6 +212,7 @@ function GameWaiting() {
           subscribeChatting();
           publishInit();
           setIsconnect(true)
+          connect_switch = true;
         },
         debug: () => {
           null;
