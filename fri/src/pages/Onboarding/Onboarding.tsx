@@ -6,6 +6,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    window.location.reload();
     const img = document.getElementById("gif");
     if (img) {
       img.classList.add("hidden");
@@ -14,7 +15,7 @@ export default function Onboarding() {
       }, 1000); // 0.5초 후 이동
     }
   };
-
+  
   return (
     <div className="onboarding" onClick={handleClick}>
       <img

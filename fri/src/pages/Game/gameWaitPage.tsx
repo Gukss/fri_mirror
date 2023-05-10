@@ -37,14 +37,14 @@ export type gameType = {
 export type participationType = {
   name: string;
   anonymousProfileImageUrl: string;
-  userId : number;
+  userId: number;
 };
 
 function GameWaiting() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let gameTime:number;
-  let totalCnt:number;
+  let gameTime: number;
+  let totalCnt: number;
   const client = useRef<StompJs.Client>();
   const [gameinfo, setGame] = useState<gameType | null>(null);
   const [isLgm, setIsLgm] = useState(true);
@@ -52,7 +52,7 @@ function GameWaiting() {
   const [view, setView] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
   const [isconnect, setIsconnect] = useState(false);
-  let player:userInfo[];
+  let player: userInfo[];
   let connect_switch = false;
 
   const gameRoomId = useSelector((state: RootState) => {
@@ -63,28 +63,28 @@ function GameWaiting() {
   });
   const [state, setState] = useState<gameMessage>({
     gameRoomId: Number(gameRoomId),
-    userList: [
-    ]
+    userList: []
   });
 
-  const goGame =  () => {
-    navigate(`/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}&location=${gameinfo?.location}`);
+  const goGame = () => {
+    navigate(
+      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}&location=${gameinfo?.location}`
+    );
   };
 
-  const checkReady = (body : gameMessage) => {
+  const checkReady = (body: gameMessage) => {
     let flag = true;
     body.userList.map((player) => {
       if (!player.ready) {
         flag = false;
       }
-    })
+    });
     if (flag && totalCnt === body.userList.length) {
       goGame();
     }
-  }
+  };
 
-  const subscribeChatting = async () => {   
-    setIsconnect(true)  
+  const subscribeChatting = async () => {
     client.current?.subscribe(
     `/sub/game-room/ready/${gameRoomId}`,
     ({ body }) => {
@@ -123,7 +123,7 @@ function GameWaiting() {
     }
     client.current.publish({
       destination: "/pub/game-room/ready",
-      body: JSON.stringify(state),
+      body: JSON.stringify(state)
     });
   };
 
@@ -133,10 +133,10 @@ function GameWaiting() {
     }
     setIsconnect(true);
     client.current.publish({
-      destination:  "/pub/game-room/ready",
-      body: JSON.stringify(state),
+      destination: "/pub/game-room/ready",
+      body: JSON.stringify(state)
     });
-    if(connect_switch && totalCnt === player.length){
+    if (totalCnt === state.userList.length) {
       setView(true);
       checkReady(state);
     }
@@ -152,36 +152,35 @@ function GameWaiting() {
         headers: header
       });
       setGame(res.data);
-      totalCnt = res.data.headCount;
-      gameTime = res.data.randomTime;
-      for(let i = 0; i < res.data.participation.length; i++){
-        const info = res.data.participation[i]
+      for (let i = 0; i < res.data.participation.length; i++) {
+        const info = res.data.participation[i];
         const data = {
           userId: info.userId,
           userProfile: info.anonymousProfileImageUrl,
           nickname: info.name,
           ready: false,
           result: 0.0
-        }
-        state.userList.push(data)
-        console.log(res.data, totalCnt)
+        };
+        state.userList.push(data);
       }
-      await connect()
-      if(isconnect && totalCnt === state.userList.length)
-        {
-          setView(true);
-          checkReady(state);
-        }
+      await connect();
+      if (
+        gameinfo?.headCount !== undefined &&
+        gameinfo?.headCount === state.userList.length
+      ) {
+        setView(true);
+        checkReady(state);
+      }
     };
     getData();
   }, []);
 
   const outGame = async () => {
-    state.userList.filter(user => user.userId !== userId)
-    if(client.current === undefined) return;
+    state.userList.filter((user) => user.userId !== userId);
+    if (client.current === undefined) return;
     client.current.publish({
-      destination:  "/pub/game-room/ready",
-      body: JSON.stringify(state),
+      destination: "/pub/game-room/ready",
+      body: JSON.stringify(state)
     });
     try {
       const header = {
@@ -212,7 +211,7 @@ function GameWaiting() {
         onConnect: () => {
           subscribeChatting();
           publishInit();
-          setIsconnect(true)
+          setIsconnect(true);
           connect_switch = true;
         },
         debug: () => {
@@ -239,9 +238,15 @@ function GameWaiting() {
 
   return (
     <div className="wait_game">
-      {view ? null : <img src={Back} alt="<" id="back" onClick={outGame} 
-      style={isconnect ? {display: "block"} : {display : "none"}}
-      />}
+      {view ? null : (
+        <img
+          src={Back}
+          alt="<"
+          id="back"
+          onClick={outGame}
+          style={isconnect ? { display: "block" } : { display: "none" }}
+        />
+      )}
       <div className="top">{gameinfo?.title}</div>
       <div>
         {isLgm ? (
@@ -290,18 +295,23 @@ function GameWaiting() {
           : null}
       </div>
       {view ? (
-        <button className="ready-btn" onClick={() => {publishMessage(); setIsready(true)}}
-        style={ready ? {backgroundColor : "rgba(124, 124, 124, 1)"} : {backgroundColor : "#ffc000"}}        
+        <button
+          className="ready-btn"
+          onClick={() => {
+            publishMessage();
+            setIsready(true);
+          }}
+          style={
+            ready
+              ? { backgroundColor: "rgba(124, 124, 124, 1)" }
+              : { backgroundColor: "#ffc000" }
+          }
         >
-          {
-            ready ? "준비완료" : "준비하기"
-          }          
+          {ready ? "준비완료" : "준비하기"}
         </button>
-      )  : 
-      (
+      ) : (
         <div className="ready">다른 플레이어 기다리는 중...</div>
-      )
-      }
+      )}
     </div>
   );
 }
