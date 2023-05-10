@@ -16,3 +16,8 @@
 .App-link {
   color: #000;
 }
+
+button {
+  appearance: none;
+  color: #000;
+}

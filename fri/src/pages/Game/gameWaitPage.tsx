@@ -37,7 +37,7 @@ export type gameType = {
 export type participationType = {
   name: string;
   anonymousProfileImageUrl: string;
-  userId : number;
+  userId: number;
 };
 
 function GameWaiting() {
@@ -62,36 +62,38 @@ function GameWaiting() {
   });
   const [state, setState] = useState<gameMessage>({
     gameRoomId: Number(gameRoomId),
-    userList: [
-    ]
+    userList: []
   });
 
-  const goGame =  () => {
-    navigate(`/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}&location=${gameinfo?.location}`);
+  const goGame = () => {
+    navigate(
+      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}&location=${gameinfo?.location}`
+    );
   };
 
-  const checkReady = (body : gameMessage) => {
+  const checkReady = (body: gameMessage) => {
     let flag = true;
     body.userList.map((player) => {
       if (!player.ready) {
         flag = false;
       }
-    })
+    });
     if (flag && totalCnt === state.userList.length) {
       goGame();
     }
-  }
+  };
 
-  const subscribeChatting = async () => {     
+  const subscribeChatting = async () => {
     client.current?.subscribe(
-    `/sub/game-room/ready/${gameRoomId}`,
-    ({ body }) => {
-      setState(JSON.parse(body))
-      if(totalCnt === JSON.parse(body).userList.length){
-        setView(true);
-        checkReady(JSON.parse(body));
-      } 
-    });
+      `/sub/game-room/ready/${gameRoomId}`,
+      ({ body }) => {
+        setState(JSON.parse(body));
+        if (totalCnt === JSON.parse(body).userList.length) {
+          setView(true);
+          checkReady(JSON.parse(body));
+        }
+      }
+    );
   };
 
   const stompActive = () => {
@@ -118,7 +120,7 @@ function GameWaiting() {
     }
     client.current.publish({
       destination: "/pub/game-room/ready",
-      body: JSON.stringify(state),
+      body: JSON.stringify(state)
     });
   };
 
@@ -127,10 +129,10 @@ function GameWaiting() {
       return;
     }
     client.current.publish({
-      destination:  "/pub/game-room/ready",
-      body: JSON.stringify(state),
+      destination: "/pub/game-room/ready",
+      body: JSON.stringify(state)
     });
-    if(totalCnt === state.userList.length){
+    if (totalCnt === state.userList.length) {
       setView(true);
       checkReady(state);
     }
@@ -146,33 +148,35 @@ function GameWaiting() {
         headers: header
       });
       setGame(res.data);
-      for(let i = 0; i < res.data.participation.length; i++){
-        const info = res.data.participation[i]
+      for (let i = 0; i < res.data.participation.length; i++) {
+        const info = res.data.participation[i];
         const data = {
           userId: info.userId,
           userProfile: info.anonymousProfileImageUrl,
           nickname: info.name,
           ready: false,
           result: 0.0
-        }
-        state.userList.push(data)
+        };
+        state.userList.push(data);
       }
-      await connect()
-      if(gameinfo?.headCount !== undefined && gameinfo?.headCount === state.userList.length)
-        {
-          setView(true);
-          checkReady(state);
-        }
+      await connect();
+      if (
+        gameinfo?.headCount !== undefined &&
+        gameinfo?.headCount === state.userList.length
+      ) {
+        setView(true);
+        checkReady(state);
+      }
     };
     getData();
   }, []);
 
   const outGame = async () => {
-    state.userList.filter(user => user.userId !== userId)
-    if(client.current === undefined) return;
+    state.userList.filter((user) => user.userId !== userId);
+    if (client.current === undefined) return;
     client.current.publish({
-      destination:  "/pub/game-room/ready",
-      body: JSON.stringify(state),
+      destination: "/pub/game-room/ready",
+      body: JSON.stringify(state)
     });
     try {
       const header = {
@@ -278,18 +282,23 @@ function GameWaiting() {
           : null}
       </div>
       {view ? (
-        <button className="ready-btn" onClick={() => {publishMessage(); setIsready(true)}}
-        style={ready ? {backgroundColor : "rgba(124, 124, 124, 1)"} : {backgroundColor : "#ffc000"}}        
+        <button
+          className="ready-btn"
+          onClick={() => {
+            publishMessage();
+            setIsready(true);
+          }}
+          style={
+            ready
+              ? { backgroundColor: "rgba(124, 124, 124, 1)" }
+              : { backgroundColor: "#ffc000" }
+          }
         >
-          {
-            ready ? "준비완료" : "준비하기"
-          }          
+          {ready ? "준비완료" : "준비하기"}
         </button>
-      )  : 
-      (
+      ) : (
         <div className="ready">다른 플레이어 기다리는 중...</div>
-      )
-      }
+      )}
     </div>
   );
 }

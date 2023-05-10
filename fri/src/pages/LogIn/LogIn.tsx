@@ -51,6 +51,8 @@ export default function LogIn() {
         .catch((err) => {
           if (err.response.status === 400)
             alert("아이디 또는 비밀번호가 잘못되었습니다 ");
+          // input 초기화
+          // setForm({ email: "", password: "" });
         });
     },
     [form]

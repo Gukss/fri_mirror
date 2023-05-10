@@ -88,7 +88,9 @@ export default function Add() {
         navigate(`/chatting/${res.data.roomId}`);
       } else {
         dispatch(game(res.data.gameRoomId));
-        navigate(`/wait/${res.data.gameRoomId}?time=${res.data.randomTime}&head=${res.data.headCount}`);
+        navigate(
+          `/wait/${res.data.gameRoomId}?time=${res.data.randomTime}&head=${res.data.headCount}`
+        );
       }
     } catch (e) {
       console.log(e);

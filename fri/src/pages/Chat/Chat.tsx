@@ -19,9 +19,10 @@ export type IMessage = {
   message: string;
   memberId: number;
   anonymousProfileImageUrl: string;
-  times: string;
+  createdAt: string;
   nickname: string;
   userId: number;
+  time: string;
 };
 
 interface Roomdetail {
@@ -36,9 +37,11 @@ export default function Chat() {
   const client = useRef<StompJs.Client>();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<IMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [data, setData] = useState<Roomdetail>({
     title: "",
@@ -67,10 +70,10 @@ export default function Chat() {
 
   // 소켓객체와 connect되면 subscribe함수를 동작시켜서 서버에 있는 주소로 sub
   const subscribeChatting = () => {
+    setLoading(false);
     client.current?.subscribe(`/sub/room/${roomId}`, ({ body }) => {
       setMessage((prev) => [...prev, JSON.parse(body)]);
     });
-    
   };
 
   // 현재는 app컴포넌트 생성과 동시에 소켓 객체가 연결이 되고 sub로 구독함!
@@ -89,7 +92,8 @@ export default function Chat() {
     const connect = async () => {
       try {
         client.current = new StompJs.Client({
-          webSocketFactory: () => new SockJS("https://meetingfri.com/api/ws-stomp"),
+          webSocketFactory: () =>
+            new SockJS("https://meetingfri.com/api/ws-stomp"),
           connectHeaders: {},
           reconnectDelay: 5000,
           heartbeatIncoming: 4000,
@@ -98,7 +102,7 @@ export default function Chat() {
             subscribeChatting();
           },
           debug: () => {
-            null
+            null;
           },
           onStompError: (frame) => {
             console.error(frame);
@@ -106,7 +110,7 @@ export default function Chat() {
         });
         await stompActive();
       } catch (e) {
-        console.log;
+        console.log(e);
       }
     };
     connect();
@@ -132,13 +136,8 @@ export default function Chat() {
 
   const publishMessage = async () => {
     const now = new Date();
-    let h = String(now.getHours());
-    const m = String(now.getMinutes());
-    let day = "오전";
-    if (13 <= Number(h) && Number(h) <= 24) {
-      h = String(Number(h) - 12);
-      day = "오후";
-    }
+
+    const formattedTime = now.toLocaleString("en-US");
     if (!client.current?.connected) {
       return;
     }
@@ -150,10 +149,12 @@ export default function Chat() {
         message: text,
         memberId: userId,
         anonymousProfileImageUrl: image,
-        times: `${day} ${h}:${m}`,
+        createdAt: formattedTime,
         nickname: nick
       })
     });
+
+    setText("");
   };
 
   useEffect(() => {
@@ -222,32 +223,50 @@ export default function Chat() {
     setIsOpen(false);
   }, [isOpen]);
 
-  return (
-    <div className="chatting-room">
-      <div className="navbar">
-        <ChatNav onOpen={handleOpenDetail} />
+  // ====================================================
+
+  if (loading) {
+    return (
+      <div className="chatting-room">
+        <div>로딩중</div>
       </div>
-      <div className="content">
-        <ChatContent msg={message} />
-      </div>
-      <div className="footer">
-        <div className="chat-footer">
-          <div className="gallery">
-            <img src={Image} alt="gallery" />
-          </div>
-          <div className="text-input">
-            <textarea ref={textareaRef} onChange={submitMessage} />
-            <button
-              className="send-message"
-              ref={btnRef}
-              onClick={publishMessage}
-            >
-              <img src={Up} alt="up-arrow" />
-            </button>
+    );
+  } else {
+    return (
+      <div className="chatting-room">
+        <div className="navbar">
+          <ChatNav onOpen={handleOpenDetail} />
+        </div>
+        <div className="content">
+          <ChatContent msg={message} contentRef={contentRef} />
+        </div>
+        <div className="footer">
+          <div className="chat-footer">
+            <div className="gallery">
+              <img src={Image} alt="gallery" />
+            </div>
+            <div className="text-input">
+              <textarea
+                ref={textareaRef}
+                onChange={submitMessage}
+                value={text}
+              />
+              {text !== "" ? (
+                <button
+                  className="send-message"
+                  ref={btnRef}
+                  onClick={publishMessage}
+                >
+                  <img src={Up} alt="up-arrow" />
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
         </div>
+        <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} />
       </div>
-      <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} />
-    </div>
-  );
+    );
+  }
 }
