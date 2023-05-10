@@ -112,7 +112,8 @@ function GameMain() {
     });
   };
 
-  const subscribeChatting = async () => {     
+  const subscribeChatting = async () => { 
+    setStart(true);   
     client.current?.subscribe(
     `/sub/game-room/stop/${gameRoomId}`,
     ({ body }) => {
@@ -146,6 +147,7 @@ function GameMain() {
         onConnect: () => {
           subscribeChatting();
           setStart(true);
+  
         },
         debug: () => {
           null;
@@ -193,7 +195,6 @@ function GameMain() {
     };
     lgmImage.src = "/assets/lgm.png";
   }, []);
-
   // 시작 3초
   useEffect(() => {
     if (imagesLoaded && isStart) {
@@ -203,7 +204,7 @@ function GameMain() {
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [imagesLoaded]);
+  }, [imagesLoaded, isStart]);
 
   useEffect(() => {
     if (seconds === -1) {
