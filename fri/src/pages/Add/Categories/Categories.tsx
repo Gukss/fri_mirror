@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
+import { RootState } from "../../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
 import "./Categories.scss";
 
 interface Error {
@@ -33,6 +35,12 @@ export default function Categories({
 }: CateProps) {
   const [searchparams, setSearchParmas] = useSearchParams();
   const [select, setSelect] = useState<string>("");
+  const roomId = useSelector((state: RootState) => {
+		return state.strr.roomId;
+	});
+	const gameRoomId = useSelector((state: RootState) => {
+		return state.strr.gameRoomId;
+	});
 
   const handleClick = useCallback(
     (selectedCate: string) => {
@@ -115,10 +123,16 @@ export default function Categories({
         id={select === "" ? "" : "show"}
         onClick={() => {
           if (form.cate === "내기") {
+            if(gameRoomId !== "참여한 방이 없습니다."){
+              return;
+            }
             searchparams.set("tab", "infos");
-            searchparams.set("cate", "bet");
+            searchparams.set("cate", "bet");      
             setSearchParmas(searchparams);
           } else {
+            if(roomId !== "참여한 방이 없습니다.") {
+              return;
+            }
             searchparams.set("tab", "infos");
             searchparams.set("cate", select);
             setSearchParmas(searchparams);
