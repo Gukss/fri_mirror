@@ -66,16 +66,17 @@ function GameMain() {
   
   const [state, setState] = useState<userInfo[]>([]);
 
-  const resultSet = async () => {
-    if(Number(totalCnt) === res.length){
+  const resultSet = async (body:userInfo[]) => {
+    if(Number(totalCnt) === body.length){
+      setState(body)
       const num = res.length
-      setLooser(res[num-1].nickname)
+      setLooser(body[num-1].nickname)
     }
   }
 
-  const resultSort = async () => {
-    state.sort((a, b) => (Number(gameTime) - a.gameTime) - (Number(gameTime) - b.gameTime))
-    await resultSet()
+  const resultSort = async (body:userInfo[]) => {
+    body.sort((a, b) => Math.abs(Number(gameTime) - a.gameTime) - Math.abs(Number(gameTime) - b.gameTime))
+    await resultSet(body)
   }
 
   const outGame = async () => {
@@ -119,7 +120,7 @@ function GameMain() {
     ({ body }) => {
       res.push(JSON.parse(body))
       setState((prev) => [...prev, JSON.parse(body)])
-      if(res.length === Number(totalCnt)) resultSort();
+      if(res.length === Number(totalCnt)) resultSort(JSON.parse(body));
     });
   };
 
@@ -228,7 +229,8 @@ function GameMain() {
     if (timer < 0.01) {
       clearInterval(timerRef.current);
       clearInterval(lgmRef.current);
-      publishMessage(0.00)
+      publishMessage(0.00);
+      setResult(true);
     }
   }, [timer]);
 

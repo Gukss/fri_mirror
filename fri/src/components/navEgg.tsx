@@ -36,7 +36,7 @@ function Nav({isnav, setIsnav} : navType) {
 	};
 
 	function addRoom() {
-		if((gameRoomId === "참여한 방이 없습니다.") || (roomId === "참여한 방이 없습니다.")) navigate("/add" + "?tab=cate");
+		if((gameRoomId === "참여한 방이 없습니다.") && (roomId === "참여한 방이 없습니다.")) navigate("/add" + "?tab=cate");
 		else {
 			alert("현재 어딘가에 참여중입니다.");
 			return;
