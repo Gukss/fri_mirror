@@ -34,6 +34,7 @@ public class Comment extends BaseTimeEntity {
   private long id;
 
   @NotNull
+  @Column(length = 511)
   private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
