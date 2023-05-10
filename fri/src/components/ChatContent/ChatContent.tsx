@@ -39,7 +39,7 @@ export default function ChatContent({ msg, contentRef }: msgType) {
             key={index}
             msg={msg.message}
             anonymousProfileImageUrl={msg.anonymousProfileImageUrl}
-            time={msg.createdAt}
+            time={msg.createdAt || msg.time}
             nickname={msg.nickname}
             bottomRef={bottomRef}
           />
