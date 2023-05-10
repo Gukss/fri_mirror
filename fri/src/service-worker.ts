@@ -79,7 +79,7 @@ self.addEventListener("message", (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+// // Any other custom service worker logic can go here.
 // const CACHE_NAME = "cache_sample";
 // const urlsToCache = ["index.html", "offline.html"];
 // const version = "v0.0.1";
@@ -89,7 +89,6 @@ self.addEventListener("message", (event) => {
 //   console.log("sw install event");
 //   event.waitUntil(
 //     caches.open(version + CACHE_NAME).then((cache) => {
-//       console.log("열린 캐시");
 //       return cache.addAll(urlsToCache);
 //     })
 //   );
@@ -97,7 +96,6 @@ self.addEventListener("message", (event) => {
 // //설치 후 sw 활성화
 // //이전 캐시가 지워지는 위치
 // self.addEventListener("activate", (event: any) => {
-//   console.log("sw activate event");
 //   event.waitUntil(
 //     caches.keys().then((cacheNames) =>
 //       Promise.all(
@@ -120,3 +118,4 @@ self.addEventListener("message", (event) => {
 //     })
 //   );
 // });
+// serviceWorker.js

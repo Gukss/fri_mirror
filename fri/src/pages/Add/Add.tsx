@@ -135,7 +135,7 @@ export default function Add() {
         }
         createRoom(data, url);
       } else {
-        alert("잘못된 입력입니다.");
+        alert("이미 참여중이거나 잘못된 입력입니다.");
       }
     },
     [form, error, message]

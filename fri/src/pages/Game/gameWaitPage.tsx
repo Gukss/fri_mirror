@@ -68,7 +68,7 @@ function GameWaiting() {
 
   const goGame = () => {
     navigate(
-      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}&location=${gameinfo?.location}`
+      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}`
     );
   };
 
@@ -85,16 +85,17 @@ function GameWaiting() {
   };
 
   const subscribeChatting = async () => {
+    connect_switch = true;
     client.current?.subscribe(
-      `/sub/game-room/ready/${gameRoomId}`,
-      ({ body }) => {
-        setState(JSON.parse(body));
-        if (totalCnt === JSON.parse(body).userList.length) {
-          setView(true);
-          checkReady(JSON.parse(body));
-        }
-      }
-    );
+    `/sub/game-room/ready/${gameRoomId}`,
+    ({ body }) => {
+      player = (JSON.parse(body).userList)
+      setState(JSON.parse(body))
+      if(connect_switch && totalCnt === JSON.parse(body).userList.length){
+        setView(true);
+        checkReady(JSON.parse(body));
+      } 
+    });
   };
 
   const stompActive = () => {
@@ -161,6 +162,8 @@ function GameWaiting() {
         };
         state.userList.push(data);
       }
+      totalCnt = res.data.headCount;
+      gameTime = res.data.randomTime;
       await connect();
       if (
         gameinfo?.headCount !== undefined &&

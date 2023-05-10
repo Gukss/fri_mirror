@@ -55,7 +55,7 @@ export default function Onboarding() {
       navigate("/main");
     }
   };
-
+  
   return (
     <div className="onboarding" onClick={handleClick}>
       <img id="gif" src={ting} alt="ting" className="onboarding-img" />
