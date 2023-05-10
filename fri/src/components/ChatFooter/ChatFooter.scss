@@ -41,6 +41,9 @@
       resize: none;
       overflow-y: auto;
 
+      // 줄바꿈이 되는지?
+      white-space: pre-line;
+
       &.autoHeight {
         height: auto;
 

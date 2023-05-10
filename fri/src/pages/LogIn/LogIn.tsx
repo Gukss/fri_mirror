@@ -44,10 +44,12 @@ export default function LogIn() {
         data: form
       })
         .then((res) => {
+          console.log(res.data);
           dispatch(login(res.data));
           setForm({ email: "", password: "" });
-          if(res.data.gameRoomId === "참여한 방이 없습니다.") navigate("/main");
-          else navigate(`/wait/${res.data.gameRoomId}`)
+          if (res.data.gameRoomId === "참여한 방이 없습니다.")
+            navigate("/main");
+          else navigate(`/wait/${res.data.gameRoomId}`);
         })
         .catch((err) => {
           if (err.response.status === 400)
@@ -64,17 +66,9 @@ export default function LogIn() {
       <Back />
       <div className="login-container">
         <div>
-          <img
-            src={logo}
-            alt="Logo"
-            className="logo"
-            // ref={logoRef}
-          />
+          <img src={logo} alt="Logo" className="logo" />
         </div>
-        <div
-          className="login-form"
-          // ref={contentRef}
-        >
+        <div className="login-form">
           <form onSubmit={handleSubmit}>
             <div className="login-box">
               <div className="login-input">

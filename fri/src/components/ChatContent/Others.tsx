@@ -16,6 +16,12 @@ export default function Others({
   nickname,
   bottomRef
 }: msgType) {
+  const dateString = time;
+  const date = new Date(dateString);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const times = date.toLocaleTimeString().slice(0, -3);
+
   return (
     <div className="chat-content" ref={bottomRef}>
       <div className="profile">
@@ -25,7 +31,12 @@ export default function Others({
         <div className="name">{nickname}</div>
         <div className="message-box">
           <div className="message">{msg}</div>
-          <span className="time">{time}</span>
+          <span className="time">
+            {" "}
+            {`${month}/${day}`}
+            <br />
+            {times}
+          </span>
         </div>
       </div>
     </div>
