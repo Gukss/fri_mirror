@@ -50,9 +50,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
         { headers: header }
       );
       dispatch(game(String(room.gameRoomId)));
-      navigate(
-        `/wait/${room.gameRoomId}?time=${res.data.randomTime}&head=${res.data.headCount}`
-      );
+      navigate(`/wait/${room.gameRoomId}`);
     } catch (e) {
       console.log(e);
     }

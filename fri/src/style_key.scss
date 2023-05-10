@@ -54,9 +54,18 @@
 }
 
 // 메인 nav부분
+.nav-background {
+  width: 100vw;
+  height: 40px;
+  position: fixed;
+  bottom: 0;
+  z-index: 2;
+  background-color: #fff0c3;
+}
+
 #egg_yellow {
   margin-top: 20px;
-  z-index: 3px;
+  z-index: 3;
   position: fixed;
   left: calc(50vw - 40px);
   width: 80px;
@@ -110,6 +119,17 @@
   #my {
     transform: rotate(65deg);
     left: calc(50vw + 85px);
+  }
+
+  #game {
+    transform: rotate(-45deg);
+    left: calc(50vw + 45px);
+  }
+
+  #commu {
+    transform: rotate(40deg);
+    left: calc(50vw - 120px);
+    color: #8f8f8f;
   }
 }
 

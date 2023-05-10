@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { game } from "../../redux/user";
@@ -43,16 +43,17 @@ export type participationType = {
 function GameWaiting() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const gameTime = queryParams.get("time");
-  const totalCnt = Number(queryParams.get("head"));
+  let gameTime: number;
+  let totalCnt: number;
   const client = useRef<StompJs.Client>();
   const [gameinfo, setGame] = useState<gameType | null>(null);
   const [isLgm, setIsLgm] = useState(true);
   const [ready, setIsready] = useState(false);
   const [view, setView] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
+  const [isconnect, setIsconnect] = useState(false);
+  let player: userInfo[];
+  let connect_switch = false;
 
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
@@ -78,7 +79,7 @@ function GameWaiting() {
         flag = false;
       }
     });
-    if (flag && totalCnt === state.userList.length) {
+    if (flag && totalCnt === body.userList.length) {
       goGame();
     }
   };
@@ -128,6 +129,7 @@ function GameWaiting() {
     if (!client.current?.connected) {
       return;
     }
+    setIsconnect(true);
     client.current.publish({
       destination: "/pub/game-room/ready",
       body: JSON.stringify(state)
@@ -194,7 +196,6 @@ function GameWaiting() {
       console.log(e);
     }
   };
-
   // 방 시작 후 웹 소켓 연결
   const connect = async () => {
     try {
@@ -208,6 +209,8 @@ function GameWaiting() {
         onConnect: () => {
           subscribeChatting();
           publishInit();
+          setIsconnect(true);
+          connect_switch = true;
         },
         debug: () => {
           null;
@@ -233,7 +236,15 @@ function GameWaiting() {
 
   return (
     <div className="wait_game">
-      {view ? null : <img src={Back} alt="<" id="back" onClick={outGame} />}
+      {view ? null : (
+        <img
+          src={Back}
+          alt="<"
+          id="back"
+          onClick={outGame}
+          style={isconnect ? { display: "block" } : { display: "none" }}
+        />
+      )}
       <div className="top">{gameinfo?.title}</div>
       <div>
         {isLgm ? (

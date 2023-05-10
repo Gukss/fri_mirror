@@ -49,6 +49,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
     majors: [],
     nonMajors: []
   });
+  
 
   useEffect(() => {
     const getDetail = async () => {

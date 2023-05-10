@@ -49,6 +49,7 @@ function GameMain() {
   const [flip, setFlip] = useState<boolean>(false);
   const [result, setResult] = useState<boolean>(false);
   const [looser, setLooser] = useState("");
+  const [isStart, setStart] = useState(false);
   const res: userInfo[] = [];
   const api_url = process.env.REACT_APP_REST_API;
 
@@ -147,6 +148,7 @@ function GameMain() {
         heartbeatOutgoing: 4000,
         onConnect: () => {
           subscribeChatting();
+          setStart(true);
         },
         debug: () => {
           null;
@@ -198,17 +200,16 @@ function GameMain() {
     };
     lgmImage.src = "/assets/lgm.png";
   }, []);
-
   // 시작 3초
   useEffect(() => {
-    if (imagesLoaded) {
+    if (imagesLoaded && isStart) {
       intervalRef.current = setInterval(() => {
         setSeconds((seconds) => seconds - 1);
       }, 1000);
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [imagesLoaded]);
+  }, [imagesLoaded, isStart]);
 
   useEffect(() => {
     if (seconds === -1) {
