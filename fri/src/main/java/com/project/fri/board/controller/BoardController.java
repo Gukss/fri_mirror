@@ -1,6 +1,8 @@
 package com.project.fri.board.controller;
 
 import com.project.fri.board.dto.CreateBoardRequest;
+import com.project.fri.board.dto.DeleteBoardRequest;
+import com.project.fri.board.dto.DeleteBoardResponse;
 import com.project.fri.board.dto.FindBoardResponse;
 import com.project.fri.board.service.BoardService;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -40,5 +43,12 @@ public class BoardController {
   public ResponseEntity<List<FindBoardResponse>> findBoard(){
     List<FindBoardResponse> board = boardService.findBoard();
     return ResponseEntity.ok().body(board);
+  }
+
+  @PatchMapping("/delete")
+  public ResponseEntity<DeleteBoardResponse> deleteBoard(@RequestBody DeleteBoardRequest deleteBoardRequest){
+    long updatedBoardId = boardService.deleteBoard(deleteBoardRequest);
+    DeleteBoardResponse deleteBoardResponse = DeleteBoardResponse.create(updatedBoardId);
+    return ResponseEntity.ok().body(deleteBoardResponse);
   }
 }

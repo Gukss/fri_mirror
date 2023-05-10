@@ -1,6 +1,7 @@
 package com.project.fri.board.service;
 
 import com.project.fri.board.dto.CreateBoardRequest;
+import com.project.fri.board.dto.DeleteBoardRequest;
 import com.project.fri.board.dto.FindBoardResponse;
 import com.project.fri.board.entity.Board;
 import com.project.fri.board.entity.BoardCategory;
@@ -38,6 +39,7 @@ public class BoardServiceImpl implements BoardService {
    * @return
    */
   @Override
+  @Transactional
   public void createBoard(CreateBoardRequest createBoardRequest, Long userId) {
     User findUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
@@ -77,5 +79,16 @@ public class BoardServiceImpl implements BoardService {
       list.add(findBoardResponse.create());
     }
     return list;
+  }
+
+  @Override
+  @Transactional
+  public long deleteBoard(DeleteBoardRequest deleteBoardRequest) {
+    //todo: 예외 변경하기
+    Board board = boardRepository.findById(deleteBoardRequest.getBoardId())
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    //todo: delete가 true로 들어오면 400 던져야한다.
+    Board updateIsDeleteBoard = board.updateIsDelete(deleteBoardRequest.isDelete());
+    return updateIsDeleteBoard.getId();
   }
 }

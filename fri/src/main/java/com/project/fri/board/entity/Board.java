@@ -67,4 +67,9 @@ public class Board extends BaseTimeEntity {
             .build())
         .build();
   }
+
+  public Board updateIsDelete(boolean isDelete){
+    this.isDelete = isDelete;
+    return this;
+  }
 }
