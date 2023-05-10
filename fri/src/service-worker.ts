@@ -118,3 +118,46 @@ self.addEventListener("message", (event) => {
 //     })
 //   );
 // });
+// serviceWorker.js
+
+const cacheVersion = 1;
+
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      // Cache hit - return response
+      if (response) {
+        return response;
+      }
+      return fetch(event.request).then(function(response) {
+        // Check if we received a valid response
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+
+        // Clone the response to avoid consuming it
+        const responseToCache = response.clone();
+
+        // Open a cache and cache the response
+        caches.open('my-cache-' + cacheVersion).then(function(cache) {
+          cache.put(event.request, responseToCache);
+        });
+
+        // Refresh the app
+        self.clients.matchAll().then(clients => {
+          clients.forEach(client => {
+            client.postMessage('refresh');
+          });
+        });
+
+        return response;
+      });
+    })
+  );
+});
+
+self.addEventListener('message', function(event) {
+  if (event.data === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
