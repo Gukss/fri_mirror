@@ -95,8 +95,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     //이 roomList에서 해당 방으로 userList를 찾아서 size()를 찾아서 가득찬 방 없애야한다.
-    //user마다 전공 여부도 체크해줘야한다.
-    List<Room> roomList = roomRepository.findAllByAreaOrderByCreatedAtDesc(foundArea);
+    //user마다 전공 여부도 체크해줘야한다.is_delete 컬럼 값이 false인 경우만 들고온다.
+    List<Room> roomList = roomRepository.findAllByAreaAndIsDeleteFalseOrderByCreatedAtDesc(foundArea);
 
     //roomList 반복하면서 responseEnitity 채워주기
     List<FindAllRoomInstance> drinkList = new ArrayList<>();
@@ -272,10 +272,10 @@ public class RoomServiceImpl implements RoomService {
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
 
     // todo : user테이블과 room테이블을 join해서 가져올 수 있을거 같음 (이렇게 바꾸면 모든 값을 가져와서 map을 돌리지 않고 db에서 가져올때부터 필요한 값만 가져올 수 있음)
-    // 지역과 카테고리로 방 목록을 찾음
-    List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
-        roomCategory, newPageable);
-    
+    // 지역과 카테고리로 방 목록을 찾음 이때 is_delete가 false일 때문 불러오기
+    List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategoryAndIsDeleteFalse(area,
+            roomCategory, newPageable);
+
     // 방 리스트에서 내가 참여한 방 안보이게 하기
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
