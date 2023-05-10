@@ -46,7 +46,7 @@ export default function MyEdit() {
     }
   ]);
   // 선택되는 이미지 ID
-  const [selected, setSelected] = useState<number>(0);
+  const [selected, setSelected] = useState<number>();
 
   // nickname
   const [form, setForm] = useState<Edit>({
@@ -122,6 +122,7 @@ export default function MyEdit() {
     };
     getImg();
   }, []);
+  console.log(selected, "dfdfdf");
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -133,6 +134,7 @@ export default function MyEdit() {
           anonymousProfileImageId: selected,
           nickname: form.nickname
         };
+        console.log(data);
         const submit = async () => {
           const header = {
             "Content-Type": "application/json",
@@ -142,7 +144,6 @@ export default function MyEdit() {
             const res = await axios.patch(api_url + "user", data, {
               headers: header
             });
-            console.log(res);
             alert("변경되었습니다!");
             dispatch(changeNick(res.data.nickname));
             dispatch(changeProfile(res.data.anonymousProfileImageUrl));
@@ -160,7 +161,7 @@ export default function MyEdit() {
         submit();
       }
     },
-    [form, error, message]
+    [form, error, message, selected]
   );
 
   return (

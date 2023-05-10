@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import lgm from "../../assets/lgm.png"
-import mgl from "../../assets/mgl.png"
-import egg from "../../assets/egg_fri.png"
+import lgm from "../../assets/lgm.png";
+import mgl from "../../assets/mgl.png";
+import egg from "../../assets/egg_fri.png";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { game } from "../../redux/user";
@@ -13,7 +13,7 @@ import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 export type userInfo = {
-  gameRoomId : number;
+  gameRoomId: number;
   userId: number;
   userProfile: string;
   nickname: string;
@@ -22,10 +22,10 @@ export type userInfo = {
 };
 
 export type partici = {
-  userId : number;
-  name : string;
-  profileUrl : string;
-}
+  userId: number;
+  name: string;
+  profileUrl: string;
+};
 
 function GameMain() {
   const navigate = useNavigate();
@@ -50,9 +50,9 @@ function GameMain() {
   const [result, setResult] = useState<boolean>(false);
   const [looser, setLooser] = useState("");
   const [isStart, setStart] = useState(false);
-  const res:userInfo[] = [];
+  const res: userInfo[] = [];
   const api_url = process.env.REACT_APP_REST_API;
-  
+
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
   });
@@ -63,20 +63,22 @@ function GameMain() {
     return state.strr.anonymousProfileImageUrl;
   });
   const [nickname, setNick] = useState<string>("");
-  
+
   const [state, setState] = useState<userInfo[]>([]);
 
   const resultSet = async () => {
-    if(Number(totalCnt) === res.length){
-      const num = res.length
-      setLooser(res[num-1].nickname)
+    if (Number(totalCnt) === res.length) {
+      const num = res.length;
+      setLooser(res[num - 1].nickname);
     }
-  }
+  };
 
   const resultSort = async () => {
-    state.sort((a, b) => (Number(gameTime) - a.gameTime) - (Number(gameTime) - b.gameTime))
-    await resultSet()
-  }
+    state.sort(
+      (a, b) => Number(gameTime) - a.gameTime - (Number(gameTime) - b.gameTime)
+    );
+    await resultSet();
+  };
 
   const outGame = async () => {
     try {
@@ -96,31 +98,31 @@ function GameMain() {
     }
   };
 
-  const publishMessage = async (time : number) => {
+  const publishMessage = async (time: number) => {
     if (!client.current?.connected) {
       return;
     }
     client.current.publish({
       destination: "/pub/game-room/stop",
       body: JSON.stringify({
-        "gameRoomId": gameRoomId, // 필요한지 모르겟음
-        "userId": userId,
-        "gameTime": time,
-        "anonymousProfileImageId" : profile,
-        "nickname": nickname,
-      }),
+        gameRoomId: gameRoomId, // 필요한지 모르겟음
+        userId: userId,
+        gameTime: time,
+        anonymousProfileImageId: profile,
+        nickname: nickname
+      })
     });
   };
 
-  const subscribeChatting = async () => { 
-    setStart(true);   
+  const subscribeChatting = async () => {
     client.current?.subscribe(
-    `/sub/game-room/stop/${gameRoomId}`,
-    ({ body }) => {
-      res.push(JSON.parse(body))
-      setState((prev) => [...prev, JSON.parse(body)])
-      if(res.length === Number(totalCnt)) resultSort();
-    });
+      `/sub/game-room/stop/${gameRoomId}`,
+      ({ body }) => {
+        res.push(JSON.parse(body));
+        setState((prev) => [...prev, JSON.parse(body)]);
+        if (res.length === Number(totalCnt)) resultSort();
+      }
+    );
   };
 
   const stompActive = () => {
@@ -147,7 +149,6 @@ function GameMain() {
         onConnect: () => {
           subscribeChatting();
           setStart(true);
-  
         },
         debug: () => {
           null;
@@ -171,16 +172,20 @@ function GameMain() {
           "Content-Type": "application/json",
           Authorization: userId
         };
-        const res = await axios.get(api_url + "game-room/" + gameRoomId, {headers: header});
-        setArea(res.data.location)
-        res.data.participation.map((player:partici) => {
-          if(player.userId === userId) setNick(player.name)
-        })
-      }catch(e){console.log(e)}
-    }
+        const res = await axios.get(api_url + "game-room/" + gameRoomId, {
+          headers: header
+        });
+        setArea(res.data.location);
+        res.data.participation.map((player: partici) => {
+          if (player.userId === userId) setNick(player.name);
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
     getData();
     connect();
-  }, [])
+  }, []);
 
   // 이미지 로딩
   useEffect(() => {
@@ -228,7 +233,7 @@ function GameMain() {
     if (timer < 0.01) {
       clearInterval(timerRef.current);
       clearInterval(lgmRef.current);
-      publishMessage(0.00)
+      publishMessage(0.0);
     }
   }, [timer]);
 
@@ -248,7 +253,7 @@ function GameMain() {
     setFlip(true);
     clearInterval(timerRef.current);
     clearInterval(lgmRef.current);
-    publishMessage(Number(timer.toFixed(2)))
+    publishMessage(Number(timer.toFixed(2)));
     setResult(true);
   };
 
@@ -285,20 +290,16 @@ function GameMain() {
         <div className="game-result-back">
           <div className="game-result" ref={resultRef}>
             <div className="header">결과</div>
-            <div className="name">
-              {looser} 잘 먹을게요~~
-            </div>
+            <div className="name">{looser} 잘 먹을게요~~</div>
             <div className="time">5분 뒤 {area}에서 만나요</div>
             <div className="result-table">
-              {
-                state.map((player, index) => (
-                  <div className="result" key={index}>
-                    <div className="number">{index+1}등</div>
-                    <div className="name">{player.nickname}</div>
-                    <div className="time">{player.gameTime}</div>
-                  </div>
-                ))
-              }
+              {state.map((player, index) => (
+                <div className="result" key={index}>
+                  <div className="number">{index + 1}등</div>
+                  <div className="name">{player.nickname}</div>
+                  <div className="time">{player.gameTime}</div>
+                </div>
+              ))}
             </div>
             <button
               className="result-btn"
@@ -314,15 +315,19 @@ function GameMain() {
       <div className="game">
         <div className="timer">
           {" "}
-          {
-            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
-          }
+          {isLgm ? (
+            <img src={lgm} alt="lgm" className="wait_lgm" />
+          ) : (
+            <img src={mgl} alt="mgl" className="wait_lgm" />
+          )}
           {"  "}
           {timer.toFixed(2)}
           {"  "}
-          {
-            isLgm ? <img src={lgm} alt="lgm" className="wait_lgm" /> : <img src={mgl} alt="mgl" className="wait_lgm" />
-          }
+          {isLgm ? (
+            <img src={lgm} alt="lgm" className="wait_lgm" />
+          ) : (
+            <img src={mgl} alt="mgl" className="wait_lgm" />
+          )}
         </div>
         <div className="game-content">
           <span>{gameTime}</span>초에 <br /> 프라이를 눌러주세요.

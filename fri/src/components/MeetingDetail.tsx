@@ -124,7 +124,9 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
                 ) : (
                   data.majors.map((info: any) => (
                     <div key={info.name} className="info">
-                      <div className="profile-img">{info.url}</div>
+                      <div className="profile-img">
+                        <img src={info.anonymousProfileImageUrl} alt="프로필" />
+                      </div>
                       <div className="name">{info.name}</div>
                     </div>
                   ))
@@ -144,7 +146,9 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
                 ) : (
                   data.nonMajors.map((info: any) => (
                     <div key={info.name} className="info">
-                      <div className="profile-img">{info.url}</div>
+                      <div className="profile-img">
+                        <img src={info.anonymousProfileImageUrl} alt="프로필" />
+                      </div>
                       <div className="name">{info.name}</div>
                     </div>
                   ))
@@ -152,40 +156,30 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
               </div>
             </div>
             {isPossible === "already" ? (
-              <div className="join_game" onClick={goChat}>
-                참여하기
+              <div
+                className="join_game"
+                style={{
+                  background: "#ffefbe"
+                }}
+                onClick={() => {
+                  navigate(`/chatting/${isRoom}?isuser=true`);
+                }}
+              >
+                이미 다른 채팅방에 들어가 있어요!
+                <br /> 내 채팅방으로
               </div>
             ) : isPossible === "full" ? (
               <div
                 className="join_game"
                 style={{
-                  background: isPossible ? "#ffce3c" : "#ffefbe"
+                  background: "#ffefbe"
                 }}
               >
                 방이 꽉 찼어요ㅜㅜ
               </div>
             ) : (
-              <div
-                className="join_game"
-                style={{
-                  background: isPossible ? "#ffce3c" : "#ffefbe"
-                }}
-              >
-                이미 다른 채팅방에 들어가 있어요!
-              </div>
-            )}
-            {isPossible ? (
               <div className="join_game" onClick={goChat}>
                 참여하기
-              </div>
-            ) : (
-              <div
-                className="join_game"
-                style={{
-                  background: isPossible ? "#ffce3c" : "#ffefbe"
-                }}
-              >
-                이미 다른 채팅방에 들어가 있어요!
               </div>
             )}
           </div>

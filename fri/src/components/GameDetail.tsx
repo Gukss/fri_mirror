@@ -26,6 +26,9 @@ function GameDetail({ room, open, setOpen }: roomType) {
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
+  const gameId = useSelector((state: RootState) => {
+    return state.strr.gameRoomId;
+  });
 
   // game detail data
   const [data, setData] = useState<Gamedetail>({
@@ -81,7 +84,9 @@ function GameDetail({ room, open, setOpen }: roomType) {
   }, []);
 
   const isPossible = useSelector((state: RootState) => {
-    if (state.strr.gameRoomId !== "참여한 방이 없습니다.") {
+    if (state.strr.gameRoomId === String(gameRoomId)) {
+      return "yourRoom";
+    } else if (state.strr.gameRoomId !== "참여한 방이 없습니다.") {
       return "already";
     } else if (headCount <= participationCount) {
       return "tooMany";
@@ -89,7 +94,6 @@ function GameDetail({ room, open, setOpen }: roomType) {
       return true;
     }
   });
-
   return (
     <>
       {open ? (
@@ -117,21 +121,35 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 <div className="game-profile">
                   {data.participation.map((info: any) => (
                     <div key={info.name} className="info">
-                      <div className="profile-img">{info.url}</div>
+                      <div className="profile-img">
+                        <img src={info.anonymousProfileImageUrl} alt="프로필" />
+                      </div>
                       <div className="name">{info.name}</div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            {isPossible === "already" ? (
+            {isPossible === "yourRoom" ? (
+              <div
+                className="join_game"
+                onClick={goGame}
+                // 참여자가 총인원보다 작을때는 누를 수 있지만, 같거나 클 때는 참여가 불가능함
+              >
+                참여하기
+              </div>
+            ) : isPossible === "already" ? (
               <div
                 className="join_game"
                 style={{
                   background: "#ffefbe"
                 }}
+                onClick={() => {
+                  navigate(`/wait/${gameId}`);
+                }}
               >
                 이미 게임에 참여중이에요!
+                <br /> 내 게임방으로
               </div>
             ) : isPossible === "tooMany" ? (
               <div
@@ -143,11 +161,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
                 참여할 수 없습니다!
               </div>
             ) : (
-              <div
-                className="join_game"
-                onClick={goGame}
-                // 참여자가 총인원보다 작을때는 누를 수 있지만, 같거나 클 때는 참여가 불가능함
-              >
+              <div className="join_game" onClick={goGame}>
                 참여하기
               </div>
             )}
