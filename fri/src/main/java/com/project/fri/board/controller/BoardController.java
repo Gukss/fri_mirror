@@ -1,6 +1,35 @@
 package com.project.fri.board.controller;
 
+import com.project.fri.board.dto.CreateBoardRequest;
+import com.project.fri.board.service.BoardService;
+import java.util.ArrayList;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/board")
+@Slf4j
 public class BoardController {
+  private final BoardService boardService;
 
+  @PostMapping
+  public ResponseEntity createBoard(
+      @RequestPart @Validated CreateBoardRequest createBoardRequest,
+      @RequestPart @Validated ArrayList<MultipartFile> boardImage,
+      @RequestHeader("Authorization") Long userId) {
+    log.info("img size: "+boardImage.size());
+    boardService.createBoard(createBoardRequest, userId);
+    return ResponseEntity.ok().build();
+  }
 }
