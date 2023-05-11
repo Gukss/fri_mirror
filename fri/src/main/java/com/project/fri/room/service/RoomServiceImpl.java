@@ -62,9 +62,9 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
 
-    // 만약 다른 방에 참여하고 있으면 방생성할 수 없다
-    if (user.getRoom() != null) {
-      throw new InvalidRequestStateException("이미 참여중인 방이 있습니다.");
+    // 만약 다른 방에 참여하고 있거나, 하트가 1개 미만이면 방생성할 수 없다
+    if (user.getRoom() != null || user.getHeart() < 1) {
+      throw new InvalidRequestStateException("방을 생성할 수 없습니다.");
     }
 
     // 방, 지역 카테고리 객체화
@@ -81,6 +81,9 @@ public class RoomServiceImpl implements RoomService {
 
     // user 테이블에 방번호 추가
     user.updateRoomNumber(room);
+
+    // 방에 들어가면서 하트 1개 소진
+    user.minusHeart();
 
     // response dto로 변환
     CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room);
