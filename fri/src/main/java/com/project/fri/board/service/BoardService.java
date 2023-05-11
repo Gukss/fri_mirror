@@ -6,6 +6,7 @@ import com.project.fri.board.dto.DeleteBoardRequest;
 import com.project.fri.board.dto.FindBoardResponse;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 
 public interface BoardService {
 
@@ -22,5 +23,11 @@ public interface BoardService {
    */
   List<FindBoardResponse> findBoard();
 
+  /**
+   * desc: 게시판 삭제
+   * @param deleteBoardRequest
+   * @return
+   */
   ResponseEntity deleteBoard(DeleteBoardRequest deleteBoardRequest);
+  ResponseEntity readBoardAndCommentList(long userId);
 }

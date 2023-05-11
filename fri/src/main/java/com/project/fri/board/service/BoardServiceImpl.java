@@ -87,17 +87,23 @@ public class BoardServiceImpl implements BoardService {
   @Transactional
   public ResponseEntity deleteBoard(DeleteBoardRequest deleteBoardRequest) {
     ResponseEntity res = null;
-    if(deleteBoardRequest.isDelete()){
+    if(!deleteBoardRequest.isDelete()){
       res = ResponseEntity.badRequest().build();
       return res;
     }
     //todo: 예외 변경하기
     Board board = boardRepository.findById(deleteBoardRequest.getBoardId())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-    //todo: delete가 true로 들어오면 400 던져야한다.
+    //todo: delete가 false로 들어오면 400 던져야한다.
     Board updateIsDeleteBoard = board.updateIsDelete(deleteBoardRequest.isDelete());
     DeleteBoardResponse instance = DeleteBoardResponse.create(updateIsDeleteBoard.getId());
     res = ResponseEntity.ok().body(instance);
     return res;
+  }
+
+  @Override
+  public ResponseEntity readBoardAndCommentList(long userId) {
+
+    return null;
   }
 }
