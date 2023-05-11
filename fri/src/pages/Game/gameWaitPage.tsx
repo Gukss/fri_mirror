@@ -74,11 +74,16 @@ function GameWaiting() {
 
   const checkReady = (body: gameMessage) => {
     let flag = true;
-    body.userList.map((player) => {
-      if (!player.ready) {
+    console.log("반복문 시작")
+    for(let i = 0; i < body.userList.length; i++){
+      console.log(body.userList[i].userId, " : ", body.userList[i].ready)
+      if(!body.userList[i].ready){
         flag = false;
+        break;
       }
-    });
+    }
+    console.log("반복문 끝")
+    console.log(flag, body.userList)
     if (flag && totalCnt === body.userList.length) {
       goGame();
     }
