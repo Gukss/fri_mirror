@@ -22,7 +22,6 @@ export type userInfo = {
   userId: number;
   userProfile: string;
   nickname: string;
-  ready: boolean;
   result: number;
 };
 
@@ -52,8 +51,6 @@ function GameWaiting() {
   const [view, setView] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
   const [isconnect, setIsconnect] = useState(false);
-  let player: userInfo[];
-  let connect_switch = false;
 
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
@@ -72,36 +69,32 @@ function GameWaiting() {
     );
   };
 
-  const checkReady = (body: gameMessage) => {
-    let flag = true;
-    console.log("반복문 시작")
-    for(let i = 0; i < body.userList.length; i++){
-      console.log(body.userList[i].userId, " : ", body.userList[i].ready)
-      if(!body.userList[i].ready){
-        flag = false;
-        break;
+  const clickReady= async () => {
+    try{
+      const header = {
+        "Content-Type": "application/json",
+        Authorization: userId
+      };
+      const data = {        
+        "gameRoomId": gameRoomId,
+        "ready": true  
       }
+      await axios.patch(api_url+'user/ready',data, {headers : header})
     }
-    console.log("반복문 끝")
-    console.log(flag, body.userList)
-    if (flag && totalCnt === body.userList.length) {
-      goGame();
-    }
-  };
+    catch(e){console.log(e)}
+  }
 
   const subscribeChatting = async () => {
-    connect_switch = true;
     client.current?.subscribe(
-    `/sub/game-room/ready/${gameRoomId}`,
+    `/sub/game-room/info/${gameRoomId}`,
     ({ body }) => {
-      player = (JSON.parse(body).userList)
       setState(JSON.parse(body))
-      if(connect_switch && totalCnt === JSON.parse(body).userList.length){
-        setView(true);
-        checkReady(JSON.parse(body));
-      }
-      if(totalCnt !== JSON.parse(body).userList.length) setView(false); 
     });
+    client.current?.subscribe(
+      `/sub/game-room/ready/${gameRoomId}`,
+      ({ body }) => {
+        if(JSON.parse(body)) goGame();
+      });
   };
 
   const stompActive = () => {
@@ -115,35 +108,17 @@ function GameWaiting() {
     if (client.current !== undefined) client.current.deactivate();
   };
 
-  const publishMessage = async () => {
-    if (!client.current?.connected) {
-      return;
-    }
-    
-    for (let i = 0; i < state.userList.length; i++) {
-      if (state.userList[i].userId === userId) {
-        state.userList[i].ready = true;
-        break;
-      }
-    }
-    client.current.publish({
-      destination: "/pub/game-room/ready",
-      body: JSON.stringify(state)
-    });
-  };
-
   const publishInit = async () => {
     if (!client.current?.connected) {
       return;
     }
     setIsconnect(true);
     client.current.publish({
-      destination: "/pub/game-room/ready",
+      destination: "/pub/game-room/info",
       body: JSON.stringify(state)
     });
     if (totalCnt === state.userList.length) {
       setView(true);
-      checkReady(state);
     }
   };
 
@@ -176,7 +151,6 @@ function GameWaiting() {
         gameinfo?.headCount === state.userList.length
       ) {
         setView(true);
-        checkReady(state);
       }
     };
     getData();
@@ -219,7 +193,6 @@ function GameWaiting() {
           subscribeChatting();
           publishInit();
           setIsconnect(true);
-          connect_switch = true;
         },
         debug: () => {
           null;
@@ -301,22 +274,25 @@ function GameWaiting() {
             ))
           : null}
       </div>
-      {view ? (
+      {view ?
+      <>
+      {
+        ready ? 
+      <div className="isready-btn">준비완료</div> :
+         
         <button
-          className="ready-btn"
-          onClick={() => {
-            publishMessage();
-            setIsready(true);
-          }}
-          style={
-            ready
-              ? { backgroundColor: "rgba(124, 124, 124, 1)" }
-              : { backgroundColor: "#ffc000" }
-          }
-        >
-          {ready ? "준비완료" : "준비하기"}
-        </button>
-      ) : (
+        className="ready-btn"
+        onClick={() => {
+          setIsready(true);
+          clickReady();
+        }}
+      >
+        준비하기
+      </button>
+       }
+      </>
+        
+       : (
         <div className="ready">다른 플레이어 기다리는 중...</div>
       )}
     </div>
