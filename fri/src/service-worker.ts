@@ -82,7 +82,7 @@ self.addEventListener("message", (event) => {
 // Any other custom service worker logic can go here.
 const CACHE_NAME = "cache_sample";
 const urlsToCache = ["index.html", "offline.html"];
-const version = "v0.0.2";
+const version = "v0.0.3";
 //처음에 sw를 설치합니다.
 //웹 페이지 로딩 시간을 단축하기 위해 자산을 캐시합니다.
 self.addEventListener("install", (event: any) => {
