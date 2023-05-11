@@ -94,7 +94,8 @@ function GameWaiting() {
       if(connect_switch && totalCnt === JSON.parse(body).userList.length){
         setView(true);
         checkReady(JSON.parse(body));
-      } 
+      }
+      if(totalCnt !== JSON.parse(body).userList.length) setView(false); 
     });
   };
 
@@ -113,7 +114,7 @@ function GameWaiting() {
     if (!client.current?.connected) {
       return;
     }
-
+    
     for (let i = 0; i < state.userList.length; i++) {
       if (state.userList[i].userId === userId) {
         state.userList[i].ready = true;
