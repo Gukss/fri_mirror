@@ -1,12 +1,12 @@
 package com.project.fri.likes.controller;
 
+import com.project.fri.likes.dto.CreateLikesRequest;
+import com.project.fri.likes.dto.CreateLikesResponse;
 import com.project.fri.likes.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,10 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikesController {
     private final LikesService likesService;
 
+    /**
+     * 좋아요 생성
+     * @param createLikesRequest 요청
+     * @param userId Authorization
+     * @return 응답
+     */
     @PostMapping
-    public ResponseEntity<?> createLikes() {
+    public ResponseEntity<CreateLikesResponse> createLikes(
+            @RequestBody CreateLikesRequest createLikesRequest, @RequestHeader("Authorization") Long userId) {
+        CreateLikesResponse result = likesService.createLikes(createLikesRequest, userId);
 
-        return null;
+        if (result == null) {
+            return ResponseEntity.badRequest().body(new CreateLikesResponse(true));
+        }
+        return ResponseEntity.ok().body(result);
     }
 
 }
