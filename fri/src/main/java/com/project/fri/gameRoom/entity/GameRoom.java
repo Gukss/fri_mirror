@@ -49,6 +49,7 @@ public class GameRoom extends BaseTimeEntity {
   private double randomTime;
 
   private boolean isDelete;
+  private int readyCount;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "area_id")
@@ -65,6 +66,7 @@ public class GameRoom extends BaseTimeEntity {
         .title(request.getTitle())
         .headCount(request.getHeadCount())
         .randomTime(time)
+        .readyCount(0) //처음 생성할 때는 0으로 생성
         .area(area)
         .location(request.getLocation())
         .baseEntity(BaseEntity.builder()
@@ -82,5 +84,10 @@ public class GameRoom extends BaseTimeEntity {
   public GameRoom updateIsDelete(boolean isDelete) {
     this.isDelete = isDelete;
     return this;
+  }
+
+  public int updateReadyCount(int value){ //+-로 값을 받는다.
+    this.readyCount += value;
+    return this.readyCount;
   }
 }

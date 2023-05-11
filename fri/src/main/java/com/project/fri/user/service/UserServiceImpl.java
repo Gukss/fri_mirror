@@ -3,6 +3,9 @@ package com.project.fri.user.service;
 import com.project.fri.common.entity.Area;
 import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
+import com.project.fri.gameRoom.dto.SocketGameRoomStatusRequestAndResponse;
+import com.project.fri.gameRoom.entity.GameRoom;
+import com.project.fri.gameRoom.repository.GameRoomRepository;
 import com.project.fri.room.entity.Room;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.dto.*;
@@ -29,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +51,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+  private final GameRoomRepository gameRoomRepository;
+
   private final RoomRepository roomRepository;
   private final AreaRepository areaRepository;
   private final UserRepository userRepository;
@@ -55,6 +61,8 @@ public class UserServiceImpl implements UserService {
 
   private WebDriver driver;
   private final JavaMailSender emailSender;
+  private final SimpMessageSendingOperations messagingTemplate;
+
 
 //  public static final String ePw = createKey();
 
@@ -312,7 +320,8 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
-    Optional<User> user = userRepository.findByEmailWithAreaAndAnonymousProfileImage(signInUserRequest.getEmail());
+    Optional<User> user = userRepository.findByEmailWithAreaAndAnonymousProfileImage(
+        signInUserRequest.getEmail());
 
     if (user.isPresent()) {
       User findUser = user.get();
@@ -426,15 +435,17 @@ public class UserServiceImpl implements UserService {
 
   /**
    * 유저 프로필수정 (닉네임, 사진)
+   *
    * @param updateUserProfileRequest 프로필 수정 요청
-   * @param userId 수정할 유저
+   * @param userId                   수정할 유저
    * @return 프로필 수정 응답
    */
   @Override
   @Transactional
-  public UpdateUserProfileResponse updateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, Long userId) {
+  public UpdateUserProfileResponse updateUserProfile(
+      UpdateUserProfileRequest updateUserProfileRequest, Long userId) {
     User userNickName = userRepository.findByNickname(updateUserProfileRequest.getNickname())
-            .orElse(null);
+        .orElse(null);
 
     // 중복된 닉네임 유저 있는지 확인
     if (userNickName != null && !userNickName.getId().equals(userId)) {
@@ -442,17 +453,21 @@ public class UserServiceImpl implements UserService {
     }
 
     User findUser = userRepository.findByIdWithAnonymousProfileImage(userId)
-            .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
-    Optional<AnonymousProfileImage> anonymousProfileImage = anonymousProfileImageRepository.findById(updateUserProfileRequest.getAnonymousProfileImageId());
-    AnonymousProfileImage findAnonymousProfileImage = anonymousProfileImage.orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AnonymousProfileImage));
+    Optional<AnonymousProfileImage> anonymousProfileImage = anonymousProfileImageRepository.findById(
+        updateUserProfileRequest.getAnonymousProfileImageId());
+    AnonymousProfileImage findAnonymousProfileImage = anonymousProfileImage.orElseThrow(
+        () -> new NotFoundExceptionMessage(
+            NotFoundExceptionMessage.NOT_FOUND_AnonymousProfileImage));
 
-    User updateUser = findUser.updateUserProfile(findAnonymousProfileImage, updateUserProfileRequest.getNickname());
+    User updateUser = findUser.updateUserProfile(findAnonymousProfileImage,
+        updateUserProfileRequest.getNickname());
 
     return UpdateUserProfileResponse.builder()
-            .anonymousProfileImageUrl(updateUser.getAnonymousProfileImage().getImageUrl())
-            .nickname(updateUser.getNickname())
-            .build();
+        .anonymousProfileImageUrl(updateUser.getAnonymousProfileImage().getImageUrl())
+        .nickname(updateUser.getNickname())
+        .build();
   }
 
   @Override
@@ -460,9 +475,9 @@ public class UserServiceImpl implements UserService {
     String nickname = certifiedNicknameRequest.getNickname();
     Optional<User> optionalUser = userRepository.findByNickname(nickname);
     HttpStatus returnStatus = null;
-    if(optionalUser.isPresent()){ //해당 닉네임 유저가 존재한다.
+    if (optionalUser.isPresent()) { //해당 닉네임 유저가 존재한다.
       returnStatus = HttpStatus.BAD_REQUEST;
-    }else{ //해당 닉네임 유저가 존재하지 않는다.
+    } else { //해당 닉네임 유저가 존재하지 않는다.
       returnStatus = HttpStatus.OK;
     }
     return returnStatus;
@@ -480,18 +495,54 @@ public class UserServiceImpl implements UserService {
 
   /**
    * 유저 프로필 수정을 위한 사진 리스트 조회
+   *
    * @return FindAnonymousProfileImagesResponse
    */
   @Override
   public FindAnonymousProfileImagesResponse findAnonymousProfileImages() {
     List<AnonymousProfileImage> findImages = anonymousProfileImageRepository.findAll();
     List<FindAnonymousProfileImageDto> result = findImages.stream()
-            .map(i -> FindAnonymousProfileImageDto.builder()
-                    .anonymousImageId(i.getId())
-                    .anonymousImageUrl(i.getImageUrl())
-                    .build())
-            .collect(Collectors.toList());
+        .map(i -> FindAnonymousProfileImageDto.builder()
+            .anonymousImageId(i.getId())
+            .anonymousImageUrl(i.getImageUrl())
+            .build())
+        .collect(Collectors.toList());
     return new FindAnonymousProfileImagesResponse(result);
   }
 
+  @Override
+  @Transactional
+  public UpdateIsReadyResponse updateIsReady(Long userId,
+      UpdateIsReadyRequest updateIsReadyRequest) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    GameRoom gameRoom = gameRoomRepository.findById(updateIsReadyRequest.getGameRoomId())
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_GAME_ROOM));
+
+    user.updateReady(updateIsReadyRequest.isReady());
+
+    int value = 0;
+    //todo: 프론트를 믿지말고, postman으로 true가 계속 넘어오면 계속 +1 한다. => 고치기
+    if(user.isReady()){ //준비
+      value = 1;
+    }else{ //준비 해제
+      value = -1;
+    }
+
+    int updateReadyCount = gameRoom.updateReadyCount(value);
+    //headCount를 채우지 않아도 동작하도록 하는 코드
+//    List<User> allByGameRoom = userRepository.findAllByGameRoom(gameRoom);
+//    int size = allByGameRoom.size();
+
+    //headCount를 모두 채워야 동작하는 코드
+    int headCount = gameRoom.getHeadCount();
+    if(updateReadyCount == headCount){ //방 인원과 readyCount가 동일하면
+      SocketGameRoomStatusRequestAndResponse x = new SocketGameRoomStatusRequestAndResponse();
+      messagingTemplate.convertAndSend("/sub/game-room/ready/" + gameRoom.getId(), true);
+    }
+
+    UpdateIsReadyResponse updateIsReadyResponse = UpdateIsReadyResponse.create(user.isReady());
+    return updateIsReadyResponse;
+  }
 }

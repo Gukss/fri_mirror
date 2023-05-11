@@ -47,8 +47,7 @@ public class BoardController {
 
   @PatchMapping("/delete")
   public ResponseEntity<DeleteBoardResponse> deleteBoard(@RequestBody DeleteBoardRequest deleteBoardRequest){
-    long updatedBoardId = boardService.deleteBoard(deleteBoardRequest);
-    DeleteBoardResponse deleteBoardResponse = DeleteBoardResponse.create(updatedBoardId);
-    return ResponseEntity.ok().body(deleteBoardResponse);
+    ResponseEntity responseEntity = boardService.deleteBoard(deleteBoardRequest);
+    return responseEntity;
   }
 }

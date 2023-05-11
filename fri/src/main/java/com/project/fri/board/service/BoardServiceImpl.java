@@ -2,6 +2,7 @@ package com.project.fri.board.service;
 
 import com.project.fri.board.dto.CreateBoardRequest;
 import com.project.fri.board.dto.DeleteBoardRequest;
+import com.project.fri.board.dto.DeleteBoardResponse;
 import com.project.fri.board.dto.FindBoardResponse;
 import com.project.fri.board.entity.Board;
 import com.project.fri.board.entity.BoardCategory;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,12 +85,19 @@ public class BoardServiceImpl implements BoardService {
 
   @Override
   @Transactional
-  public long deleteBoard(DeleteBoardRequest deleteBoardRequest) {
+  public ResponseEntity deleteBoard(DeleteBoardRequest deleteBoardRequest) {
+    ResponseEntity res = null;
+    if(deleteBoardRequest.isDelete()){
+      res = ResponseEntity.badRequest().build();
+      return res;
+    }
     //todo: 예외 변경하기
     Board board = boardRepository.findById(deleteBoardRequest.getBoardId())
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     //todo: delete가 true로 들어오면 400 던져야한다.
     Board updateIsDeleteBoard = board.updateIsDelete(deleteBoardRequest.isDelete());
-    return updateIsDeleteBoard.getId();
+    DeleteBoardResponse instance = DeleteBoardResponse.create(updateIsDeleteBoard.getId());
+    res = ResponseEntity.ok().body(instance);
+    return res;
   }
 }

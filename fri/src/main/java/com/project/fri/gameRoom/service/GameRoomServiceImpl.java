@@ -201,6 +201,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     } else {                    // exitRoom: true일 때 -> 게임방번호 null로
       isParticipate = false;
       user.updateGameRoomNumber(null);
+      user.updateReady(false); // 방 나갈 때 ready를 false로 변경
       // 내가 나갈 때, 참여인원이 0명이면 방 삭제처리
       List<User> allParticipant = userRepository.findAllByGameRoom(gameRoom);
       if (allParticipant.isEmpty()) {  // 아무도 없으면 삭제처리

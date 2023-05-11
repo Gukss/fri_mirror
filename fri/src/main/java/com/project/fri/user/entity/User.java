@@ -62,6 +62,7 @@ public class User extends BaseTimeEntity {
   private boolean isDelete;
   @NotNull
   private String salt;
+  private boolean isReady;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "area_id")
@@ -113,6 +114,11 @@ public class User extends BaseTimeEntity {
     return gameRoom;
   }
 
+  public User updateReady(boolean isReady){
+    this.isReady = isReady;
+    return this;
+  }
+
   /**
    * desc: 사용자가 ready를 눌렀을 때 입력받은 값으로 ready를 update한다.
    *
@@ -149,6 +155,7 @@ public class User extends BaseTimeEntity {
         .password(encrypt)
         .salt(salt)
         .heart(5)
+        .isReady(false)
         .anonymousProfileImage(AnonymousProfileImage.builder().id(1L).build()) // todo : 나중에 랜덤 값으로 변경
         .nickname(request.getNickname())
         .isCertified(true)  // 인증이 완료되어야만 생성할 수 있기 때문에 true 하지만 추후 확장성을 위해 필드는 놔둠
