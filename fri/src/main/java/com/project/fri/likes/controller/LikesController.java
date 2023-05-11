@@ -29,7 +29,11 @@ public class LikesController {
         if (result == null) {
             return ResponseEntity.badRequest().body(new CreateLikesResponse(true));
         }
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.status(201).body(result);
     }
 
+    @PatchMapping
+    public ResponseEntity<?> updateLikes() {
+        return null;
+    }
 }
