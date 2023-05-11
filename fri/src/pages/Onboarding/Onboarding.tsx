@@ -58,7 +58,7 @@ export default function Onboarding() {
 
   return (
     <div className="onboarding" onClick={handleClick}>
-      <img id="gif" src={ting} alt="ting" className="onboarding-img" />
+      {/* <img id="gif" src={ting} alt="ting" className="onboarding-img" /> */}
       <div className="onboarding-text"> 터치해 주세요.</div>
     </div>
   );

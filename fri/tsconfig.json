@@ -22,7 +22,7 @@
   },
   "include": [
     "src",
-    "public/service-worker.ts",
+    "src/service-worker.ts",
     "src/serviceWorkerRegistration.ts"
   ]
 }
