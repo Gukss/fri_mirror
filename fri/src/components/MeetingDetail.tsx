@@ -20,6 +20,8 @@ interface Roomdetail {
 
 function MeetingDetail({ room, open, setOpen }: roomType) {
   const { headCount, location, major, nonMajor, roomId, title } = room;
+  const [isOk, setOk] = useState(false);
+  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => {
@@ -28,6 +30,9 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
   const isRoom = useSelector((state: RootState) => {
     return state.strr.roomId;
   });
+  const eggCnt = useSelector((state:RootState) => {
+    return state.strr.heart;
+  })
 
   const isPossible = useSelector((state: RootState) => {
     if (state.strr.roomId !== "참여한 방이 없습니다.") {
@@ -77,6 +82,11 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
   }, []);
 
   const goChat = async () => {
+    setModal(true);
+    if(eggCnt === 0){
+      alert("알이 없어요... 내일 다시 오셔야 할듯..")
+    }
+    else setModal(true);
     if (isRoom !== "참여한 방이 없습니다.") {
       alert("이미 다른 방에 참여중입니다.");
       return;
@@ -177,13 +187,27 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
                 방이 꽉 찼어요ㅜㅜ
               </div>
             ) : (
-              <div className="join_game" onClick={goChat}>
+              <div className="join_game" onClick={() => setModal(true)}>
                 참여하기
               </div>
             )}
           </div>
         </div>
       ) : null}
+      <div className="modal-back" style={modal ? {top : 0} : {bottom : "-100vh"}}>
+      <div className="checkmodal" style={modal ? {bottom : "40vh"} : {bottom : "-20vh"}}>
+        <div className="check-text">
+          달걀이 하나 깨져요ㅠ
+        </div>
+        <div className="button">
+          <button 
+            className="ok-btn" 
+            onClick={() => {goChat(); setModal(false)}}
+          >괜찮아요</button>
+          <button className="no-btn" onClick={() => {setModal(false)}}>괜찮을리가</button>
+			</div>
+		</div>
+    </div>
     </>
   );
 }

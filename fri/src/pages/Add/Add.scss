@@ -39,7 +39,7 @@
 .add-btn {
   width: 40vw;
   height: 7vh;
-  margin-top: 1.5rem;
+  margin-top: .5rem;
   background: #ffc000;
   color: #fff;
   border: none;
@@ -55,4 +55,12 @@
     visibility: visible;
     transition: ease-in-out 0.2s;
   }
+}
+
+.add-tip {
+  margin-top: 20px;
+  font-weight: 700;
+  color: #f63a5d;
+  margin-bottom: 0;
+  font-size: 15px;
 }
