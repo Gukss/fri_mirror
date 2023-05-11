@@ -8,52 +8,53 @@ import "./Onboarding.scss";
 import axios from "axios";
 
 export default function Onboarding() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
-  const api_url = process.env.REACT_APP_REST_API;
-  const userId = useSelector((state: RootState) => {
-    return state.strr.userId;
-  });
+  // const api_url = process.env.REACT_APP_REST_API;
+  // const userId = useSelector((state: RootState) => {
+  //   return state.strr.userId;
+  // });
 
-  const gameRoomId = useSelector((state: RootState) => {
-    return state.strr.gameRoomId;
-  });
+  // const gameRoomId = useSelector((state: RootState) => {
+  //   return state.strr.gameRoomId;
+  // });
 
-  // 새로 정보 받아와서 업데이트 하고, 그 다음 넘어가자
-  useEffect(() => {
-    const getNewInfo = async () => {
-      const header = {
-        "Content-Type": "application/json",
-        Authorization: Number(userId)
-      };
-      const res = await axios.get(api_url + "user", {
-        headers: header
-      });
-      // dispatch(login(res.data));
-      const data = {
-        anonymousProfileImageUrl: res.data.anonymousProfileImageUrl,
-        gameRoomId: res.data.gameRoomId,
-        heart: res.data.heart,
-        location: res.data.area,
-        major: res.data.major,
-        name: res.data.name,
-        nickname: res.data.nickname,
-        roomId: res.data.roomId,
-        userId: userId
-      };
-      dispatch(login(data));
-    };
-    getNewInfo();
-  }, []);
+  // // 새로 정보 받아와서 업데이트 하고, 그 다음 넘어가자
+  // useEffect(() => {
+  //   const getNewInfo = async () => {
+  //     const header = {
+  //       "Content-Type": "application/json",
+  //       Authorization: Number(userId)
+  //     };
+  //     const res = await axios.get(api_url + "user", {
+  //       headers: header
+  //     });
+  //     // dispatch(login(res.data));
+  //     const data = {
+  //       anonymousProfileImageUrl: res.data.anonymousProfileImageUrl,
+  //       gameRoomId: res.data.gameRoomId,
+  //       heart: res.data.heart,
+  //       location: res.data.area,
+  //       major: res.data.major,
+  //       name: res.data.name,
+  //       nickname: res.data.nickname,
+  //       roomId: res.data.roomId,
+  //       userId: userId
+  //     };
+  //     dispatch(login(data));
+  //   };
+  //   getNewInfo();
+  // }, []);
 
   const handleClick = () => {
-    if (userId === 0) {
-      navigate("/login");
-    } else if (gameRoomId !== "참여한 방이 없습니다.") {
-      navigate(`/wait/${gameRoomId}`);
-    } else {
-      navigate("/main");
-    }
+    navigate("/login");
+    // if (userId === 0) {
+    //   navigate("/login");
+    // } else if (gameRoomId !== "참여한 방이 없습니다.") {
+    //   navigate(`/wait/${gameRoomId}`);
+    // } else {
+    //   navigate("/main");
+    // }
   };
 
   return (
