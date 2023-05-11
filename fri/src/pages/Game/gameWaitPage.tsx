@@ -74,11 +74,16 @@ function GameWaiting() {
 
   const checkReady = (body: gameMessage) => {
     let flag = true;
-    body.userList.map((player) => {
-      if (!player.ready) {
+    console.log("반복문 시작")
+    for(let i = 0; i < body.userList.length; i++){
+      console.log(body.userList[i].userId, " : ", body.userList[i].ready)
+      if(!body.userList[i].ready){
         flag = false;
+        break;
       }
-    });
+    }
+    console.log("반복문 끝")
+    console.log(flag, body.userList)
     if (flag && totalCnt === body.userList.length) {
       goGame();
     }
@@ -94,7 +99,8 @@ function GameWaiting() {
       if(connect_switch && totalCnt === JSON.parse(body).userList.length){
         setView(true);
         checkReady(JSON.parse(body));
-      } 
+      }
+      if(totalCnt !== JSON.parse(body).userList.length) setView(false); 
     });
   };
 
@@ -113,7 +119,7 @@ function GameWaiting() {
     if (!client.current?.connected) {
       return;
     }
-
+    
     for (let i = 0; i < state.userList.length; i++) {
       if (state.userList[i].userId === userId) {
         state.userList[i].ready = true;
