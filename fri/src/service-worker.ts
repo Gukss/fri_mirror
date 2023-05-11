@@ -86,7 +86,6 @@ const version = "v0.0.3";
 //처음에 sw를 설치합니다.
 //웹 페이지 로딩 시간을 단축하기 위해 자산을 캐시합니다.
 self.addEventListener("install", (event: any) => {
-  console.log("sw install event");
   event.waitUntil(
     caches.open(version + CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache);
@@ -96,7 +95,6 @@ self.addEventListener("install", (event: any) => {
 //설치 후 sw 활성화
 //이전 캐시가 지워지는 위치
 self.addEventListener("activate", (event: any) => {
-  console.log("activate")
   event.waitUntil(
     caches.keys().then((cacheNames) =>
       Promise.all(
@@ -113,7 +111,6 @@ self.addEventListener("activate", (event: any) => {
 });
 //요청 수신 대기
 self.addEventListener("fetch", (event: any) => {
-  console.log("fetch")
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.response);
