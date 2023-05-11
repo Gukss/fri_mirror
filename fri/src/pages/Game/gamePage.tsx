@@ -67,18 +67,23 @@ function GameMain() {
   const [state, setState] = useState<userInfo[]>([]);
 
   const resultSet = async () => {
-    if(Number(totalCnt) === res.length){
-      setState(res)
-      const num = res.length
-      setLooser(res[num-1].nickname)
+    if (Number(totalCnt) === res.length) {
+      setState(res);
+      const num = res.length;
+      setLooser(res[num - 1].nickname);
     }
   };
 
   const resultSort = async () => {
-    res.sort((a:userInfo, b:userInfo): number => {return (Math.abs(Number(gameTime) - a.gameTime) - Math.abs(Number(gameTime) - b.gameTime))})
-    console.log(state, res)
-    await resultSet()
-  }
+    res.sort((a: userInfo, b: userInfo): number => {
+      return (
+        Math.abs(Number(gameTime) - a.gameTime) -
+        Math.abs(Number(gameTime) - b.gameTime)
+      );
+    });
+    console.log(state, res);
+    await resultSet();
+  };
 
   const outGame = async () => {
     try {
@@ -116,12 +121,13 @@ function GameMain() {
 
   const subscribeChatting = async () => {
     client.current?.subscribe(
-    `/sub/game-room/stop/${gameRoomId}`,
-    ({ body }) => {
-      res.push(JSON.parse(body))
-      setState((prev) => [...prev, JSON.parse(body)])
-      if(res.length === Number(totalCnt)) resultSort();
-    });
+      `/sub/game-room/stop/${gameRoomId}`,
+      ({ body }) => {
+        res.push(JSON.parse(body));
+        setState((prev) => [...prev, JSON.parse(body)]);
+        if (res.length === Number(totalCnt)) resultSort();
+      }
+    );
   };
 
   const stompActive = () => {
@@ -232,7 +238,7 @@ function GameMain() {
     if (timer < 0.01) {
       clearInterval(timerRef.current);
       clearInterval(lgmRef.current);
-      publishMessage(0.00);
+      publishMessage(0.0);
       setResult(true);
     }
   }, [timer]);
