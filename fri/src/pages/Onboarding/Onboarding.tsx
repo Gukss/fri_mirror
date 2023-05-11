@@ -50,8 +50,6 @@ export default function Onboarding() {
     // navigate("/login");
     if (userId === 0) {
       navigate("/login");
-    } else if (gameRoomId !== "참여한 방이 없습니다.") {
-      navigate(`/wait/${gameRoomId}`);
     } else {
       navigate("/main");
     }
