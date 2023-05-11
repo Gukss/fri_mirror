@@ -66,18 +66,18 @@ function GameMain() {
 
   const [state, setState] = useState<userInfo[]>([]);
 
-  const resultSet = async (body:userInfo[]) => {
-    if(Number(totalCnt) === body.length){
-      setState(body)
+  const resultSet = async () => {
+    if(Number(totalCnt) === res.length){
+      setState(res)
       const num = res.length
-      setLooser(body[num-1].nickname)
+      setLooser(res[num-1].nickname)
     }
   };
 
-  const resultSort = async (body:userInfo[]) => {
-    body.sort((a:userInfo, b:userInfo): number => {return Math.abs(Number(gameTime) - a.gameTime) - Math.abs(Number(gameTime) - b.gameTime)})
-    console.log(state, body)
-    await resultSet(body)
+  const resultSort = async () => {
+    res.sort((a:userInfo, b:userInfo): number => {return (Math.abs(Number(gameTime) - a.gameTime) - Math.abs(Number(gameTime) - b.gameTime))})
+    console.log(state, res)
+    await resultSet()
   }
 
   const outGame = async () => {
@@ -120,7 +120,7 @@ function GameMain() {
     ({ body }) => {
       res.push(JSON.parse(body))
       setState((prev) => [...prev, JSON.parse(body)])
-      if(res.length === Number(totalCnt)) resultSort(JSON.parse(body));
+      if(res.length === Number(totalCnt)) resultSort();
     });
   };
 
