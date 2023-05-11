@@ -110,13 +110,13 @@ self.addEventListener("activate", (event: any) => {
   );
 });
 //요청 수신 대기
-self.addEventListener("fetch", (event: any) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.response);
-    })
-  );
-});
+// self.addEventListener("fetch", (event: any) => {
+//   event.respondWith(
+//     caches.match(event.request).then((response) => {
+//       return response || fetch(event.response);
+//     })
+//   );
+// });
 
 // serviceWorker.js
 
