@@ -85,6 +85,7 @@ function GameWaiting() {
   }
 
   const subscribeChatting = async () => {
+    setView(true);
     client.current?.subscribe(
     `/sub/game-room/info/${gameRoomId}`,
     ({ body }) => {
@@ -117,9 +118,6 @@ function GameWaiting() {
       destination: "/pub/game-room/info",
       body: JSON.stringify(state)
     });
-    if (totalCnt === state.userList.length) {
-      setView(true);
-    }
   };
 
   useEffect(() => {
@@ -290,8 +288,7 @@ function GameWaiting() {
         준비하기
       </button>
        }
-      </>
-        
+      </>        
        : (
         <div className="ready">다른 플레이어 기다리는 중...</div>
       )}
