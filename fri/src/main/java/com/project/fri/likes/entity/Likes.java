@@ -31,7 +31,7 @@ public class Likes extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="likes_id")
-  private long id;
+  private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "board_id")
@@ -46,4 +46,17 @@ public class Likes extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  //==생성메서드==//
+  public static Likes craete(Board board, User user) {
+    return Likes.builder()
+            .board(board)
+            .user(user)
+            .isDelete(false)
+            .baseEntity(BaseEntity.builder()
+                    .constructor(user.getName())
+                    .updater(user.getName())
+                    .build())
+            .build();
+  }
 }
