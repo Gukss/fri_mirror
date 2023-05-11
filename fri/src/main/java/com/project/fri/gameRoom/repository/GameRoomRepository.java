@@ -15,7 +15,6 @@ import java.util.List;
  * 2023-04-25        hagnoykmik       최초 생성
  */
 public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
-    List<GameRoom> findAllByArea(Area area, Pageable pagable);
-    List<GameRoom> findAllByAreaOrderByCreatedAtDesc(Area area);
-
+    List<GameRoom> findByAreaAndIsDeleteFalse(Area area, Pageable pagable);
+    List<GameRoom> findByAreaAndIsDeleteFalseOrderByCreatedAtDesc(Area area);
 }
