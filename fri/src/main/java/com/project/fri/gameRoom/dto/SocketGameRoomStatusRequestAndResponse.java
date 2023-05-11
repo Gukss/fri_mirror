@@ -10,6 +10,6 @@ import lombok.Data;
 @Data
 public class SocketGameRoomStatusRequestAndResponse {
   private long gameRoomId;
-
   private ArrayList<SocketGameRoomStatusUserListInstance> userList;
+
 }

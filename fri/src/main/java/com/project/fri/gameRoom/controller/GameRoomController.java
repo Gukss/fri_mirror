@@ -120,9 +120,9 @@ public class GameRoomController {
     return ResponseEntity.ok().body(result);
   }
 
-  @MessageMapping("/game-room/ready")
+  @MessageMapping("/game-room/info")
   public void message(SocketGameRoomStatusRequestAndResponse message) {
-    messagingTemplate.convertAndSend("/sub/game-room/ready/" + message.getGameRoomId(), message);
+    messagingTemplate.convertAndSend("/sub/game-room/info/" + message.getGameRoomId(), message);
   }
 
   @MessageMapping("/game-room/stop")
