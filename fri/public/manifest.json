@@ -1,6 +1,10 @@
 {
   "short_name": "Fri",
   "name": "이번주 금요일에 만나요",
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "favicon.ico",
@@ -42,10 +46,12 @@
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icons/android-icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
-  ],
-  "start_url": "./",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  ]
 }

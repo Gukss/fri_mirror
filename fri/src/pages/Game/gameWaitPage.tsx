@@ -48,7 +48,6 @@ function GameWaiting() {
   const [gameinfo, setGame] = useState<gameType | null>(null);
   const [isLgm, setIsLgm] = useState(true);
   const [ready, setIsready] = useState(false);
-  const [view, setView] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
   const [isconnect, setIsconnect] = useState(false);
 
@@ -85,6 +84,7 @@ function GameWaiting() {
   }
 
   const subscribeChatting = async () => {
+    setIsconnect(true);
     client.current?.subscribe(
     `/sub/game-room/info/${gameRoomId}`,
     ({ body }) => {
@@ -117,9 +117,6 @@ function GameWaiting() {
       destination: "/pub/game-room/info",
       body: JSON.stringify(state)
     });
-    if (totalCnt === state.userList.length) {
-      setView(true);
-    }
   };
 
   useEffect(() => {
@@ -146,12 +143,6 @@ function GameWaiting() {
       totalCnt = res.data.headCount;
       gameTime = res.data.randomTime;
       await connect();
-      if (
-        gameinfo?.headCount !== undefined &&
-        gameinfo?.headCount === state.userList.length
-      ) {
-        setView(true);
-      }
     };
     getData();
   }, []);
@@ -218,14 +209,15 @@ function GameWaiting() {
 
   return (
     <div className="wait_game">
-      {view ? null : (
+      {isconnect ? 
         <img
           src={Back}
           alt="<"
           id="back"
           onClick={outGame}
           style={isconnect ? { display: "block" } : { display: "none" }}
-        />
+        /> : (
+        null
       )}
       <div className="top">{gameinfo?.title}</div>
       <div>
@@ -274,7 +266,7 @@ function GameWaiting() {
             ))
           : null}
       </div>
-      {view ?
+      {isconnect ?
       <>
       {
         ready ? 
@@ -290,8 +282,7 @@ function GameWaiting() {
         준비하기
       </button>
        }
-      </>
-        
+      </>        
        : (
         <div className="ready">다른 플레이어 기다리는 중...</div>
       )}
