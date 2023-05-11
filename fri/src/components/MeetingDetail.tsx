@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MeetType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -49,7 +49,6 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
     majors: [],
     nonMajors: []
   });
-  
 
   useEffect(() => {
     const getDetail = async () => {
@@ -127,7 +126,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
                       <div className="profile-img">
                         <img src={info.anonymousProfileImageUrl} alt="프로필" />
                       </div>
-                      <div className="name">{info.name}</div>
+                      <div className="name-chat">{info.name}</div>
                     </div>
                   ))
                 )}
@@ -149,7 +148,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
                       <div className="profile-img">
                         <img src={info.anonymousProfileImageUrl} alt="프로필" />
                       </div>
-                      <div className="name">{info.name}</div>
+                      <div className="name-chat">{info.name}</div>
                     </div>
                   ))
                 )}
