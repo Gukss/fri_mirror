@@ -75,6 +75,7 @@ export default function Chat() {
   const subscribeChatting = () => {
     setLoading(false);
     client.current?.subscribe(`/sub/room/${roomId}`, ({ body }) => {
+      console.log(body, "fdfdfdfd");
       setMessage((prev) => [...prev, JSON.parse(body)]);
     });
   };
@@ -141,8 +142,17 @@ export default function Chat() {
 
   const publishMessage = async () => {
     const now = new Date();
-
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false
+    };
     const formattedTime = now.toLocaleString("en-US");
+    console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
     if (!client.current?.connected) {
       return;
     }
@@ -154,7 +164,7 @@ export default function Chat() {
         message: text,
         memberId: userId,
         anonymousProfileImageUrl: image,
-        createdAt: formattedTime,
+        time: formattedTime,
         nickname: nick
       })
     });
@@ -273,9 +283,9 @@ export default function Chat() {
         </div>
         <div className="footer">
           <div className="chat-footer">
-            <div className="gallery">
+            {/* <div className="gallery">
               <img src={Image} alt="gallery" />
-            </div>
+            </div> */}
             <div className="text-input">
               <textarea
                 ref={textareaRef}
