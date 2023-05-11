@@ -151,9 +151,6 @@ public class GameRoomServiceImpl implements GameRoomService {
     double time =
         Math.round((((Math.random() * 9) + 1) * 100)) / 100.0; //1~10초사이 랜덤값 => 소수점 아래 두 번째 자리
 
-    // 방에 들어가면서 하트 1개 소진
-    user.minusHeart();
-
     // db에 저장
     GameRoom gameRoom = GameRoom.create(request, area, user, time);
     gameRoomRepository.save(gameRoom);
