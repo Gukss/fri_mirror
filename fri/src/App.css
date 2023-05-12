@@ -23,6 +23,7 @@ input {
 
 button {
   font-family: "bingrae-bold";
+  -webkit-overflow-scrolling: touch; /* 추가 */
 }
 
 .App-header {
