@@ -23,4 +23,5 @@ public interface BoardService {
   List<FindBoardResponse> findBoard();
 
   ResponseEntity deleteBoard(DeleteBoardRequest deleteBoardRequest);
+
 }
