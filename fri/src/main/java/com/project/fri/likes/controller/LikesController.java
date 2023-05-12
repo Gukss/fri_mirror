@@ -37,7 +37,12 @@ public class LikesController {
     @PatchMapping
     public ResponseEntity<UpdateLikesResponse> updateLikes(
             @RequestBody UpdateLikesRequest updateLikesRequest, @RequestHeader("Authorization") Long userId) {
+        UpdateLikesResponse result = likesService.updateLikes(updateLikesRequest, userId);
 
-        return null;
+        if (result == null) {
+            return ResponseEntity.badRequest().body(new UpdateLikesResponse(false));
+        }
+
+        return ResponseEntity.ok().body(result);
     }
 }

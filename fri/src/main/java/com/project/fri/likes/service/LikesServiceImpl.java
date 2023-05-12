@@ -68,7 +68,14 @@ public class LikesServiceImpl implements LikesService{
         Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoard(findUser, findBoard)
                 .orElse(null);
 
+        // 유저가 좋아요 한적이 없거나 취소한 상태면 잘못된 요청
+        if (findLikesByUserAndBoard == null || findLikesByUserAndBoard.isDelete()) {
+            return null;
+        }
 
+        boolean result = findLikesByUserAndBoard.updateIsDelete(updateLikesRequest.isDelete());
+
+        return new UpdateLikesResponse(result);
     }
 
 
