@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../redux/user";
 import axios from "axios";
 import logo from "../../assets/images/Logo.png";
-import Back from "../../components/Back";
+import Back from "../../assets/back.png";
 import "./LogIn.scss";
 
 interface SingInForm {
@@ -62,7 +62,7 @@ export default function LogIn() {
 
   return (
     <div className="login">
-      <Back />
+      <img src={Back} alt="<" id="back" onClick={()=>navigate("/")} />
       <div className="login-container">
         <div>
           <img src={logo} alt="Logo" className="logo" />
