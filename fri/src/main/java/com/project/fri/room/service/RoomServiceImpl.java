@@ -17,6 +17,7 @@ import com.project.fri.room.repository.RoomCategoryRepository;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
+import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,9 +57,15 @@ public class RoomServiceImpl implements RoomService {
   @Override
   @Transactional
   public CreateRoomResponse createRoom(CreateRoomRequest request, Long userId) {
-    User findUser = userRepository.findById(userId)
+
+    User user = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    // 만약 다른 방에 참여하고 있거나, 하트가 1개 미만이면 방생성할 수 없다
+    if (user.getRoom() != null || user.getHeart() < 1) {
+      throw new InvalidRequestStateException("방을 생성할 수 없습니다.");
+    }
 
     // 방, 지역 카테고리 객체화
     RoomCategory roomCategory = roomCategoryRepository.findByCategory(request.getRoomCategory())
@@ -68,12 +75,15 @@ public class RoomServiceImpl implements RoomService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
 
     // request dto를 저장
-    Room room = Room.create(request, findUser, roomCategory, area);
+    Room room = Room.create(request, user, roomCategory, area);
 
     roomRepository.save(room);
 
     // user 테이블에 방번호 추가
-    findUser.updateRoomNumber(room);
+    user.updateRoomNumber(room);
+
+    // 방에 들어가면서 하트 1개 소진
+    user.minusHeart();
 
     // response dto로 변환
     CreateRoomResponse createRoomResponse = CreateRoomResponse.create(room);
@@ -95,8 +105,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     //이 roomList에서 해당 방으로 userList를 찾아서 size()를 찾아서 가득찬 방 없애야한다.
-    //user마다 전공 여부도 체크해줘야한다.
-    List<Room> roomList = roomRepository.findAllByAreaOrderByCreatedAtDesc(foundArea);
+    //user마다 전공 여부도 체크해줘야한다.is_delete 컬럼 값이 false인 경우만 들고온다.
+    List<Room> roomList = roomRepository.findAllByAreaAndIsDeleteFalseOrderByCreatedAtDesc(foundArea);
 
     //roomList 반복하면서 responseEnitity 채워주기
     List<FindAllRoomInstance> drinkList = new ArrayList<>();
@@ -260,7 +270,7 @@ public class RoomServiceImpl implements RoomService {
 
   @Override
   public List<FindAllRoomByCategoryResponse> findAllByAreaAndRoomCategory(Category stringArea,
-      com.project.fri.room.entity.Category stringCategory, int page, Pageable pageable) {
+      com.project.fri.room.entity.Category stringCategory, int page, Pageable pageable, Long userId) {
 
     Pageable newPageable = PageRequest.of(page, pageable.getPageSize(), pageable.getSort());
 
@@ -272,9 +282,19 @@ public class RoomServiceImpl implements RoomService {
             () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
 
     // todo : user테이블과 room테이블을 join해서 가져올 수 있을거 같음 (이렇게 바꾸면 모든 값을 가져와서 map을 돌리지 않고 db에서 가져올때부터 필요한 값만 가져올 수 있음)
-    // 지역과 카테고리로 방 목록을 찾음
-    List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategory(area,
-        roomCategory, newPageable);
+    // 지역과 카테고리로 방 목록을 찾음 이때 is_delete가 false일 때문 불러오기
+    List<Room> findAllRoom = roomRepository.findAllByAreaAndRoomCategoryAndIsDeleteFalse(area,
+            roomCategory, newPageable);
+
+    // 방 리스트에서 내가 참여한 방 안보이게 하기
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundExceptionMessage(
+            NotFoundExceptionMessage.NOT_FOUND_USER
+        ));
+
+    // 방 리스트에 user가 참여한 방이있으면 제거한다.
+    // list.contains()로 확인안해도 remove()에서 알아서 검사하고 있으면 삭제해줌
+    findAllRoom.remove(user.getRoom());
 
     // 찾은 방 목록으로 user찾아서 전공, 비전공자 참여자 수 추가해서 dto로 반환하기
     List<FindAllRoomByCategoryResponse> seeMoreRoom = findAllRoom.stream()
@@ -282,7 +302,7 @@ public class RoomServiceImpl implements RoomService {
 
           // 방으로 참여 user 찾기
           List<User> users = userRepository.findAllByRoom(findRoom);
-          long major = users.stream().filter(user -> user.isMajor() == true).count();    // 전공자
+          long major = users.stream().filter(u -> u.isMajor() == true).count();    // 전공자
           long nonMajor = users.size() - major;                                          // 비전공자
 
           // response dto로 반환

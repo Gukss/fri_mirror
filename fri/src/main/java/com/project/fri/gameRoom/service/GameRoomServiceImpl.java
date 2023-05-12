@@ -97,7 +97,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     // 지역별 게임방
     Pageable newPagable = PageRequest.of(page, pageable.getPageSize(),
         pageable.getSort());  // page별로 20개씩 잘라주기
-    List<GameRoom> findAllGameRoomByArea = gameRoomRepository.findAllByArea(area, newPagable);
+    List<GameRoom> findAllGameRoomByArea = gameRoomRepository.findByAreaAndIsDeleteFalse(area, newPagable);
 
     // user가 속한 게임방 찾기
     User user = userRepository.findById(userId)
@@ -106,9 +106,8 @@ public class GameRoomServiceImpl implements GameRoomService {
         ));
 
     // 자신이 속한 게임방은 보여주지 않기
-    if (findAllGameRoomByArea.contains(user.getGameRoom())) {  // 내가 속한 게임방이 리스트에 포함되면
-      findAllGameRoomByArea.remove(user.getGameRoom());        // 리스트에서 제거해준다
-    }
+//    if (findAllGameRoomByArea.contains(user.getGameRoom())) {  // 내가 속한 게임방이 리스트에 포함되면 -> 이 처리 필요X
+    findAllGameRoomByArea.remove(user.getGameRoom());        // 리스트에서 제거해준다
 
     // todo: 쿼리 dsl
     // 응답 dto로 변환
@@ -142,6 +141,11 @@ public class GameRoomServiceImpl implements GameRoomService {
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER
         ));
+
+    // 만약 다른 방에 참여하고 있으면 방생성할 수 없다
+    if (user.getGameRoom() != null) {
+      throw new InvalidRequestStateException("이미 참여중인 방이 있습니다.");
+    }
 
     //랜덤 시간 만들기
     double time =
@@ -202,6 +206,7 @@ public class GameRoomServiceImpl implements GameRoomService {
     } else {                    // exitRoom: true일 때 -> 게임방번호 null로
       isParticipate = false;
       user.updateGameRoomNumber(null);
+      user.updateReady(false); // 방 나갈 때 ready를 false로 변경
       // 내가 나갈 때, 참여인원이 0명이면 방 삭제처리
       List<User> allParticipant = userRepository.findAllByGameRoom(gameRoom);
       if (allParticipant.isEmpty()) {  // 아무도 없으면 삭제처리
@@ -224,17 +229,26 @@ public class GameRoomServiceImpl implements GameRoomService {
    * @return 게임방 10개 리스트
    */
   @Override
-  public List<FindGameRoomInstance> findGameRoomList(Category areaCategory) {
+  public List<FindGameRoomInstance> findGameRoomList(Category areaCategory, Long userId) {
     Area findArea = areaRepository.findByCategory(areaCategory)
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_AREA));
-    List<GameRoom> gameRoomList = gameRoomRepository.findAllByAreaOrderByCreatedAtDesc(findArea);
+
+    User findUser = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    List<GameRoom> gameRoomList = gameRoomRepository.findByAreaAndIsDeleteFalseOrderByCreatedAtDesc(findArea);
     // todo : 게임방이 많으면 전체 게임방을 다들고와서 리스트를 만드는건 비효율적으로 보임
+
+    // 내가 들어가 있는 game방 제거
+    gameRoomList.remove(findUser.getGameRoom());
+
     List<FindGameRoomInstance> result = new ArrayList<>();
 
     for (GameRoom r : gameRoomList) {
       List<User> foundUserList = userRepository.findAllByGameRoom(r);
       int userSize = foundUserList.size(); //방에 참여한 인원수
 
+      // 입장 인원이 다 차지않은 경우
       if (userSize < r.getHeadCount()) {
         result.add(FindGameRoomInstance.create(r, userSize));
       }

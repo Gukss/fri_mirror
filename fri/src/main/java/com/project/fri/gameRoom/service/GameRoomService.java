@@ -56,5 +56,5 @@ public interface GameRoomService {
      * @param areaCategory
      * @return
      */
-    List<FindGameRoomInstance> findGameRoomList(Category areaCategory);
+    List<FindGameRoomInstance> findGameRoomList(Category areaCategory, Long userId);
 }

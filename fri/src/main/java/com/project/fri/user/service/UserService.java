@@ -85,4 +85,6 @@ public interface UserService {
    * @return FindAnonymousProfileImagesResponse
    */
   FindAnonymousProfileImagesResponse findAnonymousProfileImages();
+
+  UpdateIsReadyResponse updateIsReady(Long userId, UpdateIsReadyRequest updateIsReadyRequest);
 }
