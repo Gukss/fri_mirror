@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/Logo.png";
-import Back from "../../components/Back";
+import Back from "../../assets/back.png";
 import axios from "axios";
 import "./SignUp.scss";
 
@@ -389,7 +389,7 @@ export default function SignUp() {
     <div className="signup">
       <div className="signup-container">
         <div className="signup-nav">
-          <Back />
+        <img src={Back} alt="<" id="back" onClick={()=>navigate("/login")} />
           <img src={logo} alt="Logo" className="signup-logo" />
         </div>
         <div className="signup-form">
