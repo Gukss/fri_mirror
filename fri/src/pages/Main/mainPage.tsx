@@ -8,6 +8,7 @@ import Game from "../../components/GameRoom";
 import Nav from "../../components/navEgg";
 import No from "../../assets/no_room.png";
 import axios from "axios";
+import moment from "moment";
 import "./main.scss";
 
 export type MeetType = {
@@ -29,7 +30,76 @@ export type GameType = {
   participationCount: number;
 };
 
+interface CountdownTimerProps {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+const CountdownTimer: React.FC<CountdownTimerProps> = ({
+  days,
+  hours,
+  minutes,
+  seconds
+}: CountdownTimerProps) => {
+  return (
+    <div className="timer_box">
+      <div className="title">
+        금요일 밤 <br />
+        11시 11분
+      </div>
+      <div className="title">
+        방이 <br /> 터져요
+      </div>
+      <div className="timer">
+        <div className="time-box">
+          <div className="time">{days}</div>일
+        </div>
+        <div className="time-box">
+          <div className="time">{hours}</div>시간
+        </div>
+        <div className="time-box">
+          <div className="time">{minutes}</div>분
+        </div>
+        <div className="time-box">
+          <div className="time">{seconds}</div>초
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Main: React.FC = () => {
+  // 매주 금요일 카운트다운
+  const getNextFriday = () => {
+    const now = moment();
+    const friday = moment()
+      .day("Friday")
+      .hour(23)
+      .minute(11)
+      .second(0)
+      .millisecond(0);
+    if (now.day() === 5) {
+      if (now.hour() >= 23 && now.minute() >= 11) {
+        friday.add(7, "days");
+      }
+    } else if (now.day() > 5) {
+      friday.add(7, "days");
+    }
+    return friday.diff(now, "seconds");
+  };
+
+  const getTimeLeft = (seconds: number) => {
+    const days = Math.floor(seconds / 86400);
+    seconds -= days * 86400;
+    const hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    const minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+    return { days, hours, minutes, seconds };
+  };
+
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
@@ -46,6 +116,7 @@ const Main: React.FC = () => {
   const [exercise, setExercise] = useState([]);
   const [study, setStudy] = useState([]);
   const [etc, setEtc] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft(getNextFriday()));
 
   const api_url = process.env.REACT_APP_REST_API;
 
@@ -146,59 +217,75 @@ const Main: React.FC = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTimeLeft(getTimeLeft(getNextFriday()));
+    }, 1000);
+    return () => clearInterval(timerId);
+  }, []);
+
   return (
     <div className="mainpage">
-      <Topheader />
-      <ul className="main_region">
-        <li
-          id={region == "SEOUL" ? "select" : "seoul"}
-          onClick={() => {
-            setRegion("SEOUL");
-            changeRegion("SEOUL");
-          }}
-        >
-          서울
-        </li>
-        <li
-          id={region == "DAEJEON" ? "select" : "daejeon"}
-          onClick={() => {
-            setRegion("DAEJEON");
-            changeRegion("DAEJEON");
-          }}
-        >
-          대전
-        </li>
-        <li
-          id={region == "GUMI" ? "select" : "gumi"}
-          onClick={() => {
-            setRegion("GUMI");
-            changeRegion("GUMI");
-          }}
-        >
-          구미
-        </li>
-        <li
-          id={region == "GWANGJU" ? "select" : "gwangju"}
-          onClick={() => {
-            setRegion("GWANGJU");
-            changeRegion("GWANGJU");
-          }}
-        >
-          광주
-        </li>
-        <li
-          id={region == "BUSAN" ? "select" : "buulgyeong"}
-          onClick={() => {
-            setRegion("BUSAN");
-            changeRegion("BUSAN");
-          }}
-        >
-          부울경
-        </li>
-      </ul>
+      <div className="main-nav">
+        <Topheader />
+        <ul className="main_region">
+          <li
+            id={region == "SEOUL" ? "select" : "seoul"}
+            onClick={() => {
+              setRegion("SEOUL");
+              changeRegion("SEOUL");
+            }}
+          >
+            서울
+          </li>
+          <li
+            id={region == "DAEJEON" ? "select" : "daejeon"}
+            onClick={() => {
+              setRegion("DAEJEON");
+              changeRegion("DAEJEON");
+            }}
+          >
+            대전
+          </li>
+          <li
+            id={region == "GUMI" ? "select" : "gumi"}
+            onClick={() => {
+              setRegion("GUMI");
+              changeRegion("GUMI");
+            }}
+          >
+            구미
+          </li>
+          <li
+            id={region == "GWANGJU" ? "select" : "gwangju"}
+            onClick={() => {
+              setRegion("GWANGJU");
+              changeRegion("GWANGJU");
+            }}
+          >
+            광주
+          </li>
+          <li
+            id={region == "BUSAN" ? "select" : "buulgyeong"}
+            onClick={() => {
+              setRegion("BUSAN");
+              changeRegion("BUSAN");
+            }}
+          >
+            부울경
+          </li>
+        </ul>
+      </div>
 
       <div className="main_category">
-        <div className="time_bar">타임어택~</div>
+        <div className="timer_bar">
+          <CountdownTimer
+            days={timeLeft.days}
+            hours={timeLeft.hours}
+            minutes={timeLeft.minutes}
+            seconds={timeLeft.seconds}
+          />
+        </div>
         <p id="category_title">
           # 내기 할 사람<span onClick={() => go_more("BETTING")}>더보기</span>
         </p>
