@@ -172,11 +172,15 @@ export default function Chat() {
 
   useEffect(() => {
     const getChat = async () => {
+      const header = {
+        "Content-Type": "application/json",
+        Authorization: userId
+      };
       try {
-        const res = await axios.get(api_url + `chatting/${roomId}`);
+        const res = await axios.get(api_url + `chatting/${roomId}`, {headers: header});
         setMessage(res.data);
       } catch (e) {
-        console.log();
+        console.log(e);
       }
     };
     if (isuser === "true") getChat();
@@ -187,7 +191,7 @@ export default function Chat() {
       try {
         const header = {
           "Content-Type": "application/json",
-          Authorization: userId
+          "Authorization": userId
         };
         const res = await axios.get(api_url + "room/" + roomId, {
           headers: header
