@@ -26,7 +26,7 @@ public class BoardImage extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="board_image_id")
-  private long id;
+  private Long id;
   @NotNull
   private String boardUrl;
 
