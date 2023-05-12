@@ -1,0 +1,617 @@
+// 컴포넌트 LogoEgg
+.main_top {
+  width: 100vw;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+
+  #main_logo {
+    width: 53px;
+    height: 30px;
+    float: center;
+    margin-left: 45px;
+  }
+
+  .egg_cnt {
+    margin-right: 24px;
+    min-width: 75px;
+    margin-top: 7px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    font-weight: bolder;
+    float: right;
+  }
+
+  #main_egg {
+    margin-right: 5px;
+    width: 10px;
+    height: 17px;
+  }
+
+  #back {
+    margin-left: 24px;
+    float: left;
+  }
+}
+
+// 카테고리 각 줄
+.meeting_block {
+  margin: 0 24px 12px 12px;
+  display: flex;
+  width: 100vw;
+  min-height: 190px;
+  max-height: 190px;
+  height: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  flex-flow: column wrap;
+  border-bottom: 1px solid rgba(225, 225, 225, 1);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+// 메인 nav부분
+.nav-background {
+  width: 100vw;
+  height: 40px;
+  position: fixed;
+  bottom: 0;
+  z-index: 2;
+  background-color: #fff0c3;
+}
+
+#egg_yellow {
+  margin-top: 20px;
+  z-index: 3;
+  position: fixed;
+  left: calc(50vw - 40px);
+  width: 80px;
+  height: 80px;
+  transition: linear 0.5s;
+}
+
+#egg_nav {
+  width: 300px;
+  height: 300px;
+  z-index: 1;
+  position: fixed;
+  left: calc(50vw - 150px);
+  transition: linear 0.3s;
+}
+
+.nav_back {
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+
+  img {
+    position: fixed;
+    z-index: 5;
+    transition: linear 0.3s;
+    width: 60px;
+    left: calc(50vw - 30px);
+  }
+
+  div {
+    position: fixed;
+    z-index: 5;
+    transition: linear 0.3s;
+    font-weight: 700;
+    font-size: 25px;
+  }
+
+  #meeting {
+    left: calc(50vw - 28px);
+  }
+
+  #chat {
+    transform: rotate(-65deg);
+    left: calc(50vw - 130px);
+  }
+
+  #my {
+    transform: rotate(65deg);
+    left: calc(50vw + 85px);
+  }
+
+  #game {
+    transform: rotate(-45deg);
+    left: calc(50vw + 45px);
+  }
+
+  #commu {
+    transform: rotate(40deg);
+    left: calc(50vw - 120px);
+    color: #8f8f8f;
+  }
+}
+
+// 미팅 룸 컴포넌트
+.room_component {
+  width: 155px;
+  height: auto;
+  padding: 12px;
+}
+
+.meeting_room {
+  padding: 8px 0 0 16px;
+  width: 139px;
+  height: 134px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 240, 195, 1);
+  margin: 0;
+  text-align: left;
+
+  p {
+    margin: 0;
+  }
+
+  .place {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    letter-spacing: 0em;
+    margin-bottom: 8px;
+    color: rgba(255, 192, 0, 1);
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    width: 120px;
+    letter-spacing: 0em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 27px;
+  }
+
+  .soft {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0em;
+    width: 120px;
+
+    .total {
+      float: right;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19px;
+      letter-spacing: 0em;
+      color: rgba(124, 124, 124, 1);
+    }
+  }
+
+  .other {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0em;
+    width: 120px;
+
+    .total {
+      float: right;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19px;
+      letter-spacing: 0em;
+      color: rgba(124, 124, 124, 1);
+    }
+  }
+}
+
+.meeting_room_full {
+  width: 155px;
+  height: 142px;
+  color: #fff;
+  background-color: rgba(255, 192, 0, 1);
+  font-size: 25px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.game_room {
+  padding: 8px 0 0 16px;
+  width: 139px;
+  height: 134px;
+  border-radius: 16px;
+  background-color: rgba(255, 240, 195, 1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  text-align: left;
+
+  p {
+    margin: 0;
+  }
+
+  .place {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    margin-bottom: 8px;
+    color: rgba(255, 192, 0, 1);
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    width: 120px;
+    letter-spacing: 0em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 37px;
+  }
+
+  .cnt {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0em;
+    width: 120px;
+
+    span {
+      float: right;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 19px;
+      letter-spacing: 0em;
+      color: rgba(124, 124, 124, 1);
+    }
+  }
+}
+
+.empty_category {
+  display: flex;
+  height: 190px;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 192, 0, 1);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+// 방 상세보기 모달같은거
+@-webkit-keyframes moveup {
+  0% {
+    bottom: -450px;
+  }
+
+  100% {
+    bottom: 0;
+  }
+}
+
+@keyframes moveup {
+  0% {
+    bottom: -450px;
+  }
+
+  100% {
+    bottom: 0;
+  }
+}
+
+.room_detail {
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+
+  .room_modal {
+    position: fixed;
+    width: 100vw;
+    height: 500px;
+    bottom: 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    background-color: #fff;
+    transition: linear 0.3s;
+    text-align: left;
+
+    animation: moveup 0.5s;
+    -webkit-animation: moveup 0.5s;
+
+    .place {
+      margin: 0.5rem 24px;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 36px;
+      letter-spacing: 0em;
+    }
+
+    .soft {
+      font-size: 1.25rem;
+      margin: 0 1.5rem 0.5rem 1.5rem;
+      height: 140px;
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .profile {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        column-gap: 2rem;
+        width: 100%;
+        height: 100px;
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 80px;
+          height: 100%;
+          flex-shrink: 0;
+        }
+
+        .profile-img {
+          width: 100%;
+          height: 70%;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .name-chat {
+          width: 80px;
+          text-align: center;
+          white-space: pre-line;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+        }
+      }
+
+      .game-profile {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        align-items: center;
+        justify-content: center;
+        column-gap: 1rem;
+        row-gap: 1rem;
+        width: 100%;
+        height: 200px;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+        overflow-y: scroll;
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          width: 60px;
+          height: 80px;
+          flex-shrink: 0;
+        }
+
+        .profile-img {
+          width: 100%;
+          height: 70%;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .name {
+          width: 100%;
+          text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+        }
+      }
+    }
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: 0em;
+    width: 100vw;
+    border-bottom: 1px solid rgba(214, 214, 214, 1);
+
+    span {
+      margin: 24px;
+    }
+  }
+
+  .join_game {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    background-color: rgba(255, 192, 0, 1);
+    font-weight: 700;
+    width: 100vw;
+    height: 62px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+#back {
+  width: 15px;
+  height: 30px;
+}
+
+// not found 페이지
+
+@keyframes cloud-ani {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(40px, -20px);
+  }
+
+  20% {
+    transform: translate(80px, 20px);
+  }
+
+  30% {
+    transform: translate(120px, -20px);
+  }
+
+  40% {
+    transform: translate(160px, 20px);
+  }
+
+  50% {
+    transform: translate(200px, -20px);
+  }
+
+  60% {
+    transform: translate(240px, 20px);
+  }
+
+  70% {
+    transform: translate(280px, -20px);
+  }
+
+  80% {
+    transform: translate(320px, 20px);
+  }
+
+  90% {
+    transform: translate(360px, -20px);
+  }
+
+  100% {
+    transform: translate(400px, 20px);
+  }
+}
+
+.notfound {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, #cdeaf0 50.31%, #fff0c3 100%);
+  padding-top: 140px;
+
+  .main {
+    display: flex wrap;
+    justify-content: center;
+    width: 100vw;
+
+    #not_duck {
+      margin-top: 40px;
+      position: fixed;
+      bottom: 5vh;
+      left: 15vw;
+      width: 70vw;
+      height: 70vw;
+    }
+
+    #not_404 {
+      position: fixed;
+      left: -41vw;
+      top: 20vh;
+      width: 60vw;
+      height: 60vw;
+      animation: cloud-ani 18s linear infinite;
+    }
+  }
+
+  #not_logo {
+    width: 100px;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+  }
+}
+
+.checkmodal {
+  width: 70vw;
+  height: 20vh;
+  display: flex;
+  position: fixed;
+  left: calc(50vw - 35vw);
+  background-color: #ffd453;
+  border-radius: 15px;
+  justify-content: center;
+  text-align: center;
+  flex-flow: column;
+  z-index: 10;
+  font-size: 1.2rem;
+  font-weight: 700;
+  transition: linear 0.4s;
+
+  .check-text {
+    margin-bottom: 20px;
+  }
+
+  button {
+    border: none;
+    border-radius: 7px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .ok-btn {
+    background-color: #fff;
+    width: 80px;
+    height: 32px;
+    margin-right: 15px;
+    font-weight: 700;
+  }
+
+  .no-btn {
+    background-color: #494949;
+    color: #fff;
+    width: 80px;
+    height: 32px;
+    margin-left: 15px;
+    font-weight: 700;
+  }
+}
+
+.modal-back {
+  position: fixed;
+  z-index: 8;
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+}

@@ -1,0 +1,31 @@
+.more_room {
+    overflow: hidden;
+
+
+    .text {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 0em;
+        text-align: center;
+        margin-bottom: 16px;
+        width: 100vw;
+        height: auto;
+    }
+
+    .room {
+        width: 100vw;
+        height: calc(100vh - 140px);
+        overflow-y: scroll;
+        border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
+        border-top: rgba(0, 0, 0, 0.25) 1px solid;
+
+        .room_container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-flow: wrap;
+        }
+
+    }
+}

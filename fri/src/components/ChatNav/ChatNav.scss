@@ -1,0 +1,29 @@
+.chat-nav {
+  height: 100%;
+  margin: 0 1rem;
+
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .nav-back {
+    height: 50%;
+
+    img {
+      height: 100%;
+    }
+  }
+
+  #logo {
+    width: 40px;
+  }
+
+  .nav-menu {
+    height: 50%;
+
+    img {
+      height: 100%;
+    }
+  }
+}
