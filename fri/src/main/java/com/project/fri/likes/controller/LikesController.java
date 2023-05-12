@@ -2,6 +2,8 @@ package com.project.fri.likes.controller;
 
 import com.project.fri.likes.dto.CreateLikesRequest;
 import com.project.fri.likes.dto.CreateLikesResponse;
+import com.project.fri.likes.dto.UpdateLikesRequest;
+import com.project.fri.likes.dto.UpdateLikesResponse;
 import com.project.fri.likes.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,9 @@ public class LikesController {
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateLikes() {
+    public ResponseEntity<UpdateLikesResponse> updateLikes(
+            @RequestBody UpdateLikesRequest updateLikesRequest, @RequestHeader("Authorization") Long userId) {
+
         return null;
     }
 }

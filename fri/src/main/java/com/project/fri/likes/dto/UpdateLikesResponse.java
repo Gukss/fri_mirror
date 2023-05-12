@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class updateLikesResponse {
+public class UpdateLikesResponse {
     private boolean likes;
 }

@@ -5,6 +5,8 @@ import com.project.fri.board.repository.BoardRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.likes.dto.CreateLikesRequest;
 import com.project.fri.likes.dto.CreateLikesResponse;
+import com.project.fri.likes.dto.UpdateLikesRequest;
+import com.project.fri.likes.dto.UpdateLikesResponse;
 import com.project.fri.likes.entity.Likes;
 import com.project.fri.likes.repository.LikesRepository;
 import com.project.fri.user.entity.User;
@@ -52,6 +54,21 @@ public class LikesServiceImpl implements LikesService{
         likesRepository.save(likes);
 
         return new CreateLikesResponse(true);
+    }
+
+    @Override
+    @Transactional
+    public UpdateLikesResponse updateLikes(UpdateLikesRequest updateLikesRequest, Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+        Board findBoard = boardRepository.findById(updateLikesRequest.getBoardId())
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
+
+        Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoard(findUser, findBoard)
+                .orElse(null);
+
+
     }
 
 

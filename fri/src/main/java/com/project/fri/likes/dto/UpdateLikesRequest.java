@@ -3,7 +3,7 @@ package com.project.fri.likes.dto;
 import lombok.Data;
 
 @Data
-public class updateLikesRequest {
+public class UpdateLikesRequest {
     private Long boardId;
     private boolean delete;
 }
