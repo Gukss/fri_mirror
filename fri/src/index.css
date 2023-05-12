@@ -12,7 +12,8 @@ body {
   position: fixed;
   width: 100vw;
   height: 100vh;
-  background: #fff;
+  background: #666666;
+  overflow: auto;
 }
 
 #root {
@@ -20,6 +21,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: auto;
+  background: #666666;
 }
 
 code {
