@@ -16,12 +16,12 @@
         width: 100vw;
         height: calc(100vh - 150px);
         overflow-y: scroll;
+        overflow-x: hidden;
         border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
         border-top: rgba(0, 0, 0, 0.25) 1px solid;
 
         .room_container {
             display: grid;
-            padding: 0 10px;
             grid-template-columns: 1fr 1fr;
             place-items: center;
 
