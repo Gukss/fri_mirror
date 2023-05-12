@@ -63,38 +63,39 @@ const GameWaiting = (): JSX.Element => {
   });
 
   const goGame = () => {
-    navigate(
-      `/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}`
-    );
+    navigate(`/game/${gameRoomId}?time=${gameTime}&head=${totalCnt}`);
   };
 
-  const clickReady= async () => {
-    try{
+  const clickReady = async () => {
+    try {
       const header = {
         "Content-Type": "application/json",
         Authorization: userId
       };
-      const data = {        
-        "gameRoomId": gameRoomId,
-        "ready": true  
-      }
-      await axios.patch(api_url+'user/ready',data, {headers : header})
+      const data = {
+        gameRoomId: gameRoomId,
+        ready: true
+      };
+      await axios.patch(api_url + "user/ready", data, { headers: header });
+    } catch (e) {
+      console.log(e);
     }
-    catch(e){console.log(e)}
-  }
+  };
 
   const subscribeChatting = async (): Promise<void> => {
     setIsconnect(true);
     client.current?.subscribe(
-    `/sub/game-room/info/${gameRoomId}`,
-    ({ body }) => {
-      setState(JSON.parse(body))
-    });
+      `/sub/game-room/info/${gameRoomId}`,
+      ({ body }) => {
+        setState(JSON.parse(body));
+      }
+    );
     client.current?.subscribe(
       `/sub/game-room/ready/${gameRoomId}`,
       ({ body }) => {
-        if(JSON.parse(body)) goGame();
-      });
+        if (JSON.parse(body)) goGame();
+      }
+    );
   };
 
   const stompActive = async (): Promise<void> => {
@@ -196,7 +197,7 @@ const GameWaiting = (): JSX.Element => {
     } catch (e) {
       console.log();
     }
-    return () => disconnect();
+    return () => alert("연결이 끊김");
   };
 
   useEffect(() => {
@@ -209,16 +210,15 @@ const GameWaiting = (): JSX.Element => {
 
   return (
     <div className="wait_game">
-      {isconnect ? 
+      {isconnect ? (
         <img
           src={Back}
           alt="<"
           id="back"
           onClick={outGame}
           style={isconnect ? { display: "block" } : { display: "none" }}
-        /> : (
-        null
-      )}
+        />
+      ) : null}
       <div className="top">{gameinfo?.title}</div>
       <div>
         {isLgm ? (
@@ -266,27 +266,26 @@ const GameWaiting = (): JSX.Element => {
             ))
           : null}
       </div>
-      {isconnect ?
-      <>
-      {
-        ready ? 
-      <div className="isready-btn">준비완료</div> :
-         
-        <button
-        className="ready-btn"
-        onClick={() => {
-          setIsready(true);
-          clickReady();
-        }}
-      >
-        준비하기
-      </button>
-       }
-      </>        
-       : (
+      {isconnect ? (
+        <>
+          {ready ? (
+            <div className="isready-btn">준비완료</div>
+          ) : (
+            <button
+              className="ready-btn"
+              onClick={() => {
+                setIsready(true);
+                clickReady();
+              }}
+            >
+              준비하기
+            </button>
+          )}
+        </>
+      ) : (
         <div className="ready">다른 플레이어 기다리는 중...</div>
       )}
     </div>
   );
-}
+};
 export default GameWaiting;
