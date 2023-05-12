@@ -75,7 +75,6 @@ export default function Chat() {
   const subscribeChatting = () => {
     setLoading(false);
     client.current?.subscribe(`/sub/room/${roomId}`, ({ body }) => {
-      console.log(body, "fdfdfdfd");
       setMessage((prev) => [...prev, JSON.parse(body)]);
     });
   };
@@ -94,7 +93,6 @@ export default function Chat() {
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
     const connect = async () => {
-      console.log("dd");
       setLoading(true);
       try {
         client.current = new StompJs.Client({
@@ -116,7 +114,7 @@ export default function Chat() {
         });
         await stompActive();
       } catch (e) {
-        console.log(e);
+        console.log();
       }
     };
     connect();
@@ -136,7 +134,7 @@ export default function Chat() {
     try {
       await axios.post(api_url + "chatting", data, { headers: header });
     } catch (e) {
-      console.log(e);
+      console.log();
     }
   };
 
@@ -153,7 +151,7 @@ export default function Chat() {
     };
     const formattedTime = now.toLocaleString("en-US");
     console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
-    if (!client.current?.connected) {
+   if (!client.current?.connected) {
       return;
     }
     pushMsg();
@@ -178,7 +176,7 @@ export default function Chat() {
         const res = await axios.get(api_url + `chatting/${roomId}`);
         setMessage(res.data);
       } catch (e) {
-        console.log(e);
+        console.log();
       }
     };
     if (isuser === "true") getChat();
@@ -208,7 +206,7 @@ export default function Chat() {
           nonMajors: nonMajors
         });
       } catch (e) {
-        console.log(e);
+        console.log();
       }
     };
     getDetail();

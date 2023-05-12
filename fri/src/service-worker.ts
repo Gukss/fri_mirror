@@ -79,7 +79,7 @@ self.addEventListener("message", (event) => {
   }
 });
 
-// // Any other custom service worker logic can go here.
+// Any other custom service worker logic can go here.
 // const CACHE_NAME = "cache_sample";
 // const urlsToCache = ["index.html", "offline.html"];
 // const version = "v0.0.4";
@@ -118,5 +118,4 @@ self.addEventListener("message", (event) => {
 //   );
 // });
 
-// // serviceWorker.js
-
+// serviceWorker.js

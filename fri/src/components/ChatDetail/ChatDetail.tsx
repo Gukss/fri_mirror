@@ -37,7 +37,7 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
       dispatch(meeting("참여한 방이 없습니다."));
       navigate("/main");
     } catch (e) {
-      console.log(e);
+      console.log();
     }
   };
 

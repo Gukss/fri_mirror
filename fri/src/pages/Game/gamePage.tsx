@@ -119,7 +119,6 @@ const GameMain = (): JSX.Element => {
   };
 
   const subscribeChatting = async (): Promise<void> => {
-    console.log("연결")
     client.current?.subscribe(
       `/sub/game-room/stop/${gameRoomId}`,
       ({ body }) => {
@@ -148,7 +147,7 @@ const GameMain = (): JSX.Element => {
       webSocketFactory: () =>
         new SockJS("https://meetingfri.com/api/ws-stomp"),
         connectHeaders: {},
-        reconnectDelay: 5000,
+        reconnectDelay: 4000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       onConnect: () => {
@@ -263,20 +262,20 @@ const GameMain = (): JSX.Element => {
   };
 
   // 모달 바깥쪽 클릭하면
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        resultRef.current &&
-        !resultRef.current.contains(event.target as Node)
-      ) {
-        navigate("/main");
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [resultRef]);
+  // useEffect(() => {
+  //   function handleClickOutside(event: MouseEvent) {
+  //     if (
+  //       resultRef.current &&
+  //       !resultRef.current.contains(event.target as Node)
+  //     ) {
+  //       navigate("/main");
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [resultRef]);
 
   // 소켓에서 뭐 주면 결과 모달 띄우기
 
@@ -319,15 +318,12 @@ const GameMain = (): JSX.Element => {
       ) : null}
       <div className="game">
         <div className="timer">
-          {" "}
           {isLgm ? (
             <img src={lgm} alt="lgm" className="wait_lgm" />
           ) : (
             <img src={mgl} alt="mgl" className="wait_lgm" />
           )}
-          {"  "}
           {timer.toFixed(2)}
-          {"  "}
           {isLgm ? (
             <img src={lgm} alt="lgm" className="wait_lgm" />
           ) : (
@@ -338,12 +334,7 @@ const GameMain = (): JSX.Element => {
           <span>{gameTime}</span>초에 <br /> 프라이를 눌러주세요.
         </div>
         <div className="game-btn">
-          <img
-            src={egg}
-            alt="fri-btn"
-            className={flip ? "flip" : ""}
-            onClick={handleClick}
-          />
+          <img src={egg} alt="fri-btn" onClick={handleClick} />
         </div>
       </div>
     </>

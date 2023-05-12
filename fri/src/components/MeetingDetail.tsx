@@ -75,7 +75,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
           nonMajors: nonMajors
         });
       } catch (e) {
-        console.log(e);
+        console.log();
       }
     };
     getDetail();
@@ -104,7 +104,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
       dispatch(useegg(1));
       navigate(`/chatting/${res.data.roomId}?isuser=false`);
     } catch (e) {
-      console.log(e);
+      console.log();
     }
   };
 

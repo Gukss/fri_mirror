@@ -92,7 +92,7 @@ export default function Add() {
         navigate(`/wait/${res.data.gameRoomId}`);
       }
     } catch (e) {
-      console.log(e);
+      console.log();
     }
   };
 

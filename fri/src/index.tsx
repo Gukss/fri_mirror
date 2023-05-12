@@ -5,12 +5,10 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(  
+const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(
-    <App />
-);
+root.render(<App />);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -112,7 +112,6 @@ export default function MyEdit() {
       const res = await axios.get(api_url + "user/profile-image", {
         headers: header
       });
-      console.log(res.data.anonymousImages);
       res.data.anonymousImages.map((image: any) => {
         if (image.anonymousImageUrl === profileImage) {
           setSelected(image.anonymousImageId);
@@ -122,7 +121,6 @@ export default function MyEdit() {
     };
     getImg();
   }, []);
-  console.log(selected, "dfdfdf");
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -134,7 +132,6 @@ export default function MyEdit() {
           anonymousProfileImageId: selected,
           nickname: form.nickname
         };
-        console.log(data);
         const submit = async () => {
           const header = {
             "Content-Type": "application/json",
