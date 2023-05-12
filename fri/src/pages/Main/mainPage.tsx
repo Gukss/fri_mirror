@@ -95,6 +95,19 @@ const Main: React.FC = () => {
     });
   }
 
+  // const state = { page_id: 1 };
+  // const title = "Page Title";
+  // const url = "/main";
+  // window.history.pushState(state, title, url);
+
+  // // Add a popstate event listener to handle the back button
+  //     window.addEventListener('popstate', (event) => {
+  //       // Prevent the default back behavior
+  //       // navigate("/main");
+  //       event.preventDefault();
+  //       window.history.pushState(state, title, url);
+  //     })
+
   const changeRegion = async (area: string) => {
     const header = {
       Authorization: Number(userId),
