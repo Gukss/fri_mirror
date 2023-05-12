@@ -12,7 +12,7 @@
   text-align: center;
   width: 100vw;
   height: 100vh;
-  overflow: auto;
+  /* overflow: auto; */
   position: fixed;
   font-family: "bingrae-bold";
 }
@@ -23,7 +23,7 @@ input {
 
 button {
   font-family: "bingrae-bold";
-  -webkit-overflow-scrolling: touch; /* 추가 */
+  /* -webkit-overflow-scrolling: touch; 추가 */
 }
 
 .App-header {
