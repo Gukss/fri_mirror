@@ -2,8 +2,8 @@ package com.project.fri.likes.controller;
 
 import com.project.fri.likes.dto.CreateLikesRequest;
 import com.project.fri.likes.dto.CreateLikesResponse;
-import com.project.fri.likes.dto.UpdateLikesRequest;
-import com.project.fri.likes.dto.UpdateLikesResponse;
+import com.project.fri.likes.dto.DeleteLikesRequest;
+import com.project.fri.likes.dto.DeleteLikesResponse;
 import com.project.fri.likes.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,17 +36,17 @@ public class LikesController {
 
     /**
      * 좋아요 취소
-     * @param updateLikesRequest 요청
+     * @param deleteLikesRequest 요청
      * @param userId Authorization
      * @return 응답
      */
     @PatchMapping
-    public ResponseEntity<UpdateLikesResponse> updateLikes(
-            @RequestBody UpdateLikesRequest updateLikesRequest, @RequestHeader("Authorization") Long userId) {
-        UpdateLikesResponse result = likesService.updateLikes(updateLikesRequest, userId);
+    public ResponseEntity<DeleteLikesResponse> deleteLikes(
+            @RequestBody DeleteLikesRequest deleteLikesRequest, @RequestHeader("Authorization") Long userId) {
+        DeleteLikesResponse result = likesService.deleteLikes(deleteLikesRequest, userId);
 
         if (result == null) {
-            return ResponseEntity.badRequest().body(new UpdateLikesResponse(false));
+            return ResponseEntity.badRequest().body(new DeleteLikesResponse(false));
         }
 
         return ResponseEntity.ok().body(result);

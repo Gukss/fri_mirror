@@ -5,8 +5,8 @@ import com.project.fri.board.repository.BoardRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.likes.dto.CreateLikesRequest;
 import com.project.fri.likes.dto.CreateLikesResponse;
-import com.project.fri.likes.dto.UpdateLikesRequest;
-import com.project.fri.likes.dto.UpdateLikesResponse;
+import com.project.fri.likes.dto.DeleteLikesRequest;
+import com.project.fri.likes.dto.DeleteLikesResponse;
 import com.project.fri.likes.entity.Likes;
 import com.project.fri.likes.repository.LikesRepository;
 import com.project.fri.user.entity.User;
@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -58,17 +56,17 @@ public class LikesServiceImpl implements LikesService{
 
     /**
      * 좋아요 취소
-     * @param updateLikesRequest 요청
+     * @param deleteLikesRequest 요청
      * @param userId Authorization
      * @return 응답
      */
     @Override
     @Transactional
-    public UpdateLikesResponse updateLikes(UpdateLikesRequest updateLikesRequest, Long userId) {
+    public DeleteLikesResponse deleteLikes(DeleteLikesRequest deleteLikesRequest, Long userId) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
-        Board findBoard = boardRepository.findById(updateLikesRequest.getBoardId())
+        Board findBoard = boardRepository.findById(deleteLikesRequest.getBoardId())
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
 
         Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard)
@@ -79,9 +77,9 @@ public class LikesServiceImpl implements LikesService{
             return null;
         }
 
-        boolean result = findLikesByUserAndBoard.updateIsDelete(updateLikesRequest.isDelete());
+        boolean result = findLikesByUserAndBoard.updateIsDelete(deleteLikesRequest.isDelete());
 
-        return new UpdateLikesResponse(result);
+        return new DeleteLikesResponse(result);
     }
 
 
