@@ -52,7 +52,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
       dispatch(game(String(room.gameRoomId)));
       navigate(`/wait/${room.gameRoomId}`);
     } catch (e) {
-      console.log(e);
+      console.log();
     }
   }, []);
 
@@ -77,7 +77,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
           participation: participation
         });
       } catch (e) {
-        console.log(e);
+        console.log();
       }
     };
     getData();

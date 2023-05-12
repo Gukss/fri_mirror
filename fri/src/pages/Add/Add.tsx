@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { RootState } from "../../redux/store";
-import { meeting, game } from "../../redux/user";
+import { meeting, game, useegg } from "../../redux/user";
 import { useSelector, useDispatch } from "react-redux";
 import Categories from "./Categories/Categories";
 import Back from "../../assets/back.png";
@@ -84,6 +84,7 @@ export default function Add() {
       };
       const res = await axios.post(url, data, { headers: header });
       if (cate !== "bet") {
+        dispatch(useegg(1));
         dispatch(meeting(res.data.roomId));
         navigate(`/chatting/${res.data.roomId}`);
       } else {
@@ -91,7 +92,7 @@ export default function Add() {
         navigate(`/wait/${res.data.gameRoomId}`);
       }
     } catch (e) {
-      console.log(e);
+      console.log();
     }
   };
 
@@ -168,6 +169,9 @@ export default function Add() {
                   message={message}
                   setMessage={setMessage}
                 />
+                {
+                  cate !== "bet" ?
+                  <div className="add-tip">※ 방을 만들기 위해서는 알이 하나 필요해요 ※</div> : null}
                 <button
                   className="add-btn"
                   id={

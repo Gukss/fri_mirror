@@ -39,7 +39,7 @@ export type participationType = {
   userId: number;
 };
 
-function GameWaiting() {
+const GameWaiting = (): JSX.Element => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let gameTime: number;
@@ -83,7 +83,7 @@ function GameWaiting() {
     catch(e){console.log(e)}
   }
 
-  const subscribeChatting = async () => {
+  const subscribeChatting = async (): Promise<void> => {
     setIsconnect(true);
     client.current?.subscribe(
     `/sub/game-room/info/${gameRoomId}`,
@@ -97,7 +97,7 @@ function GameWaiting() {
       });
   };
 
-  const stompActive = () => {
+  const stompActive = async (): Promise<void> => {
     if (client.current !== undefined) {
       client.current.activate();
     }
@@ -192,9 +192,9 @@ function GameWaiting() {
           null;
         }
       });
-      stompActive();
+      await stompActive();
     } catch (e) {
-      console.log(e);
+      console.log();
     }
     return () => disconnect();
   };

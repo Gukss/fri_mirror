@@ -44,7 +44,6 @@ export default function LogIn() {
         data: form
       })
         .then((res) => {
-          console.log(res.data);
           dispatch(login(res.data));
           setForm({ email: "", password: "" });
           if (res.data.gameRoomId === "참여한 방이 없습니다.")

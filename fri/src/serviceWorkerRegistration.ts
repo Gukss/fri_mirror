@@ -26,12 +26,6 @@ type Config = {
 };
 
 export function register(config?: Config) {
-  console.log("레지스터 들어왔어유~");
-  console.log(
-    process.env.NODE_ENV === "production" && "serviceWorker" in navigator,
-    process.env.NODE_ENV,
-    navigator
-  );
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
@@ -44,7 +38,6 @@ export function register(config?: Config) {
 
     window.addEventListener("load", () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-      console.log(swUrl);
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
@@ -89,7 +82,6 @@ function registerValidSW(swUrl: string, config?: Config) {
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
-                console.log("업데이트중");
               }
             } else {
               // At this point, everything has been precached.

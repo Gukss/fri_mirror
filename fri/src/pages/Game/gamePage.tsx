@@ -27,7 +27,7 @@ export type partici = {
   profileUrl: string;
 };
 
-function GameMain() {
+const GameMain = (): JSX.Element => {
   const navigate = useNavigate();
   const client = useRef<StompJs.Client>();
   const [seconds, setSeconds] = useState<number>(3);
@@ -81,7 +81,6 @@ function GameMain() {
         Math.abs(Number(gameTime) - b.gameTime)
       );
     });
-    console.log(state, res);
     await resultSet();
   };
 
@@ -103,7 +102,7 @@ function GameMain() {
     }
   };
 
-  const publishMessage = async (time: number) => {
+  const publishMessage = async (time: number): Promise<void> => {
     if (!client.current?.connected) {
       return;
     }
@@ -119,11 +118,10 @@ function GameMain() {
     });
   };
 
-  const subscribeChatting = async () => {
+  const subscribeChatting = async (): Promise<void> => {
     client.current?.subscribe(
       `/sub/game-room/stop/${gameRoomId}`,
       ({ body }) => {
-        console.log(body, "서브스크라이브 바디");
         res.push(JSON.parse(body));
         setState((prev) => [...prev, JSON.parse(body)]);
         if (res.length === Number(totalCnt)) resultSort();
@@ -131,8 +129,7 @@ function GameMain() {
     );
   };
 
-  const stompActive = () => {
-    console.log(client.current, "client.current");
+  const stompActive = async (): Promise<void> => {
     if (client.current !== undefined) {
       client.current.activate();
     }
@@ -145,35 +142,29 @@ function GameMain() {
 
   // 방 시작 후 웹 소켓 연결
   const connect = async () => {
-    try {
+    try{
       client.current = new StompJs.Client({
-        webSocketFactory: () =>
-          new SockJS("https://meetingfri.com/api/ws-stomp"),
+      webSocketFactory: () =>
+        new SockJS("https://meetingfri.com/api/ws-stomp"),
         connectHeaders: {},
         reconnectDelay: 4000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
-        onConnect: () => {
-          console.log("소켓 onConnect");
-          subscribeChatting();
-          setStart(true);
-        },
-        debug: (str) => {
-          console.log("소켓 debug");
-          console.log(str);
-          null;
-        },
-        onStompError: (err) => {
-          console.log("소켓 onStompError");
-          console.log(err);
-          null;
-        }
-      });
-      stompActive();
-    } catch (e) {
-      console.log(e);
-    }
-    return () => disconnect();
+      onConnect: () => {
+        subscribeChatting();
+        setStart(true);
+      },
+      debug: () => {
+        null;
+      },
+      onStompError: () => {
+        null;
+      }
+    });
+    await stompActive();
+  }
+  catch(e){console.log}
+  return() => disconnect();
   };
 
   // 소켓 연결 시점

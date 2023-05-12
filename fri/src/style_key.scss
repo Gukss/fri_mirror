@@ -561,3 +561,60 @@
     left: 24px;
   }
 }
+
+
+.checkmodal {
+  width: 70vw;
+  height: 20vh;
+  display: flex;
+  position: fixed;
+  left: calc(50vw - 35vw);
+  background-color: #ffd453;
+  border-radius: 15px;
+  justify-content: center;
+  text-align: center;
+  flex-flow: column;
+  z-index: 10;
+  font-size: 1.2rem;
+  font-weight: 700;
+  transition: linear 0.4s;
+
+  .check-text {
+    margin-bottom: 20px;
+  }
+
+  button {
+    border: none;
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .button {
+    width: calc(100% - 60px);
+    display: flex;
+    padding: 0 30px;
+    justify-content: space-between;
+    font-weight: 700;
+  }
+
+  .ok-btn {
+    background-color: #fff;
+    width: 100px;
+  }
+
+  .no-btn {
+    background-color: #494949;
+    color: #fff;
+  }
+}
+
+.modal-back {
+  position: fixed;
+  z-index: 8;
+  background-color: rgba(0, 0, 0, 0.25);
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+}
