@@ -15,12 +15,14 @@ public class FindAllUserByGameRoomId {
     private String name;
     private String anonymousProfileImageUrl;
     private Long userId;
+    private boolean isReady;
 
     public static FindAllUserByGameRoomId create(User users) {
         return FindAllUserByGameRoomId.builder()
                 .name(users.getName())
                 .anonymousProfileImageUrl(users.getAnonymousProfileImage().getImageUrl())
                 .userId(users.getId())
+                .isReady(users.isReady())
                 .build();
     }
 }
