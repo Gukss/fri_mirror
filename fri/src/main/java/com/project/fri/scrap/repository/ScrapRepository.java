@@ -1,5 +1,8 @@
 package com.project.fri.scrap.repository;
 
-public interface ScrapRepository {
+import com.project.fri.scrap.entity.Scrap;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
 }
