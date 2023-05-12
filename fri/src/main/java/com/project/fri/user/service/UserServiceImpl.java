@@ -15,6 +15,8 @@ import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.AnonymousProfileImageRepository;
 import com.project.fri.user.repository.CertificationRepository;
 import com.project.fri.user.repository.UserRepository;
+import com.project.fri.user.repository.UserRoomTimeRepository;
+import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.Random;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
   private final CertificationRepository certificationRepository;
   private final AnonymousProfileImageRepository anonymousProfileImageRepository;
 
+
   private WebDriver driver;
   private final JavaMailSender emailSender;
   private final SimpMessageSendingOperations messagingTemplate;
@@ -70,6 +73,8 @@ public class UserServiceImpl implements UserService {
   private static final String LOCAL_PATH = "D:\\Guk\\fri\\chromedriver.exe";
   private static final String SERVER_PATH = "/usr/bin/chromedriver";
   private static final String containerIp = "172.17.0.5";
+
+  private final UserRoomTimeService userRoomTimeService;
 
   @Override
   public User findById(long userId) {
@@ -106,6 +111,13 @@ public class UserServiceImpl implements UserService {
         if (Boolean.FALSE.equals(request.isParticipate())) { //false로 오면 참여하기를 누른거다.
           //하트가 1이상인지 검사하고, 1이상이면 입장 후 하트-=1, 1미만이면 입장하면 안된다.
           findUser.updateRoomNumber(findRoom);
+          // todo : 시간 참여 테이블에 insert
+          HttpStatus userRoomTime = userRoomTimeService.createUserRoomTime(findUser, findRoom);
+
+          // userRoomTime 테이블에서 에러 발생시 예외 에러처리
+          if (userRoomTime.isError()){
+            throw new InvalidRequestStateException();
+          }
           findUser.minusHeart();
         } else {
           //true로 오면 나가기를 누른거다. => but room이 null인데 true가 올 수 없다.
@@ -124,6 +136,13 @@ public class UserServiceImpl implements UserService {
         request.isParticipate())) {
       // 입장중인 방과 동일하면 퇴장 만약시 남은 인원이 없으면 방 삭제 및 유저 ready상태 false
       findUser.updateRoomNumber(null);
+      // todo : 시간 참여 테이블에 update
+      HttpStatus userRoomTime = userRoomTimeService.updateUserRoomTime(findUser, findRoom);
+
+      // userRoomTime 테이블에서 에러 발생시 예외 에러처리
+      if (userRoomTime.isError()){
+        throw new InvalidRequestStateException();
+      }
       //ready 상태 false만들기 -> merge 하고난 후
       participate = false;
       // 해당방에 유저가 남아 있는지 확인 없으면 방 삭제
