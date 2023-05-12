@@ -46,6 +46,14 @@ export default function Categories({
     (selectedCate: string) => {
       setForm({ ...form, cate: selectedCate });
       setError({ ...error, cate: true });
+      if (selectedCate === "내기" && gameRoomId !== "참여한 방이 없습니다."){
+        alert("게임방에서 사람들이 기다립니다. 돌아가세요.")
+        return;
+      }
+      if (selectedCate !== "내기" && roomId !== "참여한 방이 없습니다."){
+        alert("이미 금요일에 약속이 있어요. 돌아가세요.")
+        return;
+      } 
       if (selectedCate === select) {
         setSelect("");
       } else {

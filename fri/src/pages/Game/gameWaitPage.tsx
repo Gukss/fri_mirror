@@ -105,7 +105,9 @@ const GameWaiting = (): JSX.Element => {
 
   // 웹 소켓 끊기.
   const disconnect = () => {
-    if (client.current !== undefined) client.current.deactivate();
+    if (client.current !== undefined){
+      client.current.deactivate();
+    }
   };
 
   const publishInit = async () => {
@@ -138,6 +140,9 @@ const GameWaiting = (): JSX.Element => {
           ready: false,
           result: 0.0
         };
+        if(info.userId === userId){
+          if(info.ready) setIsready(true);
+        }
         state.userList.push(data);
       }
       totalCnt = res.data.headCount;
@@ -196,7 +201,7 @@ const GameWaiting = (): JSX.Element => {
     } catch (e) {
       console.log();
     }
-    return () => disconnect();
+    return () => navigate("/main");
   };
 
   useEffect(() => {
