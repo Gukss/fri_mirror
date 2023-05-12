@@ -43,9 +43,9 @@ public class LikesServiceImpl implements LikesService{
         Board findBoard = boardRepository.findById(createLikesRequest.getBoardId())
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
 
-        Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoard(findUser, findBoard)
+        Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard)
                 .orElse(null);
-        // 해당 유저가 게시글에 좋아요를 한 상태이고, 삭제되지 않은 상태면 잘못된 요청이 들어온것
+        // 해당 유저가 게시글에 좋아요를 한 상태일 때
         if (findLikesByUserAndBoard != null && !findLikesByUserAndBoard.isDelete()) {
             return null;
         }
@@ -56,6 +56,12 @@ public class LikesServiceImpl implements LikesService{
         return new CreateLikesResponse(true);
     }
 
+    /**
+     * 좋아요 취소
+     * @param updateLikesRequest 요청
+     * @param userId Authorization
+     * @return 응답
+     */
     @Override
     @Transactional
     public UpdateLikesResponse updateLikes(UpdateLikesRequest updateLikesRequest, Long userId) {
@@ -65,11 +71,11 @@ public class LikesServiceImpl implements LikesService{
         Board findBoard = boardRepository.findById(updateLikesRequest.getBoardId())
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
 
-        Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoard(findUser, findBoard)
+        Likes findLikesByUserAndBoard = likesRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard)
                 .orElse(null);
 
-        // 유저가 좋아요 한적이 없거나 취소한 상태면 잘못된 요청
-        if (findLikesByUserAndBoard == null || findLikesByUserAndBoard.isDelete()) {
+        // 유저가 좋아요 하지 않았을 때
+        if (findLikesByUserAndBoard == null) {
             return null;
         }
 

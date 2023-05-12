@@ -34,6 +34,12 @@ public class LikesController {
         return ResponseEntity.status(201).body(result);
     }
 
+    /**
+     * 좋아요 취소
+     * @param updateLikesRequest 요청
+     * @param userId Authorization
+     * @return 응답
+     */
     @PatchMapping
     public ResponseEntity<UpdateLikesResponse> updateLikes(
             @RequestBody UpdateLikesRequest updateLikesRequest, @RequestHeader("Authorization") Long userId) {
