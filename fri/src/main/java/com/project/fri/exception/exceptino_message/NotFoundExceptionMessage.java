@@ -14,6 +14,8 @@ public class NotFoundExceptionMessage extends RuntimeException{
   public static final String NOT_FOUND_AnonymousProfileImage = "존재하지 않는 이미지입니다.";
   public static final String NOT_FOUND_BOARD="존재하지 않는 게시판입니다.";
   public static final String NOT_FOUND_COMMENT="존재하지 않는 댓글입니다.";
+  public static final String NOT_FOUND_GAME_ROOM = "존재하지 않는 게임 방입니다.";
+
 
   public NotFoundExceptionMessage() {
     super();

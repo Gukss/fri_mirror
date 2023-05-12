@@ -19,7 +19,7 @@ public class ChattingRepositoryImpl implements ChattingRepositoryCustom {
         .join(QChattingMessage.chattingMessage.user).fetchJoin()
         .where(QChattingMessage.chattingMessage.room.id.eq(roomId)
             .and(QChattingMessage.chattingMessage.createdAt.after(roomCreatedTime)))
-        .orderBy(QChattingMessage.chattingMessage.createdAt.desc())
+        .orderBy(QChattingMessage.chattingMessage.createdAt.asc())
         .fetch();
   }
 }

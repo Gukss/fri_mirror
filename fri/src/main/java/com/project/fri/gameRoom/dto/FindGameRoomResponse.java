@@ -20,16 +20,18 @@ public class FindGameRoomResponse {
     private boolean isParticipate;
     private List<FindAllUserByGameRoomId> participation;
     private int participationCount;
+    private double randomTime;
 
     public static FindGameRoomResponse create(GameRoom gameRoom, List<FindAllUserByGameRoomId> users, boolean isParticipate) {
         return FindGameRoomResponse.builder()
-                .roomId(gameRoom.getId())
-                .title(gameRoom.getTitle())
-                .location(gameRoom.getLocation())
-                .headCount(gameRoom.getHeadCount())
-                .isParticipate(isParticipate)
-                .participation(users)
-                .participationCount(users.size())
-                .build();
+            .roomId(gameRoom.getId())
+            .title(gameRoom.getTitle())
+            .location(gameRoom.getLocation())
+            .headCount(gameRoom.getHeadCount())
+            .randomTime(gameRoom.getRandomTime())
+            .isParticipate(isParticipate)
+            .participation(users)
+            .participationCount(users.size())
+            .build();
     }
 }

@@ -25,6 +25,6 @@ public class CreateUserRequest {
 
   private String year;
 
-  private boolean isMajor;
+  private boolean major;
 
 }

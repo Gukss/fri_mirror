@@ -36,6 +36,7 @@ public class Comment extends BaseTimeEntity {
   private long id;
 
   @NotNull
+  @Column(length = 511)
   private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -50,6 +51,7 @@ public class Comment extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
 
   public static Comment create(CreateCommentRequest createCommentRequest,User user,Board board){
     Comment comment = Comment.builder()
@@ -75,4 +77,5 @@ public class Comment extends BaseTimeEntity {
     this.update(LocalDateTime.now());
     return this;
   }
+
 }
