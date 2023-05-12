@@ -41,9 +41,9 @@ function More() {
   });
   
   const [game, setGame] = useState<gameroomType[]>([]);
-  const [room, setRoom] = useState<roomType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [meeting, setRoom] = useState<roomType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(0);
 
   const loadMoreData = async () => {
     setIsLoading(true);
@@ -55,15 +55,18 @@ function More() {
       };
       if (category !== "BETTING") {
         res = await axios.get(api_url + `room/category?area=${region}&category=${category}&page=${page}`, { headers: header });
-        setRoom((prevData) => [...prevData, ...res.data]);
+        if(res.data.length) setRoom((prevData) => [...prevData, ...res.data]);
+        if(res.data.length < 20) setIsLoading(true);
+        else setIsLoading(false);
       } else {
         res = await axios.get(api_url + `game-room/category?area=${region}&page=${page}`, { headers: header });
-        setGame((prevData) => [...prevData, ...res.data]);
+        if(res.data.length) setGame((prevData) => [...prevData, ...res.data]);
+        if(res.data.length < 20) setIsLoading(true);
+        else setIsLoading(false);
       }
-      setIsLoading(false);
     } catch (e) {
       console.log(e);
-      setIsLoading(false);
+      setIsLoading(true);
     }
   };
 
@@ -84,7 +87,7 @@ function More() {
   );
 
   useEffect(() => {
-    setPage(1);
+    setPage(0);
     setGame([]);
     setRoom([]);
   }, [category, region, text]);
@@ -99,12 +102,19 @@ function More() {
       <div className="text">{text}</div>
       <div className="room">
         <div className="room_container">
-          {category === "BETTING"
-            ? game.map((room, idx) => <GameRoom key={idx} room={room} />)
-            : room.map((room, idx) => <Room key={idx} room={room} />)
+          {
+            category === "BETTING"
+            ? game.map((room, idx) =>(
+              idx === game.length - 1 ?
+              <div  key={idx} ref={lastRoomElementRef}><GameRoom room={room} /></div> :
+               <GameRoom key={idx} room={room} />
+            ))
+            : meeting.map((room, idx) =>(
+              idx === meeting.length - 1 ?
+              <div  key={idx} ref={lastRoomElementRef}><Room  room={room}></Room></div> :
+              <Room key={idx} room={room} />
+            ))
           }
-        <div></div>
-        <div ref={lastRoomElementRef}></div>
         </div>
       </div>
       <Nav isnav={isnav} setIsnav={setIsnav} />
