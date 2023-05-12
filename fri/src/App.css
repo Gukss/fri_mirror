@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  position: fixed;
 }
 
 .App-header {
@@ -11,6 +15,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: #fff;
+  position: fixed;
 }
 
 .App-link {

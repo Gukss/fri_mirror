@@ -209,9 +209,9 @@ const Main: React.FC = () => {
           부울경
         </li>
       </ul>
-      <div className="region_bar"></div>
 
       <div className="main_category">
+        <div className="time_bar">타임어택~</div>
         <p id="category_title">
           # 내기 할 사람<span onClick={() => go_more("BETTING")}>더보기</span>
         </p>

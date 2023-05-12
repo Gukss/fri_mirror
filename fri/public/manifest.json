@@ -2,7 +2,7 @@
   "short_name": "Fri",
   "name": "이번주 금요일에 만나요",
   "start_url": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "theme_color": "#000000",
   "background_color": "#ffffff",
   "icons": [
