@@ -100,4 +100,5 @@ public class BoardServiceImpl implements BoardService {
     res = ResponseEntity.ok().body(instance);
     return res;
   }
+
 }
