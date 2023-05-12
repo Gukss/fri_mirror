@@ -1,9 +1,11 @@
 package com.project.fri.comment.entity;
 
 import com.project.fri.board.entity.Board;
+import com.project.fri.comment.dto.CreateCommentRequest;
 import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -48,4 +50,29 @@ public class Comment extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  public static Comment create(CreateCommentRequest createCommentRequest,User user,Board board){
+    Comment comment = Comment.builder()
+        .board(board)
+        .user(user)
+        .content(createCommentRequest.getContent())
+        .baseEntity(BaseEntity.builder()
+            .constructor(user.getNickname())
+            .updater(user.getNickname())
+            .build())
+        .build();
+
+    return comment;
+  }
+
+  public Comment updateIsDelete(boolean isDelete) {
+    this.isDelete = isDelete;
+    return this;
+  }
+
+  public Comment updateComment(String content){
+    this.content=content;
+    this.update(LocalDateTime.now());
+    return this;
+  }
 }
