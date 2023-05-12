@@ -6,7 +6,7 @@ function Back() {
 
   return (
     <>
-      <img src={back} id="back" alt="back" onClick={() => navigate(-1)}/>
+      <img src={back} id="back" alt="back" onClick={() => navigate("/main")}/>
     </>
   )
 }

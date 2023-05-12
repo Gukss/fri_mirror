@@ -1,9 +1,28 @@
+@font-face {
+  font-family: "bingrae";
+  src: url("./Fonts/Binggrae.ttf");
+}
+
+@font-face {
+  font-family: "bingrae-bold";
+  src: url("./Fonts/Binggrae-Bold.ttf");
+}
+
 .App {
   text-align: center;
   width: 100vw;
   height: 100vh;
   overflow: auto;
   position: fixed;
+  font-family: "bingrae-bold";
+}
+
+input {
+  font-family: "bingrae";
+}
+
+button {
+  font-family: "bingrae-bold";
   -webkit-overflow-scrolling: touch; /* 추가 */
 }
 

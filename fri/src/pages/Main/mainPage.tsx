@@ -165,7 +165,6 @@ const Main: React.FC = () => {
       }).toString()
     });
   }
-
   const changeRegion = async (area: string) => {
     const header = {
       Authorization: Number(userId),
