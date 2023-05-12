@@ -293,8 +293,8 @@ const GameMain = (): JSX.Element => {
       {result ? (
         <div className="game-result-back">
           <div className="game-result" ref={resultRef}>
-            <div className="header">결과</div>
-            <div className="name">{looser} 잘 먹을게요~~</div>
+            <div className="header">{gameTime}초 결과</div>
+            <div className="name">{looser}가 쏜다!</div>
             <div className="time">5분 뒤 {area}에서 만나요</div>
             <div className="result-table">
               {state.map((player, index) => (
