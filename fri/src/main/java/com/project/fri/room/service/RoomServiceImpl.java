@@ -322,8 +322,14 @@ public class RoomServiceImpl implements RoomService {
   @Transactional
   public void deleteRoomScheduler() {
     List<Room> allRoomList = roomRepository.findAll();
+    List<User> allUserList = userRepository.findAll();
+
     for (Room r : allRoomList) {
       r.deleteRoom();
+    }
+
+    for (User u : allUserList) {
+      u.updateRoomNumber(null);
     }
   }
 
