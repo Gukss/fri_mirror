@@ -62,6 +62,16 @@ const GameMain = (): JSX.Element => {
   const profile = useSelector((state: RootState) => {
     return state.strr.anonymousProfileImageUrl;
   });
+  const year = useSelector((state: RootState) => {
+    return state.strr.year;
+  })
+  const region = useSelector((state: RootState) => {
+    if(state.strr.location === "SEOUL") return "서울";
+    else if(state.strr.location === "DAEJEON") return "대전";
+    else if(state.strr.location === "GUMI") return "구미";
+    else if(state.strr.location === "GWANGJU") return "광주";
+    else if(state.strr.location === "BUSAN") return "부울경";
+  })
   const [nickname, setNick] = useState<string>("");
 
   const [state, setState] = useState<userInfo[]>([]);
@@ -113,7 +123,7 @@ const GameMain = (): JSX.Element => {
         userId: userId,
         gameTime: time,
         anonymousProfileImageId: profile,
-        nickname: nickname
+        nickname: `${region} ${year}기 ${nickname}`
       })
     });
   };
@@ -295,8 +305,8 @@ const GameMain = (): JSX.Element => {
         <div className="game-result-back">
           <div className="game-result" ref={resultRef}>
             <div className="header">{gameTime}초 결과</div>
-            <div className="name">{looser}가 쏜다!</div>
-            <div className="time">5분 뒤 {area}에서 만나요</div>
+            <div className="name">{looser}(이)가 쏜다!</div>
+            <div className="time">5분 뒤 <span id="area">{area}</span>에서 만나요</div>
             <div className="result-table">
               {state.map((player, index) => (
                 <div className="result" key={index}>

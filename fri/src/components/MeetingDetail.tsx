@@ -197,14 +197,14 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
       <div className="modal-back" style={modal ? {top : 0} : {bottom : "-100vh"}}>
       <div className="checkmodal" style={modal ? {bottom : "40vh"} : {bottom : "-20vh"}}>
         <div className="check-text">
-          달걀이 하나 깨져요ㅠ
+          입장료 : 달걀 1개
         </div>
         <div className="button">
           <button 
             className="ok-btn" 
             onClick={() => {goChat(); setModal(false)}}
-          >괜찮아요</button>
-          <button className="no-btn" onClick={() => {setModal(false)}}>괜찮을리가</button>
+          >지불</button>
+          <button className="no-btn" onClick={() => {setModal(false)}}>X</button>
 			</div>
 		</div>
     </div>

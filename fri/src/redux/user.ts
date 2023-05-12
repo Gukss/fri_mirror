@@ -10,6 +10,7 @@ interface UserState {
   nickname: string;
   anonymousProfileImageUrl: string;
   major: boolean | null;
+  year: string;
 }
 
 // 초기 상태
@@ -21,6 +22,7 @@ const initialState: UserState = {
   gameRoomId: "",
   nickname: "",
   anonymousProfileImageUrl: "",
+  year: "",
   major: null
 };
 

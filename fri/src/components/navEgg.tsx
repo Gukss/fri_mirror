@@ -23,8 +23,11 @@ function Nav({isnav, setIsnav} : navType) {
 	})
 
 	function checkEgg(){
-		if(eggCnt > 0)	navigate("/add" + "?tab=cate")
-		else alert("현재 보유중인 달걀이 없어요.. 내일 다시 오셔야 할 듯..")
+		if(roomId !== "참여한 방이 없습니다." && gameRoomId !== "참여한 방이 없습니다." ){
+			alert("나는 게임도 미팅도 참여중")
+			return
+		}
+		else navigate("/add?tab=cate")
 	}
 
 	function goChat() {

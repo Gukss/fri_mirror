@@ -585,27 +585,25 @@
   button {
     border: none;
     border-radius: 7px;
-    padding: 5px 10px;
     font-weight: 700;
     font-size: 16px;
   }
 
-  .button {
-    width: calc(100% - 60px);
-    display: flex;
-    padding: 0 30px;
-    justify-content: space-between;
-    font-weight: 700;
-  }
-
   .ok-btn {
     background-color: #fff;
-    width: 100px;
+    width: 80px;
+    height: 32px;
+    margin-right: 15px;
+    font-weight: 700;
   }
 
   .no-btn {
     background-color: #494949;
     color: #fff;
+    width: 80px;
+    height: 32px;
+    margin-left: 15px;
+    font-weight: 700;
   }
 }
 

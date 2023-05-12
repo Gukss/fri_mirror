@@ -26,12 +26,6 @@ type Config = {
 };
 
 export function register(config?: Config) {
-  console.log("레지스터 들어왔어유~");
-  console.log(
-    process.env.NODE_ENV === "production" && "serviceWorker" in navigator,
-    process.env.NODE_ENV,
-    navigator
-  );
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
@@ -81,15 +75,14 @@ function registerValidSW(swUrl: string, config?: Config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              console.log(
-                "New content is available and will be used when all " +
-                  "tabs for this page are closed. See https://cra.link/PWA."
-              );
+              // console.log(
+              //   "New content is available and will be used when all " +
+              //     "tabs for this page are closed. See https://cra.link/PWA."
+              // );
 
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
-                console.log("업데이트중");
               }
             } else {
               // At this point, everything has been precached.
@@ -107,7 +100,7 @@ function registerValidSW(swUrl: string, config?: Config) {
       };
     })
     .catch((error) => {
-      console.error("Error during service worker registration:", error);
+      console.error();
     });
 }
 
