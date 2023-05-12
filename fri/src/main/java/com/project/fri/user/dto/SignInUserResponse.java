@@ -11,6 +11,7 @@ public class SignInUserResponse {
     private Long userId;
     private String anonymousProfileImageUrl;
     private String nickname;
+    private String year;
     private Category location;
     private int heart;
     private String roomId;
@@ -22,6 +23,7 @@ public class SignInUserResponse {
         userId = user.getId();
         anonymousProfileImageUrl = user.getAnonymousProfileImage().getImageUrl();
         nickname = user.getNickname();
+        year = user.getYear();
         location = user.getArea().getCategory();
         heart = user.getHeart();
         name = user.getName();
