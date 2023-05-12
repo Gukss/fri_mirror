@@ -123,6 +123,7 @@ function GameMain() {
     client.current?.subscribe(
       `/sub/game-room/stop/${gameRoomId}`,
       ({ body }) => {
+        console.log(body, "서브스크라이브 바디");
         res.push(JSON.parse(body));
         setState((prev) => [...prev, JSON.parse(body)]);
         if (res.length === Number(totalCnt)) resultSort();
@@ -131,6 +132,7 @@ function GameMain() {
   };
 
   const stompActive = () => {
+    console.log(client.current, "client.current");
     if (client.current !== undefined) {
       client.current.activate();
     }
@@ -148,17 +150,22 @@ function GameMain() {
         webSocketFactory: () =>
           new SockJS("https://meetingfri.com/api/ws-stomp"),
         connectHeaders: {},
-        reconnectDelay: 5000,
+        reconnectDelay: 4000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
         onConnect: () => {
+          console.log("소켓 onConnect");
           subscribeChatting();
           setStart(true);
         },
-        debug: () => {
+        debug: (str) => {
+          console.log("소켓 debug");
+          console.log(str);
           null;
         },
-        onStompError: () => {
+        onStompError: (err) => {
+          console.log("소켓 onStompError");
+          console.log(err);
           null;
         }
       });
@@ -264,20 +271,20 @@ function GameMain() {
   };
 
   // 모달 바깥쪽 클릭하면
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        resultRef.current &&
-        !resultRef.current.contains(event.target as Node)
-      ) {
-        navigate("/main");
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [resultRef]);
+  // useEffect(() => {
+  //   function handleClickOutside(event: MouseEvent) {
+  //     if (
+  //       resultRef.current &&
+  //       !resultRef.current.contains(event.target as Node)
+  //     ) {
+  //       navigate("/main");
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [resultRef]);
 
   // 소켓에서 뭐 주면 결과 모달 띄우기
 
@@ -320,15 +327,12 @@ function GameMain() {
       ) : null}
       <div className="game">
         <div className="timer">
-          {" "}
           {isLgm ? (
             <img src={lgm} alt="lgm" className="wait_lgm" />
           ) : (
             <img src={mgl} alt="mgl" className="wait_lgm" />
           )}
-          {"  "}
           {timer.toFixed(2)}
-          {"  "}
           {isLgm ? (
             <img src={lgm} alt="lgm" className="wait_lgm" />
           ) : (
@@ -339,12 +343,7 @@ function GameMain() {
           <span>{gameTime}</span>초에 <br /> 프라이를 눌러주세요.
         </div>
         <div className="game-btn">
-          <img
-            src={egg}
-            alt="fri-btn"
-            className={flip ? "flip" : ""}
-            onClick={handleClick}
-          />
+          <img src={egg} alt="fri-btn" onClick={handleClick} />
         </div>
       </div>
     </>
