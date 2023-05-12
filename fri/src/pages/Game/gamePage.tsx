@@ -152,29 +152,30 @@ const GameMain = (): JSX.Element => {
 
   // 방 시작 후 웹 소켓 연결
   const connect = async () => {
-    try{
+    try {
       client.current = new StompJs.Client({
-      webSocketFactory: () =>
-        new SockJS("https://meetingfri.com/api/ws-stomp"),
+        webSocketFactory: () =>
+          new SockJS("https://meetingfri.com/api/ws-stomp"),
         connectHeaders: {},
         reconnectDelay: 4000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
-      onConnect: () => {
-        subscribeChatting();
-        setStart(true);
-      },
-      debug: () => {
-        null;
-      },
-      onStompError: () => {
-        null;
-      }
-    });
-    await stompActive();
-  }
-  catch(e){console.log}
-  return() => disconnect();
+        onConnect: () => {
+          subscribeChatting();
+          setStart(true);
+        },
+        debug: () => {
+          null;
+        },
+        onStompError: () => {
+          null;
+        }
+      });
+      await stompActive();
+    } catch (e) {
+      console.log;
+    }
+    return () => disconnect();
   };
 
   // 소켓 연결 시점
@@ -349,6 +350,6 @@ const GameMain = (): JSX.Element => {
       </div>
     </>
   );
-}
+};
 
 export default GameMain;
