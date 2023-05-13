@@ -3,6 +3,7 @@
     text-align: start;
     margin-top: 2px;
   }
+
   .input-label {
     text-align: start;
     margin: 1rem 0;
@@ -42,6 +43,7 @@
       font-size: 1rem;
       color: #777777;
     }
+
     &:focus {
       outline: 0;
       border: 2px solid #ffc000;
@@ -71,7 +73,7 @@
       border: 2px solid green;
     }
 
-    + .message {
+    +.message {
       color: green;
     }
 
@@ -112,10 +114,12 @@
       0% {
         transform: translateY(-5%);
       }
+
       100% {
         transform: translateY(0);
       }
     }
+
     animation: dropdown 0.3s ease;
   }
 
@@ -136,4 +140,9 @@
       cursor: pointer;
     }
   }
+}
+
+#alert {
+  color: #ff0000;
+  font-size: 1rem;
 }

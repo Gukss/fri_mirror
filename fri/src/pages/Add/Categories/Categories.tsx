@@ -74,7 +74,7 @@ export default function Categories({
           id={select === "내기" ? "select" : ""}
           onClick={() => handleClick("내기")}
         >
-          <div className="title">내기</div>
+          <div className="title">커피내기</div>
           <div className="content">점심시간 커피 내기?</div>
         </div>
         <div
@@ -98,8 +98,8 @@ export default function Categories({
           id={select === "GAME" ? "select" : ""}
           onClick={() => handleClick("GAME")}
         >
-          <div className="title">게임</div>
-          <div className="content">이번 주 금요일에 게임</div>
+          <div className="title">오락</div>
+          <div className="content">이번 주 금요일에 오락</div>
         </div>
         <div
           className="select-box"
