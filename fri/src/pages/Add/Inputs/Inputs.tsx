@@ -197,7 +197,9 @@ export default function Inputs({
               {form.area === "" ? "지역을 선택해주세요." : form.area}
             </div>
           </button>
-          <div className="message">{form.area === "" ? "" : "가능합니다!"}</div>
+          <div className="message">
+            {/* {form.area === "" ? "" : "가능합니다!"} */}
+          </div>
           {isAreaDown && (
             <div className="drop-down">
               {area.map((area) => (
@@ -228,7 +230,7 @@ export default function Inputs({
           />
         </div>
         <div id="namemessage" className="message">
-          {message.name}
+          {/* {message.name} */}
         </div>
       </div>
       {cate === "bet" ? (
@@ -247,7 +249,7 @@ export default function Inputs({
             />
           </div>
           <div id="placemessage" className="message">
-            {message.place}
+            {/* {message.place} */}
           </div>
         </div>
       ) : (
@@ -266,7 +268,7 @@ export default function Inputs({
             />
           </div>
           <div id="placemessage" className="message">
-            {message.place}
+            {/* {message.place} */}
           </div>
         </div>
       )}
@@ -286,7 +288,7 @@ export default function Inputs({
             />
           </div>
           <div id="peoplemessage" className="message">
-            {message.people}
+            {/* {message.people} */}
           </div>
         </div>
       ) : (
@@ -319,9 +321,9 @@ export default function Inputs({
               </div>
             </button>
             <div className="message">
-              {form.people === "" || !form.people.includes(":")
+              {/* {form.people === "" || !form.people.includes(":")
                 ? ""
-                : "가능합니다!"}
+                : "가능합니다!"} */}
             </div>
             {isDropDown && (
               <div className="drop-down">
