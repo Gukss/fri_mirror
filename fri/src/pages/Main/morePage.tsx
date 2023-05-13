@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import axios from "axios";
 import Room from "../../components/MeetingRoom";
 import GameRoom from "../../components/GameRoom";
 import Head from "../../components/LogoEgg";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Nav from "../../components/navEgg";
 import "./more.scss";
 

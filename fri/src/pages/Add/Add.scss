@@ -15,6 +15,7 @@
 .add-container {
   width: 100vw;
   height: 100vh;
+  overflow-y: scroll;
 }
 
 .small-logo {
@@ -27,36 +28,36 @@
 }
 
 #cate {
-  margin-top: 20px;
-  font-size: 44px;
+  font-size: 34px;
   font-weight: 700;
   line-height: 86px;
   letter-spacing: 0em;
   text-align: center;
   color: #ffc000;
+  margin: 0;
 }
 
 .add-title {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
-  margin: 1.5rem;
+  margin: 1rem;
   text-align: center;
 }
 
 .add-form {
-  margin: 1.5rem;
+  margin: 1rem;
 }
 
 .add-btn {
   width: 40vw;
-  height: 7vh;
+  height: 5vh;
   margin-top: .5rem;
   background: #ffc000;
   color: #fff;
   border: none;
   border-radius: 0.5rem;
   box-shadow: 2px 2px 1px #7c7c7c;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: bold;
 
   visibility: hidden;
