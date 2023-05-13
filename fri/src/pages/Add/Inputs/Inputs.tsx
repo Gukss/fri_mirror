@@ -343,9 +343,8 @@ export default function Inputs({
       )}
       {cate === "bet" && (
         <div className="add-input-box">
-          <div className="input-label time" id="label">
-            ※ 중요 <br />
-            내기가 끝나고 5분뒤 입력하신 장소로 모여주세요!
+          <div className="input-label time" id="alert">
+            ※ 내기가 끝나고 5분 후 장소로 모여주세요! ※
           </div>
         </div>
       )}
