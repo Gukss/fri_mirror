@@ -1,0 +1,33 @@
+.boardpage {
+    height: 100vh;
+    overflow: hidden;
+
+    .board-nav {
+        position: fixed;
+        box-sizing: border-box;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    }
+}
+
+.board_cate {
+    display: flex;
+    padding: 0px;
+    width: 70%;
+    justify-content: space-between;
+    height: 24px;
+    margin-left: 24px;
+    margin-bottom: 5px;
+    font-weight: bolder;
+    color: rgba(124, 124, 124, 1);
+
+    li {
+        list-style: none;
+    }
+
+    #select {
+        color: rgba(255, 192, 0, 1);
+        font-weight: bolder;
+        border-bottom: 1px solid rgba(255, 192, 0, 1);
+        transition: 0.7s ease-in-out;
+    }
+}
