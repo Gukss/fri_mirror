@@ -161,7 +161,7 @@ const Main: React.FC = () => {
       search: createSearchParams({
         region: region,
         category: category,
-        text: temp
+        text: String(temp)
       }).toString()
     });
   }
@@ -188,6 +188,19 @@ const Main: React.FC = () => {
       console.log(e);
     }
   };
+
+  const preventGoBack = () => {
+    history.pushState(null, "", location.href)
+  };
+
+  useEffect(() => {
+    history.pushState(null, "", location.href);
+    window.addEventListener("popstate", preventGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", preventGoBack);
+    }
+  }, [])
 
   useEffect(() => {
     const getData = async () => {

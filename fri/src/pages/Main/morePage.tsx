@@ -96,6 +96,18 @@ function More() {
     loadMoreData();
   }, [page]);
 
+  const preventGoBack = () => {
+    history.pushState(null, "", `more?region=${region}&category=${category}&text=${text}`)
+  };
+  useEffect(() => {
+    history.pushState(null, "", `more?region=${region}&category=${category}&text=${text}`);
+    window.addEventListener("popstate", preventGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", preventGoBack);
+    }
+  }, [])
+
   return (
     <div className="more_room">
       <Head />
