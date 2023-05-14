@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateScrabResponse {
+public class CreateScrapResponse {
     private boolean scrab;
 }

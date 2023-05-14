@@ -3,8 +3,9 @@ package com.project.fri.scrap.service;
 import com.project.fri.board.entity.Board;
 import com.project.fri.board.repository.BoardRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
-import com.project.fri.scrap.dto.CreateScrabRequest;
-import com.project.fri.scrap.dto.CreateScrabResponse;
+import com.project.fri.scrap.dto.CreateScrapRequest;
+import com.project.fri.scrap.dto.CreateScrapResponse;
+import com.project.fri.scrap.dto.FindScrapListResponse;
 import com.project.fri.scrap.entity.Scrap;
 import com.project.fri.scrap.repository.ScrapRepository;
 import com.project.fri.user.entity.User;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,17 +30,18 @@ public class ScrapServiceImpl implements ScrapService {
 
     /**
      * scrab 생성
-     * @param createScrabRequest 요청
-     * @param userId 유저Id
+     *
+     * @param createScrapRequest 요청
+     * @param userId             유저Id
      * @return 스크랩 여부 응답
      */
     @Override
     @Transactional
-    public CreateScrabResponse createScrab(CreateScrabRequest createScrabRequest, Long userId) {
+    public CreateScrapResponse createScrap(CreateScrapRequest createScrapRequest, Long userId) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
-        Board findBoard = boardRepository.findById(createScrabRequest.getBoardId())
+        Board findBoard = boardRepository.findById(createScrapRequest.getBoardId())
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
 
         Optional<Scrap> findScrap = scrapRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard);
@@ -51,7 +54,17 @@ public class ScrapServiceImpl implements ScrapService {
         Scrap scrap = Scrap.create(findUser, findBoard);
         scrapRepository.save(scrap);
 
-        return new CreateScrabResponse(true);
+        return new CreateScrapResponse(true);
+    }
+
+    @Override
+    public FindScrapListResponse findScrapList(Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+        List<Scrap> scrapList = scrapRepository.findAllByUserAndIsDeleteFalseOrderByCreatedAtAscWithBoard(findUser);
+
+        return null;
     }
 
 }
