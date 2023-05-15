@@ -11,13 +11,13 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     #서버용
-    url: ENC(upYg2gFoNX6LVCDQsjv1ssJJR62cSC/dmkwSEs1V8JH0Awd7dm6ltdNeot09aHsIkWRIxIQNMOI=)
-    username: ENC(1r8bussQYmMrfJCfg4h1mQ==)
-    password: ENC(pXp97hELSeLXhz+isZEfFK+2QKlpEQ+0)
+#    url: ENC(upYg2gFoNX6LVCDQsjv1ssJJR62cSC/dmkwSEs1V8JH0Awd7dm6ltdNeot09aHsIkWRIxIQNMOI=)
+#    username: ENC(1r8bussQYmMrfJCfg4h1mQ==)
+#    password: ENC(pXp97hELSeLXhz+isZEfFK+2QKlpEQ+0)
     #로컬용
-#    url: jdbc:mariadb://localhost:3307/fri
-#    username: root
-#    password: ssafy
+    url: jdbc:mariadb://localhost:3307/fri
+    username: root
+    password: ssafy
 
   #  email:
   #    properties:
@@ -41,8 +41,8 @@ spring:
     show-sql: true
     hibernate:
       # ddl-auto: create
-      # ddl-auto: none
-      ddl-auto: update
+      ddl-auto: none
+#      ddl-auto: update
 
     properties:
       hibernate:
