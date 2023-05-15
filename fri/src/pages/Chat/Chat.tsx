@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ChatContent from "../../components/ChatContent/ChatContent";
-import Image from "../../assets/Add photo alternate.png";
+// import Image from "../../assets/Add photo alternate.png";
 import Up from "../../assets/Arrow upward.png";
 import ChatNav from "../../components/ChatNav/ChatNav";
 import ChatDetail from "../../components/ChatDetail/ChatDetail";
@@ -35,6 +35,8 @@ interface Roomdetail {
   majors: { name: string; url: string }[];
   nonMajors: { name: string; url: string }[];
 }
+
+export type HandleOutChatType = () => void;
 
 export default function Chat() {
   const client = useRef<StompJs.Client>();
@@ -90,6 +92,37 @@ export default function Chat() {
     if (client.current !== undefined) client.current.deactivate();
   };
 
+  const outChatMsg:HandleOutChatType = () => {
+    if(client.current === undefined) return;
+    client.current.publish({
+      destination: "/pub/chatting",
+      body: JSON.stringify({
+        roomId: roomId,
+        message: `${nick}님이 나갔습니다.`,
+        memberId: -1,
+        anonymousProfileImageUrl: "",
+        time: "",
+        nickname: nick
+      })
+  })
+  }
+  const pubInit = () => {
+    if(client.current === undefined) return;
+    const info = {
+      roomId: roomId,
+      message: `${nick}님이 입장했습니다.`,
+      memberId: -1,
+      anonymousProfileImageUrl: "",
+      time: "",
+      nickname: nick
+    }
+    if(!(JSON.stringify(info) in message))
+    {
+      client.current.publish({
+      destination: "/pub/chatting",
+      body: JSON.stringify(info)
+  })}}
+
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
     const connect = async () => {
@@ -104,12 +137,13 @@ export default function Chat() {
           heartbeatOutgoing: 4000,
           onConnect: () => {
             subscribeChatting();
+            if(isuser === "false") pubInit();
           },
           debug: () => {
             null;
           },
           onStompError: (frame) => {
-            console.error(frame);
+            console.error();
           }
         });
         await stompActive();
@@ -150,7 +184,7 @@ export default function Chat() {
       hour12: false
     };
     const formattedTime = now.toLocaleString("en-US");
-    console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
+    // console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
    if (!client.current?.connected) {
       return;
     }
@@ -308,7 +342,7 @@ export default function Chat() {
             </div>
           </div>
         </div>
-        <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} />
+        <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} outChatMsg={outChatMsg} />
       </div>
     );
   }

@@ -3,10 +3,15 @@ import { RootState } from "../../redux/store";
 import { meeting } from "../../redux/user";
 import { useNavigate } from "react-router-dom";
 import Close from "../../assets/x_btn.png";
+import { HandleOutChatType } from "../../pages/Chat/Chat";
 import axios from "axios";
 import "../../pages/Chat/Chat.scss";
 
-export default function ChatDetail({ isOpen, onClose, data }: any) {
+interface ChildProps {
+  outChatMsg : HandleOutChatType;
+}
+
+export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
   const handleCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -23,13 +28,18 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
   const navigate = useNavigate();
   const api_url = process.env.REACT_APP_REST_API;
 
+  const out = () => {
+    outChatMsg();    
+  }
+
   const outChat = async () => {
+    out();
     const header = {
       "Content-Type": "application/json",
       Authorization: userId
     };
     try {
-      const res = await axios.patch(
+      await axios.patch(
         api_url + `user/room/${roomId}`,
         { participate: true },
         { headers: header }
@@ -52,11 +62,11 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
         </div>
         <div className="info">
           <div className="top">방제목</div>
-          <div>{data.title}</div>
+          <div className="detail_info">{data.title}</div>
         </div>
         <div className="info">
           <div className="top">장소</div>
-          <div>{data.location}</div>
+          <div className="detail_info">{data.location}</div>
         </div>
         <div className="info last">
           <div className="participate-box">
@@ -64,7 +74,7 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
             <div className="sub">전공자</div>
             <div className="people">
               {data.majors.length === 0 ? (
-                <div className="none">아직 전공자가 없어요 :(</div>
+                <div className="none">아직 전공자가 없어요</div>
               ) : (
                 data.majors.map((person: any) => (
                   <div className="profile" key={person.name}>
