@@ -190,7 +190,7 @@ const Main: React.FC = () => {
   };
 
   const preventGoBack = () => {
-    history.pushState(null, "", location.href)
+    history.pushState(null, "", location.href);
   };
 
   useEffect(() => {
@@ -199,8 +199,8 @@ const Main: React.FC = () => {
 
     return () => {
       window.removeEventListener("popstate", preventGoBack);
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -235,6 +235,41 @@ const Main: React.FC = () => {
     }, 1000);
     return () => clearInterval(timerId);
   }, []);
+
+  // pull to refresh
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [startY, setStartY] = useState(0);
+
+  const handleTouchStart = (event: TouchEvent) => {
+    setStartY(event.touches[0].clientY);
+  };
+
+  const handleTouchMove = (event: TouchEvent) => {
+    if (event.touches.length !== 1) return;
+    const distance = event.touches[0].clientY - startY;
+    if (distance > 0 && window.scrollY === 0) {
+      event.preventDefault();
+      event.stopPropagation();
+      document.body.style.overflow = "hidden"; // 스크롤 금지
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none"; // 터치 이벤트 금지
+      document.documentElement.style.touchAction = "none";
+    }
+  };
+
+  const handleTouchEnd = (event: TouchEvent) => {
+    document.body.style.overflow = "auto"; // 스크롤 허용
+    document.documentElement.style.overflow = "auto";
+    document.body.style.touchAction = "auto"; // 터치 이벤트 허용
+    document.documentElement.style.touchAction = "auto";
+
+    const distance = event.changedTouches[0].clientY - startY;
+    if (distance > 100) {
+      // 일정 거리 이상 드래그한 경우 새로고침 실행
+      setIsRefreshing(true);
+      window.location.reload();
+    }
+  };
 
   return (
     <div className="mainpage">
@@ -289,7 +324,12 @@ const Main: React.FC = () => {
         </ul>
       </div>
 
-      <div className="main_category">
+      <div
+        className="main_category"
+        onTouchStart={(event: any) => handleTouchStart(event)}
+        onTouchMove={(event: any) => handleTouchMove(event)}
+        onTouchEnd={(event: any) => handleTouchEnd(event)}
+      >
         <div className="timer_bar">
           <CountdownTimer
             days={timeLeft.days}

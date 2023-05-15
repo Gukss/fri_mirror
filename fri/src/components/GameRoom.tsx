@@ -24,7 +24,7 @@ function GameRoom({ room }: roomType) {
         </p>
       </div>
       {/* )} */}
-      <Room room={room} open={open} setOpen={setOpen} />
+      {open ? <Room room={room} open={open} setOpen={setOpen} /> : null}
     </div>
   );
 }
