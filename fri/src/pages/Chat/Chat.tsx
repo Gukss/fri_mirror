@@ -77,7 +77,7 @@ export default function Chat() {
   const subscribeChatting = () => {
     setLoading(false);
     client.current?.subscribe(`/sub/room/${roomId}`, ({ body }) => {
-      setMessage((prev) => [...prev, JSON.parse(body)]);
+      if(!(JSON.parse(body) in message)) setMessage((prev) => [...prev, JSON.parse(body)]);
     });
   };
 
@@ -108,17 +108,20 @@ export default function Chat() {
   }
   const pubInit = () => {
     if(client.current === undefined) return;
-    client.current.publish({
+    const data = {
+      roomId: roomId,
+      message: `${nick}님이 입장했습니다.`,
+      memberId: -1,
+      anonymousProfileImageUrl: "",
+      time: "",
+      nickname: nick
+    }
+    if(!(JSON.stringify(data) in message))
+    {
+      client.current.publish({
       destination: "/pub/chatting",
-      body: JSON.stringify({
-        roomId: roomId,
-        message: `${nick}님이 입장했습니다.`,
-        memberId: -1,
-        anonymousProfileImageUrl: "",
-        time: "",
-        nickname: nick
-      })
-  })}
+      body: JSON.stringify(data)
+  })}}
 
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
