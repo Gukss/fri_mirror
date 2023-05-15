@@ -106,7 +106,7 @@ const GameWaiting = (): JSX.Element => {
 
   // 웹 소켓 끊기.
   const disconnect = () => {
-    if (client.current !== undefined){
+    if (client.current !== undefined) {
       client.current.deactivate();
     }
   };
@@ -141,8 +141,8 @@ const GameWaiting = (): JSX.Element => {
           ready: false,
           result: 0.0
         };
-        if(info.userId === userId){
-          if(info.ready) setIsready(true);
+        if (info.userId === userId) {
+          if (info.ready) setIsready(true);
         }
         state.userList.push(data);
       }
@@ -154,11 +154,13 @@ const GameWaiting = (): JSX.Element => {
   }, []);
 
   const outGame = async () => {
-    state.userList.filter((user) => user.userId !== userId);
     if (client.current === undefined) return;
     client.current.publish({
-      destination: "/pub/game-room/ready",
-      body: JSON.stringify(state)
+      destination: "/pub/game-room/info",
+      body: JSON.stringify({
+        ...state,
+        userList: state.userList.filter((user) => user.userId !== userId)
+      })
     });
     try {
       const header = {
@@ -176,6 +178,7 @@ const GameWaiting = (): JSX.Element => {
       console.log(e);
     }
   };
+
   // 방 시작 후 웹 소켓 연결
   const connect = async () => {
     try {
@@ -200,9 +203,12 @@ const GameWaiting = (): JSX.Element => {
       });
       await stompActive();
     } catch (e) {
-      console.log();
+      console.log(e);
     }
-    return () => disconnect();
+    return () => {
+      console.log("끊김");
+      disconnect();
+    };
   };
 
   useEffect(() => {
