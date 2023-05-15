@@ -26,11 +26,16 @@ export default function Others({
   const checkUrl = (text: string) => {
     if (text.match(urlRegex)) {
       const textWithLinks = text.replace(urlRegex, (url) => {
-        return `${'<a href="' + url + '" target="_blank">' + url + '</a>'}`;
+        return `${'<a href="' + url + '" target="_blank">' + url + "</a>"}`;
       });
-      return <div className="message mine" dangerouslySetInnerHTML={{ __html: textWithLinks }}></div>;
+      return (
+        <div
+          className="message"
+          dangerouslySetInnerHTML={{ __html: textWithLinks }}
+        ></div>
+      );
     } else {
-      return <div className="message mine">{text}</div>;
+      return <div className="message">{text}</div>;
     }
   };
 
@@ -44,7 +49,6 @@ export default function Others({
         <div className="message-box">
           {checkUrl(msg)}
           <span className="time">
-            {" "}
             {`${month}/${day}`}
             <br />
             {times}
