@@ -81,3 +81,16 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIARDOHRZSJGK2YH6ZX      # AWS IAM AccessKey 적기
+      secretKey: rRmriCRZFPaLw4Jgj2v7ij1dizqN6U5rWw5iwUtR   # AWS IAM SecretKey 적기
+    s3:
+      bucket: meetingfri    # ex) marryting-gyunny
+    #      dir: /blur # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
