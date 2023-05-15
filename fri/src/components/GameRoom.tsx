@@ -1,5 +1,5 @@
 import { GameType } from "../pages/Main/mainPage";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Room from "./GameDetail";
 import { useState, useEffect } from "react";
@@ -8,9 +8,9 @@ import axios from "axios";
 interface roomType {
   room: GameType;
 }
-function GameRoom({room} : roomType) {
+function GameRoom({ room }: roomType) {
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState<GameType>()
+  const [data, setData] = useState<GameType>();
   const api_url = process.env.REACT_APP_REST_API;
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
@@ -40,7 +40,13 @@ function GameRoom({room} : roomType) {
       {/* {current_cnt === total_cnt ? (
         <div className="meeting_room_full">게임중</div>
       ) : ( */}
-      <div className="game_room" onClick={() =>{getData(); setOpen(true)}}>
+      <div
+        className="game_room"
+        onClick={() => {
+          getData();
+          setOpen(true);
+        }}
+      >
         <p className="place"># {data?.location}</p>
         <p className="title">{data?.title}</p>
         <p className="cnt">
@@ -51,10 +57,9 @@ function GameRoom({room} : roomType) {
         </p>
       </div>
       {/* )} */}
-      {
-        open ? 
-      <Room id={room.gameRoomId} open={open} setOpen={setOpen} /> : null
-}
+      {open ? (
+        <Room id={room.gameRoomId} open={open} setOpen={setOpen} />
+      ) : null}
     </div>
   );
 }

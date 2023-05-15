@@ -92,8 +92,8 @@ export default function Chat() {
     if (client.current !== undefined) client.current.deactivate();
   };
 
-  const outChatMsg:HandleOutChatType = () => {
-    if(client.current === undefined) return;
+  const outChatMsg: HandleOutChatType = () => {
+    if (client.current === undefined) return;
     client.current.publish({
       destination: "/pub/chatting",
       body: JSON.stringify({
@@ -104,10 +104,10 @@ export default function Chat() {
         time: "",
         nickname: nick
       })
-  })
-  }
+    });
+  };
   const pubInit = () => {
-    if(client.current === undefined) return;
+    if (client.current === undefined) return;
     const info = {
       roomId: roomId,
       message: `${nick}님이 입장했습니다.`,
@@ -115,13 +115,14 @@ export default function Chat() {
       anonymousProfileImageUrl: "",
       time: "",
       nickname: nick
-    }
-    if(!(JSON.stringify(info) in message))
-    {
+    };
+    if (!(JSON.stringify(info) in message)) {
       client.current.publish({
-      destination: "/pub/chatting",
-      body: JSON.stringify(info)
-  })}}
+        destination: "/pub/chatting",
+        body: JSON.stringify(info)
+      });
+    }
+  };
 
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
@@ -137,7 +138,7 @@ export default function Chat() {
           heartbeatOutgoing: 4000,
           onConnect: () => {
             subscribeChatting();
-            if(isuser === "false") pubInit();
+            if (isuser === "false") pubInit();
           },
           debug: () => {
             null;
@@ -185,7 +186,7 @@ export default function Chat() {
     };
     const formattedTime = now.toLocaleString("en-US");
     // console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
-   if (!client.current?.connected) {
+    if (!client.current?.connected) {
       return;
     }
     pushMsg();
@@ -211,7 +212,9 @@ export default function Chat() {
         Authorization: userId
       };
       try {
-        const res = await axios.get(api_url + `chatting/${roomId}`, {headers: header});
+        const res = await axios.get(api_url + `chatting/${roomId}`, {
+          headers: header
+        });
         setMessage(res.data);
       } catch (e) {
         console.log(e);
@@ -225,7 +228,7 @@ export default function Chat() {
       try {
         const header = {
           "Content-Type": "application/json",
-          "Authorization": userId
+          Authorization: userId
         };
         const res = await axios.get(api_url + "room/" + roomId, {
           headers: header

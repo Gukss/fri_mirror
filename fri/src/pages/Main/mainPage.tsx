@@ -190,7 +190,7 @@ const Main: React.FC = () => {
   };
 
   const preventGoBack = () => {
-    history.pushState(null, "", location.href)
+    history.pushState(null, "", location.href);
   };
 
   useEffect(() => {
@@ -199,8 +199,8 @@ const Main: React.FC = () => {
 
     return () => {
       window.removeEventListener("popstate", preventGoBack);
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     const getData = async () => {

@@ -9,7 +9,7 @@ import "../../pages/Chat/Chat.scss";
 import { useEffect, useState } from "react";
 
 interface ChildProps {
-  outChatMsg : HandleOutChatType;
+  outChatMsg: HandleOutChatType;
 }
 
 interface Roomdetail {
@@ -42,8 +42,8 @@ export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
   const api_url = process.env.REACT_APP_REST_API;
 
   const out = () => {
-    outChatMsg();    
-  }
+    outChatMsg();
+  };
 
   const outChat = async () => {
     out();

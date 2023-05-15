@@ -34,10 +34,11 @@ export default function ChatContent({ msg, contentRef }: msgType) {
             time={msg.createdAt || msg.time}
             bottomRef={bottomRef}
           />
-        ) :( Number(msg.memberId || msg.userId) === -1 ?
-          <div className="new-face" key={index}>{msg.message}</div>
-        :
-          (
+        ) : Number(msg.memberId || msg.userId) === -1 ? (
+          <div className="new-face" key={index}>
+            {msg.message}
+          </div>
+        ) : (
           <Others
             key={index}
             msg={msg.message}
@@ -46,7 +47,7 @@ export default function ChatContent({ msg, contentRef }: msgType) {
             nickname={msg.nickname}
             bottomRef={bottomRef}
           />
-        ))
+        )
       )}
     </div>
   );
