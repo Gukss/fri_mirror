@@ -18,26 +18,31 @@ export default function Mine({ msg, time, bottomRef }: msgType) {
   const checkUrl = (text: string) => {
     if (text.match(urlRegex)) {
       const textWithLinks = text.replace(urlRegex, (url) => {
-        return `${'<a href="' + url + '" target="_blank">' + url + '</a>'}`;
+        return `${'<a href="' + url + '" target="_blank">' + url + "</a>"}`;
       });
-      return <div className="message mine" dangerouslySetInnerHTML={{ __html: textWithLinks }}></div>;
+      return (
+        <div
+          className="message mine"
+          dangerouslySetInnerHTML={{ __html: textWithLinks }}
+        ></div>
+      );
     } else {
       return <div className="message mine">{text}</div>;
     }
   };
 
-return (
-  <div className="chat-content" ref={bottomRef}>
-    <div className="chat-box">
-      <div className="message-box mine">
-        <span className="time">
-          {`${month}/${day}`}
-          <br />
-          {times}
-        </span>
-        {checkUrl(msg)}
+  return (
+    <div className="chat-content" ref={bottomRef}>
+      <div className="chat-box">
+        <div className="message-box mine">
+          <span className="time">
+            {`${month}/${day}`}
+            <br />
+            {times}
+          </span>
+          {checkUrl(msg)}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
