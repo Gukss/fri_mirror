@@ -80,7 +80,6 @@ export default function Chat() {
       setMessage((prev) => [...prev, JSON.parse(body)]);
     });
   };
-  console.log(message)
 
   // 현재는 app컴포넌트 생성과 동시에 소켓 객체가 연결이 되고 sub로 구독함!
   // 이 코드를 방에 들어갈때 연결하면 됨!
@@ -144,7 +143,7 @@ export default function Chat() {
             null;
           },
           onStompError: (frame) => {
-            console.error(frame);
+            console.error();
           }
         });
         await stompActive();
@@ -185,7 +184,7 @@ export default function Chat() {
       hour12: false
     };
     const formattedTime = now.toLocaleString("en-US");
-    console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
+    // console.log(formattedTime); // 예시 출력: "2023-05-10 16:23:46" (로케일 및 시간대에 따라 다를 수 있음)
    if (!client.current?.connected) {
       return;
     }
