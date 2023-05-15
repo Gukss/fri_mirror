@@ -569,6 +569,7 @@ public class UserServiceImpl implements UserService {
     int headCount = gameRoom.getHeadCount();
     if(updateReadyCount == headCount){ //방 인원과 readyCount가 동일하면
       SocketGameRoomStatusRequestAndResponse x = new SocketGameRoomStatusRequestAndResponse();
+       gameRoom.updateIsDelete(true);
       messagingTemplate.convertAndSend("/sub/game-room/ready/" + gameRoom.getId(), true);
     }
 
