@@ -20,8 +20,10 @@ function LogoEgg() {
 
   return (
     <div className="main_top">
-      <Back />
-      <img src={fri} alt="fri" id="main_logo" />
+      {/* <Back /> */}
+      <div>
+        <img src={fri} alt="fri" id="main_logo" />
+      </div>
       <div className="egg_cnt">{heart()}</div>
     </div>
   );
