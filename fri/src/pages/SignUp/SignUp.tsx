@@ -190,6 +190,7 @@ export default function SignUp() {
         const go = async () => {
           try {
             axios.post(api_url + "user", data);
+            alert("축하합니다 :) \n이번주 금요일에 만나요~~");
             navigate("/login");
           } catch (e) {
             alert("입력된 값을 확인해 주세요.");
@@ -340,7 +341,13 @@ export default function SignUp() {
       setLoading(false);
     } catch (e: any) {
       setLoading(false);
-      if (e.response.status === 400) alert("이미 가입된 이메일입니다.");
+      if (e.response.data.code === "exception") {
+        setError({ ...error, code: true });
+        setEmail(false);
+        setCer(true);
+        setCon(false);
+        setLoading(false);
+      } else if (e.response.status === 400) alert("이미 가입된 이메일입니다.");
       else alert("싸피인이 맞습니까? 에듀싸피 이메일을 입력해주세요.");
     }
   };
@@ -389,7 +396,12 @@ export default function SignUp() {
     <div className="signup">
       <div className="signup-container">
         <div className="signup-nav">
-        <img src={Back} alt="<" id="back" onClick={()=>navigate("/login")} />
+          <img
+            src={Back}
+            alt="<"
+            id="back"
+            onClick={() => navigate("/login")}
+          />
           <img src={logo} alt="Logo" className="signup-logo" />
         </div>
         <div className="signup-form">

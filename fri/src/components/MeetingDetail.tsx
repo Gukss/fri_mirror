@@ -30,9 +30,9 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
   const isRoom = useSelector((state: RootState) => {
     return state.strr.roomId;
   });
-  const eggCnt = useSelector((state:RootState) => {
+  const eggCnt = useSelector((state: RootState) => {
     return state.strr.heart;
-  })
+  });
 
   const isPossible = useSelector((state: RootState) => {
     if (state.strr.roomId !== "참여한 방이 없습니다.") {
@@ -83,10 +83,9 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
 
   const goChat = async () => {
     setModal(true);
-    if(eggCnt === 0){
-      alert("알이 없어요... 내일 다시 오셔야 할듯..")
-    }
-    else setModal(true);
+    if (eggCnt === 0) {
+      alert("알이 없어요... 내일 다시 오셔야 할듯..");
+    } else setModal(true);
     if (isRoom !== "참여한 방이 없습니다.") {
       alert("이미 다른 방에 참여중입니다.");
       return;
@@ -108,10 +107,17 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
     }
   };
 
+  const handleDetailClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      // 클릭한 요소가 room_detail인 경우에만 처리
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       {open ? (
-        <div className="room_detail">
+        <div className="room_detail" onClick={handleDetailClick}>
           <div className="room_modal">
             <div className="title">
               <span>{title}</span>
@@ -194,20 +200,36 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
           </div>
         </div>
       ) : null}
-      <div className="modal-back" style={modal ? {top : 0} : {bottom : "-100vh"}}>
-      <div className="checkmodal" style={modal ? {bottom : "40vh"} : {bottom : "-20vh"}}>
-        <div className="check-text">
-          입장료 : 달걀 1개
+      <div
+        className="modal-back"
+        style={modal ? { top: 0 } : { bottom: "-100vh" }}
+      >
+        <div
+          className="checkmodal"
+          style={modal ? { bottom: "40vh" } : { bottom: "-20vh" }}
+        >
+          <div className="check-text">입장료 : 달걀 1개</div>
+          <div className="button">
+            <button
+              className="ok-btn"
+              onClick={() => {
+                goChat();
+                setModal(false);
+              }}
+            >
+              지불
+            </button>
+            <button
+              className="no-btn"
+              onClick={() => {
+                setModal(false);
+              }}
+            >
+              X
+            </button>
+          </div>
         </div>
-        <div className="button">
-          <button 
-            className="ok-btn" 
-            onClick={() => {goChat(); setModal(false)}}
-          >지불</button>
-          <button className="no-btn" onClick={() => {setModal(false)}}>X</button>
-			</div>
-		</div>
-    </div>
+      </div>
     </>
   );
 }
