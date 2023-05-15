@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -49,7 +50,7 @@ public class ScrapServiceImpl implements ScrapService {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
-        Board findBoard = boardRepository.findById(createScrapRequest.getBoardId())
+        Board findBoard = boardRepository.findByIdAndIsDeleteFalse(createScrapRequest.getBoardId())
                 .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
 
         Optional<Scrap> findScrap = scrapRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard);
@@ -65,6 +66,11 @@ public class ScrapServiceImpl implements ScrapService {
         return new CreateScrapResponse(true);
     }
 
+    /**
+     * scrap 목록 조회
+     * @param userId header
+     * @return 스크랩 목록 반환
+     */
     @Override
     public FindScrapListResponse findScrapList(Long userId) {
         User findUser = userRepository.findById(userId)
@@ -72,13 +78,14 @@ public class ScrapServiceImpl implements ScrapService {
 
         List<Scrap> scrapList = scrapRepository.findAllByUserAndIsDeleteFalseOrderByCreatedAtAscWithBoard(findUser);
 
-//        scrapList.stream().map(
-//                s -> new FindScrapResponse(s.getBoard(),
-//                        likesRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
-//                        commentRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
-//                        )
-//        )
-        return null;
+        List<FindScrapResponse> scraps = scrapList.stream()
+                .map(s -> new FindScrapResponse(s.getBoard(),
+                        likesRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
+                        commentRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
+                        boardImageRepository.findTopByBoardAndIsDeleteFalseOrderByCreatedAtDesc(s.getBoard()).orElse(null)))
+                .collect(Collectors.toList());
+
+        return new FindScrapListResponse(scraps);
     }
 
 }
