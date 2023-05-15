@@ -52,11 +52,11 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
         </div>
         <div className="info">
           <div className="top">방제목</div>
-          <div>{data.title}</div>
+          <div className="detail_info">{data.title}</div>
         </div>
         <div className="info">
           <div className="top">장소</div>
-          <div>{data.location}</div>
+          <div className="detail_info">{data.location}</div>
         </div>
         <div className="info last">
           <div className="participate-box">
@@ -64,7 +64,7 @@ export default function ChatDetail({ isOpen, onClose, data }: any) {
             <div className="sub">전공자</div>
             <div className="people">
               {data.majors.length === 0 ? (
-                <div className="none">아직 전공자가 없어요 :(</div>
+                <div className="none">아직 전공자가 없어요</div>
               ) : (
                 data.majors.map((person: any) => (
                   <div className="profile" key={person.name}>
