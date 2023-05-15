@@ -6,18 +6,30 @@ import Close from "../../assets/x_btn.png";
 import { HandleOutChatType } from "../../pages/Chat/Chat";
 import axios from "axios";
 import "../../pages/Chat/Chat.scss";
+import { useEffect, useState } from "react";
 
 interface ChildProps {
   outChatMsg: HandleOutChatType;
 }
 
-export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
+interface Roomdetail {
+  roomId : number;
+  title : string;
+  location : string;
+  roomCategory: string;
+  headCount : number;
+  isParticipate : boolean;
+  participate: boolean;
+  major: { name: string; url: string }[];
+  nonMajor: { name: string; url: string }[];
+}
+
+export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
   const handleCloseModal = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
-
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
   });
@@ -26,6 +38,7 @@ export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [data, setData] = useState<Roomdetail>();
   const api_url = process.env.REACT_APP_REST_API;
 
   const out = () => {
@@ -51,6 +64,24 @@ export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
     }
   };
 
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const header = {
+          "Content-Type": "application/json",
+          Authorization: userId
+        };
+        const res = await axios.get(api_url + "room/" + roomId, {
+          headers: header
+        });
+        setData(res.data);
+      } catch (e) {
+        console.log();
+      }
+    }
+    getData()
+  }, [])
+
   return (
     <div
       className={`chat-detail ${isOpen ? "open" : ""}`}
@@ -62,21 +93,21 @@ export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
         </div>
         <div className="info">
           <div className="top">방제목</div>
-          <div className="detail_info">{data.title}</div>
+          <div className="detail_info">{data?.title}</div>
         </div>
         <div className="info">
           <div className="top">장소</div>
-          <div className="detail_info">{data.location}</div>
+          <div className="detail_info">{data?.location}</div>
         </div>
         <div className="info last">
           <div className="participate-box">
             <div className="top">참여자</div>
             <div className="sub">전공자</div>
             <div className="people">
-              {data.majors.length === 0 ? (
+              {data?.major.length === 0 ? (
                 <div className="none">아직 전공자가 없어요</div>
               ) : (
-                data.majors.map((person: any) => (
+                data?.major.map((person: any) => (
                   <div className="profile" key={person.name}>
                     <div className="img">
                       <img
@@ -91,10 +122,10 @@ export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
             </div>
             <div className="sub">비전공자</div>
             <div className="people">
-              {data.nonMajors.length === 0 ? (
-                <div className="none">비전공자가 없어요 :(</div>
+              {data?.nonMajor.length === 0 ? (
+                <div className="none">비전공자가 없어요</div>
               ) : (
-                data.nonMajors.map((person: any) => (
+                data?.nonMajor.map((person: any) => (
                   <div className="profile" key={person.name}>
                     <div className="img">
                       <img
