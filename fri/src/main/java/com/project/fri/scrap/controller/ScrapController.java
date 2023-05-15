@@ -36,9 +36,15 @@ public class ScrapController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * scrap 목록 조회
+     * @param userId header
+     * @return 스크랩 목록 반환
+     */
     @GetMapping
     public ResponseEntity<FindScrapListResponse> findScrapList(@RequestHeader("Authorization") Long userId) {
+        FindScrapListResponse result = scrapService.findScrapList(userId);
 
-        return null;
+        return ResponseEntity.ok().body(result);
     }
 }
