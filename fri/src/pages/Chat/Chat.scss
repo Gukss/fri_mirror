@@ -1,6 +1,7 @@
 .chatting-room {
   width: 100vw;
   height: 100vh;
+  overscroll-behavior: none;
 
   .chat-loading {
     display: grid;
@@ -189,7 +190,6 @@
 
           .top {
             margin-bottom: 1rem;
-
           }
 
           .sub {
@@ -208,7 +208,6 @@
         .top {
           font-size: 1.25rem;
           font-weight: bold;
-
         }
 
         .people {
@@ -329,7 +328,7 @@
       &.autoHeight {
         height: auto;
 
-        +button.send-message {
+        + button.send-message {
           position: absolute;
           left: calc(100% - 2.25rem);
           top: 1rem;
