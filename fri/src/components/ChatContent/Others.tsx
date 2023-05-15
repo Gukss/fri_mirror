@@ -21,6 +21,18 @@ export default function Others({
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
   const times = date.toLocaleTimeString().slice(0, -3);
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  const checkUrl = (text: string) => {
+    if (text.match(urlRegex)) {
+      const textWithLinks = text.replace(urlRegex, (url) => {
+        return `${'<a href="' + url + '" target="_blank">' + url + '</a>'}`;
+      });
+      return <div className="message mine" dangerouslySetInnerHTML={{ __html: textWithLinks }}></div>;
+    } else {
+      return <div className="message mine">{text}</div>;
+    }
+  };
 
   return (
     <div className="chat-content" ref={bottomRef}>
@@ -30,7 +42,7 @@ export default function Others({
       <div className="chat-box">
         <div className="name">{nickname}</div>
         <div className="message-box">
-          <div className="message">{msg}</div>
+          {checkUrl(msg)}
           <span className="time">
             {" "}
             {`${month}/${day}`}
