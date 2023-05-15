@@ -15,14 +15,16 @@ public class UpdateGameRoomParticipationResponse {
     private boolean participate;
     private double randomTime;
     private int headCount;
+    private String errorMessage;
 
-    public static UpdateGameRoomParticipationResponse create(boolean isParticipate, GameRoom gameRoom) {
+    public static UpdateGameRoomParticipationResponse create(boolean isParticipate, GameRoom gameRoom, String message) {
 
         if (gameRoom == null) { // gameRoom.equals(null)은 내용비교라서 항상 false
             return UpdateGameRoomParticipationResponse.builder()
 //                    .gameRoomId()
-                .title("참여중인 게임방이 없습니다.")
+//                .title("참여중인 게임방이 없습니다.")
                 .participate(isParticipate)
+                .errorMessage(message)
 //                    .randomTime(gameRoom.getRandomTime())
                 .build();
 
