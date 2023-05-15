@@ -77,9 +77,10 @@ export default function Chat() {
   const subscribeChatting = () => {
     setLoading(false);
     client.current?.subscribe(`/sub/room/${roomId}`, ({ body }) => {
-      if(!(JSON.parse(body) in message)) setMessage((prev) => [...prev, JSON.parse(body)]);
+      setMessage((prev) => [...prev, JSON.parse(body)]);
     });
   };
+  console.log(message)
 
   // 현재는 app컴포넌트 생성과 동시에 소켓 객체가 연결이 되고 sub로 구독함!
   // 이 코드를 방에 들어갈때 연결하면 됨!
@@ -108,7 +109,7 @@ export default function Chat() {
   }
   const pubInit = () => {
     if(client.current === undefined) return;
-    const data = {
+    const info = {
       roomId: roomId,
       message: `${nick}님이 입장했습니다.`,
       memberId: -1,
@@ -116,11 +117,11 @@ export default function Chat() {
       time: "",
       nickname: nick
     }
-    if(!(JSON.stringify(data) in message))
+    if(!(JSON.stringify(info) in message))
     {
       client.current.publish({
       destination: "/pub/chatting",
-      body: JSON.stringify(data)
+      body: JSON.stringify(info)
   })}}
 
   // 방 시작 후 웹 소켓 연결
