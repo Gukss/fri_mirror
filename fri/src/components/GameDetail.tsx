@@ -7,19 +7,21 @@ import { game } from "../redux/user";
 import axios from "axios";
 
 interface roomType {
-  room: GameType;
+  id : number;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Gamedetail {
+  title: string;
+  location: string;
+  headCount: string;
   participationCount: number;
   participate: boolean;
   participation: { name: string; profileUrl: string }[];
 }
 
-function GameDetail({ room, open, setOpen }: roomType) {
-  const { gameRoomId, title, headCount, location, participationCount } = room;
+function GameDetail({id, open, setOpen }: roomType) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const api_url = process.env.REACT_APP_REST_API;
@@ -31,11 +33,7 @@ function GameDetail({ room, open, setOpen }: roomType) {
   });
 
   // game detail data
-  const [data, setData] = useState<Gamedetail>({
-    participationCount: 0,
-    participate: false,
-    participation: []
-  });
+  const [data, setData] = useState<Gamedetail>();
 
   // useCallback 추가
   const goGame = useCallback(async () => {
@@ -45,12 +43,12 @@ function GameDetail({ room, open, setOpen }: roomType) {
         Authorization: userId
       };
       const res = await axios.patch(
-        api_url + `game-room/${gameRoomId}/participation`,
+        api_url + `game-room/${id}/participation`,
         { participate: false },
         { headers: header }
       );
-      dispatch(game(String(room.gameRoomId)));
-      navigate(`/wait/${room.gameRoomId}`);
+      dispatch(game(String(id)));
+      navigate(`/wait/${id}`);
     } catch (e) {
       console.log();
     }
@@ -65,18 +63,10 @@ function GameDetail({ room, open, setOpen }: roomType) {
           "Content-Type": "application/json",
           Authorization: userId
         };
-        const res = await axios.get(api_url + "game-room/" + gameRoomId, {
+        const res = await axios.get(api_url + "game-room/" + id, {
           headers: header
         });
-        const participationCount = res.data.participationCount;
-        const participate = res.data.participate;
-        const participation = res.data.participation;
-        setData({
-          ...data,
-          participationCount: participationCount,
-          participate: participate,
-          participation: participation
-        });
+        setData(res.data);
       } catch (e) {
         console.log();
       }
@@ -85,11 +75,12 @@ function GameDetail({ room, open, setOpen }: roomType) {
   }, []);
 
   const isPossible = useSelector((state: RootState) => {
-    if (state.strr.gameRoomId === String(gameRoomId)) {
+    if(data === undefined) return;
+    if (state.strr.gameRoomId === String(id)) {
       return "yourRoom";
     } else if (state.strr.gameRoomId !== "참여한 방이 없습니다.") {
       return "already";
-    } else if (headCount <= participationCount) {
+    } else if (Number(data?.headCount) <= Number(data?.participationCount)) {
       return "tooMany";
     } else {
       return true;
@@ -105,30 +96,29 @@ function GameDetail({ room, open, setOpen }: roomType) {
 
   return (
     <>
-      {open ? (
         <div className="room_detail" onClick={handleDetailClick}>
           <div className="room_modal">
             <div className="title">
-              <span>{title}</span>
+              <span>{data?.title}</span>
               <span style={{ color: "#FFC000" }} onClick={() => setOpen(false)}>
                 X
               </span>
             </div>
-            <p className="place"># {location}</p>
+            <p className="place"># {data?.location}</p>
             <div className="soft">
               <div className="header">
                 <div>참가자</div>
                 <div className="total">
-                  {data.participationCount}/{headCount}
+                  {data?.participationCount}/{data?.headCount}
                 </div>
               </div>
-              {data.participationCount === 0 ? (
+              {data?.participationCount === 0 ? (
                 <div className="profile">
                   <div>참여자가 없습니다.</div>
                 </div>
               ) : (
                 <div className="game-profile">
-                  {data.participation.map((info: any) => (
+                  {data?.participation.map((info: any) => (
                     <div key={info.name} className="info">
                       <div className="profile-img">
                         <img src={info.anonymousProfileImageUrl} alt="프로필" />
@@ -176,7 +166,6 @@ function GameDetail({ room, open, setOpen }: roomType) {
             )}
           </div>
         </div>
-      ) : null}
     </>
   );
 }

@@ -7,19 +7,26 @@ import { meeting, useegg } from "../redux/user";
 import axios from "axios";
 
 interface roomType {
-  room: MeetType;
+  headCount : number;
+  id: number;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Roomdetail {
+  roomId : number;
+  title : string;
+  location : string;
+  roomCategory: string;
+  headCount : number;
+  isParticipate : boolean;
   participate: boolean;
-  majors: { name: string; url: string }[];
-  nonMajors: { name: string; url: string }[];
+  major: { name: string; url: string }[];
+  nonMajor: { name: string; url: string }[];
 }
 
-function MeetingDetail({ room, open, setOpen }: roomType) {
-  const { headCount, location, major, nonMajor, roomId, title } = room;
+function MeetingDetail({ id, headCount, open, setOpen }: roomType) {
+  const [data, setData] = useState<Roomdetail>()
   const [isOk, setOk] = useState(false);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
@@ -35,11 +42,12 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
   });
 
   const isPossible = useSelector((state: RootState) => {
+    if(data === undefined) return;
     if (state.strr.roomId !== "참여한 방이 없습니다.") {
       return "already";
-    } else if (state.strr.major === false && nonMajor >= headCount / 2) {
+    } else if (state.strr.major === false && data?.nonMajor.length >= data?.headCount / 2) {
       return "full";
-    } else if (state.strr.major === true && major >= headCount / 2) {
+    } else if (state.strr.major === true && data?.major.length >= data?.headCount / 2) {
       return "full";
     } else {
       return true;
@@ -48,13 +56,6 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
 
   const api_url = process.env.REACT_APP_REST_API;
 
-  // room detail 정보
-  const [data, setData] = useState<Roomdetail>({
-    participate: false,
-    majors: [],
-    nonMajors: []
-  });
-
   useEffect(() => {
     const getDetail = async () => {
       try {
@@ -62,18 +63,10 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
           "Content-Type": "application/json",
           Authorization: userId
         };
-        const res = await axios.get(api_url + "room/" + roomId, {
+        const res = await axios.get(api_url + "room/" + id, {
           headers: header
         });
-        const participate = res.data.isParticipate;
-        const majors = res.data.major;
-        const nonMajors = res.data.nonMajor;
-        setData({
-          ...data,
-          participate: participate,
-          majors: majors,
-          nonMajors: nonMajors
-        });
+        setData(res.data);
       } catch (e) {
         console.log();
       }
@@ -95,7 +88,7 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
     };
     try {
       const res = await axios.patch(
-        api_url + `user/room/${roomId}`,
+        api_url + `user/room/${id}`,
         { participate: false },
         { headers: header }
       );
@@ -120,24 +113,24 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
         <div className="room_detail" onClick={handleDetailClick}>
           <div className="room_modal">
             <div className="title">
-              <span>{title}</span>
+              <span>{data?.title}</span>
               <span style={{ color: "#FFC000" }} onClick={() => setOpen(false)}>
                 X
               </span>
             </div>
-            <div className="place"># {location}</div>
+            <div className="place"># {data?.location}</div>
             <div className="soft">
               <div className="header">
                 <div>전공</div>
                 <div className="total">
-                  {major} / {headCount / 2}
+                  {data?.major.length} / {headCount / 2}
                 </div>
               </div>
               <div className="profile">
-                {major === 0 ? (
+                {data?.major.length === 0 ? (
                   <div>참여자가 없습니다.</div>
                 ) : (
-                  data.majors.map((info: any) => (
+                  data?.major.map((info: any) => (
                     <div key={info.name} className="info">
                       <div className="profile-img">
                         <img src={info.anonymousProfileImageUrl} alt="프로필" />
@@ -152,14 +145,14 @@ function MeetingDetail({ room, open, setOpen }: roomType) {
               <div className="header">
                 <div>비전공</div>
                 <div className="total">
-                  {nonMajor} / {headCount / 2}
+                  {data?.nonMajor.length} / {headCount / 2}
                 </div>
               </div>
               <div className="profile">
-                {nonMajor === 0 ? (
+                {data?.nonMajor.length === 0 ? (
                   <div>참여자가 없습니다.</div>
                 ) : (
-                  data.nonMajors.map((info: any) => (
+                  data?.nonMajor.map((info: any) => (
                     <div key={info.name} className="info">
                       <div className="profile-img">
                         <img src={info.anonymousProfileImageUrl} alt="프로필" />

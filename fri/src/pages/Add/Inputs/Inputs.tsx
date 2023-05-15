@@ -92,8 +92,8 @@ export default function Inputs({
           setMessage({ ...message, [name]: "숫자를 입력해 주세요!" });
           setMessageColor("red", "people");
           setError({ ...error, [name]: false });
-        } else if (Number(value) < 2 || Number(value) > 10) {
-          setMessage({ ...message, [name]: "2~10명만 내기가 가능합니다!" });
+        } else if (Number(value) < 2 || Number(value) > 12) {
+          setMessage({ ...message, [name]: "2~12명만 내기가 가능합니다!" });
           setMessageColor("red", "people");
           setError({ ...error, [name]: false });
         } else {
@@ -138,8 +138,8 @@ export default function Inputs({
           setMessage({ ...message, [name]: "숫자를 입력해 주세요!" });
           setMessageColor("red", "people");
           setError({ ...error, [name]: false });
-        } else if (Number(value) < 2 || Number(value) > 10) {
-          setMessage({ ...message, [name]: "2~10명만 내기가 가능합니다!" });
+        } else if (Number(value) < 2 || Number(value) > 12) {
+          setMessage({ ...message, [name]: "2~12명만 내기가 가능합니다!" });
           setMessageColor("red", "people");
           setError({ ...error, [name]: false });
         } else {
@@ -275,7 +275,7 @@ export default function Inputs({
       {cate === "bet" ? (
         <div className="add-input-box">
           <div className="input-label" id="label">
-            # 내기 인원 <span>(숫자만 입력, 2~10명)</span>
+            # 내기 인원 <span>(숫자만 입력, 2~12명)</span>
           </div>
           <div className="add-input">
             <input
