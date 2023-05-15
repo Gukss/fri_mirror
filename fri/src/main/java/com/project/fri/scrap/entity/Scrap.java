@@ -59,4 +59,9 @@ public class Scrap extends BaseTimeEntity {
                     .build())
             .build();
   }
+
+  //==비지니스 로직==//
+  public void deleteScrap() {
+    isDelete = false;
+  }
 }

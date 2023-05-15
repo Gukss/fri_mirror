@@ -1,8 +1,6 @@
 package com.project.fri.scrap.service;
 
-import com.project.fri.scrap.dto.CreateScrapRequest;
-import com.project.fri.scrap.dto.CreateScrapResponse;
-import com.project.fri.scrap.dto.FindScrapListResponse;
+import com.project.fri.scrap.dto.*;
 
 public interface ScrapService {
 
@@ -20,4 +18,6 @@ public interface ScrapService {
      * @return 스크랩 목록 반환
      */
     FindScrapListResponse findScrapList(Long userId);
+
+    DeleteScrapResponse deleteScrap(DeleteScrapRequest deleteScrapRequest, Long userId);
 }

@@ -6,10 +6,7 @@ import com.project.fri.board.repository.BoardRepository;
 import com.project.fri.comment.repository.CommentRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.likes.repository.LikesRepository;
-import com.project.fri.scrap.dto.CreateScrapRequest;
-import com.project.fri.scrap.dto.CreateScrapResponse;
-import com.project.fri.scrap.dto.FindScrapListResponse;
-import com.project.fri.scrap.dto.FindScrapResponse;
+import com.project.fri.scrap.dto.*;
 import com.project.fri.scrap.entity.Scrap;
 import com.project.fri.scrap.repository.ScrapRepository;
 import com.project.fri.user.entity.User;
@@ -86,6 +83,20 @@ public class ScrapServiceImpl implements ScrapService {
                 .collect(Collectors.toList());
 
         return new FindScrapListResponse(scraps);
+    }
+
+    @Override
+    @Transactional
+    public DeleteScrapResponse deleteScrap(DeleteScrapRequest deleteScrapRequest, Long userId) {
+        Scrap findScrap = scrapRepository.findByBoardIdAndUserIdAndIsDeleteFalse(deleteScrapRequest.getBoardId(), userId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
+
+        // 삭제요청일 때만 삭제
+        if (deleteScrapRequest.isDelete()) {
+            findScrap.deleteScrap();
+        }
+
+        return new DeleteScrapResponse(false);
     }
 
 }
