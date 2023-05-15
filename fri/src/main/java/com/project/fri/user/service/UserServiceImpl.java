@@ -213,6 +213,14 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public CertifiedEduResponse certifiedEdu(CertifiedEduRequest certifiedEduRequest) {
+    Optional<Certification> optionalCertification = certificationRepository.findByEmail(certifiedEduRequest.getEmail());
+
+    // 이전에 인증만 하고 이탈했으면 인증과정 pass
+    if (optionalCertification.get().isConfirmedCode() && optionalCertification.get().isConfirmedEdu()) { //둘 다 true일 때
+      CertifiedEduResponse certifiedEduResponse = new CertifiedEduResponse(false, "exception");
+      return certifiedEduResponse;
+    }
+
     boolean isConfirmedEdu = false;
     String email = certifiedEduRequest.getEmail();
     //크롬 드라이버 셋팅 (드라이버 설치한 경로 입력)
@@ -255,7 +263,7 @@ public class UserServiceImpl implements UserService {
       boolean confirmedEdu = initCertification.isConfirmedEdu();
       boolean confirmedCode = initCertification.isConfirmedCode();
       String code = initCertification.getCode();
-      Optional<Certification> optionalCertification = certificationRepository.findByEmail(email);
+
       if (optionalCertification.isPresent()) { //존재할 때는 update 해야한다.
         Certification certification = optionalCertification.get();
         certification.update(code, confirmedEdu, confirmedCode);
