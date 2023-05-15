@@ -10,11 +10,13 @@ body {
   width: 100vw;
   height: 100vh;
   touch-action: none;
+  overscroll-behavior: none;
 }
 
 #root {
   width: 100vw;
   height: 100vh;
+  overscroll-behavior: none;
 }
 
 /* code {
