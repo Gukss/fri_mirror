@@ -154,13 +154,13 @@ const GameWaiting = (): JSX.Element => {
   }, []);
 
   const outGame = async () => {
-    state.userList.filter((user) => user.userId !== userId);
     if (client.current === undefined) return;
     client.current.publish({
-      destination: "/pub/game-room/ready",
-      body: JSON.stringify(
-        state.userList.filter((user) => user.userId !== userId)
-      )
+      destination: "/pub/game-room/info",
+      body: JSON.stringify({
+        ...state,
+        userList: state.userList.filter((user) => user.userId !== userId)
+      })
     });
     try {
       const header = {
@@ -178,6 +178,7 @@ const GameWaiting = (): JSX.Element => {
       console.log(e);
     }
   };
+
   // 방 시작 후 웹 소켓 연결
   const connect = async () => {
     try {
