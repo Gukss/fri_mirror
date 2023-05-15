@@ -8,7 +8,7 @@ import axios from "axios";
 import "../../pages/Chat/Chat.scss";
 
 interface ChildProps {
-  outChatMsg : HandleOutChatType;
+  outChatMsg: HandleOutChatType;
 }
 
 export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
@@ -29,8 +29,8 @@ export default function ChatDetail({ isOpen, onClose, data, outChatMsg }: any) {
   const api_url = process.env.REACT_APP_REST_API;
 
   const out = () => {
-    outChatMsg();    
-  }
+    outChatMsg();
+  };
 
   const outChat = async () => {
     out();

@@ -56,6 +56,7 @@ function GameDetail({id, open, setOpen }: roomType) {
 
   useEffect(() => {
     const getData = async () => {
+      console.log("dd");
       if (api_url === undefined) return;
       try {
         const header = {
