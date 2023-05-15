@@ -345,12 +345,7 @@ export default function Chat() {
             </div>
           </div>
         </div>
-        <ChatDetail
-          isOpen={isOpen}
-          onClose={handleCloseDetail}
-          data={data}
-          outChatMsg={outChatMsg}
-        />
+        {isOpen ? <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} outChatMsg={outChatMsg} /> : null}
       </div>
     );
   }
