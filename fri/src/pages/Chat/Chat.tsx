@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ChatContent from "../../components/ChatContent/ChatContent";
-import Image from "../../assets/Add photo alternate.png";
+// import Image from "../../assets/Add photo alternate.png";
 import Up from "../../assets/Arrow upward.png";
 import ChatNav from "../../components/ChatNav/ChatNav";
 import ChatDetail from "../../components/ChatDetail/ChatDetail";
@@ -35,6 +35,8 @@ interface Roomdetail {
   majors: { name: string; url: string }[];
   nonMajors: { name: string; url: string }[];
 }
+
+export type HandleOutChatType = () => void;
 
 export default function Chat() {
   const client = useRef<StompJs.Client>();
@@ -90,6 +92,34 @@ export default function Chat() {
     if (client.current !== undefined) client.current.deactivate();
   };
 
+  const outChatMsg:HandleOutChatType = () => {
+    if(client.current === undefined) return;
+    client.current.publish({
+      destination: "/pub/chatting",
+      body: JSON.stringify({
+        roomId: roomId,
+        message: `${nick}님이 나갔습니다.`,
+        memberId: -1,
+        anonymousProfileImageUrl: "",
+        time: "",
+        nickname: nick
+      })
+  })
+  }
+  const pubInit = () => {
+    if(client.current === undefined) return;
+    client.current.publish({
+      destination: "/pub/chatting",
+      body: JSON.stringify({
+        roomId: roomId,
+        message: `${nick}님이 입장했습니다.`,
+        memberId: -1,
+        anonymousProfileImageUrl: "",
+        time: "",
+        nickname: nick
+      })
+  })}
+
   // 방 시작 후 웹 소켓 연결
   useEffect(() => {
     const connect = async () => {
@@ -104,6 +134,7 @@ export default function Chat() {
           heartbeatOutgoing: 4000,
           onConnect: () => {
             subscribeChatting();
+            if(isuser === "false") pubInit();
           },
           debug: () => {
             null;
@@ -308,7 +339,7 @@ export default function Chat() {
             </div>
           </div>
         </div>
-        <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} />
+        <ChatDetail isOpen={isOpen} onClose={handleCloseDetail} data={data} outChatMsg={outChatMsg} />
       </div>
     );
   }
