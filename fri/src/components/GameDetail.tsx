@@ -94,10 +94,18 @@ function GameDetail({ room, open, setOpen }: roomType) {
       return true;
     }
   });
+
+  const handleDetailClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      // 클릭한 요소가 room_detail인 경우에만 처리
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       {open ? (
-        <div className="room_detail">
+        <div className="room_detail" onClick={handleDetailClick}>
           <div className="room_modal">
             <div className="title">
               <span>{title}</span>
