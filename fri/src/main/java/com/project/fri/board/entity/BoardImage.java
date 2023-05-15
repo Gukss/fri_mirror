@@ -2,13 +2,8 @@ package com.project.fri.board.entity;
 
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,4 +29,10 @@ public class BoardImage extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "board_id")
+  @NotNull
+  private Board board;
+
 }
