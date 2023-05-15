@@ -199,7 +199,10 @@ public class GameRoomServiceImpl implements GameRoomService {
             NotFoundExceptionMessage.NOT_FOUND_ROOM
         ));
 
-    if (!isParticipate) {       // enterRoom: false이고 참여한 방이 없을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
+    // 현재 게임방에 참여하고 있는 user 인원
+    int nowCount = userRepository.countByGameRoom(gameRoom);
+
+    if (!isParticipate && nowCount < gameRoom.getHeadCount()) {       // enterRoom: false이고 참여한 방이 없고ㅡ 현재 방 인원이 다 안찼을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
       isParticipate = true;
       user.updateGameRoomNumber(gameRoom);
 
