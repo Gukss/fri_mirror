@@ -21,18 +21,6 @@ import BoardDetail from "./pages/Community/ComDetail";
 import AddBoard from "./pages/Community/AddCom";
 
 function App() {
-  const preventGoBack = () => {
-    history.pushState(null, "", location.href)
-  };
-
-  useEffect(() => {
-    history.pushState(null, "", location.href);
-    window.addEventListener("popstate", preventGoBack);
-
-    return () => {
-      window.removeEventListener("popstate", preventGoBack);
-    }
-  }, [])
   
   return (
     <Provider store={store}>
