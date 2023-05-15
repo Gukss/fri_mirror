@@ -1,27 +1,31 @@
 // 컴포넌트 LogoEgg
 .main_top {
   width: 100vw;
-  align-items: center;
+  align-items: start;
   padding-top: 1rem;
   margin-bottom: 15px;
   height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   #main_logo {
     width: 53px;
     height: 30px;
-    float: center;
-    margin-left: 45px;
+    // float: center;
+    margin-left: 1.5rem;
   }
 
   .egg_cnt {
-    margin-right: 24px;
+    margin-right: 1.5rem;
     min-width: 75px;
     margin-top: 7px;
     height: 22px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     font-weight: bolder;
-    float: right;
+    float: left;
   }
 
   #main_egg {
