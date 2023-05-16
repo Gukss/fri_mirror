@@ -74,19 +74,19 @@ public class UserController {
     return res;
   }
 
-  @PostMapping("/sign-in")
-  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest,
-      HttpServletResponse response) {
-    SignInUserResponse result = userService.signIn(signInUserRequest);
-
-    if (result == null) {
-      return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
-    }
-
-    Cookie cookie = new Cookie("Authorization", result.getUserId().toString());
-    response.addCookie(cookie);
-    return ResponseEntity.ok().body(result);
-  }
+//  @PostMapping("/sign-in")
+//  public ResponseEntity<Object> signInUser(@Valid @RequestBody SignInUserRequest signInUserRequest,
+//      HttpServletResponse response) {
+//    SignInUserResponse result = userService.signIn(signInUserRequest);
+//
+//    if (result == null) {
+//      return ResponseEntity.badRequest().body(new SignInErrorResponse("아이디 또는 비밀번호가 맞지 않습니다."));
+//    }
+//
+//    Cookie cookie = new Cookie("Authorization", result.getUserId().toString());
+//    response.addCookie(cookie);
+//    return ResponseEntity.ok().body(result);
+//  }
 
   @PatchMapping
   public ResponseEntity<Object> updateUserProfile(
@@ -129,4 +129,5 @@ public class UserController {
         updateIsReadyRequest);
     return ResponseEntity.ok().body(updateIsReadyResponse);
   }
+
 }

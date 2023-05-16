@@ -29,6 +29,9 @@ repositories {
 }
 
 dependencies {
+	// 스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -73,6 +76,9 @@ dependencies {
 
 	//email 보내기
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt 추가
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
 }
 
 tasks.named('test') {

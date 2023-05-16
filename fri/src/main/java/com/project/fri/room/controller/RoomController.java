@@ -56,7 +56,9 @@ public class RoomController {
    * @return
    */
   @GetMapping("/{roomId}")
-  public ResponseEntity<FindRoomResponse> findRoom(@PathVariable("roomId") Long roomId, @RequestHeader("Authorization") Long userId) {
+  public ResponseEntity<FindRoomResponse> findRoom(
+      @PathVariable("roomId") Long roomId,
+      @RequestHeader("Authorization") Long userId) {
     FindRoomResponse result = roomService.findRoom(roomId, userId);
     return ResponseEntity.status(200).body(result);
   }
