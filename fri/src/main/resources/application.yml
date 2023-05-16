@@ -85,8 +85,8 @@ logging:
 cloud:
   aws:
     credentials:
-      accessKey: AKIARDOHRZSJGK2YH6ZX      # AWS IAM AccessKey 적기
-      secretKey: rRmriCRZFPaLw4Jgj2v7ij1dizqN6U5rWw5iwUtR   # AWS IAM SecretKey 적기
+      accessKey: ENC(o7x5UFdTtq6HEPsoilBpx5Hc/2cmcSoHqZ0l11kqdjw=)
+      secretKey: ENC(GezhgTAYqhHKsQDTi2yHj/EQO7ezy49WRRSn5wK1l4WMtbg+h0guOp9SFtAKmccEPaa1Cnrsfbc=)
     s3:
       bucket: meetingfri    # ex) marryting-gyunny
     #      dir: /blur # ex) /gyunny
