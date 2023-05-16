@@ -81,3 +81,16 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(o7x5UFdTtq6HEPsoilBpx5Hc/2cmcSoHqZ0l11kqdjw=)
+      secretKey: ENC(GezhgTAYqhHKsQDTi2yHj/EQO7ezy49WRRSn5wK1l4WMtbg+h0guOp9SFtAKmccEPaa1Cnrsfbc=)
+    s3:
+      bucket: meetingfri    # ex) marryting-gyunny
+    #      dir: /blur # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
