@@ -11,4 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
   Optional<Board> findTop1ByBoardCategoryOrderByCreatedAtDesc(BoardCategory boardCategory);
+  Optional<Board> findByIdAndIsDeleteFalse(Long boardId);
 }

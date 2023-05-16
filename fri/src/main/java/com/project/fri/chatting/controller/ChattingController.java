@@ -40,8 +40,8 @@ public class ChattingController {
 
 
   @GetMapping("/{roomId}")
-  public ResponseEntity<List<FindChattingMessageResponse>> findChattingList(@PathVariable Long roomId){
-    List<FindChattingMessageResponse> responseList = chattingService.findChatting(roomId);
+  public ResponseEntity<List<FindChattingMessageResponse>> findChattingList(@PathVariable Long roomId ,@RequestHeader("Authorization") Long userId){
+    List<FindChattingMessageResponse> responseList = chattingService.findChatting(roomId,userId);
     return ResponseEntity.ok(responseList);
   }
 }

@@ -29,7 +29,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @Slf4j
-
 public class UserController {
 
   private final UserService userService;
@@ -118,13 +117,13 @@ public class UserController {
   }
 
   @GetMapping("/profile-image")
-  public ResponseEntity<FindAnonymousProfileImagesResponse> FindAnonymousProfileImages() {
+  public ResponseEntity<FindAnonymousProfileImagesResponse> findAnonymousProfileImages() {
     FindAnonymousProfileImagesResponse result = userService.findAnonymousProfileImages();
     return ResponseEntity.ok().body(result);
   }
 
   @PatchMapping("/ready")
-  public ResponseEntity<UpdateIsReadyResponse> UpdateIsReady(@RequestBody UpdateIsReadyRequest updateIsReadyRequest,
+  public ResponseEntity<UpdateIsReadyResponse> updateIsReady(@RequestBody UpdateIsReadyRequest updateIsReadyRequest,
       @RequestHeader("Authorization") Long userId) {
     UpdateIsReadyResponse updateIsReadyResponse = userService.updateIsReady(userId,
         updateIsReadyRequest);

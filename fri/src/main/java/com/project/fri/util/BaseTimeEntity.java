@@ -30,4 +30,9 @@ public abstract class BaseTimeEntity {
   @LastModifiedDate
   @NotNull // notBlank 사용시 에러남.
   private LocalDateTime updatedAt; //수정일자
+
+  public BaseTimeEntity update(LocalDateTime updatedAt){
+    this.updatedAt=updatedAt;
+    return this;
+  }
 }

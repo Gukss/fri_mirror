@@ -182,6 +182,7 @@ public class GameRoomServiceImpl implements GameRoomService {
             NotFoundExceptionMessage.NOT_FOUND_USER
         ));
     // todo: 예외처리
+    String message = "";
     // 참여 중인 다른 방이 있다면
     if ((user.getGameRoom() != null) && !(user.getGameRoom().getId().equals(gameRoomId))) {
       throw new InvalidRequestStateException(); // 유효하지 않은 요청 상태
@@ -199,7 +200,19 @@ public class GameRoomServiceImpl implements GameRoomService {
             NotFoundExceptionMessage.NOT_FOUND_ROOM
         ));
 
-    if (!isParticipate) {       // enterRoom: false이고 참여한 방이 없을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
+    // 현재 게임방에 참여하고 있는 user 인원
+    int nowCount = userRepository.countByGameRoom(gameRoom);
+
+    if (!isParticipate) {       // enterRoom: false이고 참여한 방이 없고ㅡ 현재 방 인원이 다 안찼을 때 -> 게임방번호 추가 (user.getGameRoom().getId() == null)안돼
+      // 꽉 찬 방일 때
+      if (nowCount >= gameRoom.getHeadCount()) {
+        message = "정원이 초과된 방입니다.";
+      }
+      // 게임이 시작되어 삭제된 방일때
+      if (gameRoom.isDelete()) {
+        message = "게임이 완료된 방입니다.";
+      }
+
       isParticipate = true;
       user.updateGameRoomNumber(gameRoom);
 
@@ -213,13 +226,10 @@ public class GameRoomServiceImpl implements GameRoomService {
         gameRoom.updateIsDelete(true);
       }
       gameRoom = null;                 // 방나감 처리
-
     }
 
     // 응답 dto로 반환
-    UpdateGameRoomParticipationResponse updateGameRoomParticipation = UpdateGameRoomParticipationResponse.create(
-        isParticipate, gameRoom);
-    return updateGameRoomParticipation;
+    return UpdateGameRoomParticipationResponse.create(isParticipate, gameRoom, message);
   }
 
   /**

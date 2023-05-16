@@ -31,4 +31,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByNickname(String nickname);
     List<User> findByHeartLessThanEqual(int value);
+    int countByGameRoom(GameRoom gameRoom);
 }

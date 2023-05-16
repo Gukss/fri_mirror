@@ -32,7 +32,7 @@ public class Scrap extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="scrap_id")
-  private long id;
+  private Long id;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   @NotNull
@@ -46,4 +46,17 @@ public class Scrap extends BaseTimeEntity {
   @Embedded
   @NotNull
   private BaseEntity baseEntity;
+
+  //==생성 메서드==//
+  public static Scrap create(User user, Board board) {
+    return Scrap.builder()
+            .user(user)
+            .board(board)
+            .isDelete(false)
+            .baseEntity(BaseEntity.builder()
+                    .updater(user.getName())
+                    .constructor(user.getName())
+                    .build())
+            .build();
+  }
 }

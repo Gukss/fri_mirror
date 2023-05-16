@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 public class ChattingRepositoryImpl implements ChattingRepositoryCustom {
   private final JPAQueryFactory queryFactory;
   @Override
-  public List<FindChattingMessageResponse> findChattingMessageAndUser(Long roomId, LocalDateTime roomCreatedTime) {
+  public List<FindChattingMessageResponse> findChattingMessageAndUser(Long roomId, LocalDateTime userRoomCreatedTime) {
     return queryFactory.select(new QFindChattingMessageResponse(QChattingMessage.chattingMessage))
         .from(QChattingMessage.chattingMessage)
         .join(QChattingMessage.chattingMessage.user).fetchJoin()
         .where(QChattingMessage.chattingMessage.room.id.eq(roomId)
-            .and(QChattingMessage.chattingMessage.createdAt.after(roomCreatedTime)))
+            .and(QChattingMessage.chattingMessage.createdAt.after(userRoomCreatedTime)))
         .orderBy(QChattingMessage.chattingMessage.createdAt.asc())
         .fetch();
   }

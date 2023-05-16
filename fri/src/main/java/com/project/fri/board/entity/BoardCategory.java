@@ -25,7 +25,7 @@ public class BoardCategory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="board_category_id")
-  private long id;
+  private Long id;
   @Enumerated(EnumType.STRING)
   @NotNull
   private Category category;

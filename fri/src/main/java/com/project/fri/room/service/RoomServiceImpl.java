@@ -17,6 +17,8 @@ import com.project.fri.room.repository.RoomCategoryRepository;
 import com.project.fri.room.repository.RoomRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
+import com.project.fri.user.service.UserRoomTimeService;
+import com.project.fri.user.service.UserRoomTimeServiceImpl;
 import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +49,7 @@ public class RoomServiceImpl implements RoomService {
   private final AreaRepository areaRepository;
   private final RoomRepository roomRepository;
   private final UserRepository userRepository;
-
+  private final UserRoomTimeService userRoomTimeService;
 
   /**
    * 방 생성
@@ -77,7 +80,13 @@ public class RoomServiceImpl implements RoomService {
     // request dto를 저장
     Room room = Room.create(request, user, roomCategory, area);
 
-    roomRepository.save(room);
+    Room save = roomRepository.save(room);
+
+    HttpStatus userRoomTime = userRoomTimeService.createUserRoomTime(user, save);
+    // userRoomTime 테이블에서 에러 발생시 예외 에러처리
+    if (userRoomTime.isError()){
+      throw new InvalidRequestStateException();
+    }
 
     // user 테이블에 방번호 추가
     user.updateRoomNumber(room);
@@ -322,8 +331,14 @@ public class RoomServiceImpl implements RoomService {
   @Transactional
   public void deleteRoomScheduler() {
     List<Room> allRoomList = roomRepository.findAll();
+    List<User> allUserList = userRepository.findAll();
+
     for (Room r : allRoomList) {
       r.deleteRoom();
+    }
+
+    for (User u : allUserList) {
+      u.updateRoomNumber(null);
     }
   }
 
