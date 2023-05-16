@@ -5,6 +5,8 @@ import com.project.fri.board.dto.CreateBoardRequest;
 import com.project.fri.board.dto.DeleteBoardRequest;
 import com.project.fri.board.dto.FindBoardResponse;
 import java.util.List;
+
+import com.project.fri.board.dto.ReadBoardAndCommentListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +31,11 @@ public interface BoardService {
    * @return
    */
   ResponseEntity deleteBoard(DeleteBoardRequest deleteBoardRequest);
-  ResponseEntity readBoardAndCommentList(long userId);
+
+  /**
+   * 게시판 상세 조회
+   * @param userId
+   * @return
+   */
+  ReadBoardAndCommentListResponse readBoardDetail(Long boardId, Long userId);
 }

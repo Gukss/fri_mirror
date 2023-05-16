@@ -1,13 +1,10 @@
 package com.project.fri.board.controller;
 
+import com.project.fri.board.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.project.fri.board.dto.CreateBoardRequest;
-import com.project.fri.board.dto.DeleteBoardRequest;
-import com.project.fri.board.dto.DeleteBoardResponse;
-import com.project.fri.board.dto.FindBoardResponse;
 import com.project.fri.board.service.BoardService;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +51,8 @@ public class BoardController {
   }
 
   @GetMapping("/{boardId}")
-  public ResponseEntity<?> readBoardDetail(@PathVariable("boardId") Long boardId,
-      @RequestHeader("Authorization") Long userId) {
+  public ResponseEntity<ReadBoardAndCommentListResponse> readBoardDetail(
+          @PathVariable("boardId") Long boardId, @RequestHeader("Authorization") Long userId) {
 
     return null;
   }

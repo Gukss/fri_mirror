@@ -30,10 +30,28 @@ public class ReadBoardAndCommentListResponse {
   private boolean likes;
   private long commentCount;
   private LocalDateTime createAt;
-  private String boardUrl;
+  private List<String> boardImage;
 
+  private List<CommentListInstance> commentList;
+
+  /*
+  todo: queryDsl
   @QueryProjection
   public ReadBoardAndCommentListResponse(Board board, long likesCount, boolean likes, long commentCount, LocalDateTime createAt, BoardImage boardImage){
+  }
+  */
 
+  public static ReadBoardAndCommentListResponse create(Board board, long likesCount, boolean likes, long commentCount,
+                                                List<String> boardImage, List<CommentListInstance> commentList) {
+    return ReadBoardAndCommentListResponse.builder()
+            .boardId(board.getId())
+            .content(board.getContent())
+            .likesCount(likesCount)
+            .likes(likes)
+            .commentCount(commentCount)
+            .createAt(board.getCreatedAt())
+            .boardImage(boardImage)
+            .commentList(commentList)
+            .build();
   }
 }

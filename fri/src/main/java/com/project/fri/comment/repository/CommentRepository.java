@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment,Long>,CommentRepositoryCustom {
 
-    int countByBoardAndIsDeleteFalse(Board board);
+    long countByBoardAndIsDeleteFalse(Board board);
 }
