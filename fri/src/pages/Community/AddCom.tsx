@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Back from "../../assets/back.png";
 import logo from "../../assets/small_logo.png";
 import axios from "axios";
@@ -41,6 +42,7 @@ function AddCom() {
   const [images, setImages] = useState<string[]>([]);
 
   const [isAreaDown, setIsAreaDown] = useState(false);
+  const navigate = useNavigate();
 
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
@@ -133,9 +135,10 @@ function AddCom() {
         Authorization: userId
       };
 
-      await axios.post(api_url + "board", formData, {
+      const res = await axios.post(api_url + "board", formData, {
         headers: header
       });
+      navigate("/board/:" + res.data.boardId)
     } catch (e) {
       console.log(e);
     }
@@ -225,7 +228,7 @@ function AddCom() {
 
   return (
     <div className="add-post">
-      <img src={Back} alt="<" id="back" />
+      <img src={Back} alt="<" id="back" onClick={() => navigate("/board")}/>
       <div className="add-container">
         <div className="small-logo">
           <img src={logo} alt="Logo" />

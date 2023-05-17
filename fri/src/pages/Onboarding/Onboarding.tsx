@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { login } from "../../redux/user";
+import Modal from "../../components/AgreeModal";
 import ting from "../../assets/gif/tingtingting.gif";
 import "./Onboarding.scss";
 import axios from "axios";
@@ -18,6 +19,8 @@ export default function Onboarding() {
   const gameRoomId = useSelector((state: RootState) => {
     return state.strr.gameRoomId;
   });
+  const [open, setOpen] = useState(false);
+  const [page, setPage] = useState("");
 
   // 새로 정보 받아와서 업데이트 하고, 그 다음 넘어가자
   useEffect(() => {
@@ -50,7 +53,8 @@ export default function Onboarding() {
     if (userId === 0) {
       navigate("/login");
     } else {
-      navigate("/main");
+      setPage("login");
+      setOpen(true);
     }
   };
 
@@ -58,6 +62,9 @@ export default function Onboarding() {
     <div className="onboarding" onClick={handleClick}>
       <img id="gif" src={ting} alt="ting" className="onboarding-img" />
       <div className="onboarding-text"> 터치해 주세요.</div>
+      {
+        open ? <Modal setOpen={setOpen} page={page} /> : null
+      }
     </div>
   );
 }

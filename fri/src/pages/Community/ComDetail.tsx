@@ -41,7 +41,7 @@ function ComDetail() {
 	const [likes, setLikes] = useState<number>(0);
 	const [scrap, setScrap] = useState<number>(0);
 	const [cmt, setCmt] = useState<number>(0);
-	const api_url = process.env.REACT_APP_TEST_API;
+	const api_url = process.env.REACT_APP_REST_API;
 	const navigate = useNavigate();
 	const boardId = useParams().id;
 	const userId = useSelector((state: RootState) => {

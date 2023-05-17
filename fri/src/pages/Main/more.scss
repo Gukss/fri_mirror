@@ -1,6 +1,14 @@
 .more_room {
     overflow: hidden;
 
+    .more_top {
+        display: flex;
+    }
+
+    #back {
+        margin-left: 15px;
+    }
+
     .text {
         font-size: 20px;
         font-weight: 700;
@@ -10,6 +18,7 @@
         margin-bottom: 16px;
         width: 100vw;
         height: auto;
+        margin-right: 15px;
     }
 
     .room {
