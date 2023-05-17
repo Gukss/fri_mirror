@@ -5,7 +5,6 @@ import Back from "../../assets/back.png";
 import logo from "../../assets/small_logo.png";
 import axios from "axios";
 import "./AddCom.scss";
-import { type } from "os";
 
 interface PostForm {
   title: string;
@@ -134,10 +133,9 @@ function AddCom() {
         Authorization: userId
       };
 
-      const res = await axios.post(api_url + "board", formData, {
+      await axios.post(api_url + "board", formData, {
         headers: header
       });
-      console.log(res);
     } catch (e) {
       console.log(e);
     }
@@ -193,22 +191,15 @@ function AddCom() {
       const fileArray: File[] = [...file];
       const imgArray: string[] = [...images];
 
-      console.log(typeof newFiles, newFiles);
-
       if (newFiles) {
-        if (newFiles.length > 5) {
-          alert("사진은 최대 5개까지 등록이 가능합니다!");
-          return;
-        } else {
-          for (let i = 0; i < newFiles.length; i++) {
-            const newFile = newFiles[i];
-            // api용 파일 저장
-            fileArray.push(newFile);
+        for (let i = 0; i < newFiles.length; i++) {
+          const newFile = newFiles[i];
+          // api용 파일 저장
+          fileArray.push(newFile);
 
-            // 렌더용 사진 저장
-            const ImageUrl = URL.createObjectURL(newFile);
-            imgArray.push(ImageUrl);
-          }
+          // 렌더용 사진 저장
+          const ImageUrl = URL.createObjectURL(newFile);
+          imgArray.push(ImageUrl);
         }
       }
       setFile(fileArray);

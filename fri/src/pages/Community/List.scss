@@ -1,33 +1,72 @@
 .boardpage {
     height: 100vh;
+    width: 100vw;
     overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
 
     .board-nav {
-        position: fixed;
+        // position: fixed;
         box-sizing: border-box;
-        border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-    }
-}
-
-.board_cate {
-    display: flex;
-    padding: 0px;
-    width: 70%;
-    justify-content: space-between;
-    height: 24px;
-    margin-left: 24px;
-    margin-bottom: 5px;
-    font-weight: bolder;
-    color: rgba(124, 124, 124, 1);
-
-    li {
-        list-style: none;
+        // border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
     }
 
-    #select {
-        color: rgba(255, 192, 0, 1);
+
+    .board_cate {
+        display: flex;
+        padding: 0px;
+        width: calc(100vw - 80px);
+        justify-content: space-between;
+        height: 24px;
+        margin-left: 24px;
+        margin-bottom: 5px;
         font-weight: bolder;
-        border-bottom: 1px solid rgba(255, 192, 0, 1);
-        transition: 0.7s ease-in-out;
+        color: rgba(124, 124, 124, 1);
+
+        li {
+            list-style: none;
+        }
+
+        #select {
+            color: rgba(255, 192, 0, 1);
+            font-weight: bolder;
+            border-bottom: 1px solid rgba(255, 192, 0, 1);
+            transition: 0.7s ease-in-out;
+        }
+    }
+
+    .board_medium {
+        width: 100vw;
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding-bottom: 5px;
+    }
+
+    .write_board {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 17px;
+        letter-spacing: 0em;
+        text-align: center;
+        color: #F9B76A;
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+
+    }
+
+    #pencil {
+        height: 12px;
+        width: 12px;
+        border-radius: 0px;
+    }
+
+    .board-content {
+        // border: 2px solid rgba(255, 192, 0, 1);
+        width: 100%;
+        height: calc(100vh - 180px);
     }
 }

@@ -21,6 +21,10 @@ input {
   font-family: "bingrae";
 }
 
+textarea {
+  font-family: "bingrae";
+}
+
 button {
   font-family: "bingrae-bold";
   /* -webkit-overflow-scrolling: touch; 추가 */

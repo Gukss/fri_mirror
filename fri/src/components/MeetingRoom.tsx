@@ -52,10 +52,6 @@ function MeetingRoom({ room }: roomType) {
     }
   };
 
-  useEffect(() => {
-    getDetail();
-  }, [])
-
   return (
     <>
       {is_full ? (
@@ -65,18 +61,18 @@ function MeetingRoom({ room }: roomType) {
       ) : (
         <div className="room_component">
           <div className="meeting_room" onClick={() => {getDetail(); setOpen(true)}}>
-            <p className="place"># {data?.location}</p>
-            <p className="title">{data?.title}</p>
+            <p className="place"># {room?.location}</p>
+            <p className="title">{room?.title}</p>
             <p className="other">
               전공
               <span className="total">
-                {data?.major.length}/{headCount / 2}
+                {room.major}/{headCount / 2}
               </span>
             </p>
             <p className="other">
               비전공
               <span className="total">
-                {data?.nonMajor.length}/{headCount / 2}
+                {room.nonMajor}/{headCount / 2}
               </span>
             </p>
           </div>

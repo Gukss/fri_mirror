@@ -1,0 +1,199 @@
+.board-one {
+    display: flex;
+    width: 100vw;
+    height: 84px;
+    padding: 10px;
+    border-bottom: 1px solid #ffd453;
+    border-top: 1px solid #ffd453;
+
+    .board-left {
+        width: calc(100vw - 100px);
+        height: 100%;
+        display: flex column;
+        text-align: start;
+
+        .board-title {
+            width: 90%;
+            font-size: 18px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .board-content {
+            height: 20px;
+            width: 90%;
+            font-size: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 10px;
+        }
+
+        .board-bottom {
+            width: 90%;
+            font-size: 12px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+
+            .heart {
+                display: flex;
+                align-items: center;
+                color: #6c6c6c;
+
+                img {
+                    width: 15px;
+                    height: 13.5px;
+                    margin-right: 5px;
+                }
+            }
+
+            .comment {
+                display: flex;
+                align-items: center;
+                color: #6c6c6c;
+
+                img {
+                    width: 15px;
+                    height: 13.5px;
+                    margin-right: 5px;
+                }
+            }
+
+            .writer {
+                max-width: 25%;
+                font-size: 12px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .time {
+                color: #6c6c6c;
+            }
+        }
+    }
+
+    .board-right {
+        width: 73px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        // margin-left: 7px;
+
+        .thumbnail {
+            width: 80px;
+            height: 84px;
+            border-radius: 16px;
+            background-color: #caeaff;
+        }
+    }
+
+}
+
+.comment_box {
+    width: 100%;
+    padding: 10px 10px 0 10px;
+    height: auto;
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 10px;
+    border-top: 1px solid #ffbf00;
+
+    .cmt {
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        width: 90%;
+        margin-bottom: 7px;
+
+        .mycmt {
+            display: flex;
+            font-size: 12px;
+            color: #ffd453;
+            align-items: center;
+
+            .cmt_r {
+                margin-right: 10px;
+            }
+
+            .cmt_d {
+                color: #6c6c6c;
+            }
+        }
+    }
+
+}
+
+.comment_bottom {
+    height: 60px;
+    margin: 0 1rem;
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    background-color: #FFF0C3;
+
+    .text-input {
+        position: relative;
+        width: 100vw;
+
+        textarea {
+            box-sizing: border-box;
+            width: 100%;
+            height: 40px;
+            line-height: 1.75rem;
+
+            border: none;
+            background-color: #ffffff;
+
+            font-size: 1.1rem;
+            padding: 0.25rem 2.5rem 0.25rem 1rem;
+
+            resize: none;
+            overflow-y: auto;
+
+            &.autoHeight {
+                height: auto;
+
+                +button.send-message {
+                    position: absolute;
+                    left: calc(100% - 2.25rem);
+                    top: 1rem;
+                    width: 32px;
+                    height: 32px;
+                    padding: 2px;
+                    border: 0;
+                    border-radius: 15px;
+                    background: #ffbf00;
+
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+
+            &:focus {
+                outline: 0;
+            }
+        }
+
+        .send-message {
+            position: absolute;
+            left: calc(100% - 2.25rem);
+            top: 0.25rem;
+            width: 32px;
+            height: 32px;
+            padding: 2px;
+            border: 0;
+            border-radius: 15px;
+            background: #ffbf00;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+}
