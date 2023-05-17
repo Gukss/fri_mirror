@@ -42,9 +42,10 @@ public class ReadBoardAndCommentListResponse {
   */
 
   public static ReadBoardAndCommentListResponse create(Board board, long likesCount, boolean likes, long commentCount,
-                                                List<String> boardImage, List<CommentListInstance> commentList) {
+                                                       List<String> boardImage, List<CommentListInstance> commentList) {
     return ReadBoardAndCommentListResponse.builder()
             .boardId(board.getId())
+            .title(board.getTitle())
             .content(board.getContent())
             .likesCount(likesCount)
             .likes(likes)

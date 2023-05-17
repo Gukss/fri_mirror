@@ -50,10 +50,16 @@ public class BoardController {
     return responseEntity;
   }
 
+  /**
+   * 게시판 상세 조회
+   * @param boardId 상세 조회하는 게시판 id
+   * @param userId 조회하는 유저 id
+   * @return 댓글, 좋아요, 이미지 정보가 모두 포함된 게시판 상세 조회 정보
+   */
   @GetMapping("/{boardId}")
   public ResponseEntity<ReadBoardAndCommentListResponse> readBoardDetail(
           @PathVariable("boardId") Long boardId, @RequestHeader("Authorization") Long userId) {
-
-    return null;
+    ReadBoardAndCommentListResponse result = boardService.readBoardDetail(boardId, userId);
+    return ResponseEntity.ok().body(result);
   }
 }
