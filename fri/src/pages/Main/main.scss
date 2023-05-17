@@ -1,12 +1,17 @@
 // page 메인 페이지
 .mainpage {
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
 
   .main-nav {
     position: fixed;
+    top: 0;
+    left: 0;
     box-sizing: border-box;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+    z-index: 1;
   }
 }
 
@@ -36,7 +41,7 @@
 
 // 메인 카테고리 부분
 .main_category {
-  margin-top: 91px;
+  margin-top: 14vh;
   height: calc(100vh - 131.8px);
   overflow-y: scroll;
   overflow-x: hidden;
