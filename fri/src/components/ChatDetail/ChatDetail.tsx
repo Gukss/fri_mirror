@@ -36,6 +36,9 @@ export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
   const roomId = useSelector((state: RootState) => {
     return state.strr.roomId;
   });
+  const nick = useSelector((state: RootState) => {
+    return state.strr.nickname;
+  });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [data, setData] = useState<Roomdetail>();
@@ -50,7 +53,17 @@ export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
     const header = {
       "Content-Type": "application/json",
       Authorization: userId
+    };    
+    const data = {
+      roomId: roomId,
+      message: `${nick}님이 나갔습니다.`
     };
+
+    try {
+      await axios.post(api_url + "chatting", data, { headers: header });
+    } catch (e) {
+      console.log();
+    }
     try {
       await axios.patch(
         api_url + `user/room/${roomId}`,

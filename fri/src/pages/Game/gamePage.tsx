@@ -194,7 +194,7 @@ const GameMain = (): JSX.Element => {
           if (player.userId === userId) setNick(player.name);
         });
       } catch (e) {
-        console.log(e);
+        navigate("/main");
       }
     };
     getData();

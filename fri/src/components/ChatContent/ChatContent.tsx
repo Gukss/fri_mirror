@@ -28,24 +28,27 @@ export default function ChatContent({ msg, contentRef }: msgType) {
     <div className="chat-contents" ref={contentRef}>
       <div className="chat-alert">이곳은 채팅방입니다.<br/> 자유롭게 이야기 하시면 됩니다.</div>
       {msg.map((msg, index) =>
-        Number(msg.memberId || msg.userId) === Number(user) ? (
+        msg.message === `${msg.nickname}님이 입장했습니다.` ||  msg.message === `${msg.nickname}님이 나갔습니다.`? 
+        (
+          <div className="new-face" key={index}>
+            {msg.message}
+          </div>
+        ) :
+        Number(msg.memberId || msg.userId) !== Number(user) ? (
+          <Others
+          key={index}
+          msg={msg.message}
+          anonymousProfileImageUrl={msg.anonymousProfileImageUrl}
+          time={msg.createdAt || msg.time}
+          nickname={msg.nickname}
+          bottomRef={bottomRef}
+        />          
+        ) :
+        (
           <Mine
             key={index}
             msg={msg.message}
             time={msg.createdAt || msg.time}
-            bottomRef={bottomRef}
-          />
-        ) : Number(msg.memberId || msg.userId) === -1 ? (
-          <div className="new-face" key={index}>
-            {msg.message}
-          </div>
-        ) : (
-          <Others
-            key={index}
-            msg={msg.message}
-            anonymousProfileImageUrl={msg.anonymousProfileImageUrl}
-            time={msg.createdAt || msg.time}
-            nickname={msg.nickname}
             bottomRef={bottomRef}
           />
         )

@@ -112,29 +112,40 @@
     font-size: 25px;
   }
 
-  #meeting {
-    left: calc(50vw - 28px);
+  #home {
+    left: calc(50vw - 10px);
   }
 
-  #chat {
-    transform: rotate(-65deg);
-    left: calc(50vw - 130px);
-  }
-
-  #my {
-    transform: rotate(65deg);
-    left: calc(50vw + 85px);
+  #meet {
+    img {
+      width: 60px;
+      left: calc(50vw - 140px);
+      transform: rotate(-5deg);
+    }
   }
 
   #game {
-    transform: rotate(-45deg);
-    left: calc(50vw + 45px);
+    img {
+      width: 70px;
+      left: calc(50vw + 75px);
+      transform: rotate(30deg);
+    }
+  }
+
+  #my {
+    img {
+      width: 55px;
+      left: calc(50vw + 50px);
+      transform: rotate(15deg);
+    }
   }
 
   #commu {
-    transform: rotate(40deg);
-    left: calc(50vw - 120px);
-    color: #8f8f8f;
+    img {
+      width: 100px;
+      left: calc(50vw - 130px);
+      transform: rotate(40deg);
+    }
   }
 }
 
