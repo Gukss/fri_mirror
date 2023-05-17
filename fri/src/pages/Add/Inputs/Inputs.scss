@@ -1,7 +1,16 @@
 .add-input-box {
+  &.post-img {
+    position: relative;
+  }
+  .image-cnt {
+    position: absolute;
+    top: 4px;
+    right: 0;
+  }
   .message {
     text-align: start;
     margin-top: 2px;
+    font-weight: 500;
   }
 
   .input-label {
@@ -36,7 +45,6 @@
     border-radius: 0.5rem;
     border: 2px solid #c0c0c0;
     background-color: #ffffff;
-    box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
     align-self: center;
 
     &::placeholder {
@@ -66,14 +74,14 @@
     border-radius: 0.5rem;
     border: 2px solid #c0c0c0;
     background-color: #ffffff;
-    box-shadow: 0px 0.075rem 0.075rem rgba(0, 0, 0, 0.25);
+
     align-self: center;
 
     &.checked {
       border: 2px solid green;
     }
 
-    +.message {
+    + .message {
       color: green;
     }
 
@@ -91,6 +99,7 @@
     color: #777777;
     font-size: 1rem;
     text-align: left;
+    font-weight: 300;
 
     &.checked {
       color: #000000;
