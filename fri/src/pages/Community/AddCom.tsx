@@ -143,8 +143,6 @@ function AddCom() {
     }
   };
 
-  console.log("사진", file);
-
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -190,29 +188,31 @@ function AddCom() {
   const handleImg = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-      if (e.target.files) {
-        console.log(e.target.files[0]);
+
+      const newFiles = e.target.files;
+      const fileArray: File[] = [...file];
+      const imgArray: string[] = [...images];
+
+      console.log(typeof newFiles, newFiles);
+
+      if (newFiles) {
+        if (newFiles.length > 5) {
+          alert("사진은 최대 5개까지 등록이 가능합니다!");
+          return;
+        } else {
+          for (let i = 0; i < newFiles.length; i++) {
+            const newFile = newFiles[i];
+            // api용 파일 저장
+            fileArray.push(newFile);
+
+            // 렌더용 사진 저장
+            const ImageUrl = URL.createObjectURL(newFile);
+            imgArray.push(ImageUrl);
+          }
+        }
       }
-      // console.log(e.target);
-      // const newFiles = e.target.files[0];
-      // const fileArray: File[] = [...file];
-      // const imgArray: string[] = [...images];
-
-      // console.log(typeof newFiles, newFiles);
-
-      // if (newFiles) {
-      //   for (let i = 0; i < newFiles.length; i++) {
-      //     const newFile = newFiles[i];
-      //     // api용 파일 저장
-      //     fileArray.push(newFile);
-
-      //     // 렌더용 사진 저장
-      //     const ImageUrl = URL.createObjectURL(newFile);
-      //     imgArray.push(ImageUrl);
-      //   }
-      // }
-      // setFile(fileArray);
-      // setImages(imgArray);
+      setFile(fileArray);
+      setImages(imgArray);
     },
     [file, images]
   );
@@ -242,7 +242,7 @@ function AddCom() {
         <form className="add-form" onSubmit={handleSubmit}>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 제목
+              # 제목 <span>(필수)</span>
             </div>
             <div className="add-input">
               <input
@@ -260,7 +260,7 @@ function AddCom() {
           </div>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 카테고리 설정
+              # 카테고리 설정 <span>(필수)</span>
             </div>
             <div className="component">
               <button
@@ -294,7 +294,7 @@ function AddCom() {
           </div>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 본문
+              # 본문 <span>(필수)</span>
             </div>
             <div className="add-textarea">
               <textarea
@@ -310,9 +310,7 @@ function AddCom() {
             </div>
           </div>
           <div className="add-input-box post-img">
-            {images.length > 0 && (
-              <div className="image-cnt">{images.length}개</div>
-            )}
+            <div className="image-cnt">{images.length} / 5</div>
             <div className="input-label" id="label">
               # 사진 <span>(선택)</span>
             </div>
