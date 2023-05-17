@@ -7,17 +7,16 @@
 
   #back {
     float: left;
-    margin: 24px 0 0 24px;
+    margin: 24px 0 0 20px;
   }
 
   .top {
-    width: 100vw;
+    width: calc(100vw - 65px);
     display: flex;
-    font-size: 20px;
-
+    margin-left: 50px;
     height: 24px;
+    margin-top: 40px;
     align-items: center;
-    margin-top: 20px;
     justify-content: center;
   }
 
