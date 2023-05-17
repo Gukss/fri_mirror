@@ -13,8 +13,9 @@
   width: 100vw;
   height: 100vh;
   /* overflow: auto; */
-  position: fixed;
+  /* position: fixed; */
   font-family: "bingrae-bold";
+  overscroll-behavior: none;
 }
 
 input {
