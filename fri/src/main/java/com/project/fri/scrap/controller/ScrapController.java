@@ -1,8 +1,6 @@
 package com.project.fri.scrap.controller;
 
-import com.project.fri.scrap.dto.CreateScrapRequest;
-import com.project.fri.scrap.dto.CreateScrapResponse;
-import com.project.fri.scrap.dto.FindScrapListResponse;
+import com.project.fri.scrap.dto.*;
 import com.project.fri.scrap.service.ScrapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +42,18 @@ public class ScrapController {
     @GetMapping
     public ResponseEntity<FindScrapListResponse> findScrapList(@RequestHeader("Authorization") Long userId) {
         FindScrapListResponse result = scrapService.findScrapList(userId);
+        return ResponseEntity.ok().body(result);
+    }
 
+    @PatchMapping
+    public ResponseEntity<DeleteScrapResponse> deleteScrap(
+            @RequestBody DeleteScrapRequest deleteScrapRequest,
+            @RequestHeader("Authorization") Long userId) {
+        DeleteScrapResponse result = scrapService.deleteScrap(deleteScrapRequest, userId);
+
+        if (result == null) {
+            return ResponseEntity.badRequest().body(new DeleteScrapResponse(true));
+        }
         return ResponseEntity.ok().body(result);
     }
 }

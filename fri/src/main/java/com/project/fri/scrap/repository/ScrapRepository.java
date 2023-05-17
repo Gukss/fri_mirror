@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
     Optional<Scrap> findByUserAndBoardAndIsDeleteFalse(User user, Board board);
-
     @Query("SELECT s FROM Scrap s JOIN FETCH s.board WHERE s.user = :user AND s.isDelete =false ORDER BY s.createdAt ASC")
     List<Scrap> findAllByUserAndIsDeleteFalseOrderByCreatedAtAscWithBoard(@Param("user") User user);
+    Optional<Scrap> findByBoardIdAndUserIdAndIsDeleteFalse(Long boardId, Long userId);
 
     long countByBoardAndIsDeleteFalse(Board board);
 
