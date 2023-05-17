@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { MeetType } from "../pages/Main/mainPage";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
@@ -7,26 +6,26 @@ import { meeting, useegg } from "../redux/user";
 import axios from "axios";
 
 interface roomType {
-  headCount : number;
+  headCount: number;
   id: number;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Roomdetail {
-  roomId : number;
-  title : string;
-  location : string;
+  roomId: number;
+  title: string;
+  location: string;
   roomCategory: string;
-  headCount : number;
-  isParticipate : boolean;
+  headCount: number;
+  isParticipate: boolean;
   participate: boolean;
   major: { name: string; url: string }[];
   nonMajor: { name: string; url: string }[];
 }
 
 function MeetingDetail({ id, headCount, open, setOpen }: roomType) {
-  const [data, setData] = useState<Roomdetail>()
+  const [data, setData] = useState<Roomdetail>();
   const [isOk, setOk] = useState(false);
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
@@ -42,12 +41,21 @@ function MeetingDetail({ id, headCount, open, setOpen }: roomType) {
   });
 
   const isPossible = useSelector((state: RootState) => {
-    if(data === undefined) return;
+    if (data === undefined) return;
+    // 참여한 방이 있을때는
     if (state.strr.roomId !== "참여한 방이 없습니다.") {
       return "already";
-    } else if (state.strr.major === false && data?.nonMajor.length >= data?.headCount / 2) {
+    } else if (
+      // 비전공자일때 막기
+      state.strr.major === false &&
+      data?.nonMajor.length >= data?.headCount / 2
+    ) {
       return "full";
-    } else if (state.strr.major === true && data?.major.length >= data?.headCount / 2) {
+    } else if (
+      // 전공자 일때 막기
+      state.strr.major === true &&
+      data?.major.length >= data?.headCount / 2
+    ) {
       return "full";
     } else {
       return true;
@@ -114,9 +122,13 @@ function MeetingDetail({ id, headCount, open, setOpen }: roomType) {
           <div className="room_modal">
             <div className="title">
               <span>{data?.title}</span>
-              <span style={{ color: "#FFC000" }} onClick={() => setOpen(false)}>
+              <div
+                style={{ color: "#FFC000" }}
+                onClick={() => setOpen(false)}
+                className="x-btn"
+              >
                 X
-              </span>
+              </div>
             </div>
             <div className="place"># {data?.location}</div>
             <div className="soft">

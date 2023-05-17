@@ -64,14 +64,14 @@ const GameMain = (): JSX.Element => {
   });
   const year = useSelector((state: RootState) => {
     return state.strr.year;
-  })
+  });
   const region = useSelector((state: RootState) => {
-    if(state.strr.location === "SEOUL") return "서울";
-    else if(state.strr.location === "DAEJEON") return "대전";
-    else if(state.strr.location === "GUMI") return "구미";
-    else if(state.strr.location === "GWANGJU") return "광주";
-    else if(state.strr.location === "BUSAN") return "부울경";
-  })
+    if (state.strr.location === "SEOUL") return "서울";
+    else if (state.strr.location === "DAEJEON") return "대전";
+    else if (state.strr.location === "GUMI") return "구미";
+    else if (state.strr.location === "GWANGJU") return "광주";
+    else if (state.strr.location === "BUSAN") return "부울경";
+  });
   const [nickname, setNick] = useState<string>("");
 
   const [state, setState] = useState<userInfo[]>([]);
@@ -272,24 +272,6 @@ const GameMain = (): JSX.Element => {
     setResult(true);
   };
 
-  // 모달 바깥쪽 클릭하면
-  // useEffect(() => {
-  //   function handleClickOutside(event: MouseEvent) {
-  //     if (
-  //       resultRef.current &&
-  //       !resultRef.current.contains(event.target as Node)
-  //     ) {
-  //       navigate("/main");
-  //     }
-  //   }
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [resultRef]);
-
-  // 소켓에서 뭐 주면 결과 모달 띄우기
-
   return (
     <>
       {modal ? (
@@ -306,7 +288,9 @@ const GameMain = (): JSX.Element => {
           <div className="game-result" ref={resultRef}>
             <div className="header">{gameTime}초 결과</div>
             <div className="name">{looser}(이)가 쏜다!</div>
-            <div className="time">5분 뒤 <span id="area">{area}</span>에서 만나요</div>
+            <div className="time">
+              5분 뒤 <span id="area">{area}</span>에서 만나요
+            </div>
             <div className="result-table">
               {state.map((player, index) => (
                 <div className="result" key={index}>

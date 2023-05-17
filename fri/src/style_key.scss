@@ -4,7 +4,7 @@
   align-items: start;
   padding-top: 1rem;
   margin-bottom: 15px;
-  height: 30px;
+  height: 5vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -346,7 +346,7 @@
     .soft {
       font-size: 1.25rem;
       margin: 0 1.5rem 0.5rem 1.5rem;
-      height: 140px;
+      height: 120px;
 
       .header {
         display: flex;
@@ -362,7 +362,7 @@
         justify-content: start;
         column-gap: 2rem;
         width: 100%;
-        height: 100px;
+        height: 80px;
         overflow-x: auto;
         white-space: nowrap;
         flex-shrink: 0;
@@ -372,7 +372,7 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          width: 80px;
+          width: 60px;
           height: 100%;
           flex-shrink: 0;
         }
@@ -388,7 +388,7 @@
         }
 
         .name-chat {
-          width: 80px;
+          width: 100%;
           text-align: center;
           white-space: pre-line;
           overflow: hidden;
@@ -456,9 +456,23 @@
     letter-spacing: 0em;
     width: 100vw;
     border-bottom: 1px solid rgba(214, 214, 214, 1);
+    position: relative;
 
     span {
       margin: 24px;
+      margin-right: 48px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .x-btn {
+      font-size: 2rem;
+      position: absolute;
+      top: 24px;
+      right: 16px;
     }
   }
 
