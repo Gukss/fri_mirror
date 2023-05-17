@@ -24,7 +24,7 @@ spring:
 #    password: ENC(pXp97hELSeLXhz+isZEfFK+2QKlpEQ+0)
 
     #서버용-개발
-    url: ENC(2Cm1GpBtqiLcBd3G9T4TzezWcP2vITHmfGtupw/7rUhSs6oPBRr3uIQeqQ6MQqWf2Q1Zm1qCXOs=)
+    url: ENC(Pisukd31oO4oeL6LjxlpHR+HC4mDqQ5OfIIWMem1iMU7iJe0glpyPlM3+fLGMnUzMoU5/TOMihU=)
     username: ENC(1r8bussQYmMrfJCfg4h1mQ==)
     password: ENC(pXp97hELSeLXhz+isZEfFK+2QKlpEQ+0)
 
