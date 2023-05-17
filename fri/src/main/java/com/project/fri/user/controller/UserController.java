@@ -1,6 +1,7 @@
 package com.project.fri.user.controller;
 
 import com.project.fri.user.dto.*;
+import com.project.fri.user.entity.Certification;
 import com.project.fri.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -128,5 +129,12 @@ public class UserController {
     UpdateIsReadyResponse updateIsReadyResponse = userService.updateIsReady(userId,
         updateIsReadyRequest);
     return ResponseEntity.ok().body(updateIsReadyResponse);
+  }
+
+  @PatchMapping("/certified/agreement")
+  public ResponseEntity updateEmailAgreement(@RequestHeader("Authorization") Long userId, @RequestBody UpdateEmailAgreementRequest updateEmailAgreementRequest) {
+    ResponseEntity responseEntity = userService.updateEmailAgreement(userId,
+        updateEmailAgreementRequest);
+    return responseEntity;
   }
 }

@@ -18,8 +18,9 @@ public class SignInUserResponse {
     private String gameRoomId;
     private String name;
     private boolean major;
+    private boolean emailAgreement;
 
-    public SignInUserResponse(User user) {
+    public SignInUserResponse(User user, boolean emailAgreement) {
         userId = user.getId();
         anonymousProfileImageUrl = user.getAnonymousProfileImage().getImageUrl();
         nickname = user.getNickname();
@@ -28,6 +29,7 @@ public class SignInUserResponse {
         heart = user.getHeart();
         name = user.getName();
         major = user.isMajor();
+        this.emailAgreement = emailAgreement;
 
         if (user.getRoom() == null) {
             roomId = "참여한 방이 없습니다.";
