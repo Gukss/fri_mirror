@@ -124,6 +124,7 @@ const GameWaiting = (): JSX.Element => {
 
   useEffect(() => {
     const getData = async () => {
+      try{
       const header = {
         "Content-Type": "application/json",
         Authorization: userId
@@ -148,7 +149,11 @@ const GameWaiting = (): JSX.Element => {
       }
       totalCnt = res.data.headCount;
       gameTime = res.data.randomTime;
-      await connect();
+      await connect();      
+      }
+      catch(e) {
+        navigate("/main")
+      }
     };
     getData();
   }, []);

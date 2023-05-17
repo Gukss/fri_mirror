@@ -92,7 +92,7 @@ export default function Chat() {
     if (client.current !== undefined) client.current.deactivate();
   };
 
-  const outChatMsg: HandleOutChatType = () => {
+  const outChatMsg: HandleOutChatType = async () => {
     if (client.current === undefined) return;
     client.current.publish({
       destination: "/pub/chatting",
@@ -106,22 +106,20 @@ export default function Chat() {
       })
     });
   };
-  const pubInit = () => {
+  const pubInit = async () => {
     if (client.current === undefined) return;
     const info = {
       roomId: roomId,
       message: `${nick}님이 입장했습니다.`,
-      memberId: -1,
+      memberId: userId,
       anonymousProfileImageUrl: "",
       time: "",
       nickname: nick
     };
-    if (!(JSON.stringify(info) in message)) {
       client.current.publish({
         destination: "/pub/chatting",
         body: JSON.stringify(info)
       });
-    }
   };
 
   // 방 시작 후 웹 소켓 연결
@@ -138,7 +136,7 @@ export default function Chat() {
           heartbeatOutgoing: 4000,
           onConnect: () => {
             subscribeChatting();
-            if (isuser === "false") pubInit();
+            if(!message.length) pubInit();
           },
           debug: () => {
             null;
@@ -220,7 +218,7 @@ export default function Chat() {
         console.log(e);
       }
     };
-    if (isuser === "true") getChat();
+    getChat();
   }, []);
 
   useEffect(() => {
@@ -322,9 +320,6 @@ export default function Chat() {
         </div>
         <div className="footer">
           <div className="chat-footer">
-            {/* <div className="gallery">
-              <img src={Image} alt="gallery" />
-            </div> */}
             <div className="text-input">
               <textarea
                 ref={textareaRef}

@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/user";
+import Modal from "../../components/AgreeModal"
 import axios from "axios";
 import logo from "../../assets/images/Logo.png";
 import Back from "../../assets/back.png";
@@ -22,6 +23,8 @@ export default function LogIn() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState<SingInForm>({ email: "", password: "" });
+  const [open, setOpen] = useState(false);
+  const [page, setPage] = useState("");
 
   useEffect(() => {
     preloadImage("/assets/images/Logo.png");
@@ -46,9 +49,11 @@ export default function LogIn() {
         .then((res) => {
           dispatch(login(res.data));
           setForm({ email: "", password: "" });
-          if (res.data.gameRoomId === "참여한 방이 없습니다.")
-            navigate("/main");
-          else navigate(`/wait/${res.data.gameRoomId}`);
+          if(res.data.emailAgreement) navigate("/main");
+          else{
+            setPage("login");
+            setOpen(true);
+          }
         })
         .catch((err) => {
           if (err.response.status === 400)
@@ -99,13 +104,17 @@ export default function LogIn() {
           <div
             className="sing-up"
             onClick={() => {
-              navigate("/signup");
+              setPage("signup")
+              setOpen(true);
             }}
           >
             회원가입하러 가기
           </div>
         </div>
       </div>
+      {
+        open ? <Modal setOpen={setOpen} page={page} /> : null
+      }
     </div>
   );
 }
