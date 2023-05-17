@@ -55,8 +55,8 @@ spring:
     show-sql: true
     hibernate:
       # ddl-auto: create
-      ddl-auto: none
-#      ddl-auto: update
+      # ddl-auto: none
+     ddl-auto: update
 
     properties:
       hibernate:
