@@ -18,4 +18,6 @@ import lombok.NoArgsConstructor;
 public class CertifiedEduRequest {
   @NotNull
   private String email;
+
+  private boolean emailAgreement;
 }
