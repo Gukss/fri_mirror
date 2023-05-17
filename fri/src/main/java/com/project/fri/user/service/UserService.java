@@ -1,6 +1,7 @@
 package com.project.fri.user.service;
 
 import com.project.fri.user.dto.*;
+import com.project.fri.user.entity.Certification;
 import com.project.fri.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,4 +88,5 @@ public interface UserService {
   FindAnonymousProfileImagesResponse findAnonymousProfileImages();
 
   UpdateIsReadyResponse updateIsReady(Long userId, UpdateIsReadyRequest updateIsReadyRequest);
+  ResponseEntity updateEmailAgreement(Long userId, UpdateEmailAgreementRequest updateEmailAgreementRequest);
 }

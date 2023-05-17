@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface LikesRepository extends JpaRepository<Likes, Long> {
 
     Optional<Likes> findByUserAndBoardAndIsDeleteFalse(User user, Board board);
-    int countByBoardAndIsDeleteFalse(Board board);
+    long countByBoardAndIsDeleteFalse(Board board);
 }

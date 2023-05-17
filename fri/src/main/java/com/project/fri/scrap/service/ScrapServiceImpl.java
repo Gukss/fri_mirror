@@ -6,10 +6,7 @@ import com.project.fri.board.repository.BoardRepository;
 import com.project.fri.comment.repository.CommentRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.likes.repository.LikesRepository;
-import com.project.fri.scrap.dto.CreateScrapRequest;
-import com.project.fri.scrap.dto.CreateScrapResponse;
-import com.project.fri.scrap.dto.FindScrapListResponse;
-import com.project.fri.scrap.dto.FindScrapResponse;
+import com.project.fri.scrap.dto.*;
 import com.project.fri.scrap.entity.Scrap;
 import com.project.fri.scrap.repository.ScrapRepository;
 import com.project.fri.user.entity.User;
@@ -82,10 +79,32 @@ public class ScrapServiceImpl implements ScrapService {
                 .map(s -> new FindScrapResponse(s.getBoard(),
                         likesRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
                         commentRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
-                        boardImageRepository.findTopByBoardAndIsDeleteFalseOrderByCreatedAtDesc(s.getBoard()).orElse(null)))
+                        boardImageRepository.findTopByBoardAndIsDeleteFalseOrderByCreatedAtAsc(s.getBoard()).orElse(null)))
                 .collect(Collectors.toList());
 
         return new FindScrapListResponse(scraps);
+    }
+
+    /**
+     * 스크랩 취소 하기
+     * @param deleteScrapRequest 요청
+     * @param userId 유저
+     * @return 취소결과 응답
+     */
+    @Override
+    @Transactional
+    public DeleteScrapResponse deleteScrap(DeleteScrapRequest deleteScrapRequest, Long userId) {
+        Scrap findScrap = scrapRepository.findByBoardIdAndUserIdAndIsDeleteFalse(deleteScrapRequest.getBoardId(), userId)
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_SCRAP));
+
+        // isDelete 가 false -> 잘못된 요청
+        if (!deleteScrapRequest.isDelete()) {
+            return null;
+        }
+
+        boolean result = findScrap.updateIsDelete(deleteScrapRequest.isDelete());
+        return new DeleteScrapResponse(!result);
+
     }
 
 }

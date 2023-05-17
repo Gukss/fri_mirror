@@ -59,4 +59,10 @@ public class Scrap extends BaseTimeEntity {
                     .build())
             .build();
   }
+
+  //==비지니스 로직==//
+  public boolean updateIsDelete(boolean value) {
+    this.isDelete = value;
+    return this.isDelete;
+  }
 }
