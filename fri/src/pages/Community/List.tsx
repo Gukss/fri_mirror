@@ -2,7 +2,9 @@ import Topheader from "../../components/LogoEgg";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
+import OneBoard from "../../components/Board/OneBoard";
 import { useNavigate } from "react-router-dom";
+import Pencil from "../../assets/Pencil.png"
 import axios from "axios";
 import Nav from "../../components/navEgg";
 import "./List.scss"
@@ -57,74 +59,81 @@ function List() {
     // }, [])
 
     return (
-        <div className="boardpage">
-            <div className="board-nav">
-        <Topheader />
-        <ul className="board_cate">
-          <li
-            id={category == "HOT" ? "select" : "HOT"}
-            onClick={() => {
-              setCategory("HOT");
-              // changeCate("HOT");
-            }}
-          >
-            Hot
-          </li>
-          <li
-            id={category == "RESTAURANT" ? "select" : "RESTAURANT"}
-            onClick={() => {
-              setCategory("RESTAURANT");
-              // changeCate("RESTAURANT");
-            }}
-          >
-            맛집
-          </li>
-          <li
-            id={category == "INFORMATION" ? "select" : "INFORMATION"}
-            onClick={() => {
-              setCategory("INFORMATION");
-              // changeCate("INFORMATION");
-            }}
-          >
-            정보
-          </li>
-          <li
-            id={category == "GITHUB" ? "select" : "GITHUB"}
-            onClick={() => {
-              setCategory("GITHUB");
-              // changeCate("GITHUB");
-            }}
-          >
-            Git
-          </li>
-          <li
-            id={category == "JOB" ? "select" : "JOB"}
-            onClick={() => {
-              setCategory("JOB");
-              // changeCate("JOB");
-            }}
-          >
-            Job
-          </li>
-          <li
-            id={category == "FREE" ? "select" : "FREE"}
-            onClick={() => {
-              setCategory("FREE");
-              // changeCate("FREE");
-            }}
-          >
-            자율
-          </li>
-          <li
-            id={category == "ASK" ? "select" : "ASK"}
-            onClick={() => {
-              setCategory("ASK");
-              // changeCate("ASK");
-            }}
-          >
-            QnA
-          </li>
-        </ul>
+      <div className="boardpage">
+        <div className="board-nav">
+          <Topheader />
+          <ul className="board_cate">
+            <li
+              id={category == "HOT" ? "select" : "HOT"}
+              onClick={() => {
+                setCategory("HOT");
+                // changeCate("HOT");
+              }}
+            >
+              Hot
+            </li>
+            <li
+              id={category == "RESTAURANT" ? "select" : "RESTAURANT"}
+              onClick={() => {
+                setCategory("RESTAURANT");
+                // changeCate("RESTAURANT");
+              }}
+            >
+              맛집
+            </li>
+            <li
+              id={category == "INFORMATION" ? "select" : "INFORMATION"}
+              onClick={() => {
+                setCategory("INFORMATION");
+                // changeCate("INFORMATION");
+              }}
+            >
+              정보
+            </li>
+            <li
+              id={category == "GITHUB" ? "select" : "GITHUB"}
+              onClick={() => {
+                setCategory("GITHUB");
+                // changeCate("GITHUB");
+              }}
+            >
+              Git
+            </li>
+            <li
+              id={category == "JOB" ? "select" : "JOB"}
+              onClick={() => {
+                setCategory("JOB");
+                // changeCate("JOB");
+              }}
+            >
+              Job
+            </li>
+            <li
+              id={category == "FREE" ? "select" : "FREE"}
+              onClick={() => {
+                setCategory("FREE");
+                // changeCate("FREE");
+              }}
+            >
+              자유
+            </li>
+            <li
+              id={category == "ASK" ? "select" : "ASK"}
+              onClick={() => {
+                setCategory("ASK");
+                // changeCate("ASK");
+              }}
+            >
+              QnA
+            </li>
+          </ul>
+        </div>
+        <div className="board_medium">
+          <div className="write_board">글쓰기<img src={Pencil} alt="pencil" id="pencil"/></div>
+
+        </div>
+      <div className="board-content">
+        <OneBoard />
       </div>
 				<Nav isnav={isnav} setIsnav={setIsnav} />
 		</div>
