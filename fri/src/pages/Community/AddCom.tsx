@@ -5,7 +5,6 @@ import Back from "../../assets/back.png";
 import logo from "../../assets/small_logo.png";
 import axios from "axios";
 import "./AddCom.scss";
-import { type } from "os";
 
 interface PostForm {
   title: string;
@@ -134,6 +133,8 @@ function AddCom() {
         Authorization: userId
       };
 
+      formData.forEach((data) => console.log(data));
+
       const res = await axios.post(api_url + "board", formData, {
         headers: header
       });
@@ -173,16 +174,9 @@ function AddCom() {
           })
         );
 
-        console.log("파일", file);
-
         if (file.length > 0) {
-          file.forEach((fileObj, index) => {
-            console.log("dd", typeof fileObj, fileObj);
-
-            const fileData = new File([JSON.stringify(fileObj)], fileObj.name, {
-              type: "multipart/form-data"
-            });
-            formData.append("boardImage", fileData);
+          file.forEach((fileObj) => {
+            formData.append("boardImage", fileObj);
           });
         }
 
@@ -197,29 +191,24 @@ function AddCom() {
   const handleImg = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-      if (e.target.files) {
-        console.log(e.target.files[0]);
+
+      const newFiles = e.target.files;
+      const fileArray: File[] = [...file];
+      const imgArray: string[] = [...images];
+
+      if (newFiles) {
+        for (let i = 0; i < newFiles.length; i++) {
+          const newFile = newFiles[i];
+          // api용 파일 저장
+          fileArray.push(newFile);
+
+          // 렌더용 사진 저장
+          const ImageUrl = URL.createObjectURL(newFile);
+          imgArray.push(ImageUrl);
+        }
       }
-      // console.log(e.target);
-      // const newFiles = e.target.files[0];
-      // const fileArray: File[] = [...file];
-      // const imgArray: string[] = [...images];
-
-      // console.log(typeof newFiles, newFiles);
-
-      // if (newFiles) {
-      //   for (let i = 0; i < newFiles.length; i++) {
-      //     const newFile = newFiles[i];
-      //     // api용 파일 저장
-      //     fileArray.push(newFile);
-
-      //     // 렌더용 사진 저장
-      //     const ImageUrl = URL.createObjectURL(newFile);
-      //     imgArray.push(ImageUrl);
-      //   }
-      // }
-      // setFile(fileArray);
-      // setImages(imgArray);
+      setFile(fileArray);
+      setImages(imgArray);
     },
     [file, images]
   );
