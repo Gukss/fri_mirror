@@ -13,8 +13,8 @@ import org.springframework.data.repository.query.Param;
  */
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
   Optional<Board> findTop1ByBoardCategoryOrderByCreatedAtDesc(BoardCategory boardCategory);
+  Optional<Board> findByIdAndIsDeleteFalse(Long boardId);
   @Query("SELECT b FROM Board b JOIN FETCH b.user WHERE b.id = :boardId AND b.isDelete = false")
   Optional<Board> findByIdAndIsDeleteFalseWithUser(@Param("boardId") Long boardId);
-  Optional<Board> findByIdAndIsDeleteFalse(@Param("boardId") Long boardId);
   Optional<Board> findByIdAndUserIdAndIsDeleteFalse(Long boardId, Long userId);
 }
