@@ -79,7 +79,7 @@ public class LikesServiceImpl implements LikesService{
 
         boolean result = findLikesByUserAndBoard.updateIsDelete(deleteLikesRequest.isDelete());
 
-        return new DeleteLikesResponse(result);
+        return new DeleteLikesResponse(!result);
     }
 
 

@@ -17,4 +17,6 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     List<Scrap> findAllByUserAndIsDeleteFalseOrderByCreatedAtAscWithBoard(@Param("user") User user);
     Optional<Scrap> findByBoardIdAndUserIdAndIsDeleteFalse(Long boardId, Long userId);
 
+    long countByBoardAndIsDeleteFalse(Board board);
+
 }

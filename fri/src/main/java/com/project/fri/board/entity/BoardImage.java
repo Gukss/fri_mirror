@@ -1,5 +1,6 @@
 package com.project.fri.board.entity;
 
+import com.project.fri.user.entity.User;
 import com.project.fri.util.BaseEntity;
 import com.project.fri.util.BaseTimeEntity;
 
@@ -35,4 +36,17 @@ public class BoardImage extends BaseTimeEntity {
   @NotNull
   private Board board;
 
+  //==셍성 메서드==//
+  public static BoardImage create(String imageUrl, User user,Board board) {
+    return BoardImage.builder()
+            .boardUrl(imageUrl)
+            .baseEntity(BaseEntity.builder()
+                    .updater(user.getNickname())
+                    .constructor(user.getNickname())
+                    .build())
+            .board(board)
+            .isDelete(false)
+            .build();
+
+  }
 }

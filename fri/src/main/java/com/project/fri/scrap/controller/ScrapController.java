@@ -42,7 +42,6 @@ public class ScrapController {
     @GetMapping
     public ResponseEntity<FindScrapListResponse> findScrapList(@RequestHeader("Authorization") Long userId) {
         FindScrapListResponse result = scrapService.findScrapList(userId);
-
         return ResponseEntity.ok().body(result);
     }
 
@@ -55,7 +54,6 @@ public class ScrapController {
         if (result == null) {
             return ResponseEntity.badRequest().body(new DeleteScrapResponse(true));
         }
-
         return ResponseEntity.ok().body(result);
     }
 }

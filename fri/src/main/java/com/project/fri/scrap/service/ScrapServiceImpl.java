@@ -104,6 +104,7 @@ public class ScrapServiceImpl implements ScrapService {
 
         boolean result = findScrap.updateIsDelete(deleteScrapRequest.isDelete());
         return new DeleteScrapResponse(!result);
+
     }
 
 }

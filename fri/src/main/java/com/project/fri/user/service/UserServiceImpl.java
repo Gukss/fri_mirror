@@ -216,9 +216,12 @@ public class UserServiceImpl implements UserService {
     Optional<Certification> optionalCertification = certificationRepository.findByEmail(certifiedEduRequest.getEmail());
 
     // 이전에 인증만 하고 이탈했으면 인증과정 pass
-    if (optionalCertification.get().isConfirmedCode() && optionalCertification.get().isConfirmedEdu()) { //둘 다 true일 때
-      CertifiedEduResponse certifiedEduResponse = new CertifiedEduResponse(false, "exception");
-      return certifiedEduResponse;
+    if(optionalCertification.isPresent()) {
+      if (optionalCertification.get().isConfirmedCode() && optionalCertification.get()
+          .isConfirmedEdu()) { //둘 다 true일 때
+        CertifiedEduResponse certifiedEduResponse = new CertifiedEduResponse(false, "exception");
+        return certifiedEduResponse;
+      }
     }
 
     boolean isConfirmedEdu = false;
@@ -566,6 +569,7 @@ public class UserServiceImpl implements UserService {
     int headCount = gameRoom.getHeadCount();
     if(updateReadyCount == headCount){ //방 인원과 readyCount가 동일하면
       SocketGameRoomStatusRequestAndResponse x = new SocketGameRoomStatusRequestAndResponse();
+       gameRoom.updateIsDelete(true);
       messagingTemplate.convertAndSend("/sub/game-room/ready/" + gameRoom.getId(), true);
     }
 
