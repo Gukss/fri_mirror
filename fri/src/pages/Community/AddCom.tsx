@@ -173,16 +173,9 @@ function AddCom() {
           })
         );
 
-        console.log("파일", file);
-
         if (file.length > 0) {
-          file.forEach((fileObj, index) => {
-            console.log("dd", typeof fileObj, fileObj);
-
-            const fileData = new File([JSON.stringify(fileObj)], fileObj.name, {
-              type: "multipart/form-data"
-            });
-            formData.append("boardImage", fileData);
+          file.forEach((fileObj) => {
+            formData.append("boardImage", fileObj);
           });
         }
 
