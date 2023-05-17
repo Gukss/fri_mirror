@@ -30,10 +30,9 @@ public class BoardController {
   @PostMapping
   public ResponseEntity createBoard(
       @RequestPart @Validated CreateBoardRequest createBoardRequest,
-      @RequestPart @Validated ArrayList<MultipartFile> boardImage,
+      @RequestPart(required = false) @Validated List<MultipartFile> boardImage,
       @RequestHeader("Authorization") Long userId) {
-    log.info("img size: " + boardImage.size());
-    boardService.createBoard(createBoardRequest, userId);
+    boardService.createBoard(createBoardRequest, boardImage, userId);
     return ResponseEntity.ok().build();
   }
 

@@ -4,11 +4,14 @@ package com.project.fri.board.service;
 import com.project.fri.board.dto.CreateBoardRequest;
 import com.project.fri.board.dto.DeleteBoardRequest;
 import com.project.fri.board.dto.FindBoardResponse;
+
+import java.io.IOException;
 import java.util.List;
 
 import com.project.fri.board.dto.ReadBoardAndCommentListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardService {
 
@@ -18,7 +21,7 @@ public interface BoardService {
    * @param userId
    * @return
    */
-  void createBoard(CreateBoardRequest createBoardRequest, Long userId);
+  void createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId);
 
   /**
    * desc: 게시판 카테고리 별 단건 조회
@@ -38,4 +41,7 @@ public interface BoardService {
    * @return
    */
   ReadBoardAndCommentListResponse readBoardDetail(Long boardId, Long userId);
+
+  String createBoardImageUrl(MultipartFile boardImage);
+
 }
