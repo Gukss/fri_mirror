@@ -18,7 +18,7 @@ function CommentList({comment, board, setCmt, cmt} : commentType) {
     const btnRef = useRef<HTMLButtonElement>(null);
     const [text, setText] = useState<string>("");
     const [data, setData] = useState(comment);
-    const api_url = process.env.REACT_APP_TEST_API;
+    const api_url = process.env.REACT_APP_REST_API;
     const userId = useSelector((state:RootState) => {
         return state.strr.userId;
     })
