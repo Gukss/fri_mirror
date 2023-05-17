@@ -19,5 +19,11 @@ public interface ScrapService {
      */
     FindScrapListResponse findScrapList(Long userId);
 
+    /**
+     * scrap 취소
+     * @param deleteScrapRequest 요청
+     * @param userId header
+     * @return 스크랩 취소 결과 응답
+     */
     DeleteScrapResponse deleteScrap(DeleteScrapRequest deleteScrapRequest, Long userId);
 }

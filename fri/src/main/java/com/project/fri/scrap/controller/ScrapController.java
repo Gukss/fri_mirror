@@ -50,8 +50,12 @@ public class ScrapController {
     public ResponseEntity<DeleteScrapResponse> deleteScrap(
             @RequestBody DeleteScrapRequest deleteScrapRequest,
             @RequestHeader("Authorization") Long userId) {
+        DeleteScrapResponse result = scrapService.deleteScrap(deleteScrapRequest, userId);
 
+        if (result == null) {
+            return ResponseEntity.badRequest().body(new DeleteScrapResponse(true));
+        }
 
-        return null;
+        return ResponseEntity.ok().body(result);
     }
 }

@@ -85,18 +85,25 @@ public class ScrapServiceImpl implements ScrapService {
         return new FindScrapListResponse(scraps);
     }
 
+    /**
+     * 스크랩 취소 하기
+     * @param deleteScrapRequest 요청
+     * @param userId 유저
+     * @return 취소결과 응답
+     */
     @Override
     @Transactional
     public DeleteScrapResponse deleteScrap(DeleteScrapRequest deleteScrapRequest, Long userId) {
         Scrap findScrap = scrapRepository.findByBoardIdAndUserIdAndIsDeleteFalse(deleteScrapRequest.getBoardId(), userId)
-                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
+                .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_SCRAP));
 
-        // 삭제요청일 때만 삭제
-        if (deleteScrapRequest.isDelete()) {
-            findScrap.deleteScrap();
+        // isDelete 가 false -> 잘못된 요청
+        if (!deleteScrapRequest.isDelete()) {
+            return null;
         }
 
-        return new DeleteScrapResponse(false);
+        boolean result = findScrap.updateIsDelete(deleteScrapRequest.isDelete());
+        return new DeleteScrapResponse(!result);
     }
 
 }
