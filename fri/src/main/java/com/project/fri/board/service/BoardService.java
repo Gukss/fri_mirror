@@ -1,14 +1,13 @@
 package com.project.fri.board.service;
 
 
-import com.project.fri.board.dto.CreateBoardRequest;
-import com.project.fri.board.dto.DeleteBoardRequest;
-import com.project.fri.board.dto.FindBoardResponse;
+import com.project.fri.board.dto.*;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.project.fri.board.dto.ReadBoardAndCommentListResponse;
+import com.project.fri.board.entity.Category;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,4 +43,11 @@ public interface BoardService {
 
   String createBoardImageUrl(MultipartFile boardImage);
 
+  /**
+   * 게시판 카테고리별 목록 조회
+   * @param category 요청 카테고리
+   * @param userId 유저
+   * @return 카테고리별 목록 응답 FindAllBoardByRoomCategoryResponse
+   */
+  FindAllBoardByRoomCategoryResponse findAllBoardByRoomCategory(Category category, Long userId, Pageable pageable);
 }

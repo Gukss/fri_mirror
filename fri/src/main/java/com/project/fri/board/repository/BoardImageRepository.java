@@ -14,7 +14,7 @@ import java.util.Optional;
  * : 2023-05-10 description    :
  */
 public interface BoardImageRepository extends JpaRepository<BoardImage, Long> {
-    Optional<BoardImage> findTopByBoardAndIsDeleteFalseOrderByCreatedAtDesc(Board board);
+    Optional<BoardImage> findTopByBoardAndIsDeleteFalseOrderByCreatedAtAsc(Board board);
     @Query("SELECT b.boardUrl FROM BoardImage b WHERE b.board = :board AND b.isDelete = false")
     List<String> findImageUrlByBoard(@Param("board") Board board);
 

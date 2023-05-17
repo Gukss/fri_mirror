@@ -79,7 +79,7 @@ public class ScrapServiceImpl implements ScrapService {
                 .map(s -> new FindScrapResponse(s.getBoard(),
                         likesRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
                         commentRepository.countByBoardAndIsDeleteFalse(s.getBoard()),
-                        boardImageRepository.findTopByBoardAndIsDeleteFalseOrderByCreatedAtDesc(s.getBoard()).orElse(null)))
+                        boardImageRepository.findTopByBoardAndIsDeleteFalseOrderByCreatedAtAsc(s.getBoard()).orElse(null)))
                 .collect(Collectors.toList());
 
         return new FindScrapListResponse(scraps);

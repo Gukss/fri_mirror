@@ -24,6 +24,7 @@ import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -169,7 +172,7 @@ public class BoardServiceImpl implements BoardService {
     User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
     // 좋아요, 댓글, 스크랩 수
-    long likeCount = likesRepository.countByBoardAndIsDeleteFalse(findBoard);
+    long likeCount = findBoard.getLikesCount();
     long commentCount = commentRepository.countByBoardAndIsDeleteFalse(findBoard);
     long scrapCount = scrapRepository.countByBoardAndIsDeleteFalse(findBoard);
     // 내가 좋아요 했는지 여부, 내가 스크랩 했는지 여부
@@ -186,5 +189,51 @@ public class BoardServiceImpl implements BoardService {
 
     return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList, scrapCount, scrap);
 
+  }
+
+  /**
+   * 게시판 카테고리별 목록 조회
+   * @param category 요청 카테고리
+   * @param userId 유저
+   * @return 카테고리별 목록 응답 FindAllBoardByRoomCategoryResponse
+   */
+  @Override
+  public FindAllBoardByRoomCategoryResponse findAllBoardByRoomCategory(Category category, Long userId, Pageable pageable) {
+    // 잘못된 요청
+    if (category == null || userId == null) {
+      return null;
+    }
+
+    List<Board> choiceBoardList;
+
+    User findUser=userRepository.findById(userId)
+            .orElseThrow(()->new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+    if (category.toString().equals("HOT")) {
+      Pageable newPageable = PageRequest.of(0, pageable.getPageSize(), pageable.getSort());
+      // HOT 게시판 조회 2주 동안의 글중 좋아요가 10개 이상인 글
+      choiceBoardList = boardRepository.findHotBoardList(LocalDateTime.now().minusWeeks(2), newPageable);
+
+    } else {
+      BoardCategory findBoardCategory = boardCategoryRepository.findByCategory(category)
+              .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_CATEGORY));
+      choiceBoardList = boardRepository.findAllByBoardCategoryAndIsDeleteFalseOrderByCreatedAtDesc(findBoardCategory);
+
+    }
+
+    List<FindBoardByRoomCategoryResponse> boardListByCategory = choiceBoardList.stream()
+            .map(b -> {
+              Optional<Likes> findLikes = likesRepository.findByUserAndBoardAndIsDeleteFalse(findUser, b);
+              long commentCount = commentRepository.countByBoardAndIsDeleteFalse(b);
+              Optional<BoardImage> findBoardImage = boardImageRepository.findTopByBoardAndIsDeleteFalseOrderByCreatedAtAsc(b);
+
+              if (findBoardImage.isPresent()) {
+                return FindBoardByRoomCategoryResponse.create(b, findLikes.isPresent(), commentCount, findBoardImage.get().getBoardUrl());
+              } else {
+                return FindBoardByRoomCategoryResponse.create(b, findLikes.isPresent(), commentCount, "");
+              }
+            }).collect(Collectors.toList());
+
+    return new FindAllBoardByRoomCategoryResponse(boardListByCategory);
   }
 }
