@@ -18,6 +18,8 @@ import com.project.fri.comment.repository.CommentRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
 import com.project.fri.likes.entity.Likes;
 import com.project.fri.likes.repository.LikesRepository;
+import com.project.fri.scrap.entity.Scrap;
+import com.project.fri.scrap.repository.ScrapRepository;
 import com.project.fri.user.entity.User;
 import com.project.fri.user.repository.UserRepository;
 
@@ -48,6 +50,7 @@ public class BoardServiceImpl implements BoardService {
   private final BoardImageRepository boardImageRepository;
   private final LikesRepository likesRepository;
   private final CommentRepository commentRepository;
+  private final ScrapRepository scrapRepository;
 
   private final AmazonS3Client amazonS3Client;
 
@@ -161,16 +164,19 @@ public class BoardServiceImpl implements BoardService {
    */
   @Override
   public ReadBoardAndCommentListResponse readBoardDetail(Long boardId, Long userId) {
-    Board findBoard = boardRepository.findByIdAndIsDeleteFalse(boardId)
+    Board findBoard = boardRepository.findByIdAndIsDeleteFalseWithUser(boardId)
             .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
     User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-    // 좋아요, 댓갤 수
+    // 좋아요, 댓글, 스크랩 수
     long likeCount = likesRepository.countByBoardAndIsDeleteFalse(findBoard);
     long commentCount = commentRepository.countByBoardAndIsDeleteFalse(findBoard);
-    // 내가 좋아요 했는지 여부 확인
+    long scrapCount = scrapRepository.countByBoardAndIsDeleteFalse(findBoard);
+    // 내가 좋아요 했는지 여부, 내가 스크랩 했는지 여부
     Optional<Likes> findLikes = likesRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard);
     boolean likes = findLikes.isPresent();
+    Optional<Scrap> findScrap = scrapRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard);
+    boolean scrap = findScrap.isPresent();
     // 댓글 리스트
     List<CommentListInstance> commentList = commentRepository.findAllByBoardAndIsDeleteFalseOrderByCreatedAtDescWithBoardAndUser(findBoard).stream()
             .map(c -> new CommentListInstance(c, userId))
@@ -178,7 +184,7 @@ public class BoardServiceImpl implements BoardService {
     // 해당 게시글 사진들 조회
     List<String> boardImageUrlList = boardImageRepository.findImageUrlByBoard(findBoard);
 
-    return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList);
+    return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList, scrapCount, scrap);
 
   }
 }
