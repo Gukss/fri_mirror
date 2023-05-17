@@ -46,14 +46,14 @@ export default function Add() {
     return state.strr.userId;
   });
   const category = () => {
-    if (cate === "bet") return "내기"
-    else if (cate === "DRINK") return "술"
-    else if (cate === "MEAL") return "밥"
-    else if (cate === "GAME") return "오락"
-    else if (cate === "EXERCISE") return "운동"
-    else if (cate === "STUDY") return "공부"
-    else if (cate === "ETC") return "기타"
-  }
+    if (cate === "bet") return "내기";
+    else if (cate === "DRINK") return "술";
+    else if (cate === "MEAL") return "밥";
+    else if (cate === "GAME") return "오락";
+    else if (cate === "EXERCISE") return "운동";
+    else if (cate === "STUDY") return "공부";
+    else if (cate === "ETC") return "기타";
+  };
 
   const [form, setForm] = useState<AddForm>({
     cate: "",
@@ -144,8 +144,8 @@ export default function Add() {
           };
         }
         createRoom(data, url);
-      } else {       
-        alert("잘못된 입력입니다.",);
+      } else {
+        alert("잘못된 입력입니다.");
       }
     },
     [form, error, message]
@@ -179,9 +179,11 @@ export default function Add() {
                   message={message}
                   setMessage={setMessage}
                 />
-                {
-                  cate !== "bet" ?
-                  <div className="add-tip">※ 방을 만들기 위해서는 알이 하나 필요해요 ※</div> : null}
+                {cate !== "bet" ? (
+                  <div className="add-tip">
+                    ※ 방을 만들기 위해서는 알이 하나 필요해요 ※
+                  </div>
+                ) : null}
                 <button
                   className="add-btn"
                   id={
