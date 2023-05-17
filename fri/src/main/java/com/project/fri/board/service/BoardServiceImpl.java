@@ -161,7 +161,7 @@ public class BoardServiceImpl implements BoardService {
    */
   @Override
   public ReadBoardAndCommentListResponse readBoardDetail(Long boardId, Long userId) {
-    Board findBoard = boardRepository.findByIdAndUserIdAndIsDeleteFalse(boardId, userId)
+    Board findBoard = boardRepository.findByIdAndIsDeleteFalse(boardId)
             .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_BOARD));
     User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
