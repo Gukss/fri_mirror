@@ -17,4 +17,6 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     @Query("SELECT s FROM Scrap s JOIN FETCH s.board WHERE s.user = :user AND s.isDelete =false ORDER BY s.createdAt ASC")
     List<Scrap> findAllByUserAndIsDeleteFalseOrderByCreatedAtAscWithBoard(@Param("user") User user);
 
+    long countByBoardAndIsDeleteFalse(Board board);
+
 }

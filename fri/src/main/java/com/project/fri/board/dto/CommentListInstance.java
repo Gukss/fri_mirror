@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CommentListInstance {
   private Long commentId;
+  private String nickname;
   @NotNull
   private String content;
   @NotNull
@@ -30,6 +31,7 @@ public class CommentListInstance {
 
   public CommentListInstance(Comment comment, Long userId) {
     commentId = comment.getId();
+    nickname = comment.getUser().getNickname();
     content = comment.getContent();
     createdAt = comment.getCreatedAt();
     if (comment.getUser().getId().equals(userId)) {
