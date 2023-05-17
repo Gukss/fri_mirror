@@ -1,0 +1,96 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    context-path: /api
+
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    #서버용
+    url: ENC(upYg2gFoNX6LVCDQsjv1ssJJR62cSC/dmkwSEs1V8JH0Awd7dm6ltdNeot09aHsIkWRIxIQNMOI=)
+    username: ENC(1r8bussQYmMrfJCfg4h1mQ==)
+    password: ENC(pXp97hELSeLXhz+isZEfFK+2QKlpEQ+0)
+    #로컬용
+#    url: jdbc:mariadb://localhost:3307/fri
+#    username: root
+#    password: ssafy
+
+  #  email:
+  #    properties:
+
+  #  mail:
+  #    host: smtp.gmail.com
+  #    port: 587
+  #    username: no.reply.eggfri@gmail.com
+  #    password: xueepbwrdkjymbup
+  #    properties:
+  #      mail:
+  #        smtp:
+  #          auth: true
+  #          starttls:
+  #            enable: true
+
+
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      # ddl-auto: create
+      ddl-auto: none
+#      ddl-auto: update
+
+    properties:
+      hibernate:
+        # sql 변수 생성 시 자동으로 ``으로 감싸준다.
+        globally_quoted_identifiers: true
+        # 콘솔에 뜨는 sql 보기 좋게 만들어준다.
+        format_sql: true
+
+mail:
+  smtp:
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      class: javax.net.ssl.SSLSocketFactory
+      fallback: false
+      port: 465
+    port: 465
+
+# admin 구글 계정
+AdminMail:
+  id: no.reply.eggfri@gmail.com
+  password: ENC(6lYSRkQQ3fJQ6qKTjHXYCMD+dmB7BCkXmdXNIpNOZCk=)
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(o7x5UFdTtq6HEPsoilBpx5Hc/2cmcSoHqZ0l11kqdjw=)
+      secretKey: ENC(GezhgTAYqhHKsQDTi2yHj/EQO7ezy49WRRSn5wK1l4WMtbg+h0guOp9SFtAKmccEPaa1Cnrsfbc=)
+    s3:
+      bucket: meetingfri    # ex) marryting-gyunny
+    #      dir: /blur # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
