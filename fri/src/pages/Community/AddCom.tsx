@@ -133,18 +133,13 @@ function AddCom() {
         Authorization: userId
       };
 
-      formData.forEach((data) => console.log(data));
-
-      const res = await axios.post(api_url + "board", formData, {
+      await axios.post(api_url + "board", formData, {
         headers: header
       });
-      console.log(res);
     } catch (e) {
       console.log(e);
     }
   };
-
-  console.log("사진", file);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -238,7 +233,7 @@ function AddCom() {
         <form className="add-form" onSubmit={handleSubmit}>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 제목
+              # 제목 <span>(필수)</span>
             </div>
             <div className="add-input">
               <input
@@ -256,7 +251,7 @@ function AddCom() {
           </div>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 카테고리 설정
+              # 카테고리 설정 <span>(필수)</span>
             </div>
             <div className="component">
               <button
@@ -290,7 +285,7 @@ function AddCom() {
           </div>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 본문
+              # 본문 <span>(필수)</span>
             </div>
             <div className="add-textarea">
               <textarea
@@ -306,9 +301,7 @@ function AddCom() {
             </div>
           </div>
           <div className="add-input-box post-img">
-            {images.length > 0 && (
-              <div className="image-cnt">{images.length}개</div>
-            )}
+            <div className="image-cnt">{images.length} / 5</div>
             <div className="input-label" id="label">
               # 사진 <span>(선택)</span>
             </div>

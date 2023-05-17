@@ -73,6 +73,8 @@ export default function SignUp() {
 
   const [isAreaDown, setIsAreaDown] = useState(false);
 
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   const onClickArea = useCallback(() => {
     setIsAreaDown(!isAreaDown);
   }, [isAreaDown]);
@@ -339,6 +341,10 @@ export default function SignUp() {
       setCon(true);
       setEmail(false);
       setLoading(false);
+      setDisabled(true);
+      alert(
+        "입력하신 이메일로 인증번호 8자리가 발송되었습니다! \n이메일을 확인해주세요 :)"
+      );
     } catch (e: any) {
       setLoading(false);
       if (e.response.data.code === "exception") {
@@ -445,7 +451,7 @@ export default function SignUp() {
                   id="id"
                   onChange={handleInput}
                   onBlur={handleBlur}
-                  disabled={isCer ? true : false}
+                  disabled={disabled ? true : false}
                   autoFocus
                 />
               </div>
@@ -470,7 +476,7 @@ export default function SignUp() {
                         justifyContent: "center"
                       }}
                     >
-                      인증
+                      이메일로 인증번호 보내기
                     </div>
                   ) : (
                     <div className="spinner">
