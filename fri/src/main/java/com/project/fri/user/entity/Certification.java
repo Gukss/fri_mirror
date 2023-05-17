@@ -1,5 +1,7 @@
 package com.project.fri.user.entity;
 
+import com.project.fri.util.BaseTimeEntity;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="certification")
-public class Certification {
+public class Certification extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="certification_id")
@@ -39,19 +41,33 @@ public class Certification {
 
   private boolean isConfirmedCode;
 
-  public static Certification init(String email, String code, boolean isConfirmedEdu, boolean isConfirmedCode){
+  private boolean isEmailAgreement;
+  @NotNull
+  private LocalDateTime emailAgreementAt;
+
+  public static Certification init(String email, String code, boolean isConfirmedEdu, boolean isConfirmedCode, boolean isEmailAgreement){
     return Certification.builder()
         .email(email)
         .code(code)
         .isConfirmedEdu(isConfirmedEdu) //edu 인증을 마친 것만 db에 들어간다.
         .isConfirmedCode(isConfirmedCode)
+        .isEmailAgreement(isEmailAgreement)
+        .emailAgreementAt(LocalDateTime.now())
         .build();
   }
 
-  public Certification update(String code, boolean isConfirmedEdu, boolean isConfirmedCode){
+  public Certification update(String code, boolean isConfirmedEdu, boolean isConfirmedCode, boolean isEmailAgreement, LocalDateTime time){
     this.code = code;
     this.isConfirmedEdu = isConfirmedEdu;
     this.isConfirmedCode = isConfirmedCode;
+    this.isEmailAgreement = isEmailAgreement;
+    this.update(time);
+    return this;
+  }
+
+  public Certification updateEmailAgreementAndEmailAgreementAt(boolean isEmailAgreement){
+    this.isEmailAgreement = isEmailAgreement;
+    this.emailAgreementAt = LocalDateTime.now();
     return this;
   }
 }
