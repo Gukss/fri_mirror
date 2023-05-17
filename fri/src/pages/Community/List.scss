@@ -83,6 +83,7 @@
         // border: 2px solid rgba(255, 192, 0, 1);
         width: 100%;
         height: calc(100vh - 180px);
+        overflow-y: scroll;
     }
 }
 

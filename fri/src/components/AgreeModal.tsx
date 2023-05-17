@@ -33,7 +33,7 @@ function AgreeModal({setOpen, page} : modalType) {
       }
       catch(e){console.log(e)}
     }
-    else{
+    else if(page === "signup") {
       if(check) navigate("/signup")
       else alert("마음이 바뀌시면 다시 찾아주세요..")
     }

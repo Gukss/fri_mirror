@@ -149,7 +149,7 @@ function List() {
           </ul>
         </div>
         <div className="board_medium">
-          <div className="write_board">글쓰기<img src={Pencil} alt="pencil" id="pencil"/></div>
+          <div className="write_board" onClick={() => navigate("/newboard")}>글쓰기<img src={Pencil} alt="pencil" id="pencil"/></div>
           <div className="board_sort_group">
           <div className="board_sort"><img src={Sort} alt="=" />{sort}</div>
           {/* {
@@ -172,7 +172,7 @@ function List() {
             <OneBoard board={board} key={board.boardId}/>
           ))
           :
-          <div className="no_content">아직 게시물이 없어요.</div>       
+          <div className="no_content">아직 게시물이 없어요</div>       
         }
       </div>
 				<Nav isnav={isnav} setIsnav={setIsnav} />
