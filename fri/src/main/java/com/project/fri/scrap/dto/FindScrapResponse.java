@@ -13,12 +13,12 @@ public class FindScrapResponse {
     private Long boardId;
     private String title;
     private String content;
-    private int likesCount;
-    private int commentCount;
+    private long likesCount;
+    private long commentCount;
     private LocalDateTime createdAt;
     private String boardImageThumbnail;
 
-    public FindScrapResponse(Board board, int likes, int comments, BoardImage boardImage) {
+    public FindScrapResponse(Board board, long likes, long comments, BoardImage boardImage) {
         boardId = board.getId();
         title = board.getTitle();
         content = board.getContent();

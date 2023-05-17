@@ -1,5 +1,6 @@
 package com.project.fri.user.service;
 
+import com.amazonaws.Response;
 import com.project.fri.common.entity.Area;
 import com.project.fri.common.repository.AreaRepository;
 import com.project.fri.exception.exceptino_message.NotFoundExceptionMessage;
@@ -17,6 +18,7 @@ import com.project.fri.user.repository.CertificationRepository;
 import com.project.fri.user.repository.UserRepository;
 import com.project.fri.user.repository.UserRoomTimeRepository;
 import com.sun.jdi.request.InvalidRequestStateException;
+import java.time.LocalDateTime;
 import java.util.Random;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -66,7 +68,6 @@ public class UserServiceImpl implements UserService {
   private final JavaMailSender emailSender;
   private final SimpMessageSendingOperations messagingTemplate;
 
-
 //  public static final String ePw = createKey();
 
   private static final String URL = "https://edu.ssafy.com/comm/login/SecurityLoginForm.do";
@@ -115,7 +116,7 @@ public class UserServiceImpl implements UserService {
           HttpStatus userRoomTime = userRoomTimeService.createUserRoomTime(findUser, findRoom);
 
           // userRoomTime 테이블에서 에러 발생시 예외 에러처리
-          if (userRoomTime.isError()){
+          if (userRoomTime.isError()) {
             throw new InvalidRequestStateException();
           }
           findUser.minusHeart();
@@ -140,7 +141,7 @@ public class UserServiceImpl implements UserService {
       HttpStatus userRoomTime = userRoomTimeService.updateUserRoomTime(findUser, findRoom);
 
       // userRoomTime 테이블에서 에러 발생시 예외 에러처리
-      if (userRoomTime.isError()){
+      if (userRoomTime.isError()) {
         throw new InvalidRequestStateException();
       }
       //ready 상태 false만들기 -> merge 하고난 후
@@ -213,10 +214,15 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public CertifiedEduResponse certifiedEdu(CertifiedEduRequest certifiedEduRequest) {
-    Optional<Certification> optionalCertification = certificationRepository.findByEmail(certifiedEduRequest.getEmail());
+    if (!certifiedEduRequest.isEmailAgreement()) { //이메일 사용 동의 안됐으면
+      return new CertifiedEduResponse(false, "emailAgreementException");
+    }
+
+    Optional<Certification> optionalCertification = certificationRepository.findByEmail(
+        certifiedEduRequest.getEmail());
 
     // 이전에 인증만 하고 이탈했으면 인증과정 pass
-    if(optionalCertification.isPresent()) {
+    if (optionalCertification.isPresent()) {
       if (optionalCertification.get().isConfirmedCode() && optionalCertification.get()
           .isConfirmedEdu()) { //둘 다 true일 때
         CertifiedEduResponse certifiedEduResponse = new CertifiedEduResponse(false, "exception");
@@ -262,14 +268,23 @@ public class UserServiceImpl implements UserService {
     if (isConfirmedEdu) { //에듀싸피에 유효한 이메일이면 메일을 보낸다.
       key = createKey();
       //key db에 email이랑 같이 저장해주기
-      Certification initCertification = Certification.init(email, key, true, false);
+      Certification initCertification = Certification.init(email, key, true, false,
+          certifiedEduRequest.isEmailAgreement());
       boolean confirmedEdu = initCertification.isConfirmedEdu();
       boolean confirmedCode = initCertification.isConfirmedCode();
       String code = initCertification.getCode();
 
+      //회원가입 돼있는 사용자가 회원가입을 또 누르면 optionalCertification이 존재한다.
+      //이 때 emailaGreementAt의 시간이 변경되면 안된다.
+      Optional<User> optionalUser = userRepository.findByEmail(email);
+      if (optionalUser.isPresent()) {
+        return new CertifiedEduResponse(false, "againSignUp");
+      }
+
       if (optionalCertification.isPresent()) { //존재할 때는 update 해야한다.
         Certification certification = optionalCertification.get();
-        certification.update(code, confirmedEdu, confirmedCode);
+        certification.update(code, confirmedEdu, confirmedCode,
+            certifiedEduRequest.isEmailAgreement(), LocalDateTime.now());
       } else { //없으면 저장해줘야한다.
         certificationRepository.save(initCertification); //edu 만 true인 상태
       }
@@ -352,7 +367,6 @@ public class UserServiceImpl implements UserService {
   public SignInUserResponse signIn(SignInUserRequest signInUserRequest) {
     Optional<User> user = userRepository.findByEmailWithAreaAndAnonymousProfileImage(
         signInUserRequest.getEmail());
-
     if (user.isPresent()) {
       User findUser = user.get();
       String salt = findUser.getSalt();
@@ -360,7 +374,11 @@ public class UserServiceImpl implements UserService {
       // 다르넹...
       // 패스워드 일치 확인
       if (findUser.getPassword().equals(encrypt)) {
-        return new SignInUserResponse(findUser);
+        Certification certification = certificationRepository.findByEmail(findUser.getEmail())
+            .orElseThrow(
+                () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+
+        return new SignInUserResponse(findUser, certification.isEmailAgreement());
       }
       return null;
     }
@@ -441,7 +459,8 @@ public class UserServiceImpl implements UserService {
     boolean confirmedEdu = certification.isConfirmedEdu();
     String certificationCode = certification.getCode();
     if (certificationCode.equals(code)) { //코드가 일치할 때
-      certification.update(code, confirmedEdu, true); //true로 업데이트
+      certification.update(code, confirmedEdu, true, certification.isConfirmedCode(),
+          certification.getEmailAgreementAt()); //true로 업데이트
       certifiedCodeResponse = new CertifiedCodeResponse(true);
     } else {//일치하지 않을 때 아무동작 안한다.
       certifiedCodeResponse = new CertifiedCodeResponse(false);
@@ -548,15 +567,16 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
 
     GameRoom gameRoom = gameRoomRepository.findById(updateIsReadyRequest.getGameRoomId())
-        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_GAME_ROOM));
+        .orElseThrow(
+            () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_GAME_ROOM));
 
     user.updateReady(updateIsReadyRequest.isReady());
 
     int value = 0;
     //todo: 프론트를 믿지말고, postman으로 true가 계속 넘어오면 계속 +1 한다. => 고치기
-    if(user.isReady()){ //준비
+    if (user.isReady()) { //준비
       value = 1;
-    }else{ //준비 해제
+    } else { //준비 해제
       value = -1;
     }
 
@@ -567,13 +587,32 @@ public class UserServiceImpl implements UserService {
 
     //headCount를 모두 채워야 동작하는 코드
     int headCount = gameRoom.getHeadCount();
-    if(updateReadyCount == headCount){ //방 인원과 readyCount가 동일하면
+    if (updateReadyCount == headCount) { //방 인원과 readyCount가 동일하면
       SocketGameRoomStatusRequestAndResponse x = new SocketGameRoomStatusRequestAndResponse();
-       gameRoom.updateIsDelete(true);
+      gameRoom.updateIsDelete(true);
       messagingTemplate.convertAndSend("/sub/game-room/ready/" + gameRoom.getId(), true);
     }
 
     UpdateIsReadyResponse updateIsReadyResponse = UpdateIsReadyResponse.create(user.isReady());
     return updateIsReadyResponse;
+  }
+
+  @Override
+  @Transactional
+  public ResponseEntity<UpdateEmailAgreementResponse> updateEmailAgreement(Long userId,
+      UpdateEmailAgreementRequest updateEmailAgreementRequest) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    //해당 요청은 무조건 가입된 유저만 요청을 보낼 수 있다.
+    Certification certification = certificationRepository.findByEmail(user.getEmail())
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM));
+    certification.updateEmailAgreementAndEmailAgreementAt(
+        updateEmailAgreementRequest.isEmailAgreement());
+    ResponseEntity res = null;
+    UpdateEmailAgreementResponse updateEmailAgreementResponse = UpdateEmailAgreementResponse.create(
+        certification.isEmailAgreement());
+    res = ResponseEntity.ok().body(updateEmailAgreementResponse); //동의는 true, 동의 철회는 false 담아서 보낸다.
+
+    return res;
   }
 }
