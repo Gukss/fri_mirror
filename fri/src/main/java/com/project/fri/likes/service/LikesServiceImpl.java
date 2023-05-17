@@ -50,6 +50,7 @@ public class LikesServiceImpl implements LikesService{
 
         Likes likes = Likes.craete(findBoard, findUser);
         likesRepository.save(likes);
+        findBoard.updateLikesCount(1);
 
         return new CreateLikesResponse(true);
     }
@@ -78,6 +79,7 @@ public class LikesServiceImpl implements LikesService{
         }
 
         boolean result = findLikesByUserAndBoard.updateIsDelete(deleteLikesRequest.isDelete());
+        findBoard.updateLikesCount(-1);
 
         return new DeleteLikesResponse(!result);
     }

@@ -34,14 +34,14 @@ public class Board extends BaseTimeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "board_id")
-  private long id;
+  private Long id;
   @NotNull
   private String title;
   @NotNull
   @Column(length = 3000)
   private String content;
-
   private boolean isDelete;
+  private int likesCount;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "board_category_id")
   @NotNull
@@ -59,6 +59,7 @@ public class Board extends BaseTimeEntity {
     return Board.builder()
         .title(createBoardRequest.getTitle())
         .content(createBoardRequest.getContent())
+        .likesCount(0)
         .boardCategory(boardCategory)
         .user(user)
         .baseEntity(BaseEntity.builder()
@@ -71,5 +72,12 @@ public class Board extends BaseTimeEntity {
   public Board updateIsDelete(boolean isDelete){
     this.isDelete = isDelete;
     return this;
+  }
+
+  public void updateLikesCount(int cnt) {
+    this.likesCount += cnt;
+    if (this.likesCount < 0) {
+      this.likesCount = 0;
+    }
   }
 }
