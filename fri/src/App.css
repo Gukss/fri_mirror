@@ -15,7 +15,6 @@
   /* overflow: auto; */
   /* position: fixed; */
   font-family: "bingrae-bold";
-  overscroll-behavior: none;
 }
 
 input {
