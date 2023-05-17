@@ -22,13 +22,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReadBoardAndCommentListResponse {
   private long boardId;
+  private String nickname;
+  private String anonymousProfileImageUrl;
   @NotNull
   private String title;
   @NotNull
   private String content;
   private long likesCount;
-  private boolean likes;
   private long commentCount;
+  private long scrapCount;
+  private boolean likes;
+  private boolean scrap;
   private LocalDateTime createAt;
   private List<String> boardImage;
 
@@ -42,14 +46,19 @@ public class ReadBoardAndCommentListResponse {
   */
 
   public static ReadBoardAndCommentListResponse create(Board board, long likesCount, boolean likes, long commentCount,
-                                                       List<String> boardImage, List<CommentListInstance> commentList) {
+                                                       List<String> boardImage, List<CommentListInstance> commentList,
+                                                       long scrapCount, boolean scrap) {
     return ReadBoardAndCommentListResponse.builder()
             .boardId(board.getId())
+            .nickname(board.getUser().getNickname())
+            .anonymousProfileImageUrl(board.getUser().getAnonymousProfileImage().getImageUrl())
             .title(board.getTitle())
             .content(board.getContent())
             .likesCount(likesCount)
             .likes(likes)
             .commentCount(commentCount)
+            .scrapCount(scrapCount)
+            .scrap(scrap)
             .createAt(board.getCreatedAt())
             .boardImage(boardImage)
             .commentList(commentList)
