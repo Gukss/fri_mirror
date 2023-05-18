@@ -111,7 +111,7 @@
   }
 
   .navbar {
-    position: sticky;
+    position: fixed;
     top: 0;
     width: 100vw;
     height: 6vh;
@@ -120,6 +120,7 @@
   }
 
   .content {
+    margin-top: 6vh;
     width: 100vw;
     height: 84vh;
   }
