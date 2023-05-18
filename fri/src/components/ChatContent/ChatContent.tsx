@@ -26,7 +26,10 @@ export default function ChatContent({ msg, contentRef }: msgType) {
 
   return (
     <div className="chat-contents" ref={contentRef}>
-      <div className="chat-alert">이곳은 채팅방입니다.<br/> 자유롭게 이야기 하시면 됩니다.</div>
+      <div className="chat-alert">
+        이곳은 채팅방입니다.
+        <br /> 자유롭게 이야기 하시면 됩니다.
+      </div>
       {msg.map((msg, index) =>
         msg.message === `${msg.nickname}님이 입장했습니다.` ||  msg.message === `${msg.nickname}님이 나갔습니다.`? 
         (
