@@ -69,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
    */
   @Override
   @Transactional
-  public void createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId) {
+  public ResponseEntity<CreateBoardResponse> createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId) {
     User findUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
     //board 하나 만들고
     Board board = Board.create(createBoardRequest, findUser, boardCategory);
-    boardRepository.save(board);
+    Board save = boardRepository.save(board);
 
     if(boardImage!=null) {
       for (MultipartFile file : boardImage) {
@@ -97,7 +97,8 @@ public class BoardServiceImpl implements BoardService {
       }
     }
 
-
+    CreateBoardResponse createBoardResponse = CreateBoardResponse.create(save.getId());
+    return ResponseEntity.ok().body(createBoardResponse);
     //todo: 올린 이미지 boardImage에 넣어주기
   }
 
@@ -180,6 +181,13 @@ public class BoardServiceImpl implements BoardService {
     boolean likes = findLikes.isPresent();
     Optional<Scrap> findScrap = scrapRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard);
     boolean scrap = findScrap.isPresent();
+    // 해당 게시글이 내가쓴글인지 확인
+    String identity;
+    if (findBoard.getUser().getId().equals(findUser.getId())) {
+      identity = "na";
+    } else {
+      identity = "nam";
+    }
     // 댓글 리스트
     List<CommentListInstance> commentList = commentRepository.findAllByBoardAndIsDeleteFalseOrderByCreatedAtDescWithBoardAndUser(findBoard).stream()
             .map(c -> new CommentListInstance(c, userId))
@@ -187,7 +195,7 @@ public class BoardServiceImpl implements BoardService {
     // 해당 게시글 사진들 조회
     List<String> boardImageUrlList = boardImageRepository.findImageUrlByBoard(findBoard);
 
-    return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList, scrapCount, scrap);
+    return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList, scrapCount, scrap, identity);
 
   }
 

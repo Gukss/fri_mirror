@@ -479,7 +479,10 @@ public class UserServiceImpl implements UserService {
     Optional<User> user = userRepository.findByIdWithAreaAndAnonymousProfileImage(userId);
     User findUser = user.orElseThrow(
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
-    return new FindUserResponse(findUser);
+    Certification certification = certificationRepository.findByEmail(findUser.getEmail())
+        .orElseThrow(() -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_USER));
+    //todo: isDelete 확인하는게 필요하겠다.
+    return new FindUserResponse(findUser, certification.isEmailAgreement());
   }
 
   /**
