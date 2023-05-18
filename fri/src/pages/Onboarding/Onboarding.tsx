@@ -11,6 +11,7 @@ import axios from "axios";
 export default function Onboarding() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isagree, setIsagree] = useState(false);
   const api_url = process.env.REACT_APP_REST_API;
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
@@ -45,11 +46,7 @@ export default function Onboarding() {
         major: res.data.major
       };
       dispatch(login(data));
-      if(res.data.emailAgreement) navigate("/main");
-      else {
-        setPage("login")
-        setOpen(true)
-      }
+      if(res.data.emailAgreement) setIsagree(true)
     };
     getNewInfo();
   }, []);
@@ -57,6 +54,13 @@ export default function Onboarding() {
   const handleClick = () => {
     if (userId === 0) {
       navigate("/login");
+    }
+    else {
+      if(isagree) navigate("/main")
+      else{
+        setPage("login")
+        setOpen(true)
+      }
     }
   };
 
