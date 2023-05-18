@@ -27,5 +27,5 @@ COPY --from=builder build/libs/fri-0.0.1-SNAPSHOT.jar fri.jar
 
 EXPOSE 8733
 
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar fri.jar"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS_PW} ${JAVA_OPTS_ACT} -jar fri.jar"]
 #ENTRYPOINT ["java", "-jar", "fri.jar"]
