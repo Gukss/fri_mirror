@@ -45,7 +45,6 @@ export default function Onboarding() {
         major: res.data.major
       };
       dispatch(login(data));
-      console.log(res.data)
       if(res.data.emailAgreement) navigate("/main");
       else {
         setPage("login")
