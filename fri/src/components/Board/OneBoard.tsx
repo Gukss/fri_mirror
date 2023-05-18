@@ -1,29 +1,39 @@
 import { useNavigate } from "react-router-dom";
-
+import { BoardType } from "../../pages/Community/List";
 import "./board.scss";
 import heart from "../../assets/like_btn.png";
+import noheart from  "../../assets/noHeart.png";
 import comment from "../../assets/comment_btn.png";
-import pic from "../../assets/notfound.png";
 
-function OneBoard() {
+interface oneType {
+	board : BoardType;
+}
+
+function OneBoard({board} : oneType) {
 	const navigate = useNavigate();
+	const now = new Date();
+	const hour = Number(now.getHours());
+	const minute = Number(now.getMinutes());
 
 	return (
-		<div className="board-one" onClick={() => navigate("/board/1")}>
+		<div className="board-one" onClick={() => navigate("/board/"+board.boardId)}>
 			<div className="board-left">
 				<div className="board-title">
-					난 내기에서 져본 적이 없지
+					{board.title}
 				</div>
-				<div className="board-content">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</div>
+				<div className="board-content">{board.content}</div>
 				<div className="board-bottom">
-					<div className="heart"><img src={heart} alt="♡"/> 999+</div>
-					<div className="comment"><img src={comment} alt="○"/>999+</div>
-					<div className="writer">안녕하세요저는누구입니다</div>
-					<div className="time">12시간 전</div>
+					<div className="heart"><img src={board.like ? heart : noheart} alt="♡"/>{board.likeCount}</div>
+					<div className="comment"><img src={comment} alt="○"/>{board.commentCount}</div>
+					<div className="writer">{board.nickname}</div>
+					{/* <div className="time">12시간 전</div> */}
 				</div>
 			</div>
 			<div className="board-right">
-				<img src={pic} className="thumbnail" alt="thumb" />
+				{
+					board.boardThumbnailUrl !== "" ?
+					<img src={board?.boardThumbnailUrl} className="thumbnail" alt="thumb" />: null
+				}
 			</div>
 		</div>
 	)

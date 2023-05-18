@@ -2,10 +2,11 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import axios from "axios";
+import Back from  "../../assets/back.png";
 import Room from "../../components/MeetingRoom";
 import GameRoom from "../../components/GameRoom";
 import Head from "../../components/LogoEgg";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Nav from "../../components/navEgg";
 import "./more.scss";
 
@@ -31,6 +32,7 @@ interface gameroomType {
 function More() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+  const navigate = useNavigate();
   const category = queryParams.get("category");
   const region = queryParams.get("region");
   const text = queryParams.get("text");
@@ -111,7 +113,10 @@ function More() {
   return (
     <div className="more_room">
       <Head />
+      <div className="more_top">
+      <img src={Back} alt="<" id="back" onClick={() => navigate("/main")}/>
       <div className="text">{text}</div>
+      </div>
       <div className="room">
         <div className="room_container">
           {

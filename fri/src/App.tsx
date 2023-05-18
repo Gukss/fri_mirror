@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./redux/store";
-import "./App.css";
+import "./App.scss";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Main from "./pages/Main/mainPage";
 import More from "./pages/Main/morePage";
@@ -39,8 +39,8 @@ function App() {
               <Route path="/my" element={<My />} />
               <Route path="/my/edit" element={<MyEdit />} />
               <Route path="/chatting/:id" element={<Chat />} />
-              <Route path="/board" element={<Board />} />
               <Route path="/board/:id" element={<BoardDetail />} />
+              <Route path="/board" element={<Board />} />
               <Route path="/newboard/" element={<AddBoard />} />
               <Route path="*" element={<Not />} />
             </Routes>

@@ -337,7 +337,7 @@ export default function SignUp() {
   const goEdu = async () => {
     setLoading(true);
     try {
-      await axios.post(api_url + "user/certified/edu", { email: form.id });
+      await axios.post(api_url + "user/certified/edu", { email: form.id, "emailAgreement" : true });
       setCon(true);
       setEmail(false);
       setLoading(false);
