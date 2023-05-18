@@ -7,7 +7,6 @@
   .main-nav {
     position: fixed;
     top: 0;
-    left: 0;
     box-sizing: border-box;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
     background: #fff;
@@ -41,7 +40,7 @@
 
 // 메인 카테고리 부분
 .main_category {
-  margin-top: 14vh;
+  margin-top: 91px;
   height: calc(100vh - 131.8px);
   overflow-y: scroll;
   overflow-x: hidden;
