@@ -24,12 +24,13 @@ public class BoardController {
   private final BoardService boardService;
 
   @PostMapping
-  public ResponseEntity createBoard(
+  public ResponseEntity<CreateBoardResponse> createBoard(
           @RequestPart @Validated CreateBoardRequest createBoardRequest,
           @RequestPart(required = false) @Validated List<MultipartFile> boardImage,
           @RequestHeader("Authorization") Long userId) {
-    boardService.createBoard(createBoardRequest, boardImage, userId);
-    return ResponseEntity.ok().build();
+    ResponseEntity<CreateBoardResponse> res = boardService.createBoard(createBoardRequest,
+        boardImage, userId);
+    return res;
   }
 
   @GetMapping
