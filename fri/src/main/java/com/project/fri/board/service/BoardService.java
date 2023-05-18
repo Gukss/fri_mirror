@@ -20,7 +20,7 @@ public interface BoardService {
    * @param userId
    * @return
    */
-  void createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId);
+  ResponseEntity<CreateBoardResponse> createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId);
 
   /**
    * desc: 게시판 카테고리 별 단건 조회
