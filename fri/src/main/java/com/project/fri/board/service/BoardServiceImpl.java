@@ -69,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
    */
   @Override
   @Transactional
-  public void createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId) {
+  public ResponseEntity<CreateBoardResponse> createBoard(CreateBoardRequest createBoardRequest, List<MultipartFile> boardImage, Long userId) {
     User findUser = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundExceptionMessage(
             NotFoundExceptionMessage.NOT_FOUND_USER));
@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
         () -> new NotFoundExceptionMessage(NotFoundExceptionMessage.NOT_FOUND_ROOM_CATEGORY));
     //board 하나 만들고
     Board board = Board.create(createBoardRequest, findUser, boardCategory);
-    boardRepository.save(board);
+    Board save = boardRepository.save(board);
 
     if(boardImage!=null) {
       for (MultipartFile file : boardImage) {
@@ -97,7 +97,8 @@ public class BoardServiceImpl implements BoardService {
       }
     }
 
-
+    CreateBoardResponse createBoardResponse = CreateBoardResponse.create(save.getId());
+    return ResponseEntity.ok().body(createBoardResponse);
     //todo: 올린 이미지 boardImage에 넣어주기
   }
 
