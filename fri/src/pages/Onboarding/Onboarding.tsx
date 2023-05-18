@@ -45,6 +45,11 @@ export default function Onboarding() {
         major: res.data.major
       };
       dispatch(login(data));
+      if(res.data.emailAgreement) navigate("/main");
+      else {
+        setPage("login")
+        setOpen(true)
+      }
     };
     getNewInfo();
   }, []);
@@ -52,9 +57,6 @@ export default function Onboarding() {
   const handleClick = () => {
     if (userId === 0) {
       navigate("/login");
-    } else {
-      setPage("login");
-      setOpen(true);
     }
   };
 

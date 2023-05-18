@@ -3,6 +3,7 @@ export default function Agree() {
         <div className="Agree_main">
             안녕하세요.<span>Fri</span>서비스를 이용해 주셔서 감사합니다.<br />
             <br />
+            본 내용에 앞서<br /> 저희 <span>Fri</span>는 <span>사무국 및 운영국</span>으로 부터 어떠한 정보도 받지 아니하였다는 점을 알려드립니다.<br /><br />
             SSAFY 커뮤니티를 제공하는<span>Fri</span>이 아래 준비한 약관을 읽어주시면 감사드리겠습니다.<br />
             <br />
             <span>제 1조 목적</span><br />

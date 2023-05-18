@@ -20,16 +20,16 @@ function AgreeModal({setOpen, page} : modalType) {
   function movePage(check : boolean) {
     if(page === "login"){
       const header = {
-        "Content-Type" : "aplication/json",
+        "Content-Type" : "application/json",
         "Authorization" : userId
       }
       const data = {
         "emailAgreement" : check
       }
       try {
-        axios.post(api_url + "user/certified/agreement", data, {headers : header})
+        axios.patch(api_url + "user/certified/agreement", data, {headers : header})
         if(check) navigate("/main")
-        else alert("그동안 저희 서비스를 이용해 주셔서 감사합니다. \n 개인정보는 안전하게 삭제되었습니다.")
+        else alert("그동안 저희 서스를 이용해 주셔서 감사합니다. \n 개인정보는 안전하게 삭제되었습니다.")
       }
       catch(e){console.log(e)}
     }

@@ -128,6 +128,7 @@
   .footer {
     position: fixed;
     // top: 90vh;
+    bottom: 0;
     width: 100vw;
     height: 10vh;
     z-index: 0;
@@ -344,7 +345,7 @@
       &.autoHeight {
         height: auto;
 
-        + button.send-message {
+        +button.send-message {
           position: absolute;
           left: calc(100% - 2.25rem);
           top: 1rem;

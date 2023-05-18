@@ -138,7 +138,7 @@ function AddCom() {
       const res = await axios.post(api_url + "board", formData, {
         headers: header
       });
-      navigate("/board/:" + res.data.boardId)
+      navigate("/board/" + res.data.boardId)
     } catch (e) {
       console.log(e);
     }
