@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class ReadBoardAndCommentListResponse {
   private long boardId;
   private String nickname;
+  private String identity;
   private String anonymousProfileImageUrl;
   @NotNull
   private String title;
@@ -47,10 +48,11 @@ public class ReadBoardAndCommentListResponse {
 
   public static ReadBoardAndCommentListResponse create(Board board, long likesCount, boolean likes, long commentCount,
                                                        List<String> boardImage, List<CommentListInstance> commentList,
-                                                       long scrapCount, boolean scrap) {
+                                                       long scrapCount, boolean scrap, String identity) {
     return ReadBoardAndCommentListResponse.builder()
             .boardId(board.getId())
             .nickname(board.getUser().getNickname())
+            .identity(identity)
             .anonymousProfileImageUrl(board.getUser().getAnonymousProfileImage().getImageUrl())
             .title(board.getTitle())
             .content(board.getContent())
