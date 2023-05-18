@@ -43,11 +43,10 @@
 			line-height: 17px;
 			letter-spacing: 0em;
 			text-align: center;
-			color: #F9B76A;
+			color: #f9b76a;
 			margin-right: 24px;
 			display: flex;
 			align-items: center;
-
 		}
 
 		.delete_board {
@@ -73,18 +72,16 @@
 			width: 15px;
 		}
 
-
 		.detail-content {
 			text-align: left;
 			padding: 10px 10px;
 			border-radius: 8px;
 			font-size: 20px;
-			background-color: #FFF0C3;
+			background-color: #fff0c3;
 			width: 85%;
 			height: auto;
 			box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-			margin-bottom: 10px;
-
+			margin-bottom: 30px;
 
 			.detail_contet-bottom {
 				width: 100%;
@@ -156,6 +153,8 @@
 			}
 
 		}
+
+
 
 		.detail_image {
 			width: 90%;
