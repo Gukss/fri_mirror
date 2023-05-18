@@ -21,7 +21,7 @@ pipeline{
         stage('Build') {
             steps {
                 script{
-                     sh "docker build -ft ./fri/Dockerfile-dev ${BACK_SPRING_NAME}"
+                     sh "docker build -t ${BACK_SPRING_NAME} -f Dockerfile-dev ./fri/."
                 }
             }
         }
