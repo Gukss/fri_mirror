@@ -16,8 +16,9 @@ public class FindUserResponse {
     private String anonymousProfileImageId;
     private String roomId;
     private String gameRoomId;
+    private boolean emailAgreement;
 
-    public FindUserResponse(User user) {
+    public FindUserResponse(User user, boolean emailAgreement) {
         name = user.getName();
         email = user.getEmail();
         nickname = user.getNickname();
@@ -26,7 +27,7 @@ public class FindUserResponse {
         heart = user.getHeart();
         isMajor = user.isMajor();
         anonymousProfileImageId = user.getAnonymousProfileImage().getImageUrl();
-
+        this.emailAgreement = emailAgreement;
         if (user.getRoom() == null) {
             roomId = "참여한 방이 없습니다.";
         } else {
