@@ -35,6 +35,7 @@ export type BoardType = {
 	nickname : string;
 	scrap : boolean;
 	scrapCount : string;
+	identity : string;
 }
 
 function ComDetail() {
@@ -116,9 +117,9 @@ function ComDetail() {
 					setData(res.data);
 					setLikes(res.data.likesCount)
 					setScrap(res.data?.scrapCount)
-					setCmt(res.data?.commentList?.length)
-					
+					setCmt(res.data?.commentList?.length)					
 				}catch(e){
+					alert("존재하지 않는 게시물입니다.")
 					navigate("/board")
 				};
 			}
@@ -132,7 +133,11 @@ function ComDetail() {
 			<div className="detail_title">{data?.title}</div>
 			<div className="detail-rd">
 				{/* <div className="write_board">수정<img src={Pencil} alt="pencil" id="pencil"/></div> */}
-				{/* <div className="delete_board" onClick={delPost}>삭제<img src={Trash} alt="trash" id="trash"/></div> */}
+				{
+					data?.identity === "na" ?
+					<div className="delete_board" onClick={delPost}>삭제<img src={Trash} alt="trash" id="trash"/></div>
+					: null
+				}
 			</div>
 			<div className="detail-content">
 				{data?.content}
