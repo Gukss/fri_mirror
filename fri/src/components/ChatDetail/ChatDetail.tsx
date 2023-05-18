@@ -13,12 +13,12 @@ interface ChildProps {
 }
 
 interface Roomdetail {
-  roomId : number;
-  title : string;
-  location : string;
+  roomId: number;
+  title: string;
+  location: string;
   roomCategory: string;
-  headCount : number;
-  isParticipate : boolean;
+  headCount: number;
+  isParticipate: boolean;
   participate: boolean;
   major: { name: string; url: string }[];
   nonMajor: { name: string; url: string }[];
@@ -53,7 +53,7 @@ export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
     const header = {
       "Content-Type": "application/json",
       Authorization: userId
-    };    
+    };
     const data = {
       roomId: roomId,
       message: `${nick}님이 나갔습니다.`
@@ -91,9 +91,9 @@ export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
       } catch (e) {
         console.log();
       }
-    }
-    getData()
-  }, [])
+    };
+    getData();
+  }, []);
 
   return (
     <div
@@ -116,22 +116,24 @@ export default function ChatDetail({ isOpen, onClose, outChatMsg }: any) {
           <div className="participate-box">
             <div className="top">참여자</div>
             <div className="sub">전공자</div>
-            <div className="people">
-              {data?.major.length === 0 ? (
-                <div className="none">아직 전공자가 없어요</div>
-              ) : (
-                data?.major.map((person: any) => (
-                  <div className="profile" key={person.name}>
-                    <div className="img">
-                      <img
-                        src={person.anonymousProfileImageUrl}
-                        alt="profile"
-                      />
+            <div className="people-box">
+              <div className="people">
+                {data?.major.length === 0 ? (
+                  <div className="none">아직 전공자가 없어요</div>
+                ) : (
+                  data?.major.map((person: any) => (
+                    <div className="profile" key={person.name}>
+                      <div className="img">
+                        <img
+                          src={person.anonymousProfileImageUrl}
+                          alt="profile"
+                        />
+                      </div>
+                      <div className="name">{person.name}</div>
                     </div>
-                    <div className="name">{person.name}</div>
-                  </div>
-                ))
-              )}
+                  ))
+                )}
+              </div>
             </div>
             <div className="sub">비전공자</div>
             <div className="people">
