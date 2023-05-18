@@ -181,6 +181,13 @@ public class BoardServiceImpl implements BoardService {
     boolean likes = findLikes.isPresent();
     Optional<Scrap> findScrap = scrapRepository.findByUserAndBoardAndIsDeleteFalse(findUser, findBoard);
     boolean scrap = findScrap.isPresent();
+    // 해당 게시글이 내가쓴글인지 확인
+    String identity;
+    if (findBoard.getUser().getId().equals(findUser.getId())) {
+      identity = "na";
+    } else {
+      identity = "nam";
+    }
     // 댓글 리스트
     List<CommentListInstance> commentList = commentRepository.findAllByBoardAndIsDeleteFalseOrderByCreatedAtDescWithBoardAndUser(findBoard).stream()
             .map(c -> new CommentListInstance(c, userId))
@@ -188,7 +195,7 @@ public class BoardServiceImpl implements BoardService {
     // 해당 게시글 사진들 조회
     List<String> boardImageUrlList = boardImageRepository.findImageUrlByBoard(findBoard);
 
-    return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList, scrapCount, scrap);
+    return ReadBoardAndCommentListResponse.create(findBoard, likeCount, likes, commentCount, boardImageUrlList, commentList, scrapCount, scrap, identity);
 
   }
 
