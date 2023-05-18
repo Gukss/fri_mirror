@@ -126,11 +126,11 @@
 
   .footer {
     position: fixed;
-    top: 90vh;
+    // top: 90vh;
     width: 100vw;
     height: 10vh;
     z-index: 10;
-
+    bottom: 0;
     background: #fff3cd;
   }
 
