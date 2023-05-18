@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Back from "../../assets/back.png";
 import logo from "../../assets/small_logo.png";
 import axios from "axios";
 import "./AddCom.scss";
+import { type } from "os";
 
 interface PostForm {
   title: string;
@@ -42,7 +42,6 @@ function AddCom() {
   const [images, setImages] = useState<string[]>([]);
 
   const [isAreaDown, setIsAreaDown] = useState(false);
-  const navigate = useNavigate();
 
   const userId = useSelector((state: RootState) => {
     return state.strr.userId;
@@ -135,14 +134,18 @@ function AddCom() {
         Authorization: userId
       };
 
+      formData.forEach((data) => console.log(data));
+
       const res = await axios.post(api_url + "board", formData, {
         headers: header
       });
-      navigate("/board/:" + res.data.boardId)
+      console.log(res);
     } catch (e) {
       console.log(e);
     }
   };
+
+  console.log("사진", file);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -172,8 +175,13 @@ function AddCom() {
           })
         );
 
+        console.log("파일", file);
+
         if (file.length > 0) {
           file.forEach((fileObj) => {
+            // const fileData = new File([JSON.stringify(fileObj)], fileObj.name, {
+            //   type: "multipart/form-data"
+            // });
             formData.append("boardImage", fileObj);
           });
         }
@@ -228,7 +236,7 @@ function AddCom() {
 
   return (
     <div className="add-post">
-      <img src={Back} alt="<" id="back" onClick={() => navigate("/board")}/>
+      <img src={Back} alt="<" id="back" />
       <div className="add-container">
         <div className="small-logo">
           <img src={logo} alt="Logo" />
@@ -236,7 +244,7 @@ function AddCom() {
         <form className="add-form" onSubmit={handleSubmit}>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 제목 <span>(필수)</span>
+              # 제목
             </div>
             <div className="add-input">
               <input
@@ -254,7 +262,7 @@ function AddCom() {
           </div>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 카테고리 설정 <span>(필수)</span>
+              # 카테고리 설정
             </div>
             <div className="component">
               <button
@@ -288,7 +296,7 @@ function AddCom() {
           </div>
           <div className="add-input-box">
             <div className="input-label" id="label">
-              # 본문 <span>(필수)</span>
+              # 본문
             </div>
             <div className="add-textarea">
               <textarea
@@ -304,7 +312,9 @@ function AddCom() {
             </div>
           </div>
           <div className="add-input-box post-img">
-            <div className="image-cnt">{images.length} / 5</div>
+            {images.length > 0 && (
+              <div className="image-cnt">{images.length}개</div>
+            )}
             <div className="input-label" id="label">
               # 사진 <span>(선택)</span>
             </div>

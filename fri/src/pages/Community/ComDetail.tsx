@@ -19,6 +19,7 @@ export type CommentType = {
 	content : string;
 	createdAt : string;
 	identity : string;
+	nickname : string;
 }
 
 export type BoardType = {
@@ -58,6 +59,7 @@ function ComDetail() {
 		}
 		try {
 			await axios.patch(api_url + "board/delete", datas, {headers: header});
+			alert("잘 삭제 되었어요~!")
 			navigate("/board")
 			
 		}catch(e){console.log(e)};
@@ -79,7 +81,7 @@ function ComDetail() {
 				const newState = { ...data, scrap: newScrap };
 				setData(newState);
 			}
-		}catch(e){console.log(e)}
+		}catch(e){alert("현재 서버가 불안정합니다. \n 잠시 후에 다시 이용해 주세요.")}
 	}
 
 
@@ -99,7 +101,9 @@ function ComDetail() {
 				const newState = { ...data, likes: newLikes };
 				setData(newState);
 			}
-		}catch(e){console.log(e)}
+		}catch(e){
+			alert("현재 서버가 불안정합니다. \n 잠시 후에 다시 이용해 주세요.")
+		}
 	}
     useEffect(() => {
 			const getData = async () => {
@@ -114,7 +118,9 @@ function ComDetail() {
 					setScrap(res.data?.scrapCount)
 					setCmt(res.data?.commentList?.length)
 					
-				}catch(e){console.log(e)};
+				}catch(e){
+					navigate("/board")
+				};
 			}
 			getData();
     }, [])
@@ -126,7 +132,7 @@ function ComDetail() {
 			<div className="detail_title">{data?.title}</div>
 			<div className="detail-rd">
 				{/* <div className="write_board">수정<img src={Pencil} alt="pencil" id="pencil"/></div> */}
-				<div className="delete_board" onClick={delPost}>삭제<img src={Trash} alt="trash" id="trash"/></div>
+				{/* <div className="delete_board" onClick={delPost}>삭제<img src={Trash} alt="trash" id="trash"/></div> */}
 			</div>
 			<div className="detail-content">
 				{data?.content}

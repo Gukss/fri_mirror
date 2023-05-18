@@ -75,7 +75,6 @@ function CommentList({comment, board, setCmt, cmt} : commentType) {
 		setText("")
 	}
 
-
 	return (
 	<div className="comment">
 		<div className="comment_box">
@@ -85,7 +84,7 @@ function CommentList({comment, board, setCmt, cmt} : commentType) {
 					<div className="cmt" key={index}>
 						<div className="cmt_top">
 						<div className="cmt_name">{
-							cmt.identity === "na" && "나" || cmt.identity === "nam" && `익명${index+1}` || cmt.identity === "writer" && "작성자"}
+							cmt.identity === "na" && "나" || cmt.identity === "nam" && cmt.nickname || cmt.identity === "writer" && "작성자"}
 						</div>
 					{
 						cmt.identity === "na" &&
@@ -103,7 +102,7 @@ function CommentList({comment, board, setCmt, cmt} : commentType) {
 			}
 			</div>
 			<div className="comment_bottom">
-				<div className="text-input">
+				<div className="comment_text-input">
 				<textarea
 					ref={textareaRef}
 					placeholder="댓글 여기에"
